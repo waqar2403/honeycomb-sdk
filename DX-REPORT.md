@@ -32,6 +32,7 @@ spec, it has a free tier, and it is not in the Voxgig catalogue.
 | TypeScript | 453 tests: 419 pass, 34 skipped |
 | Python | 303 pass, 113 skipped |
 | Go | pass. CLI and MCP server build |
+| GitHub Actions | `ci` and `Documentation` workflows green on the first push |
 | Corrections needed | 133 lines of `guide.aontu`, 2 settings in `project.aontu` |
 
 ## What worked well
@@ -77,6 +78,7 @@ Severity: **High** means a user of the SDK gets wrong or missing behaviour.
 | 15 | Low | `py/Makefile` runs `python -m pytest`. macOS ships `python3` only, so `make test` fails on a clean Mac. | Template | Use `python3`. |
 | 16 | Low | The CLI help says "boru-driven CLI" and "boru expression" without saying what boru is. | Template | One line explaining the expression syntax, with an example. |
 | 17 | Low | `.sdk/log/generated.jsonl` is committed, so every generate changes it. | Scaffold | Ignore `.sdk/log/` in the generated `.gitignore`. |
+| 18 | Low | The generated `ci.yml` has jobs for 24 languages. For the 19 not in this repo, the job checks out and skips every step, so the Actions page shows green Rust, C# and Haskell checks for SDKs that do not exist. | Template | Generate jobs only for active targets. |
 
 ## Top five recommendations
 
