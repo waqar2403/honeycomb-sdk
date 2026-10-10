@@ -12,7 +12,8 @@ correctness problems that would reach users: missing list operations on
 Honeycomb's dataset-scoped resources, no JSON:API handling, and a single
 credential per client when the API uses two key types. All three are
 fixable in `guide.aontu` without touching generated code, and this repo
-contains those corrections.
+contains those corrections. I then verified the TypeScript and Python SDKs,
+the CLI and the MCP server against the live Honeycomb API.
 
 I picked Honeycomb because I contribute to OpenTelemetry, Honeycomb is an
 observability product built around it, it publishes an official OpenAPI 3.1
@@ -33,6 +34,7 @@ spec, it has a free tier, and it is not in the Voxgig catalogue.
 | Python | 303 pass, 113 skipped |
 | Go | pass. CLI and MCP server build |
 | GitHub Actions | `ci` and `Documentation` workflows green on the first push |
+| Live check | TypeScript, Python, CLI and MCP server all pass against api.honeycomb.io |
 | Corrections needed | 133 lines of `guide.aontu`, 2 settings in `project.aontu` |
 
 ## What worked well
@@ -63,11 +65,11 @@ Severity: **High** means a user of the SDK gets wrong or missing behaviour.
 | --- | --- | --- | --- | --- |
 | 1 | High | Dataset-scoped collections such as `GET /1/slos/{datasetSlug}` (response: an array) were classified as `load`, with `datasetSlug` renamed to `id`. The real child ids (`sloId`, `triggerId`, ...) were never `id`. Result: no `list` for SLOs, triggers, markers, marker settings, burn alerts, query annotations, columns or calculated fields, and 29 flow steps switched off. | Generator heuristic | When a GET on a path ending in a parameter returns an array, or the path has a `/{parent}/{child}` sibling, classify it as `list` scoped by that parameter. |
 | 2 | High | The `/2/` endpoints return JSON:API (`application/vnd.api+json`, record under `data`). The SDK did not unwrap it, and `GET /2/teams/{teamSlug}/environments` (a collection) became `load`. 6 TypeScript tests failed out of the box. | Generator | Detect the JSON:API media type and default `transform.res` to `body.data`. |
-| 3 | High | Per-operation security is ignored. `/1/` uses `X-Honeycomb-Team`, while `/2/` needs `Authorization: Bearer`. The client sends one credential. The README Quickstart's first example is `ApiKey().list()`, a `/2/` call, right above a line saying the client sends `X-Honeycomb-Team`, so copy-paste fails with a normal key. | Generator | Honour operation-level `security`, or at least pick a Quickstart entity whose scheme matches the default. |
+| 3 | High | Per-operation security is ignored. `/1/` uses `X-Honeycomb-Team`, while `/2/` needs `Authorization: Bearer`. The client sends one credential. The README Quickstart's first example is `ApiKey().list()`, a `/2/` call, right above a line saying the client sends `X-Honeycomb-Team`, so copy-paste fails with a normal key. The MCP README's example prompt is also `list api_key`. | Generator | Honour operation-level `security`, or at least pick a Quickstart entity whose scheme matches the default. |
 | 4 | Medium | `npm run generate` exits 0 after printing `PARTIAL BUILD!`. CI cannot catch it. | Generator | Exit non-zero on a partial build, or add `--strict`. |
 | 5 | Medium | Only TypeScript ships the spec-definition conformance suite (`definition.test.ts`). Python and Go passed while carrying the same bugs as items 1 and 2. | Generator | Port the definition suite to every target, or run the TypeScript one as a shared gate. |
 | 6 | Medium | `origin: 'voxgig-sdk'` is written into `sdk.aontu`, so `go.mod`, `pyproject.toml` and README links point at `github.com/voxgig-sdk/...`. `go get` breaks for anyone publishing under their own account. LICENSE says `Copyright (c) 2026 Voxgig`. Fixing it meant finding `main.kit.publisher` by reading `sdkgen.aontu` inside `node_modules`. | Scaffold | Add `--owner` and `--publisher` options to `create-sdkgen`, or ask for them. |
-| 7 | Medium | Path parameters are also sent in the JSON body (`dataset_slug` inside the event and marker bodies). For Honeycomb events, this adds a `dataset_slug` column to the user's data. | Generator | Strip parameters that the operation places in the path, unless the request schema declares them. |
+| 7 | Medium | Path parameters are also sent in the JSON body (`dataset_slug` inside the event and marker bodies). For Honeycomb events, this adds a `dataset_slug` column to the user's data. Confirmed live: the smoke event sent 3 fields and the dataset has 4 columns. | Generator | Strip parameters that the operation places in the path, unless the request schema declares them. |
 | 8 | Medium | The guide syntax is the fix for most model problems, but warnings do not show it. I learned `op: load: active: false` and `op: list: method: "GET"` from the apidef schema file. | Docs | Print a ready-to-paste `guide.aontu` snippet with each heuristic warning. |
 | 9 | Medium | The docs landing page (`/sdk/docs`) describes the pipeline but gives no commands. The commands are on the `create-sdkgen` subpage and in that repo's AGENTS.md. The home page says `npm create @voxgig/sdkgen`, the `create-sdkgen` page says `npx @voxgig/create-sdkgen`. | Docs | Put the five-command workflow on the landing page and use one command everywhere. |
 | 10 | Low | `/1/kinesis_events` became the entity `Kinesi`. | Generator | Add `kinesis` (and similar `-is` words) to the singulariser's exceptions. |
@@ -79,6 +81,7 @@ Severity: **High** means a user of the SDK gets wrong or missing behaviour.
 | 16 | Low | The CLI help says "boru-driven CLI" and "boru expression" without saying what boru is. | Template | One line explaining the expression syntax, with an example. |
 | 17 | Low | `.sdk/log/generated.jsonl` is committed, so every generate changes it. | Scaffold | Ignore `.sdk/log/` in the generated `.gitignore`. |
 | 18 | Low | The generated `ci.yml` has jobs for 24 languages. For the 19 not in this repo, the job checks out and skips every step, so the Actions page shows green Rust, C# and Haskell checks for SDKs that do not exist. | Template | Generate jobs only for active targets. |
+| 19 | Medium | Entity errors read `HoneycombSDK: list: request: 401: Unauthorized`. Honeycomb's response says `this API key isn't allowed to access SLOs`, but that text is only on `err.result.body`. | Generator | Put the API's error message in `err.message`. |
 
 ## Top five recommendations
 
@@ -110,4 +113,18 @@ Severity: **High** means a user of the SDK gets wrong or missing behaviour.
 
 ## Live check
 
-Pending: run against api.honeycomb.io with a configuration key.
+Run on 10 October 2026 against api.honeycomb.io (US region, free plan) with a
+configuration key scoped to events, markers, triggers, boards and dataset
+creation.
+
+| Surface | Calls | Result |
+| --- | --- | --- |
+| TypeScript | `examples/smoke.mjs`: `Auth().load()`, `Event().create()`, `Dataset().list()`, `Marker().create()`, `.list()`, `.remove()` | 6 of 6 pass, 0.2 to 2.1 s each |
+| TypeScript | `Trigger().list({ dataset_slug })`, `Board().list()`, `Dataset().load({ id })` | Pass. `Trigger().list()` is one of the corrected operations |
+| Python | `Auth().load()`, `Dataset().list()`, `Trigger().list()` | Pass |
+| CLI | `honeycomb-cli list dataset` | Pass |
+| MCP server (stdio) | `initialize`, `tools/list` (`honeycomb_list`, `honeycomb_load`), `tools/call honeycomb_list` for datasets | Pass |
+| TypeScript | `Column().list()`, `Slo().list()` | 401, as expected: the key has no column or SLO permission (see item 19) |
+
+The first live call, `Auth().load()`, succeeded on the first run after
+creating the key, in 1.1 s.

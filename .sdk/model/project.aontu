@@ -34,7 +34,7 @@ main: kit: publisher: {
 
 
 # README wording.
-main: kit: text: about_md: `**Status:** generated on 2026-10-10 from Honeycomb's public OpenAPI spec (\`https://docs.honeycomb.io/api/openapi-public.yaml\`) with \`@voxgig/sdkgen\` 4.34.5. The offline test suites pass in TypeScript, Python and Go, and the CLI and MCP server build.
+main: kit: text: about_md: `**Status:** generated on 2026-10-10 from Honeycomb's public OpenAPI spec (\`https://docs.honeycomb.io/api/openapi-public.yaml\`) with \`@voxgig/sdkgen\` 4.34.5. The offline test suites pass in TypeScript, Python and Go. On the same day, the TypeScript and Python SDKs, the CLI and the MCP server were checked against the live API (see the live check in [DX-REPORT.md](DX-REPORT.md#live-check)).
 
 **Two kinds of key.** Honeycomb uses configuration keys for the \`/1/\` endpoints, sent in the \`X-Honeycomb-Team\` header, which is the client default. The \`/2/\` endpoints (\`ApiKey\`, \`Environment\`, \`ManagementAuth\`) need a management key, sent as \`Authorization: Bearer KEY_ID:SECRET\`. The client sends one credential, so use a second client for management calls:
 
