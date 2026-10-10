@@ -1,0 +1,81 @@
+# BasicSloFlow
+
+main: kit: flow: BasicSloFlow:
+{
+  entity: "slo",
+  kind: "basic",
+  name: "BasicSloFlow",
+  step: [
+    {
+      i: {
+        ref: "slo_ref01"
+      }
+
+      m: {
+        dataset_slug: "dataset_slug01"
+      }
+
+      o: "create"
+    }
+
+    {
+      d: {
+        dataset_slug: "dataset_slug01"
+      }
+
+      i: {
+        ref: "slo_ref01",
+        srcdatavar: "slo_ref01_data",
+        suffix: "_up0",
+        textfield: "description"
+      }
+
+      o: "update",
+      s: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-slo_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "slo_ref01",
+        srcdatavar: "slo_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        id: "slo01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-slo_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "slo_ref01",
+        suffix: "_rm0"
+      }
+
+      m: {
+        dataset_slug: "dataset_slug01",
+        id: "slo01"
+      }
+
+      o: "remove"
+    }
+  ],
+  "key$": "BasicSloFlow"
+}

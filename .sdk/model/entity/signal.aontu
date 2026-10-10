@@ -1,0 +1,371 @@
+# Entity: signal
+
+main: kit: entity: signal: {
+
+  alias: field: {}
+
+  fields: {
+    auto_investigate: {
+      h: "Auto Investigate"
+      n: "auto_investigate"
+      r: true
+      ro: true
+      sh: "When `true`, Honeycomb will automatically start an investigation when this Signal fires."
+      t: "`$BOOLEAN`"
+    }
+    created_at: {
+      fo: "date-time"
+      h: "Created At"
+      n: "created_at"
+      r: true
+      ro: true
+      sh: "The ISO8601-formatted time when the Signal was created."
+      t: "`$STRING`"
+    }
+    currently_anomalous: {
+      h: "Currently Anomalous"
+      n: "currently_anomalous"
+      r: true
+      ro: true
+      sh: "Whether the Signal is currently in an anomalous state."
+      t: "`$BOOLEAN`"
+    }
+    dataset_slug: {
+      h: "Dataset Slug"
+      n: "dataset_slug"
+      r: true
+      ro: true
+      sh: "The slug of the dataset the Signal's service reports to."
+      t: "`$STRING`"
+    }
+    enabled: {
+      h: "Enabled"
+      n: "enabled"
+      op: {
+        update: {
+          req: false
+          type: "`$BOOLEAN`"
+        }
+      }
+      r: true
+      sh: "Whether the Signal is currently enabled."
+      t: "`$BOOLEAN`"
+    }
+    environment_slug: {
+      h: "Environment Slug"
+      n: "environment_slug"
+      r: true
+      ro: true
+      sh: "The slug of the environment the Signal belongs to."
+      t: "`$STRING`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: true
+      ro: true
+      sh: "Unique identifier (ID) of the Signal."
+      t: "`$STRING`"
+    }
+    last_anomaly_ended_at: {
+      h: "Last Anomaly Ended At"
+      n: "last_anomaly_ended_at"
+      r: true
+      ro: true
+      sh: "The end time of the most recent anomaly, in seconds since UNIX epoch."
+      t: [
+        "`$ONE`"
+        [
+          "`$INTEGER`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    last_anomaly_started_at: {
+      h: "Last Anomaly Started At"
+      n: "last_anomaly_started_at"
+      r: true
+      ro: true
+      sh: "The start time of the most recent anomaly, in seconds since UNIX epoch."
+      t: [
+        "`$ONE`"
+        [
+          "`$INTEGER`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    measured_signal: {
+      h: "Measured Signal"
+      n: "measured_signal"
+      r: true
+      ro: true
+      sh: "The kind of measurement the Signal is trained on."
+      t: "`$STRING`"
+    }
+    recipients: {
+      h: "Recipients"
+      n: "recipients"
+      op: {
+        update: {
+          req: false
+          type: "`$ARRAY`"
+        }
+      }
+      r: true
+      sh: "The Recipients notified when this Signal fires."
+      t: "`$ARRAY`"
+    }
+    sensitivity: {
+      h: "Sensitivity"
+      n: "sensitivity"
+      op: {
+        update: {
+          req: false
+          type: "`$STRING`"
+        }
+      }
+      r: true
+      sh: "How far a measurement must deviate from the trained normal band before the Signal fires."
+      t: "`$ANY`"
+    }
+    service_name: {
+      h: "Service Name"
+      n: "service_name"
+      r: true
+      ro: true
+      sh: "The name of the service the Signal monitors."
+      t: "`$STRING`"
+    }
+    status: {
+      h: "Status"
+      n: "status"
+      r: true
+      ro: true
+      sh: "The lifecycle status of the Signal."
+      t: "`$STRING`"
+    }
+    updated_at: {
+      fo: "date-time"
+      h: "Updated At"
+      n: "updated_at"
+      r: true
+      ro: true
+      sh: "The ISO8601-formatted time when the Signal was last updated."
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "signal"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /1/signals"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                k: "query"
+                n: "currently_anomalous"
+                or: "currently_anomalous"
+                r: false
+                t: "`$BOOLEAN`"
+              }
+              {
+                ex: "checkout-api"
+                k: "query"
+                n: "dataset_slug"
+                or: "dataset_slug"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "error_rate"
+                k: "query"
+                n: "measured_signal"
+                or: "measured_signal"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "eyxJjcmAVhdGVkX"
+                k: "query"
+                n: "page_after"
+                or: "page[after]"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: 10
+                k: "query"
+                n: "page_size"
+                or: "page[size]"
+                r: false
+                t: "`$NUMBER`"
+              }
+              {
+                ex: "checkout-api"
+                k: "query"
+                n: "service_name"
+                or: "service_name"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "status"
+                or: "status"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/signals"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "signals"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.signals`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /1/signals/{signalId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "signalId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/signals/{signalId}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              signalId: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "signals"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    update: {
+      name: "update"
+      points: [
+        {
+          bf: [
+            "enabled"
+            "recipients"
+            "sensitivity"
+          ]
+          co: {
+            id: "PUT /1/signals/{signalId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "signalId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "PUT"
+          o: "/1/signals/{signalId}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              signalId: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "signals"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

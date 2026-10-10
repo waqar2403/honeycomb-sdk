@@ -1,0 +1,40 @@
+# BasicMapDependencyFlow
+
+main: kit: flow: BasicMapDependencyFlow:
+{
+  entity: "map_dependency",
+  kind: "basic",
+  name: "BasicMapDependencyFlow",
+  step: [
+    {
+      i: {
+        ref: "map_dependency_ref01"
+      }
+
+      o: "create"
+    }
+
+    {
+      i: {
+        ref: "map_dependency_ref01",
+        srcdatavar: "map_dependency_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        id: "map_dependency01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-map_dependency_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicMapDependencyFlow"
+}

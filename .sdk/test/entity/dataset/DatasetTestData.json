@@ -1,0 +1,84 @@
+{
+  "existing": {
+    "dataset": {
+      "DATASET00": {
+        "created_at": "s64",
+        "dataset_type": "s65",
+        "description": "s66",
+        "expand_json_depth": 103,
+        "id": "DATASET00",
+        "last_written_at": "s69",
+        "name": "s6a",
+        "regular_columns_count": "s6b",
+        "settings": {},
+        "slug": "s6d"
+      },
+      "DATASET01": {
+        "created_at": "sc8",
+        "dataset_type": "sc9",
+        "description": "sca",
+        "expand_json_depth": 203,
+        "id": "DATASET01",
+        "last_written_at": "scd",
+        "name": "sce",
+        "regular_columns_count": "scf",
+        "settings": {},
+        "slug": "sd1"
+      },
+      "DATASET02": {
+        "created_at": "s12c",
+        "dataset_type": "s12d",
+        "description": "s12e",
+        "expand_json_depth": 303,
+        "id": "DATASET02",
+        "last_written_at": "s131",
+        "name": "s132",
+        "regular_columns_count": "s133",
+        "settings": {},
+        "slug": "s135"
+      }
+    }
+  },
+  "new": {
+    "dataset": {
+      "dataset_ref01": {
+        "created_at": "s190",
+        "dataset_type": "s191",
+        "description": "s192",
+        "expand_json_depth": 403,
+        "last_written_at": "s195",
+        "name": "s196",
+        "regular_columns_count": "s197",
+        "settings": {},
+        "slug": "s199"
+      }
+    }
+  },
+  "requests": {
+    "POST /1/datasets": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/datasets": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/datasets/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "DELETE /1/datasets/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "PUT /1/datasets/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

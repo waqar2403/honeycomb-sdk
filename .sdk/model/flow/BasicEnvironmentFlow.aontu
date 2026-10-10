@@ -1,0 +1,80 @@
+# BasicEnvironmentFlow
+
+main: kit: flow: BasicEnvironmentFlow:
+{
+  entity: "environment",
+  kind: "basic",
+  name: "BasicEnvironmentFlow",
+  step: [
+    {
+      i: {
+        ref: "environment_ref01"
+      }
+
+      m: {
+        team_slug: "team_slug01"
+      }
+
+      o: "create"
+    }
+
+    {
+      d: {
+        team_slug: "team_slug01"
+      }
+
+      i: {
+        ref: "environment_ref01",
+        srcdatavar: "environment_ref01_data",
+        suffix: "_up0"
+      }
+
+      o: "update",
+      s: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-environment_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "environment_ref01",
+        srcdatavar: "environment_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        id: "environment01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-environment_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "environment_ref01",
+        suffix: "_rm0"
+      }
+
+      m: {
+        id: "environment01",
+        team_slug: "team_slug01"
+      }
+
+      o: "remove"
+    }
+  ],
+  "key$": "BasicEnvironmentFlow"
+}

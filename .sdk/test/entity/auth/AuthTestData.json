@@ -1,0 +1,49 @@
+{
+  "existing": {
+    "auth": {
+      "AUTH00": {
+        "api_key_access": {},
+        "environment": {},
+        "id": "AUTH00",
+        "team": {},
+        "type": "s36"
+      },
+      "AUTH01": {
+        "api_key_access": {},
+        "environment": {},
+        "id": "AUTH01",
+        "team": {},
+        "type": "s68"
+      },
+      "AUTH02": {
+        "api_key_access": {},
+        "environment": {},
+        "id": "AUTH02",
+        "team": {},
+        "type": "s9a"
+      }
+    }
+  },
+  "new": {
+    "auth": {
+      "auth_ref01": {
+        "api_key_access": {},
+        "environment": {},
+        "team": {},
+        "type": "scc"
+      }
+    }
+  },
+  "requests": {
+    "GET /1/auth": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /2/auth": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

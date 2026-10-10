@@ -1,0 +1,47 @@
+{
+  "existing": {
+    "historical_anomaly": {
+      "HISTORICAL_ANOMALY00": {
+        "ended_at": 50,
+        "id": "HISTORICAL_ANOMALY00",
+        "measurement": 52,
+        "normal_range": "s35",
+        "started_at": 54,
+        "signal_id": "SIGNAL01"
+      },
+      "HISTORICAL_ANOMALY01": {
+        "ended_at": 100,
+        "id": "HISTORICAL_ANOMALY01",
+        "measurement": 102,
+        "normal_range": "s67",
+        "started_at": 104,
+        "signal_id": "SIGNAL01"
+      },
+      "HISTORICAL_ANOMALY02": {
+        "ended_at": 150,
+        "id": "HISTORICAL_ANOMALY02",
+        "measurement": 152,
+        "normal_range": "s99",
+        "started_at": 154,
+        "signal_id": "SIGNAL01"
+      }
+    }
+  },
+  "new": {
+    "historical_anomaly": {
+      "historical_anomaly_ref01": {
+        "ended_at": 200,
+        "measurement": 202,
+        "normal_range": "scb",
+        "started_at": 204
+      }
+    }
+  },
+  "requests": {
+    "GET /1/signals/{signalId}/historical_anomalies": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

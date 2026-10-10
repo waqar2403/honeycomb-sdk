@@ -1,0 +1,94 @@
+{
+  "existing": {
+    "slo": {
+      "SLO00": {
+        "created_at": "s6e",
+        "dataset_slugs": [],
+        "description": "s70",
+        "id": "SLO00",
+        "name": "s72",
+        "reset_at": "s73",
+        "sli": {},
+        "tags": [],
+        "target_per_million": 118,
+        "time_period_days": 119,
+        "updated_at": "s78",
+        "dataset_slug": "DATASET_SLUG01",
+        "slo_id": "SLO01"
+      },
+      "SLO01": {
+        "created_at": "sdc",
+        "dataset_slugs": [],
+        "description": "sde",
+        "id": "SLO01",
+        "name": "se0",
+        "reset_at": "se1",
+        "sli": {},
+        "tags": [],
+        "target_per_million": 228,
+        "time_period_days": 229,
+        "updated_at": "se6",
+        "dataset_slug": "DATASET_SLUG01",
+        "slo_id": "SLO01"
+      },
+      "SLO02": {
+        "created_at": "s14a",
+        "dataset_slugs": [],
+        "description": "s14c",
+        "id": "SLO02",
+        "name": "s14e",
+        "reset_at": "s14f",
+        "sli": {},
+        "tags": [],
+        "target_per_million": 338,
+        "time_period_days": 339,
+        "updated_at": "s154",
+        "dataset_slug": "DATASET_SLUG01",
+        "slo_id": "SLO01"
+      }
+    }
+  },
+  "new": {
+    "slo": {
+      "slo_ref01": {
+        "created_at": "s1b8",
+        "dataset_slugs": [],
+        "description": "s1ba",
+        "name": "s1bc",
+        "reset_at": "s1bd",
+        "sli": {},
+        "tags": [],
+        "target_per_million": 448,
+        "time_period_days": 449,
+        "updated_at": "s1c2"
+      }
+    }
+  },
+  "requests": {
+    "POST /1/slos/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/slos/{datasetSlug}/{sloId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/slos/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "DELETE /1/slos/{datasetSlug}/{sloId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "PUT /1/slos/{datasetSlug}/{sloId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "existing": {
+    "burn_alert": {
+      "BURN_ALERT00": {
+        "alert_type": "s14",
+        "id": "BURN_ALERT00",
+        "burn_alert_id": "BURN_ALERT01",
+        "dataset_slug": "DATASET_SLUG01"
+      },
+      "BURN_ALERT01": {
+        "alert_type": "s28",
+        "id": "BURN_ALERT01",
+        "burn_alert_id": "BURN_ALERT01",
+        "dataset_slug": "DATASET_SLUG01"
+      },
+      "BURN_ALERT02": {
+        "alert_type": "s3c",
+        "id": "BURN_ALERT02",
+        "burn_alert_id": "BURN_ALERT01",
+        "dataset_slug": "DATASET_SLUG01"
+      }
+    }
+  },
+  "new": {
+    "burn_alert": {
+      "burn_alert_ref01": {
+        "alert_type": "s50"
+      }
+    }
+  },
+  "requests": {
+    "POST /1/burn_alerts/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/burn_alerts/{datasetSlug}/{burnAlertId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/burn_alerts/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "DELETE /1/burn_alerts/{datasetSlug}/{burnAlertId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "PUT /1/burn_alerts/{datasetSlug}/{burnAlertId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

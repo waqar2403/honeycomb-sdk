@@ -1,0 +1,385 @@
+# Entity: board
+
+main: kit: entity: board: {
+
+  alias: field: {}
+
+  fields: {
+    description: {
+      h: "Description"
+      n: "description"
+      r: false
+      sh: "A description of the Board."
+      t: "`$STRING`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      ro: true
+      sh: "Unique identifier (ID), returned in response bodies."
+      t: "`$STRING`"
+    }
+    layout_generation: {
+      h: "Layout Generation"
+      n: "layout_generation"
+      r: false
+      sh: "The layout generation mode for the board."
+      t: "`$STRING`"
+      wo: true
+    }
+    links: {
+      h: "Links"
+      n: "links"
+      r: false
+      ro: true
+      t: "`$OBJECT`"
+    }
+    name: {
+      h: "Name"
+      n: "name"
+      r: true
+      sh: "The name of the Board."
+      t: "`$STRING`"
+    }
+    panels: {
+      h: "Panels"
+      n: "panels"
+      r: false
+      t: "`$ARRAY`"
+    }
+    preset_filters: {
+      h: "Preset Filters"
+      n: "preset_filters"
+      r: false
+      sh: "A list of preset filters to apply to the board."
+      t: "`$ARRAY`"
+    }
+    tags: {
+      h: "Tags"
+      n: "tags"
+      r: false
+      sh: "A list of key-value pairs to help identify the Trigger."
+      t: "`$ARRAY`"
+    }
+    type: {
+      h: "Type"
+      n: "type"
+      r: true
+      sh: "The type of the board."
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "board"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          bf: [
+            "description"
+            "id"
+            "layout_generation"
+            "links"
+            "name"
+            "panels"
+            "preset_filters"
+            "tags"
+            "type"
+          ]
+          co: {
+            id: "POST /1/boards"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/1/boards"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "boards"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /1/boards"
+            source: "openapi3"
+            version: 2
+          }
+          m: "GET"
+          o: "/1/boards"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "boards"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /1/boards/{boardId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "boardId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/boards/{boardId}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              boardId: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "boards"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    remove: {
+      name: "remove"
+      points: [
+        {
+          co: {
+            id: "DELETE /1/boards/{boardId}/views/{viewId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "boardId"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "view_id"
+                or: "viewId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "DELETE"
+          o: "/1/boards/{boardId}/views/{viewId}"
+          q: {
+            exist: [
+              "id"
+              "view_id"
+            ]
+          }
+          r: {
+            param: {
+              boardId: "id"
+              viewId: "view_id"
+            }
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "boards"
+            }
+            {
+              var: "id"
+            }
+            {
+              lit: "views"
+            }
+            {
+              var: "view_id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+        {
+          co: {
+            id: "DELETE /1/boards/{boardId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "boardId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "DELETE"
+          o: "/1/boards/{boardId}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              boardId: "id"
+            }
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "boards"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    update: {
+      name: "update"
+      points: [
+        {
+          bf: [
+            "description"
+            "id"
+            "layout_generation"
+            "links"
+            "name"
+            "panels"
+            "preset_filters"
+            "tags"
+            "type"
+          ]
+          co: {
+            id: "PUT /1/boards/{boardId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "boardId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "PUT"
+          o: "/1/boards/{boardId}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              boardId: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "boards"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

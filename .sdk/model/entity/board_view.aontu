@@ -1,0 +1,326 @@
+# Entity: board_view
+
+main: kit: entity: board_view: {
+
+  alias: field: {}
+
+  fields: {
+    filters: {
+      h: "Filters"
+      n: "filters"
+      op: {
+        create: {
+          req: true
+          type: "`$ARRAY`"
+        }
+        update: {
+          req: true
+          type: "`$ARRAY`"
+        }
+      }
+      r: false
+      sh: "The filters to apply to this view."
+      t: "`$ARRAY`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      sh: "Unique identifier for the board view."
+      t: "`$STRING`"
+    }
+    name: {
+      h: "Name"
+      n: "name"
+      op: {
+        create: {
+          req: true
+          type: "`$STRING`"
+        }
+        update: {
+          req: true
+          type: "`$STRING`"
+        }
+      }
+      r: false
+      sh: "The name of the view."
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "board_view"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          bf: [
+            "filters"
+            "name"
+          ]
+          co: {
+            id: "POST /1/boards/{boardId}/views"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "boardId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "POST"
+          o: "/1/boards/{boardId}/views"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              boardId: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "boards"
+            }
+            {
+              var: "id"
+            }
+            {
+              lit: "views"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /1/boards/{boardId}/views"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "boardId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/boards/{boardId}/views"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              boardId: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "boards"
+            }
+            {
+              var: "id"
+            }
+            {
+              lit: "views"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /1/boards/{boardId}/views/{viewId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "board_id"
+                or: "boardId"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "id"
+                or: "viewId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/boards/{boardId}/views/{viewId}"
+          q: {
+            exist: [
+              "board_id"
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              boardId: "board_id"
+              viewId: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "boards"
+            }
+            {
+              var: "board_id"
+            }
+            {
+              lit: "views"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    update: {
+      name: "update"
+      points: [
+        {
+          bf: [
+            "filters"
+            "id"
+            "name"
+          ]
+          co: {
+            id: "PUT /1/boards/{boardId}/views/{viewId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "board_id"
+                or: "boardId"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "id"
+                or: "viewId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "PUT"
+          o: "/1/boards/{boardId}/views/{viewId}"
+          q: {
+            exist: [
+              "board_id"
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              boardId: "board_id"
+              viewId: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "boards"
+            }
+            {
+              var: "board_id"
+            }
+            {
+              lit: "views"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+  relations: ancestors: [
+    [path("$.main.kit.entity.board")]
+  ]
+
+}

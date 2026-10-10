@@ -1,0 +1,81 @@
+# BasicMarkerSettingFlow
+
+main: kit: flow: BasicMarkerSettingFlow:
+{
+  entity: "marker_setting",
+  kind: "basic",
+  name: "BasicMarkerSettingFlow",
+  step: [
+    {
+      i: {
+        ref: "marker_setting_ref01"
+      }
+
+      m: {
+        dataset_slug: "dataset_slug01"
+      }
+
+      o: "create"
+    }
+
+    {
+      d: {
+        dataset_slug: "dataset_slug01"
+      }
+
+      i: {
+        ref: "marker_setting_ref01",
+        srcdatavar: "marker_setting_ref01_data",
+        suffix: "_up0",
+        textfield: "color"
+      }
+
+      o: "update",
+      s: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-marker_setting_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "marker_setting_ref01",
+        srcdatavar: "marker_setting_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        id: "marker_setting01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-marker_setting_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "marker_setting_ref01",
+        suffix: "_rm0"
+      }
+
+      m: {
+        dataset_slug: "dataset_slug01",
+        id: "marker_setting01"
+      }
+
+      o: "remove"
+    }
+  ],
+  "key$": "BasicMarkerSettingFlow"
+}

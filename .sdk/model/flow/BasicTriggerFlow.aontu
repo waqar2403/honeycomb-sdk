@@ -1,0 +1,118 @@
+# BasicTriggerFlow
+
+main: kit: flow: BasicTriggerFlow:
+{
+  entity: "trigger",
+  kind: "basic",
+  name: "BasicTriggerFlow",
+  step: [
+    {
+      i: {
+        ref: "trigger_ref01"
+      }
+
+      m: {
+        dataset_slug: "dataset_slug01",
+        recipient_id: "recipient01"
+      }
+
+      o: "create"
+    }
+
+    {
+      m: {
+        recipient_id: "recipient01"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "trigger_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      d: {
+        dataset_slug: "dataset_slug01"
+      }
+
+      i: {
+        ref: "trigger_ref01",
+        srcdatavar: "trigger_ref01_data",
+        suffix: "_up0",
+        textfield: "alert_type"
+      }
+
+      o: "update",
+      s: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-trigger_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "trigger_ref01",
+        srcdatavar: "trigger_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        id: "trigger01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-trigger_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "trigger_ref01",
+        suffix: "_rm0"
+      }
+
+      m: {
+        dataset_slug: "dataset_slug01",
+        id: "trigger01"
+      }
+
+      o: "remove"
+    }
+
+    {
+      i: {
+        suffix: "_rt0"
+      }
+
+      m: {
+        recipient_id: "recipient01"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemNotExists",
+          def: {
+            ref: "trigger_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicTriggerFlow"
+}

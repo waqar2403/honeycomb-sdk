@@ -1,5 +1,69 @@
 # API Information
 
 
+main: {
+  kit: {
+    info: {
+      contact: {
+        email: "support@honeycomb.io"
+      }
+      description: `The API allows programmatic management of many resources within Honeycomb.
 
+Please report any discrepancies with actual API behavior in <a href="https://docs.honeycomb.io/troubleshoot/community/">Pollinators Slack</a> or to <a href="https://support.honeycomb.io/">Honeycomb Support</a>.
+`
+      license: {
+        name: "Apache 2.0"
+        url: "https://www.apache.org/licenses/LICENSE-2.0.html"
+      }
+      security: {
+        alternatives: [
+          [
+            {
+              in: "header"
+              name: "X-Honeycomb-Team"
+              prefix: ""
+              scheme: "ingest_key"
+              type: "apiKey"
+            }
+          ]
+          [
+            {
+              in: "header"
+              name: "X-Amz-Firehose-Access-Key"
+              prefix: ""
+              scheme: "firehose_access_key"
+              type: "apiKey"
+            }
+          ]
+          [
+            {
+              in: "header"
+              name: "Authorization"
+              prefix: "Bearer"
+              scheme: "bearerAuth"
+              type: "http"
+            }
+          ]
+        ]
+        in: "header"
+        name: "X-Honeycomb-Team"
+        prefix: ""
+        scheme: "configuration_key"
+        type: "apiKey"
+      }
+      servers: [
+        {
+          url: "https://api.honeycomb.io"
+        }
+        {
+          url: "https://api.eu1.honeycomb.io"
+        }
+      ]
+      summary: "The API allows programmatic management of many resources within Honeycomb."
+      title: "Honeycomb API"
+      version: "1.0.0"
+      website: "https://docs.honeycomb.io"
+    }
+  }
+}
 

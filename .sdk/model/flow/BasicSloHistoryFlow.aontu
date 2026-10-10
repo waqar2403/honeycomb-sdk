@@ -1,0 +1,18 @@
+# BasicSloHistoryFlow
+
+main: kit: flow: BasicSloHistoryFlow:
+{
+  entity: "slo_history",
+  kind: "basic",
+  name: "BasicSloHistoryFlow",
+  step: [
+    {
+      i: {
+        ref: "slo_history_ref01"
+      }
+
+      o: "create"
+    }
+  ],
+  "key$": "BasicSloHistoryFlow"
+}

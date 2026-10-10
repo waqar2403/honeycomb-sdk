@@ -1,0 +1,45 @@
+# BasicQueryFlow
+
+main: kit: flow: BasicQueryFlow:
+{
+  entity: "query",
+  kind: "basic",
+  name: "BasicQueryFlow",
+  step: [
+    {
+      i: {
+        ref: "query_ref01"
+      }
+
+      m: {
+        dataset_slug: "dataset_slug01"
+      }
+
+      o: "create"
+    }
+
+    {
+      i: {
+        ref: "query_ref01",
+        srcdatavar: "query_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        dataset_slug: "dataset_slug01",
+        id: "query01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-query_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicQueryFlow"
+}

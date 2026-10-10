@@ -1,0 +1,570 @@
+# Entity: trigger
+
+main: kit: entity: trigger: {
+
+  alias: field: {}
+
+  fields: {
+    alert_type: {
+      h: "Alert Type"
+      n: "alert_type"
+      r: false
+      sh: "How often to fire an alert when a trigger threshold is crossed."
+      t: "`$STRING`"
+    }
+    auto_investigate: {
+      h: "Auto Investigate"
+      n: "auto_investigate"
+      r: false
+      sh: "When true, Honeycomb will automatically start an investigation when this Trigger fires."
+      t: "`$BOOLEAN`"
+    }
+    baseline_details: {
+      h: "Baseline Details"
+      n: "baseline_details"
+      r: false
+      t: "`$OBJECT`"
+      union: {
+        branches: 2
+        count: 1
+        depth: 0
+      }
+    }
+    created_at: {
+      fo: "date-time"
+      h: "Created At"
+      n: "created_at"
+      r: false
+      ro: true
+      t: "`$STRING`"
+    }
+    dataset_slug: {
+      h: "Dataset Slug"
+      n: "dataset_slug"
+      r: false
+      ro: true
+      sh: "The slug of the dataset this trigger belongs to."
+      t: "`$STRING`"
+    }
+    description: {
+      h: "Description"
+      n: "description"
+      r: false
+      sh: "A longer description, displayed on the Trigger's detail page."
+      t: "`$STRING`"
+    }
+    disabled: {
+      h: "Disabled"
+      n: "disabled"
+      r: false
+      sh: "If true, the trigger will not be evaluated and alerts will not be sent."
+      t: "`$BOOLEAN`"
+    }
+    evaluation_schedule: {
+      h: "Evaluation Schedule"
+      n: "evaluation_schedule"
+      r: true
+      sh: "A schedule that determines when the trigger is run."
+      t: "`$OBJECT`"
+    }
+    evaluation_schedule_type: {
+      h: "Evaluation Schedule Type"
+      n: "evaluation_schedule_type"
+      r: false
+      sh: "The schedule type used by the trigger."
+      t: "`$STRING`"
+    }
+    frequency: {
+      h: "Frequency"
+      n: "frequency"
+      r: false
+      sh: "The interval in seconds in which to check the results of the query’s calculation against the threshold."
+      t: "`$INTEGER`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      ro: true
+      sh: "The unique identifier (ID) for this Trigger."
+      t: "`$STRING`"
+    }
+    name: {
+      h: "Name"
+      n: "name"
+      r: false
+      sh: "A short, human-readable name for this Trigger, which will be displayed in the UI and when the trigger fires."
+      t: "`$STRING`"
+    }
+    query: {
+      h: "Query"
+      n: "query"
+      r: false
+      sh: "An inline query specification that is a strict subset of the standard Query Specification."
+      t: "`$OBJECT`"
+    }
+    query_id: {
+      h: "Query Id"
+      n: "query_id"
+      r: false
+      sh: "The ID of an existing saved Query that meets the trigger query requirements."
+      t: "`$STRING`"
+    }
+    recipients: {
+      h: "Recipients"
+      n: "recipients"
+      r: false
+      sh: "A list of [Recipients](/api/recipients/) to notify when the Trigger fires."
+      t: "`$ARRAY`"
+    }
+    tags: {
+      h: "Tags"
+      n: "tags"
+      r: false
+      sh: "A list of key-value pairs to help identify the Trigger."
+      t: "`$ARRAY`"
+    }
+    threshold: {
+      h: "Threshold"
+      n: "threshold"
+      r: true
+      sh: "The threshold over which the trigger will fire, specified as both an operator and a value."
+      t: "`$OBJECT`"
+    }
+    triggered: {
+      h: "Triggered"
+      n: "triggered"
+      r: false
+      ro: true
+      sh: "If true, the trigger has crossed its specified threshold without resolving."
+      t: "`$BOOLEAN`"
+    }
+    updated_at: {
+      fo: "date-time"
+      h: "Updated At"
+      n: "updated_at"
+      r: false
+      ro: true
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    from: {
+      dataset_slug: "dataset_slug"
+    }
+    name: "id"
+    parts: [
+      "dataset_slug"
+      "trigger_id"
+    ]
+    sep: "/"
+  }
+
+  name: "trigger"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          bf: [
+            "alert_type"
+            "auto_investigate"
+            "baseline_details"
+            "created_at"
+            "dataset_slug"
+            "description"
+            "disabled"
+            "evaluation_schedule"
+            "evaluation_schedule_type"
+            "frequency"
+            "id"
+            "name"
+            "query"
+            "query_id"
+            "recipients"
+            "tags"
+            "threshold"
+            "triggered"
+            "updated_at"
+          ]
+          co: {
+            id: "POST /1/triggers/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "POST"
+          o: "/1/triggers/{datasetSlug}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "triggers"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /1/recipients/{recipientId}/triggers"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "recipient_id"
+                or: "recipientId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/recipients/{recipientId}/triggers"
+          q: {
+            exist: [
+              "recipient_id"
+            ]
+          }
+          r: {
+            param: {
+              recipientId: "recipient_id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "recipients"
+            }
+            {
+              var: "recipient_id"
+            }
+            {
+              lit: "triggers"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /1/triggers/{datasetSlug}/{triggerId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "trigger_id"
+                or: "triggerId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/triggers/{datasetSlug}/{triggerId}"
+          q: {
+            exist: [
+              "dataset_slug"
+              "trigger_id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+              triggerId: "trigger_id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "triggers"
+            }
+            {
+              var: "dataset_slug"
+            }
+            {
+              var: "trigger_id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+        {
+          co: {
+            id: "GET /1/triggers/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/triggers/{datasetSlug}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "triggers"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    remove: {
+      name: "remove"
+      points: [
+        {
+          co: {
+            id: "DELETE /1/triggers/{datasetSlug}/{triggerId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "trigger_id"
+                or: "triggerId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "DELETE"
+          o: "/1/triggers/{datasetSlug}/{triggerId}"
+          q: {
+            exist: [
+              "dataset_slug"
+              "trigger_id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+              triggerId: "trigger_id"
+            }
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "triggers"
+            }
+            {
+              var: "dataset_slug"
+            }
+            {
+              var: "trigger_id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    update: {
+      name: "update"
+      points: [
+        {
+          bf: [
+            "alert_type"
+            "auto_investigate"
+            "baseline_details"
+            "created_at"
+            "dataset_slug"
+            "description"
+            "disabled"
+            "evaluation_schedule"
+            "evaluation_schedule_type"
+            "frequency"
+            "id"
+            "name"
+            "query"
+            "query_id"
+            "recipients"
+            "tags"
+            "threshold"
+            "triggered"
+            "updated_at"
+          ]
+          co: {
+            id: "PUT /1/triggers/{datasetSlug}/{triggerId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "trigger_id"
+                or: "triggerId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "PUT"
+          o: "/1/triggers/{datasetSlug}/{triggerId}"
+          q: {
+            exist: [
+              "dataset_slug"
+              "trigger_id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+              triggerId: "trigger_id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "triggers"
+            }
+            {
+              var: "dataset_slug"
+            }
+            {
+              var: "trigger_id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+  relations: ancestors: [
+    [path("$.main.kit.entity.recipient")]
+  ]
+
+}

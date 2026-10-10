@@ -1,0 +1,78 @@
+# Entity: slo_history
+
+main: kit: entity: slo_history: {
+
+  alias: field: {}
+
+  fields: {
+    end_time: {
+      h: "End Time"
+      n: "end_time"
+      r: true
+      sh: "The ending Unix timestamp, in seconds since the epoch, to retrieve historical data for."
+      t: "`$INTEGER`"
+    }
+    ids: {
+      h: "Ids"
+      n: "ids"
+      r: true
+      sh: "A list of SLO IDs to retrieve history for."
+      t: "`$ARRAY`"
+    }
+    start_time: {
+      h: "Start Time"
+      n: "start_time"
+      r: true
+      sh: "The starting Unix timestamp, in seconds since the epoch, to retrieve historical data for."
+      t: "`$INTEGER`"
+    }
+  }
+
+  name: "slo_history"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          bf: [
+            "end_time"
+            "ids"
+            "start_time"
+          ]
+          co: {
+            id: "POST /1/reporting/slos/historical"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/1/reporting/slos/historical"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "reporting"
+            }
+            {
+              lit: "slos"
+            }
+            {
+              lit: "historical"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

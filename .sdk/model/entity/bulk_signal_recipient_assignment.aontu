@@ -1,0 +1,88 @@
+# Entity: bulk_signal_recipient_assignment
+
+main: kit: entity: bulk_signal_recipient_assignment: {
+
+  alias: field: {}
+
+  fields: {
+    failed: {
+      h: "Failed"
+      n: "failed"
+      r: true
+      sh: "The Signals that were not updated, each with the reason."
+      t: "`$ARRAY`"
+    }
+    recipients: {
+      h: "Recipients"
+      n: "recipients"
+      r: true
+      sh: "The Recipients to assign to every selected Signal."
+      t: "`$ARRAY`"
+    }
+    selector: {
+      h: "Selector"
+      n: "selector"
+      r: true
+      sh: "Chooses which Signals to act on."
+      t: "`$OBJECT`"
+    }
+    succeeded: {
+      h: "Succeeded"
+      n: "succeeded"
+      r: true
+      sh: "The Signals whose Recipient set was updated."
+      t: "`$ARRAY`"
+    }
+    unchanged: {
+      h: "Unchanged"
+      n: "unchanged"
+      r: true
+      sh: "The Signals that already had every requested Recipient."
+      t: "`$ARRAY`"
+    }
+  }
+
+  name: "bulk_signal_recipient_assignment"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          bf: [
+            "recipients"
+            "selector"
+          ]
+          co: {
+            id: "POST /1/signals/recipient_assignments"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/1/signals/recipient_assignments"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "signals"
+            }
+            {
+              lit: "recipient_assignments"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

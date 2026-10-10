@@ -1,0 +1,22 @@
+# BasicEventFlow
+
+main: kit: flow: BasicEventFlow:
+{
+  entity: "event",
+  kind: "basic",
+  name: "BasicEventFlow",
+  step: [
+    {
+      i: {
+        ref: "event_ref01"
+      }
+
+      m: {
+        dataset_slug: "dataset_slug01"
+      }
+
+      o: "create"
+    }
+  ],
+  "key$": "BasicEventFlow"
+}

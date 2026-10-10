@@ -1,0 +1,51 @@
+# BasicDatasetDefinitionFlow
+
+main: kit: flow: BasicDatasetDefinitionFlow:
+{
+  entity: "dataset_definition",
+  kind: "basic",
+  name: "BasicDatasetDefinitionFlow",
+  step: [
+    {
+      i: {
+        ref: "dataset_definition_ref01",
+        srcdatavar: "dataset_definition_ref01_data",
+        suffix: "_up0",
+        textfield: "link_span_id"
+      }
+
+      o: "update",
+      s: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-dataset_definition_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "dataset_definition_ref01",
+        srcdatavar: "dataset_definition_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        id: "dataset_definition01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-dataset_definition_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicDatasetDefinitionFlow"
+}

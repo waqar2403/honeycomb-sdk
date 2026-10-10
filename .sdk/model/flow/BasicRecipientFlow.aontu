@@ -1,0 +1,100 @@
+# BasicRecipientFlow
+
+main: kit: flow: BasicRecipientFlow:
+{
+  entity: "recipient",
+  kind: "basic",
+  name: "BasicRecipientFlow",
+  step: [
+    {
+      i: {
+        ref: "recipient_ref01"
+      }
+
+      o: "create"
+    }
+
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "recipient_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "recipient_ref01",
+        srcdatavar: "recipient_ref01_data",
+        suffix: "_up0",
+        textfield: "type"
+      }
+
+      o: "update",
+      s: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-recipient_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "recipient_ref01",
+        srcdatavar: "recipient_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        id: "recipient01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-recipient_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "recipient_ref01",
+        suffix: "_rm0"
+      }
+
+      m: {
+        id: "recipient01"
+      }
+
+      o: "remove"
+    }
+
+    {
+      i: {
+        suffix: "_rt0"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemNotExists",
+          def: {
+            ref: "recipient_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicRecipientFlow"
+}

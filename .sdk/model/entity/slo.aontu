@@ -1,0 +1,499 @@
+# Entity: slo
+
+main: kit: entity: slo: {
+
+  alias: field: {}
+
+  fields: {
+    created_at: {
+      fo: "date-time"
+      h: "Created At"
+      n: "created_at"
+      r: false
+      ro: true
+      sh: "The ISO8601-formatted time when the SLO was created."
+      t: "`$STRING`"
+    }
+    dataset_slugs: {
+      h: "Dataset Slugs"
+      n: "dataset_slugs"
+      r: false
+      ro: true
+      sh: "The dataset(s) the SLO will be evaluated against."
+      t: "`$ARRAY`"
+    }
+    description: {
+      h: "Description"
+      n: "description"
+      r: false
+      sh: "A nice description of the SLO's intent and context."
+      t: "`$STRING`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      ro: true
+      t: "`$STRING`"
+    }
+    name: {
+      h: "Name"
+      n: "name"
+      op: {
+        create: {
+          req: true
+          type: "`$STRING`"
+        }
+        load: {
+          req: true
+          type: "`$STRING`"
+        }
+        update: {
+          req: true
+          type: "`$STRING`"
+        }
+      }
+      r: false
+      sh: "The name of the SLO."
+      t: "`$STRING`"
+    }
+    reset_at: {
+      fo: "date-time"
+      h: "Reset At"
+      n: "reset_at"
+      r: false
+      ro: true
+      sh: "The ISO8601-formatted time the SLO was last reset."
+      t: "`$STRING`"
+    }
+    sli: {
+      h: "Sli"
+      n: "sli"
+      op: {
+        create: {
+          req: true
+          type: "`$OBJECT`"
+        }
+        load: {
+          req: true
+          type: "`$OBJECT`"
+        }
+        update: {
+          req: true
+          type: "`$OBJECT`"
+        }
+      }
+      r: false
+      sh: "Reference to the [Calculated Field](/api/calculated-fields/) used as the indicator of event success."
+      t: "`$OBJECT`"
+    }
+    tags: {
+      h: "Tags"
+      n: "tags"
+      r: false
+      sh: "A list of key-value pairs to help identify the SLO."
+      t: "`$ARRAY`"
+    }
+    target_per_million: {
+      h: "Target Per Million"
+      n: "target_per_million"
+      op: {
+        create: {
+          req: true
+          type: "`$INTEGER`"
+        }
+        load: {
+          req: true
+          type: "`$INTEGER`"
+        }
+        update: {
+          req: true
+          type: "`$INTEGER`"
+        }
+      }
+      r: false
+      sh: "The number of events out of one million (1,000,000) that you expected qualified events to succeed."
+      t: "`$INTEGER`"
+    }
+    time_period_days: {
+      h: "Time Period Days"
+      n: "time_period_days"
+      op: {
+        create: {
+          req: true
+          type: "`$INTEGER`"
+        }
+        load: {
+          req: true
+          type: "`$INTEGER`"
+        }
+        update: {
+          req: true
+          type: "`$INTEGER`"
+        }
+      }
+      r: false
+      sh: "The time period, in days, over which the SLO will be evaluated."
+      t: "`$INTEGER`"
+    }
+    updated_at: {
+      fo: "date-time"
+      h: "Updated At"
+      n: "updated_at"
+      r: false
+      ro: true
+      sh: "The ISO8601-formatted time when the SLO was updated."
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+    parts: [
+      "dataset_slug"
+      "slo_id"
+    ]
+    sep: "/"
+  }
+
+  name: "slo"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          bf: [
+            "created_at"
+            "dataset_slugs"
+            "description"
+            "id"
+            "name"
+            "reset_at"
+            "sli"
+            "tags"
+            "target_per_million"
+            "time_period_days"
+            "updated_at"
+          ]
+          co: {
+            id: "POST /1/slos/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "POST"
+          o: "/1/slos/{datasetSlug}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "slos"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /1/slos/{datasetSlug}/{sloId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "slo_id"
+                or: "sloId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                ex: ""
+                k: "query"
+                n: "detailed"
+                or: "detailed"
+                r: false
+                t: "`$BOOLEAN`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/slos/{datasetSlug}/{sloId}"
+          q: {
+            exist: [
+              "dataset_slug"
+              "slo_id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+              sloId: "slo_id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "slos"
+            }
+            {
+              var: "dataset_slug"
+            }
+            {
+              var: "slo_id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+        {
+          co: {
+            id: "GET /1/slos/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/slos/{datasetSlug}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "slos"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    remove: {
+      name: "remove"
+      points: [
+        {
+          co: {
+            id: "DELETE /1/slos/{datasetSlug}/{sloId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "slo_id"
+                or: "sloId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "DELETE"
+          o: "/1/slos/{datasetSlug}/{sloId}"
+          q: {
+            exist: [
+              "dataset_slug"
+              "slo_id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+              sloId: "slo_id"
+            }
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "slos"
+            }
+            {
+              var: "dataset_slug"
+            }
+            {
+              var: "slo_id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    update: {
+      name: "update"
+      points: [
+        {
+          bf: [
+            "created_at"
+            "dataset_slugs"
+            "description"
+            "id"
+            "name"
+            "reset_at"
+            "sli"
+            "tags"
+            "target_per_million"
+            "time_period_days"
+            "updated_at"
+          ]
+          co: {
+            id: "PUT /1/slos/{datasetSlug}/{sloId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "slo_id"
+                or: "sloId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "PUT"
+          o: "/1/slos/{datasetSlug}/{sloId}"
+          q: {
+            exist: [
+              "dataset_slug"
+              "slo_id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+              sloId: "slo_id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "slos"
+            }
+            {
+              var: "dataset_slug"
+            }
+            {
+              var: "slo_id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

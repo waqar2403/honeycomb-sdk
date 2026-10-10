@@ -1,0 +1,372 @@
+# Entity: burn_alert
+
+main: kit: entity: burn_alert: {
+
+  alias: field: {}
+
+  fields: {
+    alert_type: {
+      h: "Alert Type"
+      n: "alert_type"
+      r: true
+      t: "`$STRING`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+    parts: [
+      "dataset_slug"
+      "burn_alert_id"
+    ]
+    sep: "/"
+  }
+
+  name: "burn_alert"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          bf: [
+            "alert_type"
+            "auto_investigate"
+            "budget_rate_decrease_threshold_per_million"
+            "budget_rate_window_minutes"
+            "created_at"
+            "description"
+            "exhaustion_minutes"
+            "id"
+            "recipients"
+            "slo"
+            "triggered"
+            "updated_at"
+          ]
+          co: {
+            id: "POST /1/burn_alerts/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "POST"
+          o: "/1/burn_alerts/{datasetSlug}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "burn_alerts"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /1/burn_alerts/{datasetSlug}/{burnAlertId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "burn_alert_id"
+                or: "burnAlertId"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/burn_alerts/{datasetSlug}/{burnAlertId}"
+          q: {
+            exist: [
+              "burn_alert_id"
+              "dataset_slug"
+            ]
+          }
+          r: {
+            param: {
+              burnAlertId: "burn_alert_id"
+              datasetSlug: "dataset_slug"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "burn_alerts"
+            }
+            {
+              var: "dataset_slug"
+            }
+            {
+              var: "burn_alert_id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+        {
+          co: {
+            id: "GET /1/burn_alerts/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                k: "query"
+                n: "slo_id"
+                or: "slo_id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/burn_alerts/{datasetSlug}"
+          q: {
+            exist: [
+              "id"
+              "slo_id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "burn_alerts"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    remove: {
+      name: "remove"
+      points: [
+        {
+          co: {
+            id: "DELETE /1/burn_alerts/{datasetSlug}/{burnAlertId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "burn_alert_id"
+                or: "burnAlertId"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "DELETE"
+          o: "/1/burn_alerts/{datasetSlug}/{burnAlertId}"
+          q: {
+            exist: [
+              "burn_alert_id"
+              "dataset_slug"
+            ]
+          }
+          r: {
+            param: {
+              burnAlertId: "burn_alert_id"
+              datasetSlug: "dataset_slug"
+            }
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "burn_alerts"
+            }
+            {
+              var: "dataset_slug"
+            }
+            {
+              var: "burn_alert_id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    update: {
+      name: "update"
+      points: [
+        {
+          bf: [
+            "alert_type"
+            "auto_investigate"
+            "budget_rate_decrease_threshold_per_million"
+            "budget_rate_window_minutes"
+            "created_at"
+            "description"
+            "exhaustion_minutes"
+            "id"
+            "recipients"
+            "triggered"
+            "updated_at"
+          ]
+          co: {
+            id: "PUT /1/burn_alerts/{datasetSlug}/{burnAlertId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "burn_alert_id"
+                or: "burnAlertId"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "PUT"
+          o: "/1/burn_alerts/{datasetSlug}/{burnAlertId}"
+          q: {
+            exist: [
+              "burn_alert_id"
+              "dataset_slug"
+            ]
+          }
+          r: {
+            param: {
+              burnAlertId: "burn_alert_id"
+              datasetSlug: "dataset_slug"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "burn_alerts"
+            }
+            {
+              var: "dataset_slug"
+            }
+            {
+              var: "burn_alert_id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

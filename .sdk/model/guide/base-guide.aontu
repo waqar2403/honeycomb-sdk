@@ -1,0 +1,340 @@
+# Generated from the API definition and overwritten on every build: do not
+# edit this file. Put customizations in the guide entry file, which includes
+# this one and overrides its defaults:
+#   guide.aontu
+
+guide: {
+  metrics: count: entity: 27
+  metrics: count: path: 48
+  metrics: count: method: 90
+
+  entity: auth: {
+    path: "/1/auth": {
+      op: load: method: *GET
+    }
+    path: "/2/auth": {
+      op: load: method: *GET
+    }
+  }
+
+  entity: board: {
+    path: "/1/boards": {
+      op: create: method: *POST
+      op: list: method: *GET
+    }
+    path: "/1/boards/{boardId}": {
+      rename: param: "boardId": *"id"
+      op: load: method: *GET
+      op: remove: method: *DELETE
+      op: update: method: *PUT
+    }
+    path: "/1/boards/{boardId}/views/{viewId}": {
+      rename: param: "boardId": *"id"
+      rename: param: "viewId": *"view_id"
+      op: remove: method: *DELETE
+    }
+  }
+
+  entity: board_view: {
+    path: "/1/boards/{boardId}/views": {
+      rename: param: "boardId": *"id"
+      op: create: method: *POST
+      op: list: method: *GET
+    }
+    path: "/1/boards/{boardId}/views/{viewId}": {
+      rename: param: "boardId": *"board_id"
+      rename: param: "viewId": *"id"
+      op: load: method: *GET
+      op: update: method: *PUT
+    }
+  }
+
+  entity: bulk_signal_recipient_assignment: {
+    path: "/1/signals/recipient_assignments": {
+      op: create: method: *POST
+    }
+  }
+
+  entity: burn_alert: {
+    path: "/1/burn_alerts/{datasetSlug}": {
+      rename: param: "datasetSlug": *"id"
+      op: create: method: *POST
+      op: load: method: *GET
+    }
+    path: "/1/burn_alerts/{datasetSlug}/{burnAlertId}": {
+      rename: param: "burnAlertId": *"burn_alert_id"
+      rename: param: "datasetSlug": *"dataset_slug"
+      op: load: method: *GET
+      op: remove: method: *DELETE
+      op: update: method: *PUT
+    }
+  }
+
+  entity: calculated_field: {
+    path: "/1/derived_columns/{datasetSlug}": {
+      rename: param: "datasetSlug": *"dataset_slug"
+      op: create: method: *POST
+      op: load: method: *GET
+    }
+    path: "/1/derived_columns/{datasetSlug}/{derivedColumnId}": {
+      rename: param: "datasetSlug": *"dataset_slug"
+      rename: param: "derivedColumnId": *"derived_column_id"
+      op: load: method: *GET
+      op: remove: method: *DELETE
+      op: update: method: *PUT
+    }
+  }
+
+  entity: column: {
+    path: "/1/columns/{datasetSlug}": {
+      rename: param: "datasetSlug": *"id"
+      op: create: method: *POST
+      op: load: method: *GET
+    }
+    path: "/1/columns/{datasetSlug}/{columnId}": {
+      rename: param: "columnId": *"column_id"
+      rename: param: "datasetSlug": *"dataset_slug"
+      op: load: method: *GET
+      op: remove: method: *DELETE
+      op: update: method: *PUT
+    }
+  }
+
+  entity: dataset: {
+    path: "/1/datasets": {
+      op: create: method: *POST
+      op: list: method: *GET
+    }
+    path: "/1/datasets/{datasetSlug}": {
+      rename: param: "datasetSlug": *"id"
+      op: load: method: *GET
+      op: remove: method: *DELETE
+      op: update: method: *PUT
+    }
+  }
+
+  entity: dataset_definition: {
+    path: "/1/dataset_definitions/{datasetSlug}": {
+      rename: param: "datasetSlug": *"id"
+      op: load: method: *GET
+      op: patch: method: *PATCH
+    }
+  }
+
+  entity: environment: {
+    path: "/2/teams/{teamSlug}/environments": {
+      rename: param: "teamSlug": *"team_slug"
+      op: create: method: *POST
+      op: load: method: *GET
+    }
+    path: "/2/teams/{teamSlug}/environments/{ID}": {
+      rename: param: "ID": *"id"
+      rename: param: "teamSlug": *"team_slug"
+      op: load: method: *GET
+      op: patch: method: *PATCH
+      op: remove: method: *DELETE
+    }
+  }
+
+  entity: event: {
+    path: "/1/batch/{datasetSlug}": {
+      rename: param: "datasetSlug": *"dataset_slug"
+      op: create: method: *POST
+    }
+    path: "/1/events/{datasetSlug}": {
+      rename: param: "datasetSlug": *"id"
+      op: create: method: *POST
+    }
+  }
+
+  entity: historical_anomaly: {
+    path: "/1/signals/{signalId}/historical_anomalies": {
+      rename: param: "signalId": *"signal_id"
+      op: list: method: *GET
+      op: list: transform: res: *("`body.historical_anomalies`")|top
+    }
+  }
+
+  entity: key_management: {
+    path: "/2/teams/{teamSlug}/api-keys": {
+      rename: param: "teamSlug": *"team_slug"
+      op: create: method: *POST
+      op: load: method: *GET
+    }
+    path: "/2/teams/{teamSlug}/api-keys/{ID}": {
+      rename: param: "ID": *"id"
+      rename: param: "teamSlug": *"team_slug"
+      op: load: method: *GET
+      op: patch: method: *PATCH
+      op: remove: method: *DELETE
+    }
+  }
+
+  entity: kinesi: {
+    path: "/1/kinesis_events/{datasetSlug}": {
+      rename: param: "datasetSlug": *"dataset_slug"
+      op: create: method: *POST
+    }
+  }
+
+  entity: map_dependency: {
+    path: "/1/maps/dependencies/requests": {
+      op: create: method: *POST
+    }
+    path: "/1/maps/dependencies/requests/{requestId}": {
+      rename: param: "requestId": *"request_id"
+      op: load: method: *GET
+    }
+  }
+
+  entity: marker: {
+    path: "/1/markers/{datasetSlug}": {
+      rename: param: "datasetSlug": *"id"
+      op: create: method: *POST
+      op: load: method: *GET
+    }
+    path: "/1/markers/{datasetSlug}/{markerId}": {
+      rename: param: "datasetSlug": *"dataset_slug"
+      rename: param: "markerId": *"marker_id"
+      op: remove: method: *DELETE
+      op: update: method: *PUT
+    }
+  }
+
+  entity: marker_setting: {
+    path: "/1/marker_settings/{datasetSlug}": {
+      rename: param: "datasetSlug": *"id"
+      op: create: method: *POST
+      op: load: method: *GET
+    }
+    path: "/1/marker_settings/{datasetSlug}/{markerSettingId}": {
+      rename: param: "datasetSlug": *"dataset_slug"
+      rename: param: "markerSettingId": *"marker_setting_id"
+      op: remove: method: *DELETE
+      op: update: method: *PUT
+    }
+  }
+
+  entity: query: {
+    path: "/1/queries/{datasetSlug}": {
+      rename: param: "datasetSlug": *"id"
+      op: create: method: *POST
+    }
+    path: "/1/queries/{datasetSlug}/{queryId}": {
+      rename: param: "datasetSlug": *"dataset_slug"
+      rename: param: "queryId": *"query_id"
+      op: load: method: *GET
+    }
+  }
+
+  entity: query_annotation: {
+    path: "/1/query_annotations/{datasetSlug}": {
+      rename: param: "datasetSlug": *"id"
+      op: create: method: *POST
+      op: load: method: *GET
+    }
+    path: "/1/query_annotations/{datasetSlug}/{queryAnnotationId}": {
+      rename: param: "datasetSlug": *"dataset_slug"
+      rename: param: "queryAnnotationId": *"query_annotation_id"
+      op: load: method: *GET
+      op: remove: method: *DELETE
+      op: update: method: *PUT
+    }
+  }
+
+  entity: query_result: {
+    path: "/1/query_results/{datasetSlug}": {
+      rename: param: "datasetSlug": *"id"
+      op: create: method: *POST
+    }
+    path: "/1/query_results/{datasetSlug}/{queryResultId}": {
+      rename: param: "datasetSlug": *"dataset_slug"
+      rename: param: "queryResultId": *"query_result_id"
+      op: load: method: *GET
+    }
+  }
+
+  entity: recipient: {
+    path: "/1/recipients": {
+      op: create: method: *POST
+      op: list: method: *GET
+    }
+    path: "/1/recipients/{recipientId}": {
+      rename: param: "recipientId": *"id"
+      op: load: method: *GET
+      op: remove: method: *DELETE
+      op: update: method: *PUT
+    }
+  }
+
+  entity: signal: {
+    path: "/1/signals": {
+      op: list: method: *GET
+      op: list: transform: res: *("`body.signals`")|top
+    }
+    path: "/1/signals/{signalId}": {
+      rename: param: "signalId": *"id"
+      op: load: method: *GET
+      op: update: method: *PUT
+    }
+  }
+
+  entity: slo: {
+    path: "/1/slos/{datasetSlug}": {
+      rename: param: "datasetSlug": *"id"
+      op: create: method: *POST
+      op: load: method: *GET
+    }
+    path: "/1/slos/{datasetSlug}/{sloId}": {
+      rename: param: "datasetSlug": *"dataset_slug"
+      rename: param: "sloId": *"slo_id"
+      op: load: method: *GET
+      op: remove: method: *DELETE
+      op: update: method: *PUT
+    }
+  }
+
+  entity: slo_count: {
+    path: "/1/slos/{datasetSlug}/{sloId}/counts": {
+      rename: param: "datasetSlug": *"dataset_slug"
+      rename: param: "sloId": *"slo_id"
+      op: list: method: *GET
+      op: list: transform: res: *("`body.windows`")|top
+    }
+  }
+
+  entity: slo_history: {
+    path: "/1/reporting/slos/historical": {
+      op: create: method: *POST
+    }
+  }
+
+  entity: slo_hourly_count: {
+    path: "/1/slos/{datasetSlug}/{sloId}/counts/history": {
+      rename: param: "datasetSlug": *"dataset_slug"
+      rename: param: "sloId": *"slo_id"
+      op: list: method: *GET
+      op: list: transform: res: *("`body.buckets`")|top
+    }
+  }
+
+  entity: trigger: {
+    path: "/1/recipients/{recipientId}/triggers": {
+      rename: param: "recipientId": *"recipient_id"
+      op: list: method: *GET
+    }
+    path: "/1/triggers/{datasetSlug}": {
+      rename: param: "datasetSlug": *"id"
+      op: create: method: *POST
+      op: load: method: *GET
+    }
+    path: "/1/triggers/{datasetSlug}/{triggerId}": {
+      rename: param: "datasetSlug": *"dataset_slug"
+      rename: param: "triggerId": *"trigger_id"
+      op: load: method: *GET
+      op: remove: method: *DELETE
+      op: update: method: *PUT
+    }
+  }
+
+}

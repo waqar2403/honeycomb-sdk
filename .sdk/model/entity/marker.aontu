@@ -1,0 +1,355 @@
+# Entity: marker
+
+main: kit: entity: marker: {
+
+  alias: field: {}
+
+  fields: {
+    color: {
+      h: "Color"
+      n: "color"
+      r: false
+      ro: true
+      sh: "Color can be assigned to Markers using the Marker Settings endpoint."
+      t: "`$STRING`"
+    }
+    created_at: {
+      h: "Created At"
+      n: "created_at"
+      r: false
+      ro: true
+      sh: "The ISO8601-formatted time when the Marker was created."
+      t: "`$STRING`"
+    }
+    end_time: {
+      h: "End Time"
+      n: "end_time"
+      r: false
+      sh: "Specifies end time, and allows a Marker to be recorded as representing a time range, such as a 5 minute deploy."
+      t: "`$INTEGER`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      ro: true
+      sh: "A 6 character hexadecimal string assigned on Marker creation."
+      t: "`$STRING`"
+    }
+    message: {
+      h: "Message"
+      n: "message"
+      r: false
+      sh: "A message to describe this specific Marker."
+      t: "`$STRING`"
+    }
+    start_time: {
+      h: "Start Time"
+      n: "start_time"
+      r: false
+      sh: "Indicates the time the Marker should be placed."
+      t: "`$INTEGER`"
+    }
+    type: {
+      h: "Type"
+      n: "type"
+      r: false
+      sh: "Groups similar Markers."
+      t: "`$STRING`"
+    }
+    updated_at: {
+      h: "Updated At"
+      n: "updated_at"
+      r: false
+      ro: true
+      sh: "The ISO8601-formatted time when the Marker was updated."
+      t: "`$STRING`"
+    }
+    url: {
+      h: "Url"
+      n: "url"
+      r: false
+      sh: "A target for the marker."
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+    parts: [
+      "dataset_slug"
+      "marker_id"
+    ]
+    sep: "/"
+  }
+
+  name: "marker"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          bf: [
+            "color"
+            "created_at"
+            "end_time"
+            "id"
+            "message"
+            "start_time"
+            "type"
+            "updated_at"
+            "url"
+          ]
+          co: {
+            id: "POST /1/markers/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "POST"
+          o: "/1/markers/{datasetSlug}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "markers"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /1/markers/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/markers/{datasetSlug}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "markers"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    remove: {
+      name: "remove"
+      points: [
+        {
+          co: {
+            id: "DELETE /1/markers/{datasetSlug}/{markerId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "marker_id"
+                or: "markerId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "DELETE"
+          o: "/1/markers/{datasetSlug}/{markerId}"
+          q: {
+            exist: [
+              "dataset_slug"
+              "marker_id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+              markerId: "marker_id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "markers"
+            }
+            {
+              var: "dataset_slug"
+            }
+            {
+              var: "marker_id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    update: {
+      name: "update"
+      points: [
+        {
+          bf: [
+            "color"
+            "created_at"
+            "end_time"
+            "id"
+            "message"
+            "start_time"
+            "type"
+            "updated_at"
+            "url"
+          ]
+          co: {
+            id: "PUT /1/markers/{datasetSlug}/{markerId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "marker_id"
+                or: "markerId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "PUT"
+          o: "/1/markers/{datasetSlug}/{markerId}"
+          q: {
+            exist: [
+              "dataset_slug"
+              "marker_id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+              markerId: "marker_id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "markers"
+            }
+            {
+              var: "dataset_slug"
+            }
+            {
+              var: "marker_id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

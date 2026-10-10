@@ -1,0 +1,79 @@
+{
+  "existing": {
+    "query_result": {
+      "QUERY_RESULT00": {
+        "complete": true,
+        "data": {},
+        "disable_other_by_aggregate": true,
+        "disable_series": false,
+        "disable_total_by_aggregate": true,
+        "error": "s73",
+        "id": "QUERY_RESULT00",
+        "limit": 117,
+        "links": {},
+        "query": "s77",
+        "query_id": "QUERY01",
+        "dataset_slug": "DATASET_SLUG01",
+        "query_result_id": "QUERY_RESULT01"
+      },
+      "QUERY_RESULT01": {
+        "complete": true,
+        "data": {},
+        "disable_other_by_aggregate": true,
+        "disable_series": false,
+        "disable_total_by_aggregate": true,
+        "error": "se1",
+        "id": "QUERY_RESULT01",
+        "limit": 227,
+        "links": {},
+        "query": "se5",
+        "query_id": "QUERY01",
+        "dataset_slug": "DATASET_SLUG01",
+        "query_result_id": "QUERY_RESULT01"
+      },
+      "QUERY_RESULT02": {
+        "complete": true,
+        "data": {},
+        "disable_other_by_aggregate": true,
+        "disable_series": false,
+        "disable_total_by_aggregate": true,
+        "error": "s14f",
+        "id": "QUERY_RESULT02",
+        "limit": 337,
+        "links": {},
+        "query": "s153",
+        "query_id": "QUERY01",
+        "dataset_slug": "DATASET_SLUG01",
+        "query_result_id": "QUERY_RESULT01"
+      }
+    }
+  },
+  "new": {
+    "query_result": {
+      "query_result_ref01": {
+        "complete": true,
+        "data": {},
+        "disable_other_by_aggregate": true,
+        "disable_series": false,
+        "disable_total_by_aggregate": true,
+        "error": "s1bd",
+        "limit": 447,
+        "links": {},
+        "query": "s1c1",
+        "query_id": "QUERY01"
+      }
+    }
+  },
+  "requests": {
+    "POST /1/query_results/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/query_results/{datasetSlug}/{queryResultId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

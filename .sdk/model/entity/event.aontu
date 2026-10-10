@@ -1,0 +1,181 @@
+# Entity: event
+
+main: kit: entity: event: {
+
+  alias: field: {}
+
+  fields: {
+    batch_events: {
+      h: "Batch Events"
+      n: "batch_events"
+      r: false
+      sh: "The array should contain one or more JSON objects representing Events."
+      t: "`$ARRAY`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      t: "`$STRING`"
+    }
+    status: {
+      h: "Status"
+      n: "status"
+      r: false
+      t: "`$INTEGER`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "event"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          bf: [
+            "batch_events"
+          ]
+          co: {
+            id: "POST /1/batch/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            header: [
+              {
+                ex: "plaintext"
+                k: "header"
+                n: "content_encoding"
+                or: "Content-Encoding"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "POST"
+          o: "/1/batch/{datasetSlug}"
+          q: {
+            exist: [
+              "batch_events"
+              "dataset_slug"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+            }
+          }
+          rb: {
+            alternatives: [
+              {
+                binary: true
+                kind: "raw"
+                media: "application/octet-stream"
+              }
+            ]
+            kind: "json"
+            media: "application/json"
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "batch"
+            }
+            {
+              var: "dataset_slug"
+            }
+          ]
+          t: {
+            req: "`reqdata.batch_events`"
+            res: "`body`"
+          }
+        }
+        {
+          bf: false
+          co: {
+            id: "POST /1/events/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            header: [
+              {
+                k: "header"
+                n: "x_honeycomb_event_time"
+                or: "X-Honeycomb-Event-Time"
+                r: false
+                t: "`$INTEGER`"
+              }
+              {
+                k: "header"
+                n: "x_honeycomb_samplerate"
+                or: "X-Honeycomb-Samplerate"
+                r: false
+                t: "`$INTEGER`"
+              }
+            ]
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "POST"
+          o: "/1/events/{datasetSlug}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "id"
+            }
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "events"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

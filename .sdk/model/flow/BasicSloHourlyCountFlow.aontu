@@ -1,0 +1,27 @@
+# BasicSloHourlyCountFlow
+
+main: kit: flow: BasicSloHourlyCountFlow:
+{
+  entity: "slo_hourly_count",
+  kind: "basic",
+  name: "BasicSloHourlyCountFlow",
+  step: [
+    {
+      m: {
+        dataset_slug: "dataset_slug01",
+        slo_id: "slo01"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "slo_hourly_count_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicSloHourlyCountFlow"
+}

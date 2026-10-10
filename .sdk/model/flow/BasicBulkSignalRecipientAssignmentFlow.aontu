@@ -1,0 +1,18 @@
+# BasicBulkSignalRecipientAssignmentFlow
+
+main: kit: flow: BasicBulkSignalRecipientAssignmentFlow:
+{
+  entity: "bulk_signal_recipient_assignment",
+  kind: "basic",
+  name: "BasicBulkSignalRecipientAssignmentFlow",
+  step: [
+    {
+      i: {
+        ref: "bulk_signal_recipient_assignment_ref01"
+      }
+
+      o: "create"
+    }
+  ],
+  "key$": "BasicBulkSignalRecipientAssignmentFlow"
+}

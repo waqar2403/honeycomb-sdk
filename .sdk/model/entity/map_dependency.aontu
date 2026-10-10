@@ -1,0 +1,204 @@
+# Entity: map_dependency
+
+main: kit: entity: map_dependency: {
+
+  alias: field: {}
+
+  fields: {
+    dependencies: {
+      h: "Dependencies"
+      n: "dependencies"
+      r: false
+      sh: "Array of service dependencies."
+      t: "`$ANY`"
+    }
+    end_time: {
+      h: "End Time"
+      n: "end_time"
+      r: false
+      sh: "Absolute end time to evaluate dependencies, in seconds since UNIX epoch."
+      t: "`$INTEGER`"
+    }
+    filters: {
+      h: "Filters"
+      n: "filters"
+      r: false
+      sh: "Optional list of service nodes to filter dependencies by."
+      t: "`$ARRAY`"
+    }
+    links: {
+      h: "Links"
+      n: "links"
+      r: true
+      sh: "Links to iterate through the pages of results."
+      t: "`$OBJECT`"
+    }
+    request_id: {
+      h: "Request Id"
+      n: "request_id"
+      r: false
+      sh: "Unique identifier for the Map Dependency Request."
+      t: "`$STRING`"
+    }
+    start_time: {
+      h: "Start Time"
+      n: "start_time"
+      r: false
+      sh: "Absolute start time to evaluate dependencies, in seconds since UNIX epoch."
+      t: "`$INTEGER`"
+    }
+    status: {
+      h: "Status"
+      n: "status"
+      r: false
+      sh: "Status of the Map Dependency Request."
+      t: "`$STRING`"
+    }
+    time_range: {
+      h: "Time Range"
+      n: "time_range"
+      r: false
+      sh: "Time range in seconds (minimum 1)."
+      t: "`$INTEGER`"
+    }
+  }
+
+  name: "map_dependency"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          bf: [
+            "end_time"
+            "filters"
+            "start_time"
+            "time_range"
+          ]
+          co: {
+            id: "POST /1/maps/dependencies/requests"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: 5000
+                k: "query"
+                n: "limit"
+                or: "limit"
+                r: false
+                t: "`$INTEGER`"
+              }
+            ]
+          }
+          m: "POST"
+          o: "/1/maps/dependencies/requests"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "maps"
+            }
+            {
+              lit: "dependencies"
+            }
+            {
+              lit: "requests"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /1/maps/dependencies/requests/{requestId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "request_id"
+                or: "requestId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                ex: "eyxJjcmAVhdGVkX"
+                k: "query"
+                n: "page_after"
+                or: "page[after]"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: 10
+                k: "query"
+                n: "page_size"
+                or: "page[size]"
+                r: false
+                t: "`$NUMBER`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/maps/dependencies/requests/{requestId}"
+          q: {
+            exist: [
+              "request_id"
+            ]
+          }
+          r: {
+            param: {
+              requestId: "request_id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "maps"
+            }
+            {
+              lit: "dependencies"
+            }
+            {
+              lit: "requests"
+            }
+            {
+              var: "request_id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

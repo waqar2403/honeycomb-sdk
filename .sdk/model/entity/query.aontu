@@ -1,0 +1,286 @@
+# Entity: query
+
+main: kit: entity: query: {
+
+  alias: field: {}
+
+  fields: {
+    breakdowns: {
+      h: "Breakdowns"
+      n: "breakdowns"
+      r: false
+      sh: "the columns by which to break events down into groups"
+      t: "`$ARRAY`"
+    }
+    calculated_fields: {
+      h: "Calculated Fields"
+      n: "calculated_fields"
+      r: false
+      sh: "Computed properties that are calculated by a formula."
+      t: "`$ARRAY`"
+    }
+    calculations: {
+      h: "Calculations"
+      n: "calculations"
+      r: false
+      sh: "the calculations to return as a time series and summary table"
+      t: "`$ARRAY`"
+      union: {
+        branches: 5
+        count: 1
+        depth: 6
+      }
+    }
+    compare_time_offset_seconds: {
+      h: "Compare Time Offset Seconds"
+      n: "compare_time_offset_seconds"
+      r: false
+      sh: "When set, offsets the query's time range by this number of seconds into the past, allowing comparison with historical data from an earlier time period."
+      t: "`$INTEGER`"
+    }
+    end_time: {
+      h: "End Time"
+      n: "end_time"
+      r: false
+      sh: "Absolute end time of query, in seconds since UNIX epoch."
+      t: "`$INTEGER`"
+    }
+    filter_combination: {
+      h: "Filter Combination"
+      n: "filter_combination"
+      r: false
+      sh: "Set to \"OR\" to match ANY filter in the filter list"
+      t: "`$STRING`"
+    }
+    filters: {
+      h: "Filters"
+      n: "filters"
+      r: false
+      sh: "The filters with which to restrict the considered events"
+      t: "`$ARRAY`"
+      union: {
+        branches: 5
+        count: 1
+        depth: 3
+      }
+    }
+    formulas: {
+      h: "Formulas"
+      n: "formulas"
+      r: false
+      sh: "Mathematical formulas to be returned as a time series and summary table."
+      t: "`$ARRAY`"
+    }
+    granularity: {
+      h: "Granularity"
+      n: "granularity"
+      r: false
+      sh: "The time resolution of the query's graph, in seconds."
+      t: "`$INTEGER`"
+    }
+    havings: {
+      h: "Havings"
+      n: "havings"
+      r: false
+      sh: "The Having clause allows you to filter on the results table."
+      t: "`$ARRAY`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      ro: true
+      t: "`$STRING`"
+    }
+    limit: {
+      h: "Limit"
+      n: "limit"
+      r: false
+      sh: "The maximum number of unique groups returned in 'results'."
+      t: "`$INTEGER`"
+    }
+    orders: {
+      h: "Orders"
+      n: "orders"
+      r: false
+      sh: "The terms on which to order the query results."
+      t: "`$ARRAY`"
+    }
+    start_time: {
+      h: "Start Time"
+      n: "start_time"
+      r: false
+      sh: "Absolute start time of query, in seconds since UNIX epoch."
+      t: "`$INTEGER`"
+    }
+    time_range: {
+      h: "Time Range"
+      n: "time_range"
+      r: false
+      sh: "Time range of query in seconds."
+      t: "`$INTEGER`"
+    }
+    usage_mode: {
+      h: "Usage Mode"
+      n: "usage_mode"
+      r: false
+      sh: "If `true`, query results will return aggregates without correcting for sample rates."
+      t: "`$BOOLEAN`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+    parts: [
+      "dataset_slug"
+      "query_id"
+    ]
+    sep: "/"
+  }
+
+  name: "query"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          bf: [
+            "breakdowns"
+            "calculated_fields"
+            "calculations"
+            "compare_time_offset_seconds"
+            "end_time"
+            "filter_combination"
+            "filters"
+            "formulas"
+            "granularity"
+            "havings"
+            "id"
+            "limit"
+            "orders"
+            "start_time"
+            "time_range"
+            "usage_mode"
+          ]
+          co: {
+            id: "POST /1/queries/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "POST"
+          o: "/1/queries/{datasetSlug}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "queries"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /1/queries/{datasetSlug}/{queryId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "query_id"
+                or: "queryId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/queries/{datasetSlug}/{queryId}"
+          q: {
+            exist: [
+              "dataset_slug"
+              "query_id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+              queryId: "query_id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "queries"
+            }
+            {
+              var: "dataset_slug"
+            }
+            {
+              var: "query_id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

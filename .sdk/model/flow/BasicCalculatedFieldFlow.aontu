@@ -1,0 +1,81 @@
+# BasicCalculatedFieldFlow
+
+main: kit: flow: BasicCalculatedFieldFlow:
+{
+  entity: "calculated_field",
+  kind: "basic",
+  name: "BasicCalculatedFieldFlow",
+  step: [
+    {
+      i: {
+        ref: "calculated_field_ref01"
+      }
+
+      m: {
+        dataset_slug: "dataset_slug01"
+      }
+
+      o: "create"
+    }
+
+    {
+      d: {
+        dataset_slug: "dataset_slug01"
+      }
+
+      i: {
+        ref: "calculated_field_ref01",
+        srcdatavar: "calculated_field_ref01_data",
+        suffix: "_up0",
+        textfield: "alias"
+      }
+
+      o: "update",
+      s: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-calculated_field_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "calculated_field_ref01",
+        srcdatavar: "calculated_field_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        id: "calculated_field01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-calculated_field_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "calculated_field_ref01",
+        suffix: "_rm0"
+      }
+
+      m: {
+        dataset_slug: "dataset_slug01",
+        id: "calculated_field01"
+      }
+
+      o: "remove"
+    }
+  ],
+  "key$": "BasicCalculatedFieldFlow"
+}

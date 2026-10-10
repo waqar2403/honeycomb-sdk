@@ -1,0 +1,81 @@
+{
+  "existing": {
+    "marker": {
+      "MARKER00": {
+        "color": "s5a",
+        "created_at": "s5b",
+        "end_time": 92,
+        "id": "MARKER00",
+        "message": "s5e",
+        "start_time": 95,
+        "type": "s60",
+        "updated_at": "s61",
+        "url": "s62",
+        "dataset_slug": "DATASET_SLUG01",
+        "marker_id": "MARKER01"
+      },
+      "MARKER01": {
+        "color": "sb4",
+        "created_at": "sb5",
+        "end_time": 182,
+        "id": "MARKER01",
+        "message": "sb8",
+        "start_time": 185,
+        "type": "sba",
+        "updated_at": "sbb",
+        "url": "sbc",
+        "dataset_slug": "DATASET_SLUG01",
+        "marker_id": "MARKER01"
+      },
+      "MARKER02": {
+        "color": "s10e",
+        "created_at": "s10f",
+        "end_time": 272,
+        "id": "MARKER02",
+        "message": "s112",
+        "start_time": 275,
+        "type": "s114",
+        "updated_at": "s115",
+        "url": "s116",
+        "dataset_slug": "DATASET_SLUG01",
+        "marker_id": "MARKER01"
+      }
+    }
+  },
+  "new": {
+    "marker": {
+      "marker_ref01": {
+        "color": "s168",
+        "created_at": "s169",
+        "end_time": 362,
+        "message": "s16c",
+        "start_time": 365,
+        "type": "s16e",
+        "updated_at": "s16f",
+        "url": "s170"
+      }
+    }
+  },
+  "requests": {
+    "POST /1/markers/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/markers/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "DELETE /1/markers/{datasetSlug}/{markerId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "PUT /1/markers/{datasetSlug}/{markerId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

@@ -1,0 +1,384 @@
+# Entity: key_management
+
+main: kit: entity: key_management: {
+
+  alias: field: {}
+
+  fields: {
+    data: {
+      h: "Data"
+      n: "data"
+      r: true
+      t: "`$OBJECT`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "key_management"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          bf: [
+            "data"
+          ]
+          co: {
+            id: "POST /2/teams/{teamSlug}/api-keys"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "team_slug"
+                or: "teamSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "POST"
+          o: "/2/teams/{teamSlug}/api-keys"
+          q: {
+            exist: [
+              "team_slug"
+            ]
+          }
+          r: {
+            param: {
+              teamSlug: "team_slug"
+            }
+          }
+          rb: {
+            kind: "json"
+            media: "application/vnd.api+json"
+          }
+          rs: {
+            kind: "json"
+            media: "application/vnd.api+json"
+          }
+          s: [
+            {
+              lit: "2"
+            }
+            {
+              lit: "teams"
+            }
+            {
+              var: "team_slug"
+            }
+            {
+              lit: "api-keys"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /2/teams/{teamSlug}/api-keys/{ID}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "ID"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "team_slug"
+                or: "teamSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/2/teams/{teamSlug}/api-keys/{ID}"
+          q: {
+            exist: [
+              "id"
+              "team_slug"
+            ]
+          }
+          r: {
+            param: {
+              ID: "id"
+              teamSlug: "team_slug"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/vnd.api+json"
+          }
+          s: [
+            {
+              lit: "2"
+            }
+            {
+              lit: "teams"
+            }
+            {
+              var: "team_slug"
+            }
+            {
+              lit: "api-keys"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+        {
+          co: {
+            id: "GET /2/teams/{teamSlug}/api-keys"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "team_slug"
+                or: "teamSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                k: "query"
+                n: "filter_type"
+                or: "filter[type]"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "eyxJjcmAVhdGVkX"
+                k: "query"
+                n: "page_after"
+                or: "page[after]"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: 10
+                k: "query"
+                n: "page_size"
+                or: "page[size]"
+                r: false
+                t: "`$NUMBER`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/2/teams/{teamSlug}/api-keys"
+          q: {
+            exist: [
+              "team_slug"
+            ]
+          }
+          r: {
+            param: {
+              teamSlug: "team_slug"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/vnd.api+json"
+          }
+          s: [
+            {
+              lit: "2"
+            }
+            {
+              lit: "teams"
+            }
+            {
+              var: "team_slug"
+            }
+            {
+              lit: "api-keys"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    remove: {
+      name: "remove"
+      points: [
+        {
+          co: {
+            id: "DELETE /2/teams/{teamSlug}/api-keys/{ID}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "ID"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "team_slug"
+                or: "teamSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "DELETE"
+          o: "/2/teams/{teamSlug}/api-keys/{ID}"
+          q: {
+            exist: [
+              "id"
+              "team_slug"
+            ]
+          }
+          r: {
+            param: {
+              ID: "id"
+              teamSlug: "team_slug"
+            }
+          }
+          s: [
+            {
+              lit: "2"
+            }
+            {
+              lit: "teams"
+            }
+            {
+              var: "team_slug"
+            }
+            {
+              lit: "api-keys"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    update: {
+      name: "update"
+      points: [
+        {
+          bf: [
+            "data"
+          ]
+          co: {
+            id: "PATCH /2/teams/{teamSlug}/api-keys/{ID}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "ID"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "team_slug"
+                or: "teamSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "PATCH"
+          o: "/2/teams/{teamSlug}/api-keys/{ID}"
+          q: {
+            exist: [
+              "id"
+              "team_slug"
+            ]
+          }
+          r: {
+            param: {
+              ID: "id"
+              teamSlug: "team_slug"
+            }
+          }
+          rb: {
+            kind: "json"
+            media: "application/vnd.api+json"
+          }
+          rs: {
+            kind: "json"
+            media: "application/vnd.api+json"
+          }
+          s: [
+            {
+              lit: "2"
+            }
+            {
+              lit: "teams"
+            }
+            {
+              var: "team_slug"
+            }
+            {
+              lit: "api-keys"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

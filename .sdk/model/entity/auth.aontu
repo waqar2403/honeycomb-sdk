@@ -1,0 +1,108 @@
+# Entity: auth
+
+main: kit: entity: auth: {
+
+  alias: field: {}
+
+  fields: {
+    api_key_access: {
+      h: "Api Key Access"
+      n: "api_key_access"
+      r: true
+      t: "`$OBJECT`"
+    }
+    environment: {
+      h: "Environment"
+      n: "environment"
+      r: true
+      t: "`$OBJECT`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: true
+      sh: "Unique identifier (ID) of the API Key."
+      t: "`$STRING`"
+    }
+    team: {
+      h: "Team"
+      n: "team"
+      r: true
+      t: "`$OBJECT`"
+    }
+    type: {
+      h: "Type"
+      n: "type"
+      r: true
+      sh: "The type of API Key."
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "auth"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /1/auth"
+            source: "openapi3"
+            version: 2
+          }
+          m: "GET"
+          o: "/1/auth"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "auth"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+        {
+          co: {
+            id: "GET /2/auth"
+            source: "openapi3"
+            version: 2
+          }
+          m: "GET"
+          o: "/2/auth"
+          rs: {
+            kind: "json"
+            media: "application/vnd.api+json"
+          }
+          s: [
+            {
+              lit: "2"
+            }
+            {
+              lit: "auth"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

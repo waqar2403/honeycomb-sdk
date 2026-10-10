@@ -1,0 +1,51 @@
+{
+  "existing": {
+    "slo_hourly_count": {
+      "SLO_HOURLY_COUNT00": {
+        "end_time": 50,
+        "error_count": 51,
+        "is_partial": true,
+        "start_time": 53,
+        "total_count": 54,
+        "dataset_slug": "DATASET_SLUG01",
+        "slo_id": "SLO01"
+      },
+      "SLO_HOURLY_COUNT01": {
+        "end_time": 100,
+        "error_count": 101,
+        "is_partial": true,
+        "start_time": 103,
+        "total_count": 104,
+        "dataset_slug": "DATASET_SLUG01",
+        "slo_id": "SLO01"
+      },
+      "SLO_HOURLY_COUNT02": {
+        "end_time": 150,
+        "error_count": 151,
+        "is_partial": true,
+        "start_time": 153,
+        "total_count": 154,
+        "dataset_slug": "DATASET_SLUG01",
+        "slo_id": "SLO01"
+      }
+    }
+  },
+  "new": {
+    "slo_hourly_count": {
+      "slo_hourly_count_ref01": {
+        "end_time": 200,
+        "error_count": 201,
+        "is_partial": true,
+        "start_time": 203,
+        "total_count": 204
+      }
+    }
+  },
+  "requests": {
+    "GET /1/slos/{datasetSlug}/{sloId}/counts/history": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

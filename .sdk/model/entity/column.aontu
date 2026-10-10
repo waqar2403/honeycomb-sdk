@@ -1,0 +1,419 @@
+# Entity: column
+
+main: kit: entity: column: {
+
+  alias: field: {}
+
+  fields: {
+    created_at: {
+      h: "Created At"
+      n: "created_at"
+      r: false
+      ro: true
+      sh: "ISO8601 formatted time the column was created."
+      t: "`$STRING`"
+    }
+    description: {
+      h: "Description"
+      n: "description"
+      r: false
+      sh: "Column description."
+      t: "`$STRING`"
+    }
+    hidden: {
+      h: "Hidden"
+      n: "hidden"
+      r: false
+      sh: "If `true`, the column is excluded from autocomplete and raw data field lists."
+      t: "`$BOOLEAN`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      ro: true
+      sh: "Unique identifier (ID), returned in response bodies."
+      t: "`$STRING`"
+    }
+    key_name: {
+      h: "Key Name"
+      n: "key_name"
+      op: {
+        load: {
+          req: false
+          type: "`$STRING`"
+        }
+      }
+      r: true
+      ro: true
+      sh: "Name of the Column."
+      t: "`$STRING`"
+    }
+    last_written: {
+      h: "Last Written"
+      n: "last_written"
+      r: false
+      ro: true
+      sh: "ISO8601 formatted time the column was last written to (received event data)."
+      t: "`$STRING`"
+    }
+    type: {
+      h: "Type"
+      n: "type"
+      r: false
+      sh: "Type of data that the Column will contain."
+      t: "`$STRING`"
+    }
+    updated_at: {
+      h: "Updated At"
+      n: "updated_at"
+      r: false
+      ro: true
+      sh: "ISO8601 formatted time the column was updated."
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+    parts: [
+      "dataset_slug"
+      "column_id"
+    ]
+    sep: "/"
+  }
+
+  name: "column"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          bf: [
+            "created_at"
+            "description"
+            "hidden"
+            "id"
+            "key_name"
+            "last_written"
+            "type"
+            "updated_at"
+          ]
+          co: {
+            id: "POST /1/columns/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "POST"
+          o: "/1/columns/{datasetSlug}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "columns"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /1/columns/{datasetSlug}/{columnId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "column_id"
+                or: "columnId"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/columns/{datasetSlug}/{columnId}"
+          q: {
+            exist: [
+              "column_id"
+              "dataset_slug"
+            ]
+          }
+          r: {
+            param: {
+              columnId: "column_id"
+              datasetSlug: "dataset_slug"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "columns"
+            }
+            {
+              var: "dataset_slug"
+            }
+            {
+              var: "column_id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+        {
+          co: {
+            id: "GET /1/columns/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                k: "query"
+                n: "key_name"
+                or: "key_name"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/columns/{datasetSlug}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "columns"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    remove: {
+      name: "remove"
+      points: [
+        {
+          co: {
+            id: "DELETE /1/columns/{datasetSlug}/{columnId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "column_id"
+                or: "columnId"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "DELETE"
+          o: "/1/columns/{datasetSlug}/{columnId}"
+          q: {
+            exist: [
+              "column_id"
+              "dataset_slug"
+            ]
+          }
+          r: {
+            param: {
+              columnId: "column_id"
+              datasetSlug: "dataset_slug"
+            }
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "columns"
+            }
+            {
+              var: "dataset_slug"
+            }
+            {
+              var: "column_id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    update: {
+      name: "update"
+      points: [
+        {
+          bf: [
+            "created_at"
+            "description"
+            "hidden"
+            "id"
+            "key_name"
+            "last_written"
+            "type"
+            "updated_at"
+          ]
+          co: {
+            id: "PUT /1/columns/{datasetSlug}/{columnId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "column_id"
+                or: "columnId"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "PUT"
+          o: "/1/columns/{datasetSlug}/{columnId}"
+          q: {
+            exist: [
+              "column_id"
+              "dataset_slug"
+            ]
+          }
+          r: {
+            param: {
+              columnId: "column_id"
+              datasetSlug: "dataset_slug"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "columns"
+            }
+            {
+              var: "dataset_slug"
+            }
+            {
+              var: "column_id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

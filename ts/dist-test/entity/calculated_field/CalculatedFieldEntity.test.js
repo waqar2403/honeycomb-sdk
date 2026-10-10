@@ -1,0 +1,162 @@
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const node_path_1 = __importDefault(require("node:path"));
+const Fs = __importStar(require("node:fs"));
+const node_test_1 = require("node:test");
+const node_assert_1 = __importDefault(require("node:assert"));
+const live_runner_1 = require("../../live-runner");
+const live_entity_1 = require("../../live-entity");
+const __1 = require("../../..");
+const utility_1 = require("../../utility");
+(0, utility_1.loadEnvLocal)(__dirname + '/../../../.env.local');
+(0, node_test_1.describe)('CalculatedFieldEntity', async () => {
+    // Per-test live pacing. Delay is read from sdk-test-control.json's
+    // `test.live.delayMs`; only sleeps when HONEYCOMB_TEST_LIVE=TRUE.
+    (0, node_test_1.afterEach)((0, utility_1.liveDelay)('HONEYCOMB_TEST_LIVE'));
+    (0, node_test_1.test)('instance', async () => {
+        const testsdk = __1.HoneycombSDK.test();
+        const ent = testsdk.CalculatedField();
+        (0, node_assert_1.default)(null != ent);
+    });
+    (0, node_test_1.test)('validate', async (t) => {
+        if (null == __1.config.feature?.validate) {
+            t.skip('feature not present in this SDK: validate');
+            return;
+        }
+        const client = __1.HoneycombSDK.test(undefined, { feature: { validate: { active: true } } });
+        await node_assert_1.default.rejects(client.CalculatedField().load({ "dataset_slug": 1 }), (err) => 'validate_failed' === err.code);
+    });
+    (0, node_test_1.test)('basic', async (t) => {
+        const live = 'TRUE' === process.env.HONEYCOMB_TEST_LIVE;
+        for (const op of ['create', 'load']) {
+            if (!live && (0, utility_1.maybeSkipControl)(t, 'entityOp', 'calculated_field.' + op, live))
+                return;
+        }
+        const setup = basicSetup();
+        if (setup.live) {
+            return (0, live_entity_1.runLiveEntity)(setup, { "active": true, "alias": { "field": {} }, "fields": { "alias": { "a": true, "h": "Alias", "n": "alias", "r": true, "sh": "The human-readable name of the Calculated Field (also called Derived Column), as it will be referenced when building queries.", "t": "`$STRING`", "key$": "alias", "index$": 0 }, "created_at": { "a": true, "h": "Created At", "n": "created_at", "r": true, "ro": true, "sh": "ISO8601 formatted time when the field was created.", "t": "`$STRING`", "key$": "created_at", "index$": 1 }, "description": { "a": true, "h": "Description", "n": "description", "r": false, "sh": "A human-readable description for the Calculated Field that displays in the UI.", "t": "`$STRING`", "key$": "description", "index$": 2 }, "expression": { "a": true, "h": "Expression", "n": "expression", "r": true, "sh": "The expression to evaluate to construct this Calculated Field's value.", "t": "`$STRING`", "key$": "expression", "index$": 3 }, "id": { "a": true, "h": "Id", "n": "id", "r": true, "ro": true, "sh": "Unique identifier (ID), returned in response bodies.", "t": "`$STRING`", "key$": "id", "index$": 4 }, "updated_at": { "a": true, "h": "Updated At", "n": "updated_at", "r": true, "ro": true, "sh": "ISO8601 formatted time when the field was updated.", "t": "`$STRING`", "key$": "updated_at", "index$": 5 } }, "id": { "field": "id", "name": "id", "parts": ["dataset_slug", "derived_column_id"], "sep": "/" }, "name": "calculated_field", "op": { "create": { "input": "data", "name": "create", "points": [{ "a": true, "bf": ["alias", "created_at", "description", "expression", "id", "updated_at"], "co": { "id": "POST /1/derived_columns/{datasetSlug}", "source": "openapi3", "version": 2 }, "g": { "params": [{ "a": true, "k": "param", "n": "dataset_slug", "or": "datasetSlug", "r": true, "t": "`$STRING`", "index$": 0 }] }, "k": "http", "m": "POST", "o": "/1/derived_columns/{datasetSlug}", "q": { "exist": ["dataset_slug"] }, "r": { "param": { "datasetSlug": "dataset_slug" } }, "rs": { "kind": "json", "media": "application/json" }, "s": [{ "lit": "1" }, { "lit": "derived_columns" }, { "var": "dataset_slug" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "create" }, "load": { "input": "data", "name": "load", "points": [{ "a": true, "co": { "id": "GET /1/derived_columns/{datasetSlug}/{derivedColumnId}", "source": "openapi3", "version": 2 }, "g": { "params": [{ "a": true, "k": "param", "n": "dataset_slug", "or": "datasetSlug", "r": true, "t": "`$STRING`", "index$": 0 }, { "a": true, "k": "param", "n": "derived_column_id", "or": "derivedColumnId", "r": true, "t": "`$STRING`", "index$": 1 }] }, "k": "http", "m": "GET", "o": "/1/derived_columns/{datasetSlug}/{derivedColumnId}", "q": { "exist": ["dataset_slug", "derived_column_id"] }, "r": { "param": { "datasetSlug": "dataset_slug", "derivedColumnId": "derived_column_id" } }, "rs": { "kind": "json", "media": "application/json" }, "s": [{ "lit": "1" }, { "lit": "derived_columns" }, { "var": "dataset_slug" }, { "var": "derived_column_id" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }, { "a": true, "co": { "id": "GET /1/derived_columns/{datasetSlug}", "source": "openapi3", "version": 2 }, "g": { "params": [{ "a": true, "k": "param", "n": "dataset_slug", "or": "datasetSlug", "r": true, "t": "`$STRING`", "index$": 0 }], "query": [{ "a": true, "k": "query", "n": "alia", "or": "alias", "r": false, "t": "`$STRING`", "index$": 0 }] }, "k": "http", "m": "GET", "o": "/1/derived_columns/{datasetSlug}", "q": { "exist": ["dataset_slug"] }, "r": { "param": { "datasetSlug": "dataset_slug" } }, "rs": { "kind": "json", "media": "application/json" }, "s": [{ "lit": "1" }, { "lit": "derived_columns" }, { "var": "dataset_slug" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 1 }], "key$": "load" }, "remove": { "input": "data", "name": "remove", "points": [{ "a": true, "co": { "id": "DELETE /1/derived_columns/{datasetSlug}/{derivedColumnId}", "source": "openapi3", "version": 2 }, "g": { "params": [{ "a": true, "k": "param", "n": "dataset_slug", "or": "datasetSlug", "r": true, "t": "`$STRING`", "index$": 0 }, { "a": true, "k": "param", "n": "derived_column_id", "or": "derivedColumnId", "r": true, "t": "`$STRING`", "index$": 1 }] }, "k": "http", "m": "DELETE", "o": "/1/derived_columns/{datasetSlug}/{derivedColumnId}", "q": { "exist": ["dataset_slug", "derived_column_id"] }, "r": { "param": { "datasetSlug": "dataset_slug", "derivedColumnId": "derived_column_id" } }, "s": [{ "lit": "1" }, { "lit": "derived_columns" }, { "var": "dataset_slug" }, { "var": "derived_column_id" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "remove" }, "update": { "input": "data", "name": "update", "points": [{ "a": true, "bf": ["alias", "created_at", "description", "expression", "id", "updated_at"], "co": { "id": "PUT /1/derived_columns/{datasetSlug}/{derivedColumnId}", "source": "openapi3", "version": 2 }, "g": { "params": [{ "a": true, "k": "param", "n": "dataset_slug", "or": "datasetSlug", "r": true, "t": "`$STRING`", "index$": 0 }, { "a": true, "k": "param", "n": "derived_column_id", "or": "derivedColumnId", "r": true, "t": "`$STRING`", "index$": 1 }] }, "k": "http", "m": "PUT", "o": "/1/derived_columns/{datasetSlug}/{derivedColumnId}", "q": { "exist": ["dataset_slug", "derived_column_id"] }, "r": { "param": { "datasetSlug": "dataset_slug", "derivedColumnId": "derived_column_id" } }, "rs": { "kind": "json", "media": "application/json" }, "s": [{ "lit": "1" }, { "lit": "derived_columns" }, { "var": "dataset_slug" }, { "var": "derived_column_id" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "update" } }, "relations": { "ancestors": [] }, "key$": "calculated_field", "name__orig": "calculated_field", "Name": "CalculatedField", "name_": "calculated_field", "name-": "calculated-field", "NAME": "CALCULATED_FIELD", "index$": 5 }, { "active": true, "entity": "calculated_field", "key$": "BasicCalculatedFieldFlow", "kind": "basic", "name": "BasicCalculatedFieldFlow", "param": {}, "step": [{ "a": true, "d": {}, "i": { "ref": "calculated_field_ref01" }, "m": { "dataset_slug": "dataset_slug01" }, "o": "create", "s": [], "v": [], "index$": 0 }, { "a": false, "d": { "dataset_slug": "dataset_slug01" }, "i": { "ref": "calculated_field_ref01", "srcdatavar": "calculated_field_ref01_data", "suffix": "_up0", "textfield": "alias" }, "m": {}, "o": "update", "s": [{ "apply": "TextFieldMark", "def": { "mark": "Mark01-calculated_field_ref01" } }], "v": [], "unreachable": true }, { "a": true, "d": {}, "i": { "ref": "calculated_field_ref01", "srcdatavar": "calculated_field_ref01_data", "suffix": "_dt0" }, "m": { "id": "calculated_field01" }, "o": "load", "s": [], "v": [{ "apply": "TextFieldMark", "def": { "mark": "Mark01-calculated_field_ref01" } }], "index$": 1 }, { "a": false, "d": {}, "i": { "ref": "calculated_field_ref01", "suffix": "_rm0" }, "m": { "dataset_slug": "dataset_slug01", "id": "calculated_field01" }, "o": "remove", "s": [], "v": [], "unreachable": true }] }, 'CalculatedField', { "POST /1/derived_columns/{datasetSlug}": { "protocol": "http", "requestBody": { "content": { "application/json": { "schema": { "type": "object", "required": ["id", "alias", "expression", "created_at", "updated_at"], "properties": { "id": { "type": "string", "readOnly": true, "description": "Unique identifier (ID), returned in response bodies.", "key$": "id" }, "alias": { "type": "string", "description": "The human-readable name of the Calculated Field (also called Derived Column), as it will be referenced when building queries.", "minLength": 1, "maxLength": 255, "key$": "alias" }, "expression": { "type": "string", "description": "The expression to evaluate to construct this Calculated Field's value. (Calculated Field is also called Derived Column.) Refer to the [Calculated Field Reference](https://docs.honeycomb.io/reference/derived-column-formula/).\n", "minLength": 1, "maxLength": 4095, "key$": "expression" }, "description": { "type": "string", "description": "A human-readable description for the Calculated Field that displays in the UI.", "default": "", "maxLength": 255, "key$": "description" }, "created_at": { "type": "string", "readOnly": true, "description": "ISO8601 formatted time when the field was created.", "key$": "created_at" }, "updated_at": { "type": "string", "readOnly": true, "description": "ISO8601 formatted time when the field was updated.", "key$": "updated_at" } }, "x-ref": "#/components/schemas/CalculatedField", "index$": 1 } } }, "required": true }, "parameters": [{ "name": "datasetSlug", "description": "The dataset slug or use `__all__` for endpoints that support environment-wide operations.\n", "in": "path", "required": true, "schema": { "type": "string" }, "x-ref": "#/components/parameters/datasetSlugOrAll", "index$": 0 }] }, "GET /1/derived_columns/{datasetSlug}/{derivedColumnId}": { "protocol": "http", "parameters": [{ "name": "datasetSlug", "description": "The dataset slug or use `__all__` for endpoints that support environment-wide operations.\n", "in": "path", "required": true, "schema": { "type": "string" }, "x-ref": "#/components/parameters/datasetSlugOrAll", "index$": 0 }, { "name": "derivedColumnId", "description": "Unique identifier (ID) of a Calculated Field (also called a Derived Column).", "in": "path", "required": true, "schema": { "type": "string" }, "index$": 1 }] }, "GET /1/derived_columns/{datasetSlug}": { "protocol": "http", "parameters": [{ "name": "datasetSlug", "description": "The dataset slug or use `__all__` for endpoints that support environment-wide operations.\n", "in": "path", "required": true, "schema": { "type": "string" }, "x-ref": "#/components/parameters/datasetSlugOrAll", "index$": 0 }, { "name": "alias", "description": "The Calculated Field `alias`.", "in": "query", "schema": { "type": "string" }, "index$": 1 }] }, "DELETE /1/derived_columns/{datasetSlug}/{derivedColumnId}": { "protocol": "http", "parameters": [{ "name": "datasetSlug", "description": "The dataset slug or use `__all__` for endpoints that support environment-wide operations.\n", "in": "path", "required": true, "schema": { "type": "string" }, "x-ref": "#/components/parameters/datasetSlugOrAll", "index$": 0 }, { "name": "derivedColumnId", "description": "Unique identifier (ID) of a Calculated Field (also called a Derived Column).", "in": "path", "required": true, "schema": { "type": "string" }, "index$": 1 }] }, "PUT /1/derived_columns/{datasetSlug}/{derivedColumnId}": { "protocol": "http", "requestBody": { "content": { "application/json": { "schema": { "type": "object", "required": ["id", "alias", "expression", "created_at", "updated_at"], "properties": { "id": { "type": "string", "readOnly": true, "description": "Unique identifier (ID), returned in response bodies.", "key$": "id" }, "alias": { "type": "string", "description": "The human-readable name of the Calculated Field (also called Derived Column), as it will be referenced when building queries.", "minLength": 1, "maxLength": 255, "key$": "alias" }, "expression": { "type": "string", "description": "The expression to evaluate to construct this Calculated Field's value. (Calculated Field is also called Derived Column.) Refer to the [Calculated Field Reference](https://docs.honeycomb.io/reference/derived-column-formula/).\n", "minLength": 1, "maxLength": 4095, "key$": "expression" }, "description": { "type": "string", "description": "A human-readable description for the Calculated Field that displays in the UI.", "default": "", "maxLength": 255, "key$": "description" }, "created_at": { "type": "string", "readOnly": true, "description": "ISO8601 formatted time when the field was created.", "key$": "created_at" }, "updated_at": { "type": "string", "readOnly": true, "description": "ISO8601 formatted time when the field was updated.", "key$": "updated_at" } }, "x-ref": "#/components/schemas/CalculatedField", "index$": 1 } } }, "required": true }, "parameters": [{ "name": "datasetSlug", "description": "The dataset slug or use `__all__` for endpoints that support environment-wide operations.\n", "in": "path", "required": true, "schema": { "type": "string" }, "x-ref": "#/components/parameters/datasetSlugOrAll", "index$": 0 }, { "name": "derivedColumnId", "description": "Unique identifier (ID) of a Calculated Field (also called a Derived Column).", "in": "path", "required": true, "schema": { "type": "string" }, "index$": 1 }] } }, { strict: LIVE_STRICT, t });
+        }
+        const client = setup.client;
+        const struct = setup.struct;
+        const isempty = struct.isempty;
+        const select = struct.select;
+        // CREATE
+        const calculated_field_ref01_ent = client.CalculatedField();
+        let calculated_field_ref01_data = setup.data.new.calculated_field['calculated_field_ref01'];
+        calculated_field_ref01_data['dataset_slug'] = setup.idmap['dataset_slug01'];
+        calculated_field_ref01_data = (await calculated_field_ref01_ent.create(calculated_field_ref01_data)).data();
+        (0, node_assert_1.default)(null != calculated_field_ref01_data.id);
+        // LOAD
+        const calculated_field_ref01_match_dt0 = {};
+        calculated_field_ref01_match_dt0.id = calculated_field_ref01_data.id;
+        const calculated_field_ref01_data_dt0 = (await calculated_field_ref01_ent.load(calculated_field_ref01_match_dt0)).data();
+        (0, node_assert_1.default)(calculated_field_ref01_data_dt0.id === calculated_field_ref01_data.id);
+    });
+});
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true;
+function basicSetup(extra) {
+    // TODO: fix test def options
+    const options = {}; // null
+    // TODO: needs test utility to resolve path
+    const entityDataFile = node_path_1.default.resolve(__dirname, '../../../../.sdk/test/entity/calculated_field/CalculatedFieldTestData.json');
+    // TODO: file ready util needed?
+    const entityDataSource = Fs.readFileSync(entityDataFile).toString('utf8');
+    // TODO: need a xlang JSON parse utility in voxgig/struct with better error msgs
+    const entityData = JSON.parse(entityDataSource);
+    options.entity = entityData.existing;
+    let client = __1.HoneycombSDK.test(options, extra);
+    const struct = client.utility().struct;
+    const merge = struct.merge;
+    const transform = struct.transform;
+    let idmap = transform(['calculated_field01', 'calculated_field02', 'calculated_field03', 'dataset_slug01'], {
+        '`$PACK`': ['', {
+                '`$KEY`': '`$COPY`',
+                '`$VAL`': ['`$FORMAT`', 'upper', '`$COPY`']
+            }]
+    });
+    const env = (0, utility_1.envOverride)({
+        'HONEYCOMB_TEST_CALCULATED_FIELD_ENTID': idmap,
+        'HONEYCOMB_TEST_LIVE': 'FALSE',
+        'HONEYCOMB_TEST_EXPLAIN': 'FALSE',
+        'HONEYCOMB_APIKEY': '',
+    });
+    idmap = env['HONEYCOMB_TEST_CALCULATED_FIELD_ENTID'];
+    const live = 'TRUE' === env.HONEYCOMB_TEST_LIVE;
+    const transport = (0, live_runner_1.createLiveTransport)();
+    if (live) {
+        const rawIds = process.env['HONEYCOMB_TEST_CALCULATED_FIELD_ENTID'];
+        idmap = rawIds && rawIds.trim() ? JSON.parse(rawIds) : {};
+        if (!idmap || Array.isArray(idmap) || typeof idmap !== 'object') {
+            throw new Error('Live ENTID must be a JSON object');
+        }
+        client = new __1.HoneycombSDK(merge([
+            // FIRST, so the generated fields below win: sdk-test-control.json's
+            // test.client.options adds to the live client, it does not redirect it.
+            (0, utility_1.liveClientOptions)(),
+            {
+                apikey: env.HONEYCOMB_APIKEY,
+            },
+            // 'extra || {}', not a bare 'extra': struct.merge returns UNDEFINED when the
+            // last entry is undefined, and basicSetup is normally called with no
+            // argument at all - so a bare 'extra' silently discarded the apikey
+            // and server values above and handed the SDK undefined. Harmless
+            // while there was nothing in that object; not harmless now.
+            extra || {},
+            { system: { fetch: transport.fetch } }
+        ]));
+    }
+    const setup = {
+        idmap,
+        env,
+        options,
+        client,
+        struct,
+        data: entityData,
+        explain: 'TRUE' === env.HONEYCOMB_TEST_EXPLAIN,
+        live,
+        transport,
+        now: Date.now(),
+    };
+    return setup;
+}
+//# sourceMappingURL=CalculatedFieldEntity.test.js.map

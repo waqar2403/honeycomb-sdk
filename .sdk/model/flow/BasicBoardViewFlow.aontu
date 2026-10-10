@@ -1,0 +1,84 @@
+# BasicBoardViewFlow
+
+main: kit: flow: BasicBoardViewFlow:
+{
+  entity: "board_view",
+  kind: "basic",
+  name: "BasicBoardViewFlow",
+  step: [
+    {
+      i: {
+        ref: "board_view_ref01"
+      }
+
+      m: {
+        board_id: "board01"
+      }
+
+      o: "create"
+    }
+
+    {
+      m: {
+        board_id: "board01"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "board_view_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      d: {
+        board_id: "board01"
+      }
+
+      i: {
+        ref: "board_view_ref01",
+        srcdatavar: "board_view_ref01_data",
+        suffix: "_up0",
+        textfield: "name"
+      }
+
+      o: "update",
+      s: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-board_view_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "board_view_ref01",
+        srcdatavar: "board_view_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        board_id: "board01",
+        id: "board_view01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-board_view_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicBoardViewFlow"
+}

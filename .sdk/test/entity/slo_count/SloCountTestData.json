@@ -1,0 +1,51 @@
+{
+  "existing": {
+    "slo_count": {
+      "SLO_COUNT00": {
+        "error_count": 50,
+        "is_partial": false,
+        "total_count": 52,
+        "window_end": 53,
+        "window_start": 54,
+        "dataset_slug": "DATASET_SLUG01",
+        "slo_id": "SLO01"
+      },
+      "SLO_COUNT01": {
+        "error_count": 100,
+        "is_partial": false,
+        "total_count": 102,
+        "window_end": 103,
+        "window_start": 104,
+        "dataset_slug": "DATASET_SLUG01",
+        "slo_id": "SLO01"
+      },
+      "SLO_COUNT02": {
+        "error_count": 150,
+        "is_partial": false,
+        "total_count": 152,
+        "window_end": 153,
+        "window_start": 154,
+        "dataset_slug": "DATASET_SLUG01",
+        "slo_id": "SLO01"
+      }
+    }
+  },
+  "new": {
+    "slo_count": {
+      "slo_count_ref01": {
+        "error_count": 200,
+        "is_partial": false,
+        "total_count": 202,
+        "window_end": 203,
+        "window_start": 204
+      }
+    }
+  },
+  "requests": {
+    "GET /1/slos/{datasetSlug}/{sloId}/counts": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

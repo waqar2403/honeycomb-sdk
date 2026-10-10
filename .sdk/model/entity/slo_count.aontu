@@ -1,0 +1,148 @@
+# Entity: slo_count
+
+main: kit: entity: slo_count: {
+
+  alias: field: {}
+
+  fields: {
+    error_count: {
+      h: "Error Count"
+      n: "error_count"
+      r: false
+      ro: true
+      sh: "Number of failed (bad) events in this window."
+      t: "`$INTEGER`"
+    }
+    is_partial: {
+      h: "Is Partial"
+      n: "is_partial"
+      r: false
+      ro: true
+      sh: "When `true`, the data for this window may be incomplete."
+      t: "`$BOOLEAN`"
+    }
+    total_count: {
+      h: "Total Count"
+      n: "total_count"
+      r: false
+      ro: true
+      sh: "Total number of events (good + bad) in this window."
+      t: "`$INTEGER`"
+    }
+    window_end: {
+      h: "Window End"
+      n: "window_end"
+      r: false
+      ro: true
+      sh: "End of the window as a Unix timestamp (seconds)."
+      t: "`$INTEGER`"
+    }
+    window_start: {
+      h: "Window Start"
+      n: "window_start"
+      r: false
+      ro: true
+      sh: "Start of the window as a Unix timestamp (seconds)."
+      t: "`$INTEGER`"
+    }
+  }
+
+  name: "slo_count"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /1/slos/{datasetSlug}/{sloId}/counts"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "slo_id"
+                or: "sloId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                ex: 1745254740
+                k: "query"
+                n: "end_time"
+                or: "end_time"
+                r: true
+                t: "`$INTEGER`"
+              }
+              {
+                ex: 1745251200
+                k: "query"
+                n: "start_time"
+                or: "start_time"
+                r: true
+                t: "`$INTEGER`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/slos/{datasetSlug}/{sloId}/counts"
+          q: {
+            exist: [
+              "dataset_slug"
+              "end_time"
+              "slo_id"
+              "start_time"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+              sloId: "slo_id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "slos"
+            }
+            {
+              var: "dataset_slug"
+            }
+            {
+              var: "slo_id"
+            }
+            {
+              lit: "counts"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.windows`"
+          }
+        }
+      ]
+    }
+  }
+
+
+  relations: ancestors: [
+    [path("$.main.kit.entity.slo")]
+  ]
+
+}

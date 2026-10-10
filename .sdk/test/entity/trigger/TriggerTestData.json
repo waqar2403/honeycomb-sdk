@@ -1,0 +1,131 @@
+{
+  "existing": {
+    "trigger": {
+      "TRIGGER00": {
+        "alert_type": "sbe",
+        "auto_investigate": false,
+        "baseline_details": {},
+        "created_at": "sc1",
+        "dataset_slug": "sc2",
+        "description": "sc3",
+        "disabled": true,
+        "evaluation_schedule": {},
+        "evaluation_schedule_type": "sc6",
+        "frequency": 199,
+        "id": "TRIGGER00",
+        "name": "sc9",
+        "query": {},
+        "query_id": "QUERY01",
+        "recipients": [],
+        "tags": [],
+        "threshold": {},
+        "triggered": false,
+        "updated_at": "sd0",
+        "recipient_id": "RECIPIENT01",
+        "trigger_id": "TRIGGER01"
+      },
+      "TRIGGER01": {
+        "alert_type": "s17c",
+        "auto_investigate": false,
+        "baseline_details": {},
+        "created_at": "s17f",
+        "dataset_slug": "s180",
+        "description": "s181",
+        "disabled": true,
+        "evaluation_schedule": {},
+        "evaluation_schedule_type": "s184",
+        "frequency": 389,
+        "id": "TRIGGER01",
+        "name": "s187",
+        "query": {},
+        "query_id": "QUERY01",
+        "recipients": [],
+        "tags": [],
+        "threshold": {},
+        "triggered": false,
+        "updated_at": "s18e",
+        "recipient_id": "RECIPIENT01",
+        "trigger_id": "TRIGGER01"
+      },
+      "TRIGGER02": {
+        "alert_type": "s23a",
+        "auto_investigate": false,
+        "baseline_details": {},
+        "created_at": "s23d",
+        "dataset_slug": "s23e",
+        "description": "s23f",
+        "disabled": true,
+        "evaluation_schedule": {},
+        "evaluation_schedule_type": "s242",
+        "frequency": 579,
+        "id": "TRIGGER02",
+        "name": "s245",
+        "query": {},
+        "query_id": "QUERY01",
+        "recipients": [],
+        "tags": [],
+        "threshold": {},
+        "triggered": false,
+        "updated_at": "s24c",
+        "recipient_id": "RECIPIENT01",
+        "trigger_id": "TRIGGER01"
+      }
+    }
+  },
+  "new": {
+    "trigger": {
+      "trigger_ref01": {
+        "alert_type": "s2f8",
+        "auto_investigate": false,
+        "baseline_details": {},
+        "created_at": "s2fb",
+        "dataset_slug": "s2fc",
+        "description": "s2fd",
+        "disabled": true,
+        "evaluation_schedule": {},
+        "evaluation_schedule_type": "s300",
+        "frequency": 769,
+        "name": "s303",
+        "query": {},
+        "query_id": "QUERY01",
+        "recipients": [],
+        "tags": [],
+        "threshold": {},
+        "triggered": false,
+        "updated_at": "s30a"
+      }
+    }
+  },
+  "requests": {
+    "POST /1/triggers/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/recipients/{recipientId}/triggers": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/triggers/{datasetSlug}/{triggerId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/triggers/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "DELETE /1/triggers/{datasetSlug}/{triggerId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "PUT /1/triggers/{datasetSlug}/{triggerId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

@@ -1,0 +1,265 @@
+# Entity: dataset_definition
+
+main: kit: entity: dataset_definition: {
+
+  alias: field: {}
+
+  fields: {
+    annotation_type: {
+      h: "Annotation Type"
+      n: "annotation_type"
+      r: false
+      sh: "Metadata: Annotation Type - The type of span annotation."
+      t: "`$ANY`"
+    }
+    duration_ms: {
+      h: "Duration Ms"
+      n: "duration_ms"
+      r: false
+      sh: "Span Duration - How much time the span took, in milliseconds."
+      t: "`$ANY`"
+    }
+    error: {
+      h: "Error"
+      n: "error"
+      r: false
+      sh: "Use a Boolean or String to indicate error."
+      t: "`$ANY`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      t: "`$STRING`"
+    }
+    link_span_id: {
+      h: "Link Span Id"
+      n: "link_span_id"
+      r: false
+      sh: "Metadata: Link Span ID - Links let you tie traces and spans to one another."
+      t: "`$STRING`"
+    }
+    link_trace_id: {
+      h: "Link Trace Id"
+      n: "link_trace_id"
+      r: false
+      sh: "Metadata: Link Trace ID - Links let you tie traces and spans to one another."
+      t: "`$STRING`"
+    }
+    log_message: {
+      h: "Log Message"
+      n: "log_message"
+      r: false
+      sh: "A value containing the log event message."
+      t: "`$ANY`"
+    }
+    log_severity: {
+      h: "Log Severity"
+      n: "log_severity"
+      r: false
+      sh: "Severity level of the event (also known as log level)."
+      t: "`$ANY`"
+    }
+    name: {
+      h: "Name"
+      n: "name"
+      r: false
+      sh: "The name of the function or method where the span was created."
+      t: "`$STRING`"
+    }
+    parent_id: {
+      h: "Parent Id"
+      n: "parent_id"
+      r: false
+      sh: "The Parent Span ID - The ID of this span's parent span, the call location the current span was called from."
+      t: "`$STRING`"
+    }
+    route: {
+      h: "Route"
+      n: "route"
+      r: false
+      sh: "The HTTP URL or equivalent route processed by the request."
+      t: "`$ANY`"
+    }
+    service_name: {
+      h: "Service Name"
+      n: "service_name"
+      r: false
+      sh: "The name of the instrumented service."
+      t: "`$ANY`"
+    }
+    span_id: {
+      h: "Span Id"
+      n: "span_id"
+      r: false
+      sh: "The unique identifier (ID) for each span."
+      t: "`$STRING`"
+    }
+    span_kind: {
+      h: "Span Kind"
+      n: "span_kind"
+      r: false
+      sh: "Metadata: Kind - The kind of Span."
+      t: "`$ANY`"
+    }
+    status: {
+      h: "Status"
+      n: "status"
+      r: false
+      sh: "Indicates the success, failure, or other status of a request."
+      t: "`$ANY`"
+    }
+    trace_id: {
+      h: "Trace Id"
+      n: "trace_id"
+      r: false
+      sh: "The ID of the trace this span belongs to."
+      t: "`$STRING`"
+    }
+    user: {
+      h: "User"
+      n: "user"
+      r: false
+      sh: "The user making the request in the system."
+      t: "`$ANY`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "dataset_definition"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /1/dataset_definitions/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/dataset_definitions/{datasetSlug}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "dataset_definitions"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    update: {
+      name: "update"
+      points: [
+        {
+          bf: [
+            "annotation_type"
+            "duration_ms"
+            "error"
+            "link_span_id"
+            "link_trace_id"
+            "log_message"
+            "log_severity"
+            "name"
+            "parent_id"
+            "route"
+            "service_name"
+            "span_id"
+            "span_kind"
+            "status"
+            "trace_id"
+            "user"
+          ]
+          co: {
+            id: "PATCH /1/dataset_definitions/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "PATCH"
+          o: "/1/dataset_definitions/{datasetSlug}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "dataset_definitions"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

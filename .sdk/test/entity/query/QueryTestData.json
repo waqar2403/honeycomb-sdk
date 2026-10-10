@@ -1,0 +1,99 @@
+{
+  "existing": {
+    "query": {
+      "QUERY00": {
+        "breakdowns": [],
+        "calculated_fields": [],
+        "calculations": [],
+        "compare_time_offset_seconds": 163,
+        "end_time": 164,
+        "filter_combination": "sa5",
+        "filters": [],
+        "formulas": [],
+        "granularity": 168,
+        "havings": [],
+        "id": "QUERY00",
+        "limit": 171,
+        "orders": [],
+        "start_time": 173,
+        "time_range": 174,
+        "usage_mode": false,
+        "dataset_slug": "DATASET_SLUG01",
+        "query_id": "QUERY01"
+      },
+      "QUERY01": {
+        "breakdowns": [],
+        "calculated_fields": [],
+        "calculations": [],
+        "compare_time_offset_seconds": 323,
+        "end_time": 324,
+        "filter_combination": "s145",
+        "filters": [],
+        "formulas": [],
+        "granularity": 328,
+        "havings": [],
+        "id": "QUERY01",
+        "limit": 331,
+        "orders": [],
+        "start_time": 333,
+        "time_range": 334,
+        "usage_mode": false,
+        "dataset_slug": "DATASET_SLUG01",
+        "query_id": "QUERY01"
+      },
+      "QUERY02": {
+        "breakdowns": [],
+        "calculated_fields": [],
+        "calculations": [],
+        "compare_time_offset_seconds": 483,
+        "end_time": 484,
+        "filter_combination": "s1e5",
+        "filters": [],
+        "formulas": [],
+        "granularity": 488,
+        "havings": [],
+        "id": "QUERY02",
+        "limit": 491,
+        "orders": [],
+        "start_time": 493,
+        "time_range": 494,
+        "usage_mode": false,
+        "dataset_slug": "DATASET_SLUG01",
+        "query_id": "QUERY01"
+      }
+    }
+  },
+  "new": {
+    "query": {
+      "query_ref01": {
+        "breakdowns": [],
+        "calculated_fields": [],
+        "calculations": [],
+        "compare_time_offset_seconds": 643,
+        "end_time": 644,
+        "filter_combination": "s285",
+        "filters": [],
+        "formulas": [],
+        "granularity": 648,
+        "havings": [],
+        "limit": 651,
+        "orders": [],
+        "start_time": 653,
+        "time_range": 654,
+        "usage_mode": false
+      }
+    }
+  },
+  "requests": {
+    "POST /1/queries/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/queries/{datasetSlug}/{queryId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

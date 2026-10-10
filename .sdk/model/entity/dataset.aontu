@@ -1,0 +1,350 @@
+# Entity: dataset
+
+main: kit: entity: dataset: {
+
+  alias: field: {}
+
+  fields: {
+    created_at: {
+      h: "Created At"
+      n: "created_at"
+      r: false
+      ro: true
+      sh: "The ISO8601-formatted time when the dataset was created."
+      t: "`$STRING`"
+    }
+    dataset_type: {
+      h: "Dataset Type"
+      n: "dataset_type"
+      r: false
+      ro: true
+      sh: "The type of data contained in the dataset."
+      t: "`$STRING`"
+    }
+    description: {
+      h: "Description"
+      n: "description"
+      op: {
+        update: {
+          req: true
+          type: "`$STRING`"
+        }
+      }
+      r: false
+      sh: "A description for the dataset."
+      t: "`$STRING`"
+    }
+    expand_json_depth: {
+      h: "Expand Json Depth"
+      n: "expand_json_depth"
+      op: {
+        update: {
+          req: true
+          type: "`$INTEGER`"
+        }
+      }
+      r: false
+      sh: "The maximum unpacking depth of nested JSON fields."
+      t: "`$INTEGER`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      t: "`$STRING`"
+    }
+    last_written_at: {
+      h: "Last Written At"
+      n: "last_written_at"
+      r: false
+      ro: true
+      sh: "The ISO8601-formatted time when the dataset last received event data."
+      t: [
+        "`$ONE`"
+        [
+          "`$NULL`"
+          "`$STRING`"
+        ]
+      ]
+    }
+    name: {
+      h: "Name"
+      n: "name"
+      r: true
+      sh: "The name of the dataset."
+      t: "`$STRING`"
+    }
+    regular_columns_count: {
+      h: "Regular Columns Count"
+      n: "regular_columns_count"
+      r: false
+      ro: true
+      sh: "The total number of unique fields for this Dataset."
+      t: [
+        "`$ONE`"
+        [
+          "`$NULL`"
+          "`$INTEGER`"
+        ]
+      ]
+    }
+    settings: {
+      h: "Settings"
+      n: "settings"
+      r: false
+      t: "`$OBJECT`"
+    }
+    slug: {
+      h: "Slug"
+      n: "slug"
+      r: false
+      ro: true
+      sh: "The 'slug' of the dataset to be used in URLs."
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "dataset"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          bf: [
+            "description"
+            "expand_json_depth"
+            "name"
+          ]
+          co: {
+            id: "POST /1/datasets"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/1/datasets"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "datasets"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /1/datasets"
+            source: "openapi3"
+            version: 2
+          }
+          m: "GET"
+          o: "/1/datasets"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "datasets"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /1/datasets/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/datasets/{datasetSlug}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "datasets"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    remove: {
+      name: "remove"
+      points: [
+        {
+          co: {
+            id: "DELETE /1/datasets/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "DELETE"
+          o: "/1/datasets/{datasetSlug}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "datasets"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    update: {
+      name: "update"
+      points: [
+        {
+          bf: [
+            "description"
+            "expand_json_depth"
+            "settings"
+          ]
+          co: {
+            id: "PUT /1/datasets/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "PUT"
+          o: "/1/datasets/{datasetSlug}"
+          q: {
+            exist: [
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "datasets"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

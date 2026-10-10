@@ -1,0 +1,27 @@
+# BasicSloCountFlow
+
+main: kit: flow: BasicSloCountFlow:
+{
+  entity: "slo_count",
+  kind: "basic",
+  name: "BasicSloCountFlow",
+  step: [
+    {
+      m: {
+        dataset_slug: "dataset_slug01",
+        slo_id: "slo01"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "slo_count_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicSloCountFlow"
+}

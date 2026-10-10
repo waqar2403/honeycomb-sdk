@@ -1,0 +1,97 @@
+{
+  "existing": {
+    "dataset_definition": {
+      "DATASET_DEFINITION00": {
+        "annotation_type": "saa",
+        "duration_ms": "sab",
+        "error": "sac",
+        "id": "DATASET_DEFINITION00",
+        "link_span_id": "LINK_SPAN01",
+        "link_trace_id": "LINK_TRACE01",
+        "log_message": "sb0",
+        "log_severity": "sb1",
+        "name": "sb2",
+        "parent_id": "PARENT01",
+        "route": "sb4",
+        "service_name": "sb5",
+        "span_id": "SPAN01",
+        "span_kind": "sb7",
+        "status": "sb8",
+        "trace_id": "TRACE01",
+        "user": "sba"
+      },
+      "DATASET_DEFINITION01": {
+        "annotation_type": "s154",
+        "duration_ms": "s155",
+        "error": "s156",
+        "id": "DATASET_DEFINITION01",
+        "link_span_id": "LINK_SPAN01",
+        "link_trace_id": "LINK_TRACE01",
+        "log_message": "s15a",
+        "log_severity": "s15b",
+        "name": "s15c",
+        "parent_id": "PARENT01",
+        "route": "s15e",
+        "service_name": "s15f",
+        "span_id": "SPAN01",
+        "span_kind": "s161",
+        "status": "s162",
+        "trace_id": "TRACE01",
+        "user": "s164"
+      },
+      "DATASET_DEFINITION02": {
+        "annotation_type": "s1fe",
+        "duration_ms": "s1ff",
+        "error": "s200",
+        "id": "DATASET_DEFINITION02",
+        "link_span_id": "LINK_SPAN01",
+        "link_trace_id": "LINK_TRACE01",
+        "log_message": "s204",
+        "log_severity": "s205",
+        "name": "s206",
+        "parent_id": "PARENT01",
+        "route": "s208",
+        "service_name": "s209",
+        "span_id": "SPAN01",
+        "span_kind": "s20b",
+        "status": "s20c",
+        "trace_id": "TRACE01",
+        "user": "s20e"
+      }
+    }
+  },
+  "new": {
+    "dataset_definition": {
+      "dataset_definition_ref01": {
+        "annotation_type": "s2a8",
+        "duration_ms": "s2a9",
+        "error": "s2aa",
+        "link_span_id": "LINK_SPAN01",
+        "link_trace_id": "LINK_TRACE01",
+        "log_message": "s2ae",
+        "log_severity": "s2af",
+        "name": "s2b0",
+        "parent_id": "PARENT01",
+        "route": "s2b2",
+        "service_name": "s2b3",
+        "span_id": "SPAN01",
+        "span_kind": "s2b5",
+        "status": "s2b6",
+        "trace_id": "TRACE01",
+        "user": "s2b8"
+      }
+    }
+  },
+  "requests": {
+    "GET /1/dataset_definitions/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "PATCH /1/dataset_definitions/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

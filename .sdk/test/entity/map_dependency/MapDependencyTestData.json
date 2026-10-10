@@ -1,0 +1,65 @@
+{
+  "existing": {
+    "map_dependency": {
+      "MAP_DEPENDENCY00": {
+        "dependencies": "s50",
+        "end_time": 81,
+        "filters": [],
+        "links": {},
+        "request_id": "REQUEST01",
+        "start_time": 85,
+        "status": "s56",
+        "time_range": 87,
+        "id": "MAP_DEPENDENCY00"
+      },
+      "MAP_DEPENDENCY01": {
+        "dependencies": "sa0",
+        "end_time": 161,
+        "filters": [],
+        "links": {},
+        "request_id": "REQUEST01",
+        "start_time": 165,
+        "status": "sa6",
+        "time_range": 167,
+        "id": "MAP_DEPENDENCY01"
+      },
+      "MAP_DEPENDENCY02": {
+        "dependencies": "sf0",
+        "end_time": 241,
+        "filters": [],
+        "links": {},
+        "request_id": "REQUEST01",
+        "start_time": 245,
+        "status": "sf6",
+        "time_range": 247,
+        "id": "MAP_DEPENDENCY02"
+      }
+    }
+  },
+  "new": {
+    "map_dependency": {
+      "map_dependency_ref01": {
+        "dependencies": "s140",
+        "end_time": 321,
+        "filters": [],
+        "links": {},
+        "request_id": "REQUEST01",
+        "start_time": 325,
+        "status": "s146",
+        "time_range": 327
+      }
+    }
+  },
+  "requests": {
+    "POST /1/maps/dependencies/requests": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/maps/dependencies/requests/{requestId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

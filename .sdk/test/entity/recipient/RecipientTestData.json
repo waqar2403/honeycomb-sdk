@@ -1,0 +1,52 @@
+{
+  "existing": {
+    "recipient": {
+      "RECIPIENT00": {
+        "id": "RECIPIENT00",
+        "type": "s15"
+      },
+      "RECIPIENT01": {
+        "id": "RECIPIENT01",
+        "type": "s29"
+      },
+      "RECIPIENT02": {
+        "id": "RECIPIENT02",
+        "type": "s3d"
+      }
+    }
+  },
+  "new": {
+    "recipient": {
+      "recipient_ref01": {
+        "type": "s51"
+      }
+    }
+  },
+  "requests": {
+    "POST /1/recipients": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/recipients": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/recipients/{recipientId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "DELETE /1/recipients/{recipientId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "PUT /1/recipients/{recipientId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

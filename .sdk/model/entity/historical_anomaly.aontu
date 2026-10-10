@@ -1,0 +1,156 @@
+# Entity: historical_anomaly
+
+main: kit: entity: historical_anomaly: {
+
+  alias: field: {}
+
+  fields: {
+    ended_at: {
+      h: "Ended At"
+      n: "ended_at"
+      r: true
+      ro: true
+      sh: "The time the anomaly ended, in seconds since UNIX epoch."
+      t: "`$INTEGER`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: true
+      ro: true
+      sh: "A deterministic identifier for the anomaly, derived from the Signal, its measured kind, and the anomaly's start time."
+      t: "`$STRING`"
+    }
+    measurement: {
+      h: "Measurement"
+      n: "measurement"
+      r: true
+      ro: true
+      sh: "The measured value that triggered the anomaly."
+      t: "`$NUMBER`"
+    }
+    normal_range: {
+      h: "Normal Range"
+      n: "normal_range"
+      r: true
+      sh: "The trained normal band the measurement exceeded."
+      t: "`$ANY`"
+    }
+    started_at: {
+      h: "Started At"
+      n: "started_at"
+      r: true
+      ro: true
+      sh: "The time the anomaly started, in seconds since UNIX epoch."
+      t: "`$INTEGER`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "historical_anomaly"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /1/signals/{signalId}/historical_anomalies"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "signal_id"
+                or: "signalId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                ex: 1741392000
+                k: "query"
+                n: "end_time"
+                or: "end_time"
+                r: true
+                t: "`$INTEGER`"
+              }
+              {
+                ex: "eyxJjcmAVhdGVkX"
+                k: "query"
+                n: "page_after"
+                or: "page[after]"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: 10
+                k: "query"
+                n: "page_size"
+                or: "page[size]"
+                r: false
+                t: "`$NUMBER`"
+              }
+              {
+                ex: 1740787200
+                k: "query"
+                n: "start_time"
+                or: "start_time"
+                r: true
+                t: "`$INTEGER`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/signals/{signalId}/historical_anomalies"
+          q: {
+            exist: [
+              "end_time"
+              "signal_id"
+              "start_time"
+            ]
+          }
+          r: {
+            param: {
+              signalId: "signal_id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "signals"
+            }
+            {
+              var: "signal_id"
+            }
+            {
+              lit: "historical_anomalies"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.historical_anomalies`"
+          }
+        }
+      ]
+    }
+  }
+
+
+  relations: ancestors: [
+    [path("$.main.kit.entity.signal")]
+  ]
+
+}

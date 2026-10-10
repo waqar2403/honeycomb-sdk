@@ -1,0 +1,74 @@
+{
+  "existing": {
+    "calculated_field": {
+      "CALCULATED_FIELD00": {
+        "alias": "s3c",
+        "created_at": "s3d",
+        "description": "s3e",
+        "expression": "s3f",
+        "id": "CALCULATED_FIELD00",
+        "updated_at": "s41",
+        "dataset_slug": "DATASET_SLUG01",
+        "derived_column_id": "DERIVED_COLUMN01"
+      },
+      "CALCULATED_FIELD01": {
+        "alias": "s78",
+        "created_at": "s79",
+        "description": "s7a",
+        "expression": "s7b",
+        "id": "CALCULATED_FIELD01",
+        "updated_at": "s7d",
+        "dataset_slug": "DATASET_SLUG01",
+        "derived_column_id": "DERIVED_COLUMN01"
+      },
+      "CALCULATED_FIELD02": {
+        "alias": "sb4",
+        "created_at": "sb5",
+        "description": "sb6",
+        "expression": "sb7",
+        "id": "CALCULATED_FIELD02",
+        "updated_at": "sb9",
+        "dataset_slug": "DATASET_SLUG01",
+        "derived_column_id": "DERIVED_COLUMN01"
+      }
+    }
+  },
+  "new": {
+    "calculated_field": {
+      "calculated_field_ref01": {
+        "alias": "sf0",
+        "created_at": "sf1",
+        "description": "sf2",
+        "expression": "sf3",
+        "updated_at": "sf5"
+      }
+    }
+  },
+  "requests": {
+    "POST /1/derived_columns/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/derived_columns/{datasetSlug}/{derivedColumnId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/derived_columns/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "DELETE /1/derived_columns/{datasetSlug}/{derivedColumnId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "PUT /1/derived_columns/{datasetSlug}/{derivedColumnId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

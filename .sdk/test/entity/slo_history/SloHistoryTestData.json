@@ -1,0 +1,40 @@
+{
+  "existing": {
+    "slo_history": {
+      "SLO_HISTORY00": {
+        "end_time": 30,
+        "ids": [],
+        "start_time": 32,
+        "id": "SLO_HISTORY00"
+      },
+      "SLO_HISTORY01": {
+        "end_time": 60,
+        "ids": [],
+        "start_time": 62,
+        "id": "SLO_HISTORY01"
+      },
+      "SLO_HISTORY02": {
+        "end_time": 90,
+        "ids": [],
+        "start_time": 92,
+        "id": "SLO_HISTORY02"
+      }
+    }
+  },
+  "new": {
+    "slo_history": {
+      "slo_history_ref01": {
+        "end_time": 120,
+        "ids": [],
+        "start_time": 122
+      }
+    }
+  },
+  "requests": {
+    "POST /1/reporting/slos/historical": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

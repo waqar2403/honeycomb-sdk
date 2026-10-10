@@ -1,0 +1,153 @@
+# Entity: slo_hourly_count
+
+main: kit: entity: slo_hourly_count: {
+
+  alias: field: {}
+
+  fields: {
+    end_time: {
+      fo: "int64"
+      h: "End Time"
+      n: "end_time"
+      r: false
+      ro: true
+      sh: "End of the hour as a Unix timestamp (seconds)."
+      t: "`$INTEGER`"
+    }
+    error_count: {
+      h: "Error Count"
+      n: "error_count"
+      r: false
+      ro: true
+      sh: "Number of failed (bad) events in this hour."
+      t: "`$INTEGER`"
+    }
+    is_partial: {
+      h: "Is Partial"
+      n: "is_partial"
+      r: false
+      ro: true
+      sh: "When `true`, this bucket covers the current in-progress hour and its counts will increase until the hour completes."
+      t: "`$BOOLEAN`"
+    }
+    start_time: {
+      fo: "int64"
+      h: "Start Time"
+      n: "start_time"
+      r: false
+      ro: true
+      sh: "Start of the hour as a Unix timestamp (seconds)."
+      t: "`$INTEGER`"
+    }
+    total_count: {
+      h: "Total Count"
+      n: "total_count"
+      r: false
+      ro: true
+      sh: "Total number of events (good + bad) in this hour."
+      t: "`$INTEGER`"
+    }
+  }
+
+  name: "slo_hourly_count"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /1/slos/{datasetSlug}/{sloId}/counts/history"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "slo_id"
+                or: "sloId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                ex: 1745254800
+                k: "query"
+                n: "end_time"
+                or: "end_time"
+                r: true
+                t: "`$INTEGER`"
+              }
+              {
+                ex: 1745168400
+                k: "query"
+                n: "start_time"
+                or: "start_time"
+                r: true
+                t: "`$INTEGER`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/slos/{datasetSlug}/{sloId}/counts/history"
+          q: {
+            exist: [
+              "dataset_slug"
+              "end_time"
+              "slo_id"
+              "start_time"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+              sloId: "slo_id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "slos"
+            }
+            {
+              var: "dataset_slug"
+            }
+            {
+              var: "slo_id"
+            }
+            {
+              lit: "counts"
+            }
+            {
+              lit: "history"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.buckets`"
+          }
+        }
+      ]
+    }
+  }
+
+
+  relations: ancestors: [
+    [path("$.main.kit.entity.slo")]
+  ]
+
+}

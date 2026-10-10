@@ -1,0 +1,54 @@
+{
+  "existing": {
+    "board_view": {
+      "BOARD_VIEW00": {
+        "filters": [],
+        "id": "BOARD_VIEW00",
+        "name": "s20",
+        "board_id": "BOARD01"
+      },
+      "BOARD_VIEW01": {
+        "filters": [],
+        "id": "BOARD_VIEW01",
+        "name": "s3e",
+        "board_id": "BOARD01"
+      },
+      "BOARD_VIEW02": {
+        "filters": [],
+        "id": "BOARD_VIEW02",
+        "name": "s5c",
+        "board_id": "BOARD01"
+      }
+    }
+  },
+  "new": {
+    "board_view": {
+      "board_view_ref01": {
+        "filters": [],
+        "name": "s7a"
+      }
+    }
+  },
+  "requests": {
+    "POST /1/boards/{boardId}/views": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/boards/{boardId}/views": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/boards/{boardId}/views/{viewId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "PUT /1/boards/{boardId}/views/{viewId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

@@ -1,0 +1,377 @@
+# Entity: environment
+
+main: kit: entity: environment: {
+
+  alias: field: {}
+
+  fields: {
+    data: {
+      h: "Data"
+      n: "data"
+      r: true
+      t: "`$OBJECT`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "environment"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          bf: [
+            "data"
+          ]
+          co: {
+            id: "POST /2/teams/{teamSlug}/environments"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "team_slug"
+                or: "teamSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "POST"
+          o: "/2/teams/{teamSlug}/environments"
+          q: {
+            exist: [
+              "team_slug"
+            ]
+          }
+          r: {
+            param: {
+              teamSlug: "team_slug"
+            }
+          }
+          rb: {
+            kind: "json"
+            media: "application/vnd.api+json"
+          }
+          rs: {
+            kind: "json"
+            media: "application/vnd.api+json"
+          }
+          s: [
+            {
+              lit: "2"
+            }
+            {
+              lit: "teams"
+            }
+            {
+              var: "team_slug"
+            }
+            {
+              lit: "environments"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /2/teams/{teamSlug}/environments/{ID}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "ID"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "team_slug"
+                or: "teamSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/2/teams/{teamSlug}/environments/{ID}"
+          q: {
+            exist: [
+              "id"
+              "team_slug"
+            ]
+          }
+          r: {
+            param: {
+              ID: "id"
+              teamSlug: "team_slug"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/vnd.api+json"
+          }
+          s: [
+            {
+              lit: "2"
+            }
+            {
+              lit: "teams"
+            }
+            {
+              var: "team_slug"
+            }
+            {
+              lit: "environments"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+        {
+          co: {
+            id: "GET /2/teams/{teamSlug}/environments"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "team_slug"
+                or: "teamSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                ex: "eyxJjcmAVhdGVkX"
+                k: "query"
+                n: "page_after"
+                or: "page[after]"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: 10
+                k: "query"
+                n: "page_size"
+                or: "page[size]"
+                r: false
+                t: "`$NUMBER`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/2/teams/{teamSlug}/environments"
+          q: {
+            exist: [
+              "team_slug"
+            ]
+          }
+          r: {
+            param: {
+              teamSlug: "team_slug"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/vnd.api+json"
+          }
+          s: [
+            {
+              lit: "2"
+            }
+            {
+              lit: "teams"
+            }
+            {
+              var: "team_slug"
+            }
+            {
+              lit: "environments"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    remove: {
+      name: "remove"
+      points: [
+        {
+          co: {
+            id: "DELETE /2/teams/{teamSlug}/environments/{ID}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "ID"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "team_slug"
+                or: "teamSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "DELETE"
+          o: "/2/teams/{teamSlug}/environments/{ID}"
+          q: {
+            exist: [
+              "id"
+              "team_slug"
+            ]
+          }
+          r: {
+            param: {
+              ID: "id"
+              teamSlug: "team_slug"
+            }
+          }
+          s: [
+            {
+              lit: "2"
+            }
+            {
+              lit: "teams"
+            }
+            {
+              var: "team_slug"
+            }
+            {
+              lit: "environments"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    update: {
+      name: "update"
+      points: [
+        {
+          bf: [
+            "data"
+          ]
+          co: {
+            id: "PATCH /2/teams/{teamSlug}/environments/{ID}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "ID"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "team_slug"
+                or: "teamSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "PATCH"
+          o: "/2/teams/{teamSlug}/environments/{ID}"
+          q: {
+            exist: [
+              "id"
+              "team_slug"
+            ]
+          }
+          r: {
+            param: {
+              ID: "id"
+              teamSlug: "team_slug"
+            }
+          }
+          rb: {
+            kind: "json"
+            media: "application/vnd.api+json"
+          }
+          rs: {
+            kind: "json"
+            media: "application/vnd.api+json"
+          }
+          s: [
+            {
+              lit: "2"
+            }
+            {
+              lit: "teams"
+            }
+            {
+              var: "team_slug"
+            }
+            {
+              lit: "environments"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

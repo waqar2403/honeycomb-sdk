@@ -1,0 +1,47 @@
+{
+  "existing": {
+    "kinesi": {
+      "KINESI00": {
+        "errorMessage": "s28",
+        "records": [],
+        "requestId": "s2a",
+        "timestamp": 43,
+        "dataset_slug": "DATASET_SLUG01",
+        "id": "KINESI00"
+      },
+      "KINESI01": {
+        "errorMessage": "s50",
+        "records": [],
+        "requestId": "s52",
+        "timestamp": 83,
+        "dataset_slug": "DATASET_SLUG01",
+        "id": "KINESI01"
+      },
+      "KINESI02": {
+        "errorMessage": "s78",
+        "records": [],
+        "requestId": "s7a",
+        "timestamp": 123,
+        "dataset_slug": "DATASET_SLUG01",
+        "id": "KINESI02"
+      }
+    }
+  },
+  "new": {
+    "kinesi": {
+      "kinesi_ref01": {
+        "errorMessage": "sa0",
+        "records": [],
+        "requestId": "sa2",
+        "timestamp": 163
+      }
+    }
+  },
+  "requests": {
+    "POST /1/kinesis_events/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

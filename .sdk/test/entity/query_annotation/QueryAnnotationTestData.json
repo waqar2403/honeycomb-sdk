@@ -1,0 +1,78 @@
+{
+  "existing": {
+    "query_annotation": {
+      "QUERY_ANNOTATION00": {
+        "created_at": "s46",
+        "description": "s47",
+        "id": "QUERY_ANNOTATION00",
+        "name": "s49",
+        "query_id": "QUERY01",
+        "source": "s4b",
+        "updated_at": "s4c",
+        "dataset_slug": "DATASET_SLUG01",
+        "query_annotation_id": "QUERY_ANNOTATION01"
+      },
+      "QUERY_ANNOTATION01": {
+        "created_at": "s8c",
+        "description": "s8d",
+        "id": "QUERY_ANNOTATION01",
+        "name": "s8f",
+        "query_id": "QUERY01",
+        "source": "s91",
+        "updated_at": "s92",
+        "dataset_slug": "DATASET_SLUG01",
+        "query_annotation_id": "QUERY_ANNOTATION01"
+      },
+      "QUERY_ANNOTATION02": {
+        "created_at": "sd2",
+        "description": "sd3",
+        "id": "QUERY_ANNOTATION02",
+        "name": "sd5",
+        "query_id": "QUERY01",
+        "source": "sd7",
+        "updated_at": "sd8",
+        "dataset_slug": "DATASET_SLUG01",
+        "query_annotation_id": "QUERY_ANNOTATION01"
+      }
+    }
+  },
+  "new": {
+    "query_annotation": {
+      "query_annotation_ref01": {
+        "created_at": "s118",
+        "description": "s119",
+        "name": "s11b",
+        "query_id": "QUERY01",
+        "source": "s11d",
+        "updated_at": "s11e"
+      }
+    }
+  },
+  "requests": {
+    "POST /1/query_annotations/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/query_annotations/{datasetSlug}/{queryAnnotationId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/query_annotations/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "DELETE /1/query_annotations/{datasetSlug}/{queryAnnotationId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "PUT /1/query_annotations/{datasetSlug}/{queryAnnotationId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

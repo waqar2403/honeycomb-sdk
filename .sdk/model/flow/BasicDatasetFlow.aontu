@@ -1,0 +1,100 @@
+# BasicDatasetFlow
+
+main: kit: flow: BasicDatasetFlow:
+{
+  entity: "dataset",
+  kind: "basic",
+  name: "BasicDatasetFlow",
+  step: [
+    {
+      i: {
+        ref: "dataset_ref01"
+      }
+
+      o: "create"
+    }
+
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "dataset_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "dataset_ref01",
+        srcdatavar: "dataset_ref01_data",
+        suffix: "_up0",
+        textfield: "description"
+      }
+
+      o: "update",
+      s: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-dataset_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "dataset_ref01",
+        srcdatavar: "dataset_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        id: "dataset01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-dataset_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "dataset_ref01",
+        suffix: "_rm0"
+      }
+
+      m: {
+        id: "dataset01"
+      }
+
+      o: "remove"
+    }
+
+    {
+      i: {
+        suffix: "_rt0"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemNotExists",
+          def: {
+            ref: "dataset_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicDatasetFlow"
+}

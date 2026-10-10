@@ -1,0 +1,393 @@
+# Entity: calculated_field
+
+main: kit: entity: calculated_field: {
+
+  alias: field: {}
+
+  fields: {
+    alias: {
+      h: "Alias"
+      n: "alias"
+      r: true
+      sh: "The human-readable name of the Calculated Field (also called Derived Column), as it will be referenced when building queries."
+      t: "`$STRING`"
+    }
+    created_at: {
+      h: "Created At"
+      n: "created_at"
+      r: true
+      ro: true
+      sh: "ISO8601 formatted time when the field was created."
+      t: "`$STRING`"
+    }
+    description: {
+      h: "Description"
+      n: "description"
+      r: false
+      sh: "A human-readable description for the Calculated Field that displays in the UI."
+      t: "`$STRING`"
+    }
+    expression: {
+      h: "Expression"
+      n: "expression"
+      r: true
+      sh: "The expression to evaluate to construct this Calculated Field's value."
+      t: "`$STRING`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: true
+      ro: true
+      sh: "Unique identifier (ID), returned in response bodies."
+      t: "`$STRING`"
+    }
+    updated_at: {
+      h: "Updated At"
+      n: "updated_at"
+      r: true
+      ro: true
+      sh: "ISO8601 formatted time when the field was updated."
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+    parts: [
+      "dataset_slug"
+      "derived_column_id"
+    ]
+    sep: "/"
+  }
+
+  name: "calculated_field"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          bf: [
+            "alias"
+            "created_at"
+            "description"
+            "expression"
+            "id"
+            "updated_at"
+          ]
+          co: {
+            id: "POST /1/derived_columns/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "POST"
+          o: "/1/derived_columns/{datasetSlug}"
+          q: {
+            exist: [
+              "dataset_slug"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "derived_columns"
+            }
+            {
+              var: "dataset_slug"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /1/derived_columns/{datasetSlug}/{derivedColumnId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "derived_column_id"
+                or: "derivedColumnId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/derived_columns/{datasetSlug}/{derivedColumnId}"
+          q: {
+            exist: [
+              "dataset_slug"
+              "derived_column_id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+              derivedColumnId: "derived_column_id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "derived_columns"
+            }
+            {
+              var: "dataset_slug"
+            }
+            {
+              var: "derived_column_id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+        {
+          co: {
+            id: "GET /1/derived_columns/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                k: "query"
+                n: "alia"
+                or: "alias"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/derived_columns/{datasetSlug}"
+          q: {
+            exist: [
+              "dataset_slug"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "derived_columns"
+            }
+            {
+              var: "dataset_slug"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    remove: {
+      name: "remove"
+      points: [
+        {
+          co: {
+            id: "DELETE /1/derived_columns/{datasetSlug}/{derivedColumnId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "derived_column_id"
+                or: "derivedColumnId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "DELETE"
+          o: "/1/derived_columns/{datasetSlug}/{derivedColumnId}"
+          q: {
+            exist: [
+              "dataset_slug"
+              "derived_column_id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+              derivedColumnId: "derived_column_id"
+            }
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "derived_columns"
+            }
+            {
+              var: "dataset_slug"
+            }
+            {
+              var: "derived_column_id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    update: {
+      name: "update"
+      points: [
+        {
+          bf: [
+            "alias"
+            "created_at"
+            "description"
+            "expression"
+            "id"
+            "updated_at"
+          ]
+          co: {
+            id: "PUT /1/derived_columns/{datasetSlug}/{derivedColumnId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "derived_column_id"
+                or: "derivedColumnId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "PUT"
+          o: "/1/derived_columns/{datasetSlug}/{derivedColumnId}"
+          q: {
+            exist: [
+              "dataset_slug"
+              "derived_column_id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+              derivedColumnId: "derived_column_id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "derived_columns"
+            }
+            {
+              var: "dataset_slug"
+            }
+            {
+              var: "derived_column_id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

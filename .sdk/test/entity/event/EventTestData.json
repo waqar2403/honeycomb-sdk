@@ -1,0 +1,44 @@
+{
+  "existing": {
+    "event": {
+      "EVENT00": {
+        "batch_events": [],
+        "id": "EVENT00",
+        "status": 32,
+        "dataset_slug": "DATASET_SLUG01"
+      },
+      "EVENT01": {
+        "batch_events": [],
+        "id": "EVENT01",
+        "status": 62,
+        "dataset_slug": "DATASET_SLUG01"
+      },
+      "EVENT02": {
+        "batch_events": [],
+        "id": "EVENT02",
+        "status": 92,
+        "dataset_slug": "DATASET_SLUG01"
+      }
+    }
+  },
+  "new": {
+    "event": {
+      "event_ref01": {
+        "batch_events": [],
+        "status": 122
+      }
+    }
+  },
+  "requests": {
+    "POST /1/batch/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "POST /1/events/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

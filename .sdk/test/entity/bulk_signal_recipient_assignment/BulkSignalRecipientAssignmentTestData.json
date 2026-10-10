@@ -1,0 +1,48 @@
+{
+  "existing": {
+    "bulk_signal_recipient_assignment": {
+      "BULK_SIGNAL_RECIPIENT_ASSIGNMENT00": {
+        "failed": [],
+        "recipients": [],
+        "selector": {},
+        "succeeded": [],
+        "unchanged": [],
+        "id": "BULK_SIGNAL_RECIPIENT_ASSIGNMENT00"
+      },
+      "BULK_SIGNAL_RECIPIENT_ASSIGNMENT01": {
+        "failed": [],
+        "recipients": [],
+        "selector": {},
+        "succeeded": [],
+        "unchanged": [],
+        "id": "BULK_SIGNAL_RECIPIENT_ASSIGNMENT01"
+      },
+      "BULK_SIGNAL_RECIPIENT_ASSIGNMENT02": {
+        "failed": [],
+        "recipients": [],
+        "selector": {},
+        "succeeded": [],
+        "unchanged": [],
+        "id": "BULK_SIGNAL_RECIPIENT_ASSIGNMENT02"
+      }
+    }
+  },
+  "new": {
+    "bulk_signal_recipient_assignment": {
+      "bulk_signal_recipient_assignment_ref01": {
+        "failed": [],
+        "recipients": [],
+        "selector": {},
+        "succeeded": [],
+        "unchanged": []
+      }
+    }
+  },
+  "requests": {
+    "POST /1/signals/recipient_assignments": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

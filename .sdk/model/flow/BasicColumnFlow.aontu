@@ -1,0 +1,81 @@
+# BasicColumnFlow
+
+main: kit: flow: BasicColumnFlow:
+{
+  entity: "column",
+  kind: "basic",
+  name: "BasicColumnFlow",
+  step: [
+    {
+      i: {
+        ref: "column_ref01"
+      }
+
+      m: {
+        dataset_slug: "dataset_slug01"
+      }
+
+      o: "create"
+    }
+
+    {
+      d: {
+        dataset_slug: "dataset_slug01"
+      }
+
+      i: {
+        ref: "column_ref01",
+        srcdatavar: "column_ref01_data",
+        suffix: "_up0",
+        textfield: "description"
+      }
+
+      o: "update",
+      s: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-column_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "column_ref01",
+        srcdatavar: "column_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        id: "column01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-column_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "column_ref01",
+        suffix: "_rm0"
+      }
+
+      m: {
+        dataset_slug: "dataset_slug01",
+        id: "column01"
+      }
+
+      o: "remove"
+    }
+  ],
+  "key$": "BasicColumnFlow"
+}

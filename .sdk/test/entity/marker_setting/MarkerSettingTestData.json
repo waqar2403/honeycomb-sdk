@@ -1,0 +1,65 @@
+{
+  "existing": {
+    "marker_setting": {
+      "MARKER_SETTING00": {
+        "color": "s32",
+        "created_at": "s33",
+        "id": "MARKER_SETTING00",
+        "type": "s35",
+        "updated_at": "s36",
+        "dataset_slug": "DATASET_SLUG01",
+        "marker_setting_id": "MARKER_SETTING01"
+      },
+      "MARKER_SETTING01": {
+        "color": "s64",
+        "created_at": "s65",
+        "id": "MARKER_SETTING01",
+        "type": "s67",
+        "updated_at": "s68",
+        "dataset_slug": "DATASET_SLUG01",
+        "marker_setting_id": "MARKER_SETTING01"
+      },
+      "MARKER_SETTING02": {
+        "color": "s96",
+        "created_at": "s97",
+        "id": "MARKER_SETTING02",
+        "type": "s99",
+        "updated_at": "s9a",
+        "dataset_slug": "DATASET_SLUG01",
+        "marker_setting_id": "MARKER_SETTING01"
+      }
+    }
+  },
+  "new": {
+    "marker_setting": {
+      "marker_setting_ref01": {
+        "color": "sc8",
+        "created_at": "sc9",
+        "type": "scb",
+        "updated_at": "scc"
+      }
+    }
+  },
+  "requests": {
+    "POST /1/marker_settings/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/marker_settings/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "DELETE /1/marker_settings/{datasetSlug}/{markerSettingId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "PUT /1/marker_settings/{datasetSlug}/{markerSettingId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "existing": {
+    "signal": {
+      "SIGNAL00": {
+        "auto_investigate": true,
+        "created_at": "s97",
+        "currently_anomalous": true,
+        "dataset_slug": "s99",
+        "enabled": true,
+        "environment_slug": "s9b",
+        "id": "SIGNAL00",
+        "last_anomaly_ended_at": "s9d",
+        "last_anomaly_started_at": "s9e",
+        "measured_signal": "s9f",
+        "recipients": [],
+        "sensitivity": "sa1",
+        "service_name": "sa2",
+        "status": "sa3",
+        "updated_at": "sa4"
+      },
+      "SIGNAL01": {
+        "auto_investigate": true,
+        "created_at": "s12d",
+        "currently_anomalous": true,
+        "dataset_slug": "s12f",
+        "enabled": true,
+        "environment_slug": "s131",
+        "id": "SIGNAL01",
+        "last_anomaly_ended_at": "s133",
+        "last_anomaly_started_at": "s134",
+        "measured_signal": "s135",
+        "recipients": [],
+        "sensitivity": "s137",
+        "service_name": "s138",
+        "status": "s139",
+        "updated_at": "s13a"
+      },
+      "SIGNAL02": {
+        "auto_investigate": true,
+        "created_at": "s1c3",
+        "currently_anomalous": true,
+        "dataset_slug": "s1c5",
+        "enabled": true,
+        "environment_slug": "s1c7",
+        "id": "SIGNAL02",
+        "last_anomaly_ended_at": "s1c9",
+        "last_anomaly_started_at": "s1ca",
+        "measured_signal": "s1cb",
+        "recipients": [],
+        "sensitivity": "s1cd",
+        "service_name": "s1ce",
+        "status": "s1cf",
+        "updated_at": "s1d0"
+      }
+    }
+  },
+  "new": {
+    "signal": {
+      "signal_ref01": {
+        "auto_investigate": true,
+        "created_at": "s259",
+        "currently_anomalous": true,
+        "dataset_slug": "s25b",
+        "enabled": true,
+        "environment_slug": "s25d",
+        "last_anomaly_ended_at": "s25f",
+        "last_anomaly_started_at": "s260",
+        "measured_signal": "s261",
+        "recipients": [],
+        "sensitivity": "s263",
+        "service_name": "s264",
+        "status": "s265",
+        "updated_at": "s266"
+      }
+    }
+  },
+  "requests": {
+    "GET /1/signals": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /1/signals/{signalId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "PUT /1/signals/{signalId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

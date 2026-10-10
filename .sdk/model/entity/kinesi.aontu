@@ -1,0 +1,110 @@
+# Entity: kinesi
+
+main: kit: entity: kinesi: {
+
+  alias: field: {}
+
+  fields: {
+    errorMessage: {
+      h: "Error Message"
+      n: "errorMessage"
+      r: false
+      t: "`$STRING`"
+    }
+    records: {
+      h: "Records"
+      n: "records"
+      r: false
+      t: "`$ARRAY`"
+    }
+    requestId: {
+      h: "Request Id"
+      n: "requestId"
+      r: false
+      t: "`$STRING`"
+    }
+    timestamp: {
+      h: "Timestamp"
+      n: "timestamp"
+      r: false
+      t: "`$INTEGER`"
+    }
+  }
+
+  name: "kinesi"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          bf: [
+            "records"
+            "requestId"
+            "timestamp"
+          ]
+          co: {
+            id: "POST /1/kinesis_events/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            header: [
+              {
+                ex: "33658b45-a8f1-4007-92e8-f601ae33db14"
+                k: "header"
+                n: "x_amz_firehose_request_id"
+                or: "X-Amz-Firehose-Request-Id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "POST"
+          o: "/1/kinesis_events/{datasetSlug}"
+          q: {
+            exist: [
+              "dataset_slug"
+              "x_amz_firehose_request_id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "kinesis_events"
+            }
+            {
+              var: "dataset_slug"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

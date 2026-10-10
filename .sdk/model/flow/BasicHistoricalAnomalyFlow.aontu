@@ -1,0 +1,26 @@
+# BasicHistoricalAnomalyFlow
+
+main: kit: flow: BasicHistoricalAnomalyFlow:
+{
+  entity: "historical_anomaly",
+  kind: "basic",
+  name: "BasicHistoricalAnomalyFlow",
+  step: [
+    {
+      m: {
+        signal_id: "signal01"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "historical_anomaly_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicHistoricalAnomalyFlow"
+}
