@@ -1,6 +1,15 @@
 {
+  "NAME": "HONEYCOMB",
+  "Name": "Honeycomb",
   "def": "honeycomb-openapi.yaml",
   "main": {
+    "api": {
+      "entity": {},
+      "guide": {}
+    },
+    "custom": {
+      "plurals": {}
+    },
     "def": {
       "desc": ""
     },
@@ -11316,7 +11325,7 @@
         }
       },
       "text": {
-        "about_md": "",
+        "about_md": "**Status:** generated on 2026-10-10 from Honeycomb's public OpenAPI spec (`https://docs.honeycomb.io/api/openapi-public.yaml`) with `@voxgig/sdkgen` 4.34.5. The offline test suites pass in TypeScript, Python and Go, and the CLI and MCP server build.\n\n**Two kinds of key.** Honeycomb uses configuration keys for the `/1/` endpoints, sent in the `X-Honeycomb-Team` header, which is the client default. The `/2/` endpoints (`ApiKey`, `Environment`, `ManagementAuth`) need a management key, sent as `Authorization: Bearer KEY_ID:SECRET`. The client sends one credential, so use a second client for management calls:\n\n```ts\nconst mgmt = new HoneycombSDK({\n  apikey: process.env.HONEYCOMB_MANAGEMENT_KEY,\n  auth: { name: 'Authorization', prefix: 'Bearer' },\n})\n```\n\nFor the EU region, pass `base: 'https://api.eu1.honeycomb.io'`.\n\n**Model corrections.** The first generation pass read Honeycomb's dataset-scoped paths, such as `/1/slos/{datasetSlug}`, as \"load one record by id\", so the list operations were missing. The corrections are in `.sdk/model/guide/guide.aontu` and survive regeneration:\n\n- `list({ dataset_slug })` and `load({ dataset_slug, id })` for SLOs, triggers, markers, marker settings, burn alerts, query annotations, columns and calculated fields.\n- JSON:API envelopes (`body.data`) unwrapped for the `/2/` endpoints.\n- `/1/kinesis_events` is `KinesisEvent`, not `Kinesi`.\n- Deleting a board view is `BoardView().remove()`, not `Board().remove()`.\n- `/2/auth` is a separate `ManagementAuth` entity, so it no longer collides with `/1/auth`.\n",
         "docs_url": "",
         "entity_desc": {},
         "homepage": "",
@@ -11329,5 +11338,8 @@
     }
   },
   "name": "honeycomb",
+  "name-": "honeycomb",
+  "name_": "honeycomb",
+  "name__orig": "honeycomb",
   "origin": "waqar2403"
 }

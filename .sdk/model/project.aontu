@@ -31,3 +31,27 @@ main: kit: publisher: {
   url: 'https://github.com/waqar2403'
   security: 'https://github.com/waqar2403/honeycomb-sdk/security/advisories/new'
 }
+
+
+# README wording.
+main: kit: text: about_md: `**Status:** generated on 2026-10-10 from Honeycomb's public OpenAPI spec (\`https://docs.honeycomb.io/api/openapi-public.yaml\`) with \`@voxgig/sdkgen\` 4.34.5. The offline test suites pass in TypeScript, Python and Go, and the CLI and MCP server build.
+
+**Two kinds of key.** Honeycomb uses configuration keys for the \`/1/\` endpoints, sent in the \`X-Honeycomb-Team\` header, which is the client default. The \`/2/\` endpoints (\`ApiKey\`, \`Environment\`, \`ManagementAuth\`) need a management key, sent as \`Authorization: Bearer KEY_ID:SECRET\`. The client sends one credential, so use a second client for management calls:
+
+\`\`\`ts
+const mgmt = new HoneycombSDK({
+  apikey: process.env.HONEYCOMB_MANAGEMENT_KEY,
+  auth: { name: 'Authorization', prefix: 'Bearer' },
+})
+\`\`\`
+
+For the EU region, pass \`base: 'https://api.eu1.honeycomb.io'\`.
+
+**Model corrections.** The first generation pass read Honeycomb's dataset-scoped paths, such as \`/1/slos/{datasetSlug}\`, as "load one record by id", so the list operations were missing. The corrections are in \`.sdk/model/guide/guide.aontu\` and survive regeneration:
+
+- \`list({ dataset_slug })\` and \`load({ dataset_slug, id })\` for SLOs, triggers, markers, marker settings, burn alerts, query annotations, columns and calculated fields.
+- JSON:API envelopes (\`body.data\`) unwrapped for the \`/2/\` endpoints.
+- \`/1/kinesis_events\` is \`KinesisEvent\`, not \`Kinesi\`.
+- Deleting a board view is \`BoardView().remove()\`, not \`Board().remove()\`.
+- \`/2/auth\` is a separate \`ManagementAuth\` entity, so it no longer collides with \`/1/auth\`.
+`
