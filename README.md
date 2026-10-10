@@ -37,6 +37,8 @@ For the EU region, pass `base: 'https://api.eu1.honeycomb.io'`.
 - Deleting a board view is `BoardView().remove()`, not `Board().remove()`.
 - `/2/auth` is a separate `ManagementAuth` entity, so it no longer collides with `/1/auth`.
 
+**Live check and report.** `examples/smoke.mjs` runs the TypeScript SDK against api.honeycomb.io (pass `--dry` to print the requests without sending them). Findings from building this SDK, with suggestions for the generator, are in [DX-REPORT.md](DX-REPORT.md).
+
 ## Entities, not endpoints
 
 This SDK exposes the API as **28 semantic entities** that you
