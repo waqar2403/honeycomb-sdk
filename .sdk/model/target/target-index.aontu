@@ -1,0 +1,8 @@
+# SDK Targets.
+
+
+@"./ts.aontu"
+@"./py.aontu"
+@"./go.aontu"
+@"./go-cli.aontu"
+@"./go-mcp.aontu"
