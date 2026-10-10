@@ -1,7 +1,7 @@
 package core
 
 import (
-	vs "github.com/voxgig-sdk/honeycomb-sdk/go/utility/struct"
+	vs "github.com/waqar2403/honeycomb-sdk/go/utility/struct"
 )
 
 type Point struct {

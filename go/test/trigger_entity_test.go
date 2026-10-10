@@ -2,6 +2,7 @@ package sdktest
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -9,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 
-	vs "github.com/voxgig-sdk/honeycomb-sdk/go/utility/struct"
+	vs "github.com/waqar2403/honeycomb-sdk/go/utility/struct"
 )
 
 // main.kit.test.live.strict is true (the default is true): a live
@@ -38,7 +39,7 @@ func TestTriggerEntity(t *testing.T) {
 		client := sdk.TestSDK(nil, map[string]any{
 			"feature": map[string]any{"validate": map[string]any{"active": true}},
 		})
-		_, err := client.Trigger(nil).List(map[string]any{"recipient_id": 1}, nil)
+		_, err := client.Trigger(nil).List(map[string]any{"dataset_slug": 1}, nil)
 		if sdkerr, ok := err.(*core.HoneycombError); !ok || "validate_failed" != sdkerr.Code {
 			t.Fatalf("expected validate_failed, got %v", err)
 		}
@@ -53,7 +54,7 @@ func TestTriggerEntity(t *testing.T) {
 		if setup.live {
 			_mode = "live"
 		}
-		for _, _op := range []string{"list", "load"} {
+		for _, _op := range []string{"create", "list", "update", "load", "remove"} {
 			if _shouldSkip, _reason := isControlSkipped("entityOp", "trigger." + _op, _mode); _shouldSkip {
 				if _reason == "" {
 					_reason = "skipped via sdk-test-control.json"
@@ -63,7 +64,7 @@ func TestTriggerEntity(t *testing.T) {
 			}
 		}
 		if setup.live {
-			for _, _liveKey := range []string{"recipient01"} {
+			for _, _liveKey := range []string{"dataset_slug01", "recipient01"} {
 				if setup.syntheticOnly || setup.idmap[_liveKey] == nil {
 					liveMiss(t, triggerEntityLiveStrict, "Live entity test blocked: needs %s via HONEYCOMB_TEST_TRIGGER_ENTID", _liveKey)
 				}
@@ -71,24 +72,27 @@ func TestTriggerEntity(t *testing.T) {
 		}
 		client := setup.client
 		_ = client
-		if setup.live {
-			liveExisting(t, triggerEntityLiveStrict, setup.data, "trigger", func() (any, error) {
-				return client.Trigger(nil).List(map[string]any{"recipient_id": setup.idmap["recipient01"]}, nil)
-			})
-		}
 
-		// Bootstrap entity data from existing test data (no create step in flow).
-		triggerRef01DataRaw := vs.Items(core.ToMapAny(vs.GetPath(setup.data, "existing.trigger")))
-		var triggerRef01Data map[string]any
-		if len(triggerRef01DataRaw) > 0 {
-			triggerRef01Data = core.ToMapAny(triggerRef01DataRaw[0][1])
+		// CREATE
+		triggerRef01Ent := client.Trigger(nil)
+		triggerRef01Data := core.ToMapAny(vs.GetProp(
+			vs.GetPath(setup.data, []any{"new", "trigger"}), "trigger_ref01"))
+		triggerRef01Data["dataset_slug"] = setup.idmap["dataset_slug01"]
+		triggerRef01Data["recipient_id"] = setup.idmap["recipient01"]
+
+		triggerRef01DataResult, err := triggerRef01Ent.Create(triggerRef01Data, nil)
+		if err != nil {
+			t.Fatalf("create failed: %v", err)
 		}
-		// Discard guards against Go's unused-var check when the flow's steps
-		// happen not to consume the bootstrap data (e.g. list-only flows).
-		_ = triggerRef01Data
+		triggerRef01Data = core.ToMapAny(entityData(triggerRef01DataResult))
+		if triggerRef01Data == nil {
+			t.Fatal("expected create result to be a map")
+		}
+		if triggerRef01Data["id"] == nil {
+			t.Fatal("expected created entity to have an id")
+		}
 
 		// LIST
-		triggerRef01Ent := client.Trigger(nil)
 		triggerRef01Match := map[string]any{
 			"recipient_id": setup.idmap["recipient01"],
 		}
@@ -97,14 +101,49 @@ func TestTriggerEntity(t *testing.T) {
 		if err != nil {
 			t.Fatalf("list failed: %v", err)
 		}
-		_, triggerRef01ListOk := triggerRef01ListResult.([]any)
+		triggerRef01List, triggerRef01ListOk := triggerRef01ListResult.([]any)
 		if !triggerRef01ListOk {
 			t.Fatalf("expected list result to be an array, got %T", triggerRef01ListResult)
+		}
+
+		foundItem := vs.Select(entityListToData(triggerRef01List), map[string]any{"id": triggerRef01Data["id"]})
+		if vs.IsEmpty(foundItem) {
+			t.Fatal("expected to find created entity in list")
+		}
+
+		// UPDATE
+		triggerRef01DataUp0Up := map[string]any{
+			"id": triggerRef01Data["id"],
+			"dataset_slug": setup.idmap["dataset_slug"],
+		}
+
+		triggerRef01MarkdefUp0Name := "alert_type"
+		triggerRef01MarkdefUp0Value := fmt.Sprintf("Mark01-trigger_ref01_%d", setup.now)
+		triggerRef01DataUp0Up[triggerRef01MarkdefUp0Name] = triggerRef01MarkdefUp0Value
+
+		triggerRef01ResdataUp0Result, err := triggerRef01Ent.Update(triggerRef01DataUp0Up, nil)
+		if err != nil {
+			t.Fatalf("update failed: %v", err)
+		}
+		triggerRef01ResdataUp0 := core.ToMapAny(entityData(triggerRef01ResdataUp0Result))
+		if triggerRef01ResdataUp0 == nil {
+			t.Fatal("expected update result to be a map")
+		}
+		if triggerRef01ResdataUp0["id"] != triggerRef01DataUp0Up["id"] {
+			t.Fatal("expected update result id to match")
+		}
+		if triggerRef01ResdataUp0[triggerRef01MarkdefUp0Name] != triggerRef01MarkdefUp0Value {
+			t.Fatalf("expected %s to be updated, got %v", triggerRef01MarkdefUp0Name, triggerRef01ResdataUp0[triggerRef01MarkdefUp0Name])
 		}
 
 		// LOAD
 		triggerRef01MatchDt0 := map[string]any{
 			"id": triggerRef01Data["id"],
+		}
+		if v := setup.idmap["dataset_slug"]; v != nil {
+			triggerRef01MatchDt0["dataset_slug"] = v
+		} else {
+			triggerRef01MatchDt0["dataset_slug"] = setup.idmap["dataset_slug01"]
 		}
 		triggerRef01DataDt0Loaded, err := triggerRef01Ent.Load(triggerRef01MatchDt0, nil)
 		if err != nil {
@@ -116,6 +155,39 @@ func TestTriggerEntity(t *testing.T) {
 		}
 		if triggerRef01DataDt0LoadResult["id"] != triggerRef01Data["id"] {
 			t.Fatal("expected load result id to match")
+		}
+
+		// REMOVE
+		triggerRef01MatchRm0 := map[string]any{
+			"id": triggerRef01Data["id"],
+		}
+		if v := setup.idmap["dataset_slug"]; v != nil {
+			triggerRef01MatchRm0["dataset_slug"] = v
+		} else {
+			triggerRef01MatchRm0["dataset_slug"] = setup.idmap["dataset_slug01"]
+		}
+		_, err = triggerRef01Ent.Remove(triggerRef01MatchRm0, nil)
+		if err != nil {
+			t.Fatalf("remove failed: %v", err)
+		}
+
+		// LIST
+		triggerRef01MatchRt0 := map[string]any{
+			"recipient_id": setup.idmap["recipient01"],
+		}
+
+		triggerRef01ListRt0Result, err := triggerRef01Ent.List(triggerRef01MatchRt0, nil)
+		if err != nil {
+			t.Fatalf("list failed: %v", err)
+		}
+		triggerRef01ListRt0, triggerRef01ListRt0Ok := triggerRef01ListRt0Result.([]any)
+		if !triggerRef01ListRt0Ok {
+			t.Fatalf("expected list result to be an array, got %T", triggerRef01ListRt0Result)
+		}
+
+		notFoundItem := vs.Select(entityListToData(triggerRef01ListRt0), map[string]any{"id": triggerRef01Data["id"]})
+		if !vs.IsEmpty(notFoundItem) {
+			t.Fatal("expected removed entity to not be in list")
 		}
 
 	})
@@ -146,7 +218,7 @@ func triggerBasicSetup(extra map[string]any) *entityTestSetup {
 
 	// Generate idmap via transform, matching TS pattern.
 	idmap, _ := vs.Transform(
-		[]any{"trigger01", "trigger02", "trigger03", "recipient01", "recipient02", "recipient03"},
+		[]any{"trigger01", "trigger02", "trigger03", "recipient01", "recipient02", "recipient03", "dataset_slug01"},
 		map[string]any{
 			"`$PACK`": []any{"", map[string]any{
 				"`$KEY`": "`$COPY`",
@@ -170,6 +242,10 @@ func triggerBasicSetup(extra map[string]any) *entityTestSetup {
 	idmapResolved := core.ToMapAny(env["HONEYCOMB_TEST_TRIGGER_ENTID"])
 	if idmapResolved == nil {
 		idmapResolved = core.ToMapAny(idmap)
+	}
+	// Add dataset_slug alias for update test.
+	if idmapResolved["dataset_slug"] == nil {
+		idmapResolved["dataset_slug"] = idmapResolved["dataset_slug01"]
 	}
 
 	if env["HONEYCOMB_TEST_LIVE"] == "TRUE" {

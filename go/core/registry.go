@@ -32,7 +32,9 @@ var NewHistoricalAnomalyEntityFunc func(client *HoneycombSDK, entopts map[string
 
 var NewKeyManagementEntityFunc func(client *HoneycombSDK, entopts map[string]any) HoneycombEntity
 
-var NewKinesiEntityFunc func(client *HoneycombSDK, entopts map[string]any) HoneycombEntity
+var NewKinesisEventEntityFunc func(client *HoneycombSDK, entopts map[string]any) HoneycombEntity
+
+var NewManagementAuthEntityFunc func(client *HoneycombSDK, entopts map[string]any) HoneycombEntity
 
 var NewMapDependencyEntityFunc func(client *HoneycombSDK, entopts map[string]any) HoneycombEntity
 

@@ -19,6 +19,22 @@ main: kit: flow: BasicSloFlow:
     }
 
     {
+      m: {
+        dataset_slug: "dataset_slug01"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "slo_ref01"
+          }
+        }
+      ]
+    }
+
+    {
       d: {
         dataset_slug: "dataset_slug01"
       }
@@ -49,6 +65,7 @@ main: kit: flow: BasicSloFlow:
       }
 
       m: {
+        dataset_slug: "dataset_slug01",
         id: "slo01"
       }
 
@@ -75,6 +92,26 @@ main: kit: flow: BasicSloFlow:
       }
 
       o: "remove"
+    }
+
+    {
+      i: {
+        suffix: "_rt0"
+      }
+
+      m: {
+        dataset_slug: "dataset_slug01"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemNotExists",
+          def: {
+            ref: "slo_ref01"
+          }
+        }
+      ]
     }
   ],
   "key$": "BasicSloFlow"

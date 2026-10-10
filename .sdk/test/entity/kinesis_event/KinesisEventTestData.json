@@ -1,35 +1,35 @@
 {
   "existing": {
-    "kinesi": {
-      "KINESI00": {
+    "kinesis_event": {
+      "KINESIS_EVENT00": {
         "errorMessage": "s28",
         "records": [],
         "requestId": "s2a",
         "timestamp": 43,
         "dataset_slug": "DATASET_SLUG01",
-        "id": "KINESI00"
+        "id": "KINESIS_EVENT00"
       },
-      "KINESI01": {
+      "KINESIS_EVENT01": {
         "errorMessage": "s50",
         "records": [],
         "requestId": "s52",
         "timestamp": 83,
         "dataset_slug": "DATASET_SLUG01",
-        "id": "KINESI01"
+        "id": "KINESIS_EVENT01"
       },
-      "KINESI02": {
+      "KINESIS_EVENT02": {
         "errorMessage": "s78",
         "records": [],
         "requestId": "s7a",
         "timestamp": 123,
         "dataset_slug": "DATASET_SLUG01",
-        "id": "KINESI02"
+        "id": "KINESIS_EVENT02"
       }
     }
   },
   "new": {
-    "kinesi": {
-      "kinesi_ref01": {
+    "kinesis_event": {
+      "kinesis_event_ref01": {
         "errorMessage": "sa0",
         "records": [],
         "requestId": "sa2",

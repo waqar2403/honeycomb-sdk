@@ -94,9 +94,13 @@ Create a new `HistoricalAnomalyEntity` instance. Pass `None` for no initial data
 
 Create a new `KeyManagementEntity` instance. Pass `None` for no initial data.
 
-#### `Kinesi(data=None)`
+#### `KinesisEvent(data=None)`
 
-Create a new `KinesiEntity` instance. Pass `None` for no initial data.
+Create a new `KinesisEventEntity` instance. Pass `None` for no initial data.
+
+#### `ManagementAuth(data=None)`
+
+Create a new `ManagementAuthEntity` instance. Pass `None` for no initial data.
 
 #### `MapDependency(data=None)`
 
@@ -352,11 +356,11 @@ board_view = client.BoardView()
 
 ### Field Usage by Operation
 
-| Field | load | list | create | update |
-| --- | --- | --- | --- | --- |
-| `filters` | - | - | Yes | Yes |
-| `id` | - | - | - | - |
-| `name` | - | - | Yes | Yes |
+| Field | load | list | create | update | remove |
+| --- | --- | --- | --- | --- | --- |
+| `filters` | - | - | Yes | Yes | - |
+| `id` | - | - | - | - | - |
+| `name` | - | - | Yes | Yes | - |
 
 ### Operations
 
@@ -366,7 +370,7 @@ Create a new entity with the given data. Returns the created entity and raises o
 
 ```python
 result = client.BoardView().create({
-    "id": "example_id",  # str
+    "board_id": "example_board_id",  # str
 })
 ```
 
@@ -375,7 +379,7 @@ result = client.BoardView().create({
 List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list of entities, one per record, and raises on error.
 
 ```python
-results = client.BoardView().list({"id": "example"})
+results = client.BoardView().list({"board_id": "example"})
 for board_view in results:
     print(board_view.data_get())
 ```
@@ -386,6 +390,14 @@ Load a single entity matching the given criteria. Returns the entity, whose reco
 
 ```python
 result = client.BoardView().load({"id": "board_view_id", "board_id": "board_id"})
+```
+
+#### `remove(reqmatch, ctrl=None) -> BoardViewEntity`
+
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
+
+```python
+result = client.BoardView().remove({"id": "board_view_id", "board_id": "board_id"})
 ```
 
 #### `update(reqdata, ctrl=None) -> BoardViewEntity`
@@ -511,9 +523,19 @@ Create a new entity with the given data. Returns the created entity and raises o
 
 ```python
 result = client.BurnAlert().create({
-    "id": "example_id",  # str
+    "dataset_slug": "example_dataset_slug",  # str
     "alert_type": "example_alert_type",  # str
 })
+```
+
+#### `list(reqmatch=None, ctrl=None) -> list[BurnAlertEntity]`
+
+List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list of entities, one per record, and raises on error.
+
+```python
+results = client.BurnAlert().list({"dataset_slug": "example", "slo_id": "example"})
+for burn_alert in results:
+    print(burn_alert.data_get())
 ```
 
 #### `load(reqmatch, ctrl=None) -> BurnAlertEntity`
@@ -521,7 +543,7 @@ result = client.BurnAlert().create({
 Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and raises on error.
 
 ```python
-result = client.BurnAlert().load({"id": "burn_alert_id", "slo_id": "slo_id"})
+result = client.BurnAlert().load({"id": "burn_alert_id", "dataset_slug": "dataset_slug"})
 ```
 
 #### `remove(reqmatch, ctrl=None) -> BurnAlertEntity`
@@ -529,7 +551,7 @@ result = client.BurnAlert().load({"id": "burn_alert_id", "slo_id": "slo_id"})
 Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
 
 ```python
-result = client.BurnAlert().remove({"burn_alert_id": "burn_alert_id", "dataset_slug": "dataset_slug"})
+result = client.BurnAlert().remove({"id": "burn_alert_id", "dataset_slug": "dataset_slug"})
 ```
 
 #### `update(reqdata, ctrl=None) -> BurnAlertEntity`
@@ -539,7 +561,6 @@ Update an existing entity. The data must include the entity `id`. Returns the up
 ```python
 result = client.BurnAlert().update({
     "id": "burn_alert_id",
-    "burn_alert_id": "burn_alert_id",
     "dataset_slug": "dataset_slug",
     # Fields to update
 })
@@ -608,12 +629,22 @@ result = client.CalculatedField().create({
 })
 ```
 
+#### `list(reqmatch=None, ctrl=None) -> list[CalculatedFieldEntity]`
+
+List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list of entities, one per record, and raises on error.
+
+```python
+results = client.CalculatedField().list({"dataset_slug": "example"})
+for calculated_field in results:
+    print(calculated_field.data_get())
+```
+
 #### `load(reqmatch, ctrl=None) -> CalculatedFieldEntity`
 
 Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and raises on error.
 
 ```python
-result = client.CalculatedField().load({"dataset_slug": "dataset_slug"})
+result = client.CalculatedField().load({"id": "calculated_field_id", "dataset_slug": "dataset_slug"})
 ```
 
 #### `remove(reqmatch, ctrl=None) -> CalculatedFieldEntity`
@@ -621,7 +652,7 @@ result = client.CalculatedField().load({"dataset_slug": "dataset_slug"})
 Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
 
 ```python
-result = client.CalculatedField().remove({"dataset_slug": "dataset_slug", "derived_column_id": "derived_column_id"})
+result = client.CalculatedField().remove({"id": "calculated_field_id", "dataset_slug": "dataset_slug"})
 ```
 
 #### `update(reqdata, ctrl=None) -> CalculatedFieldEntity`
@@ -630,8 +661,8 @@ Update an existing entity. The data must include the entity `id`. Returns the up
 
 ```python
 result = client.CalculatedField().update({
+    "id": "calculated_field_id",
     "dataset_slug": "dataset_slug",
-    "derived_column_id": "derived_column_id",
     # Fields to update
 })
 ```
@@ -686,16 +717,16 @@ column = client.Column()
 
 ### Field Usage by Operation
 
-| Field | load | create | update | remove |
-| --- | --- | --- | --- | --- |
-| `created_at` | - | - | - | - |
-| `description` | - | - | - | - |
-| `hidden` | - | - | - | - |
-| `id` | - | - | - | - |
-| `key_name` | Yes | - | - | - |
-| `last_written` | - | - | - | - |
-| `type` | - | - | - | - |
-| `updated_at` | - | - | - | - |
+| Field | load | list | create | update | remove |
+| --- | --- | --- | --- | --- | --- |
+| `created_at` | - | - | - | - | - |
+| `description` | - | - | - | - | - |
+| `hidden` | - | - | - | - | - |
+| `id` | - | - | - | - | - |
+| `key_name` | - | Yes | - | - | - |
+| `last_written` | - | - | - | - | - |
+| `type` | - | - | - | - | - |
+| `updated_at` | - | - | - | - | - |
 
 ### Operations
 
@@ -705,9 +736,19 @@ Create a new entity with the given data. Returns the created entity and raises o
 
 ```python
 result = client.Column().create({
-    "id": "example_id",  # str
+    "dataset_slug": "example_dataset_slug",  # str
     "key_name": "example_key_name",  # str
 })
+```
+
+#### `list(reqmatch=None, ctrl=None) -> list[ColumnEntity]`
+
+List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list of entities, one per record, and raises on error.
+
+```python
+results = client.Column().list({"dataset_slug": "example"})
+for column in results:
+    print(column.data_get())
 ```
 
 #### `load(reqmatch, ctrl=None) -> ColumnEntity`
@@ -715,7 +756,7 @@ result = client.Column().create({
 Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and raises on error.
 
 ```python
-result = client.Column().load({"id": "column_id"})
+result = client.Column().load({"id": "column_id", "dataset_slug": "dataset_slug"})
 ```
 
 #### `remove(reqmatch, ctrl=None) -> ColumnEntity`
@@ -723,7 +764,7 @@ result = client.Column().load({"id": "column_id"})
 Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
 
 ```python
-result = client.Column().remove({"column_id": "column_id", "dataset_slug": "dataset_slug"})
+result = client.Column().remove({"id": "column_id", "dataset_slug": "dataset_slug"})
 ```
 
 #### `update(reqdata, ctrl=None) -> ColumnEntity`
@@ -733,7 +774,6 @@ Update an existing entity. The data must include the entity `id`. Returns the up
 ```python
 result = client.Column().update({
     "id": "column_id",
-    "column_id": "column_id",
     "dataset_slug": "dataset_slug",
     # Fields to update
 })
@@ -1054,7 +1094,6 @@ event = client.Event()
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `batch_events` | `list` | No | The array should contain one or more JSON objects representing Events. |
-| `id` | `str` | No |  |
 | `status` | `int` | No |  |
 
 ### Operations
@@ -1238,10 +1277,10 @@ Return the entity name.
 
 ---
 
-## KinesiEntity
+## KinesisEventEntity
 
 ```python
-kinesi = client.Kinesi()
+kinesis_event = client.KinesisEvent()
 ```
 
 ### Fields
@@ -1255,12 +1294,12 @@ kinesi = client.Kinesi()
 
 ### Operations
 
-#### `create(reqdata, ctrl=None) -> KinesiEntity`
+#### `create(reqdata, ctrl=None) -> KinesisEventEntity`
 
 Create a new entity with the given data. Returns the created entity and raises on error.
 
 ```python
-result = client.Kinesi().create({
+result = client.KinesisEvent().create({
     "dataset_slug": "example_dataset_slug",  # str
 })
 ```
@@ -1285,7 +1324,52 @@ Set the entity match criteria.
 
 #### `make() -> Entity`
 
-Create a new `KinesiEntity` instance with the same options.
+Create a new `KinesisEventEntity` instance with the same options.
+
+#### `get_name() -> str`
+
+Return the entity name.
+
+
+---
+
+## ManagementAuthEntity
+
+```python
+management_auth = client.ManagementAuth()
+```
+
+### Operations
+
+#### `load(reqmatch, ctrl=None) -> ManagementAuthEntity`
+
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and raises on error.
+
+```python
+result = client.ManagementAuth().load()
+```
+
+### Common Methods
+
+#### `data_get() -> dict`
+
+Get the entity data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> dict`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `ManagementAuthEntity` instance with the same options.
 
 #### `get_name() -> str`
 
@@ -1390,16 +1474,18 @@ Create a new entity with the given data. Returns the created entity and raises o
 
 ```python
 result = client.Marker().create({
-    "id": "example_id",  # str
+    "dataset_slug": "example_dataset_slug",  # str
 })
 ```
 
-#### `load(reqmatch, ctrl=None) -> MarkerEntity`
+#### `list(reqmatch=None, ctrl=None) -> list[MarkerEntity]`
 
-Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and raises on error.
+List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list of entities, one per record, and raises on error.
 
 ```python
-result = client.Marker().load({"id": "marker_id"})
+results = client.Marker().list({"dataset_slug": "example"})
+for marker in results:
+    print(marker.data_get())
 ```
 
 #### `remove(reqmatch, ctrl=None) -> MarkerEntity`
@@ -1407,7 +1493,7 @@ result = client.Marker().load({"id": "marker_id"})
 Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
 
 ```python
-result = client.Marker().remove({"dataset_slug": "dataset_slug", "marker_id": "marker_id"})
+result = client.Marker().remove({"id": "marker_id", "dataset_slug": "dataset_slug"})
 ```
 
 #### `update(reqdata, ctrl=None) -> MarkerEntity`
@@ -1418,7 +1504,6 @@ Update an existing entity. The data must include the entity `id`. Returns the up
 result = client.Marker().update({
     "id": "marker_id",
     "dataset_slug": "dataset_slug",
-    "marker_id": "marker_id",
     # Fields to update
 })
 ```
@@ -1476,18 +1561,20 @@ Create a new entity with the given data. Returns the created entity and raises o
 
 ```python
 result = client.MarkerSetting().create({
-    "id": "example_id",  # str
+    "dataset_slug": "example_dataset_slug",  # str
     "color": "example_color",  # str
     "type": "example_type",  # str
 })
 ```
 
-#### `load(reqmatch, ctrl=None) -> MarkerSettingEntity`
+#### `list(reqmatch=None, ctrl=None) -> list[MarkerSettingEntity]`
 
-Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and raises on error.
+List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list of entities, one per record, and raises on error.
 
 ```python
-result = client.MarkerSetting().load({"id": "marker_setting_id"})
+results = client.MarkerSetting().list({"dataset_slug": "example"})
+for marker_setting in results:
+    print(marker_setting.data_get())
 ```
 
 #### `remove(reqmatch, ctrl=None) -> MarkerSettingEntity`
@@ -1495,7 +1582,7 @@ result = client.MarkerSetting().load({"id": "marker_setting_id"})
 Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
 
 ```python
-result = client.MarkerSetting().remove({"dataset_slug": "dataset_slug", "marker_setting_id": "marker_setting_id"})
+result = client.MarkerSetting().remove({"id": "marker_setting_id", "dataset_slug": "dataset_slug"})
 ```
 
 #### `update(reqdata, ctrl=None) -> MarkerSettingEntity`
@@ -1506,7 +1593,6 @@ Update an existing entity. The data must include the entity `id`. Returns the up
 result = client.MarkerSetting().update({
     "id": "marker_setting_id",
     "dataset_slug": "dataset_slug",
-    "marker_setting_id": "marker_setting_id",
     # Fields to update
 })
 ```
@@ -1575,7 +1661,7 @@ Create a new entity with the given data. Returns the created entity and raises o
 
 ```python
 result = client.Query().create({
-    "id": "example_id",  # str
+    "dataset_slug": "example_dataset_slug",  # str
 })
 ```
 
@@ -1584,7 +1670,7 @@ result = client.Query().create({
 Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and raises on error.
 
 ```python
-result = client.Query().load({"dataset_slug": "dataset_slug", "query_id": "query_id"})
+result = client.Query().load({"id": "query_id", "dataset_slug": "dataset_slug"})
 ```
 
 ### Common Methods
@@ -1642,10 +1728,20 @@ Create a new entity with the given data. Returns the created entity and raises o
 
 ```python
 result = client.QueryAnnotation().create({
-    "id": "example_id",  # str
+    "dataset_slug": "example_dataset_slug",  # str
     "name": "example_name",  # str
     "query_id": "example_query_id",  # str
 })
+```
+
+#### `list(reqmatch=None, ctrl=None) -> list[QueryAnnotationEntity]`
+
+List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list of entities, one per record, and raises on error.
+
+```python
+results = client.QueryAnnotation().list({"dataset_slug": "example"})
+for query_annotation in results:
+    print(query_annotation.data_get())
 ```
 
 #### `load(reqmatch, ctrl=None) -> QueryAnnotationEntity`
@@ -1653,7 +1749,7 @@ result = client.QueryAnnotation().create({
 Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and raises on error.
 
 ```python
-result = client.QueryAnnotation().load({"id": "query_annotation_id"})
+result = client.QueryAnnotation().load({"id": "query_annotation_id", "dataset_slug": "dataset_slug"})
 ```
 
 #### `remove(reqmatch, ctrl=None) -> QueryAnnotationEntity`
@@ -1661,7 +1757,7 @@ result = client.QueryAnnotation().load({"id": "query_annotation_id"})
 Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
 
 ```python
-result = client.QueryAnnotation().remove({"dataset_slug": "dataset_slug", "query_annotation_id": "query_annotation_id"})
+result = client.QueryAnnotation().remove({"id": "query_annotation_id", "dataset_slug": "dataset_slug"})
 ```
 
 #### `update(reqdata, ctrl=None) -> QueryAnnotationEntity`
@@ -1672,7 +1768,6 @@ Update an existing entity. The data must include the entity `id`. Returns the up
 result = client.QueryAnnotation().update({
     "id": "query_annotation_id",
     "dataset_slug": "dataset_slug",
-    "query_annotation_id": "query_annotation_id",
     # Fields to update
 })
 ```
@@ -1736,7 +1831,7 @@ Create a new entity with the given data. Returns the created entity and raises o
 
 ```python
 result = client.QueryResult().create({
-    "id": "example_id",  # str
+    "dataset_slug": "example_dataset_slug",  # str
     "query_id": "example_query_id",  # str
 })
 ```
@@ -1746,7 +1841,7 @@ result = client.QueryResult().create({
 Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and raises on error.
 
 ```python
-result = client.QueryResult().load({"dataset_slug": "dataset_slug", "query_result_id": "query_result_id"})
+result = client.QueryResult().load({"id": "query_result_id", "dataset_slug": "dataset_slug"})
 ```
 
 ### Common Methods
@@ -1991,7 +2086,7 @@ slo = client.Slo()
 | `id` | `str` | No |  |
 | `name` | `str` | No | The name of the SLO. |
 | `reset_at` | `str` | No | The ISO8601-formatted time the SLO was last reset. |
-| `sli` | `dict` | No | Reference to the [Calculated Field](/api/calculated-fields/) used as the indicator of event success. |
+| `sli` | `dict` | No | Reference to the [Calculated Field (also called Derived Column)](/api/calculated-fields/) used as the indicator of event success. |
 | `tags` | `list` | No | A list of key-value pairs to help identify the SLO. |
 | `target_per_million` | `int` | No | The number of events out of one million (1,000,000) that you expected qualified events to succeed. |
 | `time_period_days` | `int` | No | The time period, in days, over which the SLO will be evaluated. |
@@ -1999,19 +2094,19 @@ slo = client.Slo()
 
 ### Field Usage by Operation
 
-| Field | load | create | update | remove |
-| --- | --- | --- | --- | --- |
-| `created_at` | - | - | - | - |
-| `dataset_slugs` | - | - | - | - |
-| `description` | - | - | - | - |
-| `id` | - | - | - | - |
-| `name` | Yes | Yes | Yes | - |
-| `reset_at` | - | - | - | - |
-| `sli` | Yes | Yes | Yes | - |
-| `tags` | - | - | - | - |
-| `target_per_million` | Yes | Yes | Yes | - |
-| `time_period_days` | Yes | Yes | Yes | - |
-| `updated_at` | - | - | - | - |
+| Field | load | list | create | update | remove |
+| --- | --- | --- | --- | --- | --- |
+| `created_at` | - | - | - | - | - |
+| `dataset_slugs` | - | - | - | - | - |
+| `description` | - | - | - | - | - |
+| `id` | - | - | - | - | - |
+| `name` | - | Yes | Yes | Yes | - |
+| `reset_at` | - | - | - | - | - |
+| `sli` | - | Yes | Yes | Yes | - |
+| `tags` | - | - | - | - | - |
+| `target_per_million` | - | Yes | Yes | Yes | - |
+| `time_period_days` | - | Yes | Yes | Yes | - |
+| `updated_at` | - | - | - | - | - |
 
 ### Operations
 
@@ -2021,8 +2116,18 @@ Create a new entity with the given data. Returns the created entity and raises o
 
 ```python
 result = client.Slo().create({
-    "id": "example_id",  # str
+    "dataset_slug": "example_dataset_slug",  # str
 })
+```
+
+#### `list(reqmatch=None, ctrl=None) -> list[SloEntity]`
+
+List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list of entities, one per record, and raises on error.
+
+```python
+results = client.Slo().list({"dataset_slug": "example"})
+for slo in results:
+    print(slo.data_get())
 ```
 
 #### `load(reqmatch, ctrl=None) -> SloEntity`
@@ -2030,7 +2135,7 @@ result = client.Slo().create({
 Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and raises on error.
 
 ```python
-result = client.Slo().load({"id": "slo_id"})
+result = client.Slo().load({"id": "slo_id", "dataset_slug": "dataset_slug"})
 ```
 
 #### `remove(reqmatch, ctrl=None) -> SloEntity`
@@ -2038,7 +2143,7 @@ result = client.Slo().load({"id": "slo_id"})
 Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
 
 ```python
-result = client.Slo().remove({"dataset_slug": "dataset_slug", "slo_id": "slo_id"})
+result = client.Slo().remove({"id": "slo_id", "dataset_slug": "dataset_slug"})
 ```
 
 #### `update(reqdata, ctrl=None) -> SloEntity`
@@ -2049,7 +2154,6 @@ Update an existing entity. The data must include the entity `id`. Returns the up
 result = client.Slo().update({
     "id": "slo_id",
     "dataset_slug": "dataset_slug",
-    "slo_id": "slo_id",
     # Fields to update
 })
 ```
@@ -2292,7 +2396,7 @@ Create a new entity with the given data. Returns the created entity and raises o
 
 ```python
 result = client.Trigger().create({
-    "id": "example_id",  # str
+    "dataset_slug": "example_dataset_slug",  # str
     "evaluation_schedule": {},  # dict
     "threshold": {},  # dict
 })
@@ -2303,7 +2407,7 @@ result = client.Trigger().create({
 List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list of entities, one per record, and raises on error.
 
 ```python
-results = client.Trigger().list({"recipient_id": "example"})
+results = client.Trigger().list({"dataset_slug": "example"})
 for trigger in results:
     print(trigger.data_get())
 ```
@@ -2313,7 +2417,7 @@ for trigger in results:
 Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and raises on error.
 
 ```python
-result = client.Trigger().load({"id": "trigger_id"})
+result = client.Trigger().load({"id": "trigger_id", "dataset_slug": "dataset_slug"})
 ```
 
 #### `remove(reqmatch, ctrl=None) -> TriggerEntity`
@@ -2321,7 +2425,7 @@ result = client.Trigger().load({"id": "trigger_id"})
 Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
 
 ```python
-result = client.Trigger().remove({"dataset_slug": "dataset_slug", "trigger_id": "trigger_id"})
+result = client.Trigger().remove({"id": "trigger_id", "dataset_slug": "dataset_slug"})
 ```
 
 #### `update(reqdata, ctrl=None) -> TriggerEntity`
@@ -2332,7 +2436,6 @@ Update an existing entity. The data must include the entity `id`. Returns the up
 result = client.Trigger().update({
     "id": "trigger_id",
     "dataset_slug": "dataset_slug",
-    "trigger_id": "trigger_id",
     # Fields to update
 })
 ```

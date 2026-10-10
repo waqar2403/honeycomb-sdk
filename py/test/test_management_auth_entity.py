@@ -1,4 +1,4 @@
-# Kinesi entity test
+# ManagementAuth entity test
 
 import json
 import os
@@ -24,54 +24,45 @@ from test import runner
 LIVE_STRICT = True
 
 
-class TestKinesiEntity:
+class TestManagementAuthEntity:
 
     def test_should_create_instance(self):
         testsdk = HoneycombSDK.test(None, None)
-        ent = testsdk.Kinesi(None)
+        ent = testsdk.ManagementAuth(None)
         assert ent is not None
 
-    def test_should_refuse_an_invalid_request(self):
-        if "validate" not in (shared_config().get("feature") or {}):
-            pytest.skip("feature not present in this SDK: validate")
-        client = HoneycombSDK.test(
-            None, {"feature": {"validate": {"active": True}}})
-        with pytest.raises(Exception) as err:
-            client.Kinesi(None).create({"dataset_slug": 1}, None)
-        assert "validate_failed" == getattr(err.value, "code", None)
-
     def test_should_run_basic_flow(self):
-        setup = _kinesi_basic_setup(None)
+        setup = _management_auth_basic_setup(None)
         # Per-op sdk-test-control.json skip — basic test exercises a flow with
         # multiple ops; skipping any one skips the whole flow (steps depend
         # on each other).
         _live = setup.get("live", False)
-        for _op in ["create"]:
-            _skip, _reason = runner.is_control_skipped("entityOp", "kinesi." + _op, "live" if _live else "unit")
+        for _op in ["load"]:
+            _skip, _reason = runner.is_control_skipped("entityOp", "management_auth." + _op, "live" if _live else "unit")
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
                 return
-        if setup["live"]:
-            for _live_key in ["dataset_slug01"]:
-                if setup.get("synthetic_only") or setup["idmap"].get(_live_key) is None:
-                    runner.live_miss(LIVE_STRICT, f"Live entity test blocked: needs {_live_key} via HONEYCOMB_TEST_KINESI_ENTID")
         client = setup["client"]
 
-        # CREATE
-        kinesi_ref01_ent = client.Kinesi(None)
-        kinesi_ref01_data = helpers.to_map(vs.getprop(
-            vs.getpath(setup["data"], "new.kinesi"), "kinesi_ref01"))
-        kinesi_ref01_data["dataset_slug"] = setup["idmap"]["dataset_slug01"]
+        # Bootstrap entity data from existing test data.
+        management_auth_ref01_data_raw = vs.items(helpers.to_map(
+            vs.getpath(setup["data"], "existing.management_auth")))
+        management_auth_ref01_data = None
+        if len(management_auth_ref01_data_raw) > 0:
+            management_auth_ref01_data = helpers.to_map(management_auth_ref01_data_raw[0][1])
 
-        kinesi_ref01_data = helpers.to_map(runner.entity_data(kinesi_ref01_ent.create(kinesi_ref01_data, None)))
-        assert kinesi_ref01_data is not None
+        # LOAD
+        management_auth_ref01_ent = client.ManagementAuth(None)
+        management_auth_ref01_match_dt0 = {}
+        management_auth_ref01_data_dt0_loaded = management_auth_ref01_ent.load(management_auth_ref01_match_dt0, None)
+        assert management_auth_ref01_data_dt0_loaded is not None
 
 
 
-def _kinesi_basic_setup(extra):
+def _management_auth_basic_setup(extra):
     runner.load_env_local()
 
-    entity_data_file = os.path.join(_TEST_DIR, "../../.sdk/test/entity/kinesi/KinesiTestData.json")
+    entity_data_file = os.path.join(_TEST_DIR, "../../.sdk/test/entity/management_auth/ManagementAuthTestData.json")
     with open(entity_data_file, "r", encoding="utf-8") as f:
         entity_data_source = f.read()
 
@@ -84,7 +75,7 @@ def _kinesi_basic_setup(extra):
 
     # Generate idmap via transform.
     idmap = vs.transform(
-        ["kinesi01", "kinesi02", "kinesi03", "dataset_slug01"],
+        ["management_auth01", "management_auth02", "management_auth03"],
         {
             "`$PACK`": ["", {
                 "`$KEY`": "`$COPY`",
@@ -96,18 +87,18 @@ def _kinesi_basic_setup(extra):
     # Whether *_ENTID supplied the idmap, read before env_override consumes
     # it: without it, the ids a live flow binds are the fixture's synthetic ones.
     _entid_env_raw = os.environ.get(
-        "HONEYCOMB_TEST_KINESI_ENTID")
+        "HONEYCOMB_TEST_MANAGEMENT_AUTH_ENTID")
     _idmap_overridden = _entid_env_raw is not None and _entid_env_raw.strip().startswith("{")
 
     env = runner.env_override({
-        "HONEYCOMB_TEST_KINESI_ENTID": idmap,
+        "HONEYCOMB_TEST_MANAGEMENT_AUTH_ENTID": idmap,
         "HONEYCOMB_TEST_LIVE": "FALSE",
         "HONEYCOMB_TEST_EXPLAIN": "FALSE",
         "HONEYCOMB_APIKEY": "",
     })
 
     idmap_resolved = helpers.to_map(
-        env.get("HONEYCOMB_TEST_KINESI_ENTID"))
+        env.get("HONEYCOMB_TEST_MANAGEMENT_AUTH_ENTID"))
     if idmap_resolved is None:
         idmap_resolved = helpers.to_map(idmap)
 

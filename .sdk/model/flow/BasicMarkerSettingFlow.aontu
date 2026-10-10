@@ -19,6 +19,22 @@ main: kit: flow: BasicMarkerSettingFlow:
     }
 
     {
+      m: {
+        dataset_slug: "dataset_slug01"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "marker_setting_ref01"
+          }
+        }
+      ]
+    }
+
+    {
       d: {
         dataset_slug: "dataset_slug01"
       }
@@ -44,28 +60,6 @@ main: kit: flow: BasicMarkerSettingFlow:
     {
       i: {
         ref: "marker_setting_ref01",
-        srcdatavar: "marker_setting_ref01_data",
-        suffix: "_dt0"
-      }
-
-      m: {
-        id: "marker_setting01"
-      }
-
-      o: "load",
-      v: [
-        {
-          apply: "TextFieldMark",
-          def: {
-            mark: "Mark01-marker_setting_ref01"
-          }
-        }
-      ]
-    }
-
-    {
-      i: {
-        ref: "marker_setting_ref01",
         suffix: "_rm0"
       }
 
@@ -75,6 +69,26 @@ main: kit: flow: BasicMarkerSettingFlow:
       }
 
       o: "remove"
+    }
+
+    {
+      i: {
+        suffix: "_rt0"
+      }
+
+      m: {
+        dataset_slug: "dataset_slug01"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemNotExists",
+          def: {
+            ref: "marker_setting_ref01"
+          }
+        }
+      ]
     }
   ],
   "key$": "BasicMarkerSettingFlow"

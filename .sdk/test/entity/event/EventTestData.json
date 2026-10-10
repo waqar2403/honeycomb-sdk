@@ -3,21 +3,21 @@
     "event": {
       "EVENT00": {
         "batch_events": [],
-        "id": "EVENT00",
-        "status": 32,
-        "dataset_slug": "DATASET_SLUG01"
+        "status": 21,
+        "dataset_slug": "DATASET_SLUG01",
+        "id": "EVENT00"
       },
       "EVENT01": {
         "batch_events": [],
-        "id": "EVENT01",
-        "status": 62,
-        "dataset_slug": "DATASET_SLUG01"
+        "status": 41,
+        "dataset_slug": "DATASET_SLUG01",
+        "id": "EVENT01"
       },
       "EVENT02": {
         "batch_events": [],
-        "id": "EVENT02",
-        "status": 92,
-        "dataset_slug": "DATASET_SLUG01"
+        "status": 61,
+        "dataset_slug": "DATASET_SLUG01",
+        "id": "EVENT02"
       }
     }
   },
@@ -25,7 +25,7 @@
     "event": {
       "event_ref01": {
         "batch_events": [],
-        "status": 122
+        "status": 81
       }
     }
   },

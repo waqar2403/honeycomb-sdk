@@ -12,18 +12,18 @@ It exposes the API as capitalised, semantic **Entities** — e.g. `client.Auth(n
 
 ## Install
 ```bash
-go get github.com/voxgig-sdk/honeycomb-sdk/go@latest
+go get github.com/waqar2403/honeycomb-sdk/go@latest
 ```
 
 The Go module proxy resolves the version from the `go/vX.Y.Z` GitHub
-release tag — see [Tags](https://github.com/voxgig-sdk/honeycomb-sdk/tags) for the available versions.
+release tag — see [Tags](https://github.com/waqar2403/honeycomb-sdk/tags) for the available versions.
 
 To vendor from a local checkout instead, clone this repo alongside your
 project and add a `replace` directive pointing at the checked-out
 `go/` directory:
 
 ```bash
-go mod edit -replace github.com/voxgig-sdk/honeycomb-sdk/go=../honeycomb-sdk/go
+go mod edit -replace github.com/waqar2403/honeycomb-sdk/go=../honeycomb-sdk/go
 ```
 
 
@@ -46,7 +46,7 @@ package main
 import (
     "fmt"
     "os"
-    sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
+    sdk "github.com/waqar2403/honeycomb-sdk/go"
 )
 
 func main() {
@@ -70,12 +70,12 @@ Every entity operation returns `(value, error)`. Check `err` before
 using the value — there is no exception to catch:
 
 ```go
-column, err := client.Column(nil).Load(map[string]any{"id": "example_id"}, nil)
+mapdependency, err := client.MapDependency(nil).Load(map[string]any{"request_id": "example"}, nil)
 if err != nil {
     // handle err
     return
 }
-_ = column
+_ = mapdependency
 ```
 
 `Direct` follows the same `(value, error)` convention:
@@ -139,13 +139,13 @@ Create a mock client for unit testing — no server required:
 ```go
 client := sdk.Test()
 
-column, err := client.Column(nil).Load(
-    map[string]any{"id": "test01"}, nil,
+mapDependency, err := client.MapDependency(nil).Load(
+    map[string]any{"request_id": "example"}, nil,
 )
 if err != nil {
     panic(err)
 }
-fmt.Println(column.(sdk.Entity).Data()) // the entity's mock record
+fmt.Println(mapDependency.(sdk.Entity).Data()) // the entity's mock record
 ```
 
 ### Use a custom fetch function
@@ -237,7 +237,8 @@ Creates a test-mode client with mock transport. Both arguments may be `nil`.
 | `Event` | `(data map[string]any) HoneycombEntity` | Create an Event entity instance. |
 | `HistoricalAnomaly` | `(data map[string]any) HoneycombEntity` | Create a HistoricalAnomaly entity instance. |
 | `KeyManagement` | `(data map[string]any) HoneycombEntity` | Create a KeyManagement entity instance. |
-| `Kinesi` | `(data map[string]any) HoneycombEntity` | Create a Kinesi entity instance. |
+| `KinesisEvent` | `(data map[string]any) HoneycombEntity` | Create a KinesisEvent entity instance. |
+| `ManagementAuth` | `(data map[string]any) HoneycombEntity` | Create a ManagementAuth entity instance. |
 | `MapDependency` | `(data map[string]any) HoneycombEntity` | Create a MapDependency entity instance. |
 | `Marker` | `(data map[string]any) HoneycombEntity` | Create a Marker entity instance. |
 | `MarkerSetting` | `(data map[string]any) HoneycombEntity` | Create a MarkerSetting entity instance. |
@@ -331,7 +332,7 @@ API path: `/1/boards`
 | `"id"` | Unique identifier for the board view. |
 | `"name"` | The name of the view. |
 
-Operations: Create, List, Load, Update.
+Operations: Create, List, Load, Remove, Update.
 
 API path: `/1/boards/{boardId}/views`
 
@@ -356,7 +357,7 @@ API path: `/1/signals/recipient_assignments`
 | `"alert_type"` |  |
 | `"id"` |  |
 
-Operations: Create, Load, Remove, Update.
+Operations: Create, List, Load, Remove, Update.
 
 API path: `/1/burn_alerts/{datasetSlug}`
 
@@ -371,7 +372,7 @@ API path: `/1/burn_alerts/{datasetSlug}`
 | `"id"` | Unique identifier (ID), returned in response bodies. |
 | `"updated_at"` | ISO8601 formatted time when the field was updated. |
 
-Operations: Create, Load, Remove, Update.
+Operations: Create, List, Load, Remove, Update.
 
 API path: `/1/derived_columns/{datasetSlug}`
 
@@ -388,7 +389,7 @@ API path: `/1/derived_columns/{datasetSlug}`
 | `"type"` | Type of data that the Column will contain. |
 | `"updated_at"` | ISO8601 formatted time the column was updated. |
 
-Operations: Create, Load, Remove, Update.
+Operations: Create, List, Load, Remove, Update.
 
 API path: `/1/columns/{datasetSlug}`
 
@@ -453,7 +454,6 @@ API path: `/2/teams/{teamSlug}/environments`
 | Field | Description |
 | --- | --- |
 | `"batch_events"` | The array should contain one or more JSON objects representing Events. |
-| `"id"` |  |
 | `"status"` |  |
 
 Operations: Create.
@@ -485,7 +485,7 @@ Operations: Create, Load, Remove, Update.
 
 API path: `/2/teams/{teamSlug}/api-keys`
 
-#### Kinesi
+#### KinesisEvent
 
 | Field | Description |
 | --- | --- |
@@ -497,6 +497,15 @@ API path: `/2/teams/{teamSlug}/api-keys`
 Operations: Create.
 
 API path: `/1/kinesis_events/{datasetSlug}`
+
+#### ManagementAuth
+
+| Field | Description |
+| --- | --- |
+
+Operations: Load.
+
+API path: `/2/auth`
 
 #### MapDependency
 
@@ -529,7 +538,7 @@ API path: `/1/maps/dependencies/requests`
 | `"updated_at"` | The ISO8601-formatted time when the Marker was updated. |
 | `"url"` | A target for the marker. |
 
-Operations: Create, Load, Remove, Update.
+Operations: Create, List, Remove, Update.
 
 API path: `/1/markers/{datasetSlug}`
 
@@ -543,7 +552,7 @@ API path: `/1/markers/{datasetSlug}`
 | `"type"` | Groups similar Markers. |
 | `"updated_at"` | The ISO8601-formatted time when the Marker Setting was updated. |
 
-Operations: Create, Load, Remove, Update.
+Operations: Create, List, Remove, Update.
 
 API path: `/1/marker_settings/{datasetSlug}`
 
@@ -584,7 +593,7 @@ API path: `/1/queries/{datasetSlug}`
 | `"source"` | The source of the Query Annotation. |
 | `"updated_at"` | ISO8601 formatted time when the Query Annotation was updated. |
 
-Operations: Create, Load, Remove, Update.
+Operations: Create, List, Load, Remove, Update.
 
 API path: `/1/query_annotations/{datasetSlug}`
 
@@ -653,13 +662,13 @@ API path: `/1/signals`
 | `"id"` |  |
 | `"name"` | The name of the SLO. |
 | `"reset_at"` | The ISO8601-formatted time the SLO was last reset. |
-| `"sli"` | Reference to the [Calculated Field](/api/calculated-fields/) used as the indicator of event success. |
+| `"sli"` | Reference to the [Calculated Field (also called Derived Column)](/api/calculated-fields/) used as the indicator of event success. |
 | `"tags"` | A list of key-value pairs to help identify the SLO. |
 | `"target_per_million"` | The number of events out of one million (1,000,000) that you expected qualified events to succeed. |
 | `"time_period_days"` | The time period, in days, over which the SLO will be evaluated. |
 | `"updated_at"` | The ISO8601-formatted time when the SLO was updated. |
 
-Operations: Create, Load, Remove, Update.
+Operations: Create, List, Load, Remove, Update.
 
 API path: `/1/slos/{datasetSlug}`
 
@@ -844,6 +853,7 @@ Create an instance: `boardView := client.BoardView(nil)`
 | `Load(match, ctrl)` | Load a single entity by match criteria. |
 | `Create(data, ctrl)` | Create a new entity with the given data. |
 | `Update(data, ctrl)` | Update an existing entity. |
+| `Remove(match, ctrl)` | Remove the matching entity. |
 
 #### Fields
 
@@ -866,7 +876,7 @@ fmt.Println(boardView.(sdk.Entity).Data()) // the loaded entity's record
 #### Example: List
 
 ```go
-boardViews, err := client.BoardView(nil).List(map[string]any{"id": "example"}, nil)
+boardViews, err := client.BoardView(nil).List(map[string]any{"board_id": "example"}, nil)
 if err != nil {
     panic(err)
 }
@@ -880,7 +890,7 @@ for _, item := range boardViews.([]any) {
 
 ```go
 result, err := client.BoardView(nil).Create(map[string]any{
-    "id": "example_id",
+    "board_id": "example_board_id",
 }, nil)
 if err != nil {
     panic(err)
@@ -934,6 +944,7 @@ Create an instance: `burnAlert := client.BurnAlert(nil)`
 
 | Method | Description |
 | --- | --- |
+| `List(match, ctrl)` | List entities matching the criteria. |
 | `Load(match, ctrl)` | Load a single entity by match criteria. |
 | `Create(data, ctrl)` | Create a new entity with the given data. |
 | `Update(data, ctrl)` | Update an existing entity. |
@@ -949,18 +960,31 @@ Create an instance: `burnAlert := client.BurnAlert(nil)`
 #### Example: Load
 
 ```go
-burnAlert, err := client.BurnAlert(nil).Load(map[string]any{"id": "burn_alert_id", "slo_id": "slo_id"}, nil)
+burnAlert, err := client.BurnAlert(nil).Load(map[string]any{"id": "burn_alert_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
 fmt.Println(burnAlert.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
+#### Example: List
+
+```go
+burnAlerts, err := client.BurnAlert(nil).List(map[string]any{"dataset_slug": "example", "slo_id": "example"}, nil)
+if err != nil {
+    panic(err)
+}
+// A []any of entities, one per record.
+for _, item := range burnAlerts.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
+```
+
 #### Example: Create
 
 ```go
 result, err := client.BurnAlert(nil).Create(map[string]any{
-    "id": "example_id",
+    "dataset_slug": "example_dataset_slug",
     "alert_type": "example_alert_type",
 }, nil)
 if err != nil {
@@ -978,6 +1002,7 @@ Create an instance: `calculatedField := client.CalculatedField(nil)`
 
 | Method | Description |
 | --- | --- |
+| `List(match, ctrl)` | List entities matching the criteria. |
 | `Load(match, ctrl)` | Load a single entity by match criteria. |
 | `Create(data, ctrl)` | Create a new entity with the given data. |
 | `Update(data, ctrl)` | Update an existing entity. |
@@ -997,11 +1022,24 @@ Create an instance: `calculatedField := client.CalculatedField(nil)`
 #### Example: Load
 
 ```go
-calculatedField, err := client.CalculatedField(nil).Load(map[string]any{"dataset_slug": "dataset_slug"}, nil)
+calculatedField, err := client.CalculatedField(nil).Load(map[string]any{"id": "calculated_field_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
 fmt.Println(calculatedField.(sdk.Entity).Data()) // the loaded entity's record
+```
+
+#### Example: List
+
+```go
+calculatedFields, err := client.CalculatedField(nil).List(map[string]any{"dataset_slug": "example"}, nil)
+if err != nil {
+    panic(err)
+}
+// A []any of entities, one per record.
+for _, item := range calculatedFields.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 #### Example: Create
@@ -1030,6 +1068,7 @@ Create an instance: `column := client.Column(nil)`
 
 | Method | Description |
 | --- | --- |
+| `List(match, ctrl)` | List entities matching the criteria. |
 | `Load(match, ctrl)` | Load a single entity by match criteria. |
 | `Create(data, ctrl)` | Create a new entity with the given data. |
 | `Update(data, ctrl)` | Update an existing entity. |
@@ -1051,18 +1090,31 @@ Create an instance: `column := client.Column(nil)`
 #### Example: Load
 
 ```go
-column, err := client.Column(nil).Load(map[string]any{"id": "column_id"}, nil)
+column, err := client.Column(nil).Load(map[string]any{"id": "column_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
 fmt.Println(column.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
+#### Example: List
+
+```go
+columns, err := client.Column(nil).List(map[string]any{"dataset_slug": "example"}, nil)
+if err != nil {
+    panic(err)
+}
+// A []any of entities, one per record.
+for _, item := range columns.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
+```
+
 #### Example: Create
 
 ```go
 result, err := client.Column(nil).Create(map[string]any{
-    "id": "example_id",
+    "dataset_slug": "example_dataset_slug",
     "key_name": "example_key_name",
 }, nil)
 if err != nil {
@@ -1240,7 +1292,6 @@ Create an instance: `event := client.Event(nil)`
 | Field | Type | Description |
 | --- | --- | --- |
 | `batch_events` | `[]any` | The array should contain one or more JSON objects representing Events. |
-| `id` | `string` |  |
 | `status` | `int` |  |
 
 #### Example: Create
@@ -1334,9 +1385,9 @@ fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
 ```
 
 
-### Kinesi
+### KinesisEvent
 
-Create an instance: `kinesi := client.Kinesi(nil)`
+Create an instance: `kinesisEvent := client.KinesisEvent(nil)`
 
 #### Operations
 
@@ -1356,13 +1407,34 @@ Create an instance: `kinesi := client.Kinesi(nil)`
 #### Example: Create
 
 ```go
-result, err := client.Kinesi(nil).Create(map[string]any{
+result, err := client.KinesisEvent(nil).Create(map[string]any{
     "dataset_slug": "example_dataset_slug",
 }, nil)
 if err != nil {
     panic(err)
 }
 fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
+```
+
+
+### ManagementAuth
+
+Create an instance: `managementAuth := client.ManagementAuth(nil)`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `Load(match, ctrl)` | Load a single entity by match criteria. |
+
+#### Example: Load
+
+```go
+managementAuth, err := client.ManagementAuth(nil).Load(nil, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(managementAuth.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
 
@@ -1421,7 +1493,7 @@ Create an instance: `marker := client.Marker(nil)`
 
 | Method | Description |
 | --- | --- |
-| `Load(match, ctrl)` | Load a single entity by match criteria. |
+| `List(match, ctrl)` | List entities matching the criteria. |
 | `Create(data, ctrl)` | Create a new entity with the given data. |
 | `Update(data, ctrl)` | Update an existing entity. |
 | `Remove(match, ctrl)` | Remove the matching entity. |
@@ -1440,21 +1512,24 @@ Create an instance: `marker := client.Marker(nil)`
 | `updated_at` | `string` | The ISO8601-formatted time when the Marker was updated. |
 | `url` | `string` | A target for the marker. |
 
-#### Example: Load
+#### Example: List
 
 ```go
-marker, err := client.Marker(nil).Load(map[string]any{"id": "marker_id"}, nil)
+markers, err := client.Marker(nil).List(map[string]any{"dataset_slug": "example"}, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(marker.(sdk.Entity).Data()) // the loaded entity's record
+// A []any of entities, one per record.
+for _, item := range markers.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 #### Example: Create
 
 ```go
 result, err := client.Marker(nil).Create(map[string]any{
-    "id": "example_id",
+    "dataset_slug": "example_dataset_slug",
 }, nil)
 if err != nil {
     panic(err)
@@ -1471,7 +1546,7 @@ Create an instance: `markerSetting := client.MarkerSetting(nil)`
 
 | Method | Description |
 | --- | --- |
-| `Load(match, ctrl)` | Load a single entity by match criteria. |
+| `List(match, ctrl)` | List entities matching the criteria. |
 | `Create(data, ctrl)` | Create a new entity with the given data. |
 | `Update(data, ctrl)` | Update an existing entity. |
 | `Remove(match, ctrl)` | Remove the matching entity. |
@@ -1486,21 +1561,24 @@ Create an instance: `markerSetting := client.MarkerSetting(nil)`
 | `type` | `string` | Groups similar Markers. |
 | `updated_at` | `any` | The ISO8601-formatted time when the Marker Setting was updated. |
 
-#### Example: Load
+#### Example: List
 
 ```go
-markerSetting, err := client.MarkerSetting(nil).Load(map[string]any{"id": "marker_setting_id"}, nil)
+markerSettings, err := client.MarkerSetting(nil).List(map[string]any{"dataset_slug": "example"}, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(markerSetting.(sdk.Entity).Data()) // the loaded entity's record
+// A []any of entities, one per record.
+for _, item := range markerSettings.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 #### Example: Create
 
 ```go
 result, err := client.MarkerSetting(nil).Create(map[string]any{
-    "id": "example_id",
+    "dataset_slug": "example_dataset_slug",
     "color": "example_color",
     "type": "example_type",
 }, nil)
@@ -1546,7 +1624,7 @@ Create an instance: `query := client.Query(nil)`
 #### Example: Load
 
 ```go
-query, err := client.Query(nil).Load(map[string]any{"dataset_slug": "dataset_slug", "query_id": "query_id"}, nil)
+query, err := client.Query(nil).Load(map[string]any{"id": "query_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
@@ -1557,7 +1635,7 @@ fmt.Println(query.(sdk.Entity).Data()) // the loaded entity's record
 
 ```go
 result, err := client.Query(nil).Create(map[string]any{
-    "id": "example_id",
+    "dataset_slug": "example_dataset_slug",
 }, nil)
 if err != nil {
     panic(err)
@@ -1574,6 +1652,7 @@ Create an instance: `queryAnnotation := client.QueryAnnotation(nil)`
 
 | Method | Description |
 | --- | --- |
+| `List(match, ctrl)` | List entities matching the criteria. |
 | `Load(match, ctrl)` | Load a single entity by match criteria. |
 | `Create(data, ctrl)` | Create a new entity with the given data. |
 | `Update(data, ctrl)` | Update an existing entity. |
@@ -1594,18 +1673,31 @@ Create an instance: `queryAnnotation := client.QueryAnnotation(nil)`
 #### Example: Load
 
 ```go
-queryAnnotation, err := client.QueryAnnotation(nil).Load(map[string]any{"id": "query_annotation_id"}, nil)
+queryAnnotation, err := client.QueryAnnotation(nil).Load(map[string]any{"id": "query_annotation_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
 fmt.Println(queryAnnotation.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
+#### Example: List
+
+```go
+queryAnnotations, err := client.QueryAnnotation(nil).List(map[string]any{"dataset_slug": "example"}, nil)
+if err != nil {
+    panic(err)
+}
+// A []any of entities, one per record.
+for _, item := range queryAnnotations.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
+```
+
 #### Example: Create
 
 ```go
 result, err := client.QueryAnnotation(nil).Create(map[string]any{
-    "id": "example_id",
+    "dataset_slug": "example_dataset_slug",
     "name": "example_name",
     "query_id": "example_query_id",
 }, nil)
@@ -1646,7 +1738,7 @@ Create an instance: `queryResult := client.QueryResult(nil)`
 #### Example: Load
 
 ```go
-queryResult, err := client.QueryResult(nil).Load(map[string]any{"dataset_slug": "dataset_slug", "query_result_id": "query_result_id"}, nil)
+queryResult, err := client.QueryResult(nil).Load(map[string]any{"id": "query_result_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
@@ -1657,7 +1749,7 @@ fmt.Println(queryResult.(sdk.Entity).Data()) // the loaded entity's record
 
 ```go
 result, err := client.QueryResult(nil).Create(map[string]any{
-    "id": "example_id",
+    "dataset_slug": "example_dataset_slug",
     "query_id": "example_query_id",
 }, nil)
 if err != nil {
@@ -1788,6 +1880,7 @@ Create an instance: `slo := client.Slo(nil)`
 
 | Method | Description |
 | --- | --- |
+| `List(match, ctrl)` | List entities matching the criteria. |
 | `Load(match, ctrl)` | Load a single entity by match criteria. |
 | `Create(data, ctrl)` | Create a new entity with the given data. |
 | `Update(data, ctrl)` | Update an existing entity. |
@@ -1803,7 +1896,7 @@ Create an instance: `slo := client.Slo(nil)`
 | `id` | `string` |  |
 | `name` | `string` | The name of the SLO. |
 | `reset_at` | `string` | The ISO8601-formatted time the SLO was last reset. |
-| `sli` | `map[string]any` | Reference to the [Calculated Field](/api/calculated-fields/) used as the indicator of event success. |
+| `sli` | `map[string]any` | Reference to the [Calculated Field (also called Derived Column)](/api/calculated-fields/) used as the indicator of event success. |
 | `tags` | `[]any` | A list of key-value pairs to help identify the SLO. |
 | `target_per_million` | `int` | The number of events out of one million (1,000,000) that you expected qualified events to succeed. |
 | `time_period_days` | `int` | The time period, in days, over which the SLO will be evaluated. |
@@ -1812,18 +1905,31 @@ Create an instance: `slo := client.Slo(nil)`
 #### Example: Load
 
 ```go
-slo, err := client.Slo(nil).Load(map[string]any{"id": "slo_id"}, nil)
+slo, err := client.Slo(nil).Load(map[string]any{"id": "slo_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
 fmt.Println(slo.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
+#### Example: List
+
+```go
+slos, err := client.Slo(nil).List(map[string]any{"dataset_slug": "example"}, nil)
+if err != nil {
+    panic(err)
+}
+// A []any of entities, one per record.
+for _, item := range slos.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
+```
+
 #### Example: Create
 
 ```go
 result, err := client.Slo(nil).Create(map[string]any{
-    "id": "example_id",
+    "dataset_slug": "example_dataset_slug",
 }, nil)
 if err != nil {
     panic(err)
@@ -1974,7 +2080,7 @@ Create an instance: `trigger := client.Trigger(nil)`
 #### Example: Load
 
 ```go
-trigger, err := client.Trigger(nil).Load(map[string]any{"id": "trigger_id"}, nil)
+trigger, err := client.Trigger(nil).Load(map[string]any{"id": "trigger_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
@@ -1984,7 +2090,7 @@ fmt.Println(trigger.(sdk.Entity).Data()) // the loaded entity's record
 #### Example: List
 
 ```go
-triggers, err := client.Trigger(nil).List(map[string]any{"recipient_id": "example"}, nil)
+triggers, err := client.Trigger(nil).List(map[string]any{"dataset_slug": "example"}, nil)
 if err != nil {
     panic(err)
 }
@@ -1998,7 +2104,7 @@ for _, item := range triggers.([]any) {
 
 ```go
 result, err := client.Trigger(nil).Create(map[string]any{
-    "id": "example_id",
+    "dataset_slug": "example_dataset_slug",
     "evaluation_schedule": map[string]any{},
     "threshold": map[string]any{},
 }, nil)
@@ -2108,7 +2214,7 @@ An operation returns the entity, and its `Data()` returns the record. Use
 ### Package structure
 
 ```
-github.com/voxgig-sdk/honeycomb-sdk/go/
+github.com/waqar2403/honeycomb-sdk/go/
 ├── honeycomb.go        # Root package — type aliases and constructors
 ├── core/               # SDK core — client, types, pipeline
 ├── entity/             # Entity implementations
@@ -2117,7 +2223,7 @@ github.com/voxgig-sdk/honeycomb-sdk/go/
 └── test/               # Test suites
 ```
 
-The root package (`github.com/voxgig-sdk/honeycomb-sdk/go`) re-exports everything needed
+The root package (`github.com/waqar2403/honeycomb-sdk/go`) re-exports everything needed
 for normal use. Import sub-packages only when you need specific types
 like `core.ToMapAny`.
 
@@ -2127,11 +2233,11 @@ Entity instances are stateful. After a successful `Load`, the entity
 stores the returned data and match criteria internally.
 
 ```go
-column := client.Column(nil)
-column.Load(map[string]any{"id": "example_id"}, nil)
+mapdependency := client.MapDependency(nil)
+mapdependency.Load(map[string]any{"request_id": "example"}, nil)
 
-// column.Data() now returns the column data from the last load
-// column.Match() returns the last match criteria
+// mapdependency.Data() now returns the mapdependency data from the last load
+// mapdependency.Match() returns the last match criteria
 ```
 
 Call `Make()` to create a fresh instance with the same configuration

@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 )
 
 // main.kit.test.live.strict is true (the default is true): a live

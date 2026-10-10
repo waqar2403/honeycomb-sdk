@@ -100,9 +100,13 @@ Create a new `HistoricalAnomaly` entity instance. Pass `nil` for no initial data
 
 Create a new `KeyManagement` entity instance. Pass `nil` for no initial data.
 
-#### `Kinesi(data map[string]any) HoneycombEntity`
+#### `KinesisEvent(data map[string]any) HoneycombEntity`
 
-Create a new `Kinesi` entity instance. Pass `nil` for no initial data.
+Create a new `KinesisEvent` entity instance. Pass `nil` for no initial data.
+
+#### `ManagementAuth(data map[string]any) HoneycombEntity`
+
+Create a new `ManagementAuth` entity instance. Pass `nil` for no initial data.
 
 #### `MapDependency(data map[string]any) HoneycombEntity`
 
@@ -395,11 +399,11 @@ fmt.Println(boardView.GetName()) // "board_view"
 
 ### Field Usage by Operation
 
-| Field | load | list | create | update |
-| --- | --- | --- | --- | --- |
-| `filters` | - | - | Yes | Yes |
-| `id` | - | - | - | - |
-| `name` | - | - | Yes | Yes |
+| Field | load | list | create | update | remove |
+| --- | --- | --- | --- | --- | --- |
+| `filters` | - | - | Yes | Yes | - |
+| `id` | - | - | - | - | - |
+| `name` | - | - | Yes | Yes | - |
 
 ### Operations
 
@@ -408,7 +412,7 @@ fmt.Println(boardView.GetName()) // "board_view"
 List entities matching the given criteria. Returns a `[]any` of entities, one per record; `err` is non-nil on failure.
 
 ```go
-results, err := client.BoardView(nil).List(map[string]any{"id": "example"}, nil)
+results, err := client.BoardView(nil).List(map[string]any{"board_id": "example"}, nil)
 if err != nil {
     panic(err)
 }
@@ -435,7 +439,7 @@ Create a new entity with the given data. Returns the created entity; `err` is no
 
 ```go
 result, err := client.BoardView(nil).Create(map[string]any{
-    "id": "example_id",
+    "board_id": "example_board_id",
 }, nil)
 if err != nil {
     panic(err)
@@ -453,6 +457,18 @@ result, err := client.BoardView(nil).Update(map[string]any{
     "board_id": "board_id",
     // Fields to update
 }, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result.(sdk.Entity).Data())
+```
+
+#### `Remove(reqmatch, ctrl map[string]any) (any, error)`
+
+Remove the entity matching the given criteria. Returns the entity, marked as deleted; `err` is non-nil on failure.
+
+```go
+result, err := client.BoardView(nil).Remove(map[string]any{"id": "board_view_id", "board_id": "board_id"}, nil)
 if err != nil {
     panic(err)
 }
@@ -576,12 +592,26 @@ fmt.Println(burnAlert.GetName()) // "burn_alert"
 
 ### Operations
 
+#### `List(reqmatch, ctrl map[string]any) (any, error)`
+
+List entities matching the given criteria. Returns a `[]any` of entities, one per record; `err` is non-nil on failure.
+
+```go
+results, err := client.BurnAlert(nil).List(map[string]any{"dataset_slug": "example", "slo_id": "example"}, nil)
+if err != nil {
+    panic(err)
+}
+for _, item := range results.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
+```
+
 #### `Load(reqmatch, ctrl map[string]any) (any, error)`
 
 Load a single entity matching the given criteria. Returns the entity, whose record `Data()` reads; `err` is non-nil on failure.
 
 ```go
-result, err := client.BurnAlert(nil).Load(map[string]any{"id": "burn_alert_id", "slo_id": "slo_id"}, nil)
+result, err := client.BurnAlert(nil).Load(map[string]any{"id": "burn_alert_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
@@ -594,7 +624,7 @@ Create a new entity with the given data. Returns the created entity; `err` is no
 
 ```go
 result, err := client.BurnAlert(nil).Create(map[string]any{
-    "id": "example_id",
+    "dataset_slug": "example_dataset_slug",
     "alert_type": "example_alert_type",
 }, nil)
 if err != nil {
@@ -610,7 +640,6 @@ Update an existing entity. The data must include the entity `id`. Returns the up
 ```go
 result, err := client.BurnAlert(nil).Update(map[string]any{
     "id": "burn_alert_id",
-    "burn_alert_id": "burn_alert_id",
     "dataset_slug": "dataset_slug",
     // Fields to update
 }, nil)
@@ -625,7 +654,7 @@ fmt.Println(result.(sdk.Entity).Data())
 Remove the entity matching the given criteria. Returns the entity, marked as deleted; `err` is non-nil on failure.
 
 ```go
-result, err := client.BurnAlert(nil).Remove(map[string]any{"burn_alert_id": "burn_alert_id", "dataset_slug": "dataset_slug"}, nil)
+result, err := client.BurnAlert(nil).Remove(map[string]any{"id": "burn_alert_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
@@ -684,12 +713,26 @@ fmt.Println(calculatedField.GetName()) // "calculated_field"
 
 ### Operations
 
+#### `List(reqmatch, ctrl map[string]any) (any, error)`
+
+List entities matching the given criteria. Returns a `[]any` of entities, one per record; `err` is non-nil on failure.
+
+```go
+results, err := client.CalculatedField(nil).List(map[string]any{"dataset_slug": "example"}, nil)
+if err != nil {
+    panic(err)
+}
+for _, item := range results.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
+```
+
 #### `Load(reqmatch, ctrl map[string]any) (any, error)`
 
 Load a single entity matching the given criteria. Returns the entity, whose record `Data()` reads; `err` is non-nil on failure.
 
 ```go
-result, err := client.CalculatedField(nil).Load(map[string]any{"dataset_slug": "dataset_slug"}, nil)
+result, err := client.CalculatedField(nil).Load(map[string]any{"id": "calculated_field_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
@@ -721,8 +764,8 @@ Update an existing entity. The data must include the entity `id`. Returns the up
 
 ```go
 result, err := client.CalculatedField(nil).Update(map[string]any{
+    "id": "calculated_field_id",
     "dataset_slug": "dataset_slug",
-    "derived_column_id": "derived_column_id",
     // Fields to update
 }, nil)
 if err != nil {
@@ -736,7 +779,7 @@ fmt.Println(result.(sdk.Entity).Data())
 Remove the entity matching the given criteria. Returns the entity, marked as deleted; `err` is non-nil on failure.
 
 ```go
-result, err := client.CalculatedField(nil).Remove(map[string]any{"dataset_slug": "dataset_slug", "derived_column_id": "derived_column_id"}, nil)
+result, err := client.CalculatedField(nil).Remove(map[string]any{"id": "calculated_field_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
@@ -797,25 +840,39 @@ fmt.Println(column.GetName()) // "column"
 
 ### Field Usage by Operation
 
-| Field | load | create | update | remove |
-| --- | --- | --- | --- | --- |
-| `created_at` | - | - | - | - |
-| `description` | - | - | - | - |
-| `hidden` | - | - | - | - |
-| `id` | - | - | - | - |
-| `key_name` | Yes | - | - | - |
-| `last_written` | - | - | - | - |
-| `type` | - | - | - | - |
-| `updated_at` | - | - | - | - |
+| Field | load | list | create | update | remove |
+| --- | --- | --- | --- | --- | --- |
+| `created_at` | - | - | - | - | - |
+| `description` | - | - | - | - | - |
+| `hidden` | - | - | - | - | - |
+| `id` | - | - | - | - | - |
+| `key_name` | - | Yes | - | - | - |
+| `last_written` | - | - | - | - | - |
+| `type` | - | - | - | - | - |
+| `updated_at` | - | - | - | - | - |
 
 ### Operations
+
+#### `List(reqmatch, ctrl map[string]any) (any, error)`
+
+List entities matching the given criteria. Returns a `[]any` of entities, one per record; `err` is non-nil on failure.
+
+```go
+results, err := client.Column(nil).List(map[string]any{"dataset_slug": "example"}, nil)
+if err != nil {
+    panic(err)
+}
+for _, item := range results.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
+```
 
 #### `Load(reqmatch, ctrl map[string]any) (any, error)`
 
 Load a single entity matching the given criteria. Returns the entity, whose record `Data()` reads; `err` is non-nil on failure.
 
 ```go
-result, err := client.Column(nil).Load(map[string]any{"id": "column_id"}, nil)
+result, err := client.Column(nil).Load(map[string]any{"id": "column_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
@@ -828,7 +885,7 @@ Create a new entity with the given data. Returns the created entity; `err` is no
 
 ```go
 result, err := client.Column(nil).Create(map[string]any{
-    "id": "example_id",
+    "dataset_slug": "example_dataset_slug",
     "key_name": "example_key_name",
 }, nil)
 if err != nil {
@@ -844,7 +901,6 @@ Update an existing entity. The data must include the entity `id`. Returns the up
 ```go
 result, err := client.Column(nil).Update(map[string]any{
     "id": "column_id",
-    "column_id": "column_id",
     "dataset_slug": "dataset_slug",
     // Fields to update
 }, nil)
@@ -859,7 +915,7 @@ fmt.Println(result.(sdk.Entity).Data())
 Remove the entity matching the given criteria. Returns the entity, marked as deleted; `err` is non-nil on failure.
 
 ```go
-result, err := client.Column(nil).Remove(map[string]any{"column_id": "column_id", "dataset_slug": "dataset_slug"}, nil)
+result, err := client.Column(nil).Remove(map[string]any{"id": "column_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
@@ -1241,7 +1297,6 @@ fmt.Println(event.GetName()) // "event"
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `batch_events` | `[]any` | No | The array should contain one or more JSON objects representing Events. |
-| `id` | `string` | No |  |
 | `status` | `int` | No |  |
 
 ### Operations
@@ -1460,11 +1515,11 @@ Return the entity name.
 
 ---
 
-## KinesiEntity
+## KinesisEventEntity
 
 ```go
-kinesi := client.Kinesi(nil)
-fmt.Println(kinesi.GetName()) // "kinesi"
+kinesisEvent := client.KinesisEvent(nil)
+fmt.Println(kinesisEvent.GetName()) // "kinesis_event"
 ```
 
 ### Fields
@@ -1483,7 +1538,7 @@ fmt.Println(kinesi.GetName()) // "kinesi"
 Create a new entity with the given data. Returns the created entity; `err` is non-nil on failure.
 
 ```go
-result, err := client.Kinesi(nil).Create(map[string]any{
+result, err := client.KinesisEvent(nil).Create(map[string]any{
     "dataset_slug": "example_dataset_slug",
 }, nil)
 if err != nil {
@@ -1506,7 +1561,60 @@ Get or set the entity match criteria. Works the same as `Data()`.
 
 #### `Make() Entity`
 
-Create a new `KinesiEntity` instance with the same client and
+Create a new `KinesisEventEntity` instance with the same client and
+options.
+
+#### `Stream(action string, args map[string]any, callopts map[string]any) <-chan StreamItem`
+
+Run an operation through the pipeline and send its result items on the
+returned channel, which closes when the stream ends. A `StreamItem` holds
+one item in `Item`, or in `Err` the error that ended the stream: the
+error the operation itself would return, sent as the last value. Under
+`throw: false` in `callopts["ctrl"]`, no error is sent.
+
+#### `GetName() string`
+
+Return the entity name.
+
+
+---
+
+## ManagementAuthEntity
+
+```go
+managementAuth := client.ManagementAuth(nil)
+fmt.Println(managementAuth.GetName()) // "management_auth"
+```
+
+### Operations
+
+#### `Load(reqmatch, ctrl map[string]any) (any, error)`
+
+Load a single entity matching the given criteria. Returns the entity, whose record `Data()` reads; `err` is non-nil on failure.
+
+```go
+result, err := client.ManagementAuth(nil).Load(nil, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result.(sdk.Entity).Data())
+```
+
+### Common Methods
+
+#### `Data(args ...any) any`
+
+Get or set the entity data. When called with data, sets the entity's
+internal data and returns the current data. When called without
+arguments, returns a copy of the current data.
+
+#### `Match(args ...any) any`
+
+Get or set the entity match criteria. Works the same as `Data()`.
+
+#### `Make() Entity`
+
+Create a new `ManagementAuthEntity` instance with the same client and
 options.
 
 #### `Stream(action string, args map[string]any, callopts map[string]any) <-chan StreamItem`
@@ -1627,16 +1735,18 @@ fmt.Println(marker.GetName()) // "marker"
 
 ### Operations
 
-#### `Load(reqmatch, ctrl map[string]any) (any, error)`
+#### `List(reqmatch, ctrl map[string]any) (any, error)`
 
-Load a single entity matching the given criteria. Returns the entity, whose record `Data()` reads; `err` is non-nil on failure.
+List entities matching the given criteria. Returns a `[]any` of entities, one per record; `err` is non-nil on failure.
 
 ```go
-result, err := client.Marker(nil).Load(map[string]any{"id": "marker_id"}, nil)
+results, err := client.Marker(nil).List(map[string]any{"dataset_slug": "example"}, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(result.(sdk.Entity).Data())
+for _, item := range results.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 #### `Create(reqdata, ctrl map[string]any) (any, error)`
@@ -1645,7 +1755,7 @@ Create a new entity with the given data. Returns the created entity; `err` is no
 
 ```go
 result, err := client.Marker(nil).Create(map[string]any{
-    "id": "example_id",
+    "dataset_slug": "example_dataset_slug",
 }, nil)
 if err != nil {
     panic(err)
@@ -1661,7 +1771,6 @@ Update an existing entity. The data must include the entity `id`. Returns the up
 result, err := client.Marker(nil).Update(map[string]any{
     "id": "marker_id",
     "dataset_slug": "dataset_slug",
-    "marker_id": "marker_id",
     // Fields to update
 }, nil)
 if err != nil {
@@ -1675,7 +1784,7 @@ fmt.Println(result.(sdk.Entity).Data())
 Remove the entity matching the given criteria. Returns the entity, marked as deleted; `err` is non-nil on failure.
 
 ```go
-result, err := client.Marker(nil).Remove(map[string]any{"dataset_slug": "dataset_slug", "marker_id": "marker_id"}, nil)
+result, err := client.Marker(nil).Remove(map[string]any{"id": "marker_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
@@ -1733,16 +1842,18 @@ fmt.Println(markerSetting.GetName()) // "marker_setting"
 
 ### Operations
 
-#### `Load(reqmatch, ctrl map[string]any) (any, error)`
+#### `List(reqmatch, ctrl map[string]any) (any, error)`
 
-Load a single entity matching the given criteria. Returns the entity, whose record `Data()` reads; `err` is non-nil on failure.
+List entities matching the given criteria. Returns a `[]any` of entities, one per record; `err` is non-nil on failure.
 
 ```go
-result, err := client.MarkerSetting(nil).Load(map[string]any{"id": "marker_setting_id"}, nil)
+results, err := client.MarkerSetting(nil).List(map[string]any{"dataset_slug": "example"}, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(result.(sdk.Entity).Data())
+for _, item := range results.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 #### `Create(reqdata, ctrl map[string]any) (any, error)`
@@ -1751,7 +1862,7 @@ Create a new entity with the given data. Returns the created entity; `err` is no
 
 ```go
 result, err := client.MarkerSetting(nil).Create(map[string]any{
-    "id": "example_id",
+    "dataset_slug": "example_dataset_slug",
     "color": "example_color",
     "type": "example_type",
 }, nil)
@@ -1769,7 +1880,6 @@ Update an existing entity. The data must include the entity `id`. Returns the up
 result, err := client.MarkerSetting(nil).Update(map[string]any{
     "id": "marker_setting_id",
     "dataset_slug": "dataset_slug",
-    "marker_setting_id": "marker_setting_id",
     // Fields to update
 }, nil)
 if err != nil {
@@ -1783,7 +1893,7 @@ fmt.Println(result.(sdk.Entity).Data())
 Remove the entity matching the given criteria. Returns the entity, marked as deleted; `err` is non-nil on failure.
 
 ```go
-result, err := client.MarkerSetting(nil).Remove(map[string]any{"dataset_slug": "dataset_slug", "marker_setting_id": "marker_setting_id"}, nil)
+result, err := client.MarkerSetting(nil).Remove(map[string]any{"id": "marker_setting_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
@@ -1857,7 +1967,7 @@ fmt.Println(query.GetName()) // "query"
 Load a single entity matching the given criteria. Returns the entity, whose record `Data()` reads; `err` is non-nil on failure.
 
 ```go
-result, err := client.Query(nil).Load(map[string]any{"dataset_slug": "dataset_slug", "query_id": "query_id"}, nil)
+result, err := client.Query(nil).Load(map[string]any{"id": "query_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
@@ -1870,7 +1980,7 @@ Create a new entity with the given data. Returns the created entity; `err` is no
 
 ```go
 result, err := client.Query(nil).Create(map[string]any{
-    "id": "example_id",
+    "dataset_slug": "example_dataset_slug",
 }, nil)
 if err != nil {
     panic(err)
@@ -1931,12 +2041,26 @@ fmt.Println(queryAnnotation.GetName()) // "query_annotation"
 
 ### Operations
 
+#### `List(reqmatch, ctrl map[string]any) (any, error)`
+
+List entities matching the given criteria. Returns a `[]any` of entities, one per record; `err` is non-nil on failure.
+
+```go
+results, err := client.QueryAnnotation(nil).List(map[string]any{"dataset_slug": "example"}, nil)
+if err != nil {
+    panic(err)
+}
+for _, item := range results.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
+```
+
 #### `Load(reqmatch, ctrl map[string]any) (any, error)`
 
 Load a single entity matching the given criteria. Returns the entity, whose record `Data()` reads; `err` is non-nil on failure.
 
 ```go
-result, err := client.QueryAnnotation(nil).Load(map[string]any{"id": "query_annotation_id"}, nil)
+result, err := client.QueryAnnotation(nil).Load(map[string]any{"id": "query_annotation_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
@@ -1949,7 +2073,7 @@ Create a new entity with the given data. Returns the created entity; `err` is no
 
 ```go
 result, err := client.QueryAnnotation(nil).Create(map[string]any{
-    "id": "example_id",
+    "dataset_slug": "example_dataset_slug",
     "name": "example_name",
     "query_id": "example_query_id",
 }, nil)
@@ -1967,7 +2091,6 @@ Update an existing entity. The data must include the entity `id`. Returns the up
 result, err := client.QueryAnnotation(nil).Update(map[string]any{
     "id": "query_annotation_id",
     "dataset_slug": "dataset_slug",
-    "query_annotation_id": "query_annotation_id",
     // Fields to update
 }, nil)
 if err != nil {
@@ -1981,7 +2104,7 @@ fmt.Println(result.(sdk.Entity).Data())
 Remove the entity matching the given criteria. Returns the entity, marked as deleted; `err` is non-nil on failure.
 
 ```go
-result, err := client.QueryAnnotation(nil).Remove(map[string]any{"dataset_slug": "dataset_slug", "query_annotation_id": "query_annotation_id"}, nil)
+result, err := client.QueryAnnotation(nil).Remove(map[string]any{"id": "query_annotation_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
@@ -2050,7 +2173,7 @@ fmt.Println(queryResult.GetName()) // "query_result"
 Load a single entity matching the given criteria. Returns the entity, whose record `Data()` reads; `err` is non-nil on failure.
 
 ```go
-result, err := client.QueryResult(nil).Load(map[string]any{"dataset_slug": "dataset_slug", "query_result_id": "query_result_id"}, nil)
+result, err := client.QueryResult(nil).Load(map[string]any{"id": "query_result_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
@@ -2063,7 +2186,7 @@ Create a new entity with the given data. Returns the created entity; `err` is no
 
 ```go
 result, err := client.QueryResult(nil).Create(map[string]any{
-    "id": "example_id",
+    "dataset_slug": "example_dataset_slug",
     "query_id": "example_query_id",
 }, nil)
 if err != nil {
@@ -2358,7 +2481,7 @@ fmt.Println(slo.GetName()) // "slo"
 | `id` | `string` | No |  |
 | `name` | `string` | No | The name of the SLO. |
 | `reset_at` | `string` | No | The ISO8601-formatted time the SLO was last reset. |
-| `sli` | `map[string]any` | No | Reference to the [Calculated Field](/api/calculated-fields/) used as the indicator of event success. |
+| `sli` | `map[string]any` | No | Reference to the [Calculated Field (also called Derived Column)](/api/calculated-fields/) used as the indicator of event success. |
 | `tags` | `[]any` | No | A list of key-value pairs to help identify the SLO. |
 | `target_per_million` | `int` | No | The number of events out of one million (1,000,000) that you expected qualified events to succeed. |
 | `time_period_days` | `int` | No | The time period, in days, over which the SLO will be evaluated. |
@@ -2366,28 +2489,42 @@ fmt.Println(slo.GetName()) // "slo"
 
 ### Field Usage by Operation
 
-| Field | load | create | update | remove |
-| --- | --- | --- | --- | --- |
-| `created_at` | - | - | - | - |
-| `dataset_slugs` | - | - | - | - |
-| `description` | - | - | - | - |
-| `id` | - | - | - | - |
-| `name` | Yes | Yes | Yes | - |
-| `reset_at` | - | - | - | - |
-| `sli` | Yes | Yes | Yes | - |
-| `tags` | - | - | - | - |
-| `target_per_million` | Yes | Yes | Yes | - |
-| `time_period_days` | Yes | Yes | Yes | - |
-| `updated_at` | - | - | - | - |
+| Field | load | list | create | update | remove |
+| --- | --- | --- | --- | --- | --- |
+| `created_at` | - | - | - | - | - |
+| `dataset_slugs` | - | - | - | - | - |
+| `description` | - | - | - | - | - |
+| `id` | - | - | - | - | - |
+| `name` | - | Yes | Yes | Yes | - |
+| `reset_at` | - | - | - | - | - |
+| `sli` | - | Yes | Yes | Yes | - |
+| `tags` | - | - | - | - | - |
+| `target_per_million` | - | Yes | Yes | Yes | - |
+| `time_period_days` | - | Yes | Yes | Yes | - |
+| `updated_at` | - | - | - | - | - |
 
 ### Operations
+
+#### `List(reqmatch, ctrl map[string]any) (any, error)`
+
+List entities matching the given criteria. Returns a `[]any` of entities, one per record; `err` is non-nil on failure.
+
+```go
+results, err := client.Slo(nil).List(map[string]any{"dataset_slug": "example"}, nil)
+if err != nil {
+    panic(err)
+}
+for _, item := range results.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
+```
 
 #### `Load(reqmatch, ctrl map[string]any) (any, error)`
 
 Load a single entity matching the given criteria. Returns the entity, whose record `Data()` reads; `err` is non-nil on failure.
 
 ```go
-result, err := client.Slo(nil).Load(map[string]any{"id": "slo_id"}, nil)
+result, err := client.Slo(nil).Load(map[string]any{"id": "slo_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
@@ -2400,7 +2537,7 @@ Create a new entity with the given data. Returns the created entity; `err` is no
 
 ```go
 result, err := client.Slo(nil).Create(map[string]any{
-    "id": "example_id",
+    "dataset_slug": "example_dataset_slug",
 }, nil)
 if err != nil {
     panic(err)
@@ -2416,7 +2553,6 @@ Update an existing entity. The data must include the entity `id`. Returns the up
 result, err := client.Slo(nil).Update(map[string]any{
     "id": "slo_id",
     "dataset_slug": "dataset_slug",
-    "slo_id": "slo_id",
     // Fields to update
 }, nil)
 if err != nil {
@@ -2430,7 +2566,7 @@ fmt.Println(result.(sdk.Entity).Data())
 Remove the entity matching the given criteria. Returns the entity, marked as deleted; `err` is non-nil on failure.
 
 ```go
-result, err := client.Slo(nil).Remove(map[string]any{"dataset_slug": "dataset_slug", "slo_id": "slo_id"}, nil)
+result, err := client.Slo(nil).Remove(map[string]any{"id": "slo_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
@@ -2702,7 +2838,7 @@ fmt.Println(trigger.GetName()) // "trigger"
 List entities matching the given criteria. Returns a `[]any` of entities, one per record; `err` is non-nil on failure.
 
 ```go
-results, err := client.Trigger(nil).List(map[string]any{"recipient_id": "example"}, nil)
+results, err := client.Trigger(nil).List(map[string]any{"dataset_slug": "example"}, nil)
 if err != nil {
     panic(err)
 }
@@ -2716,7 +2852,7 @@ for _, item := range results.([]any) {
 Load a single entity matching the given criteria. Returns the entity, whose record `Data()` reads; `err` is non-nil on failure.
 
 ```go
-result, err := client.Trigger(nil).Load(map[string]any{"id": "trigger_id"}, nil)
+result, err := client.Trigger(nil).Load(map[string]any{"id": "trigger_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }
@@ -2729,7 +2865,7 @@ Create a new entity with the given data. Returns the created entity; `err` is no
 
 ```go
 result, err := client.Trigger(nil).Create(map[string]any{
-    "id": "example_id",
+    "dataset_slug": "example_dataset_slug",
     "evaluation_schedule": map[string]any{},
     "threshold": map[string]any{},
 }, nil)
@@ -2747,7 +2883,6 @@ Update an existing entity. The data must include the entity `id`. Returns the up
 result, err := client.Trigger(nil).Update(map[string]any{
     "id": "trigger_id",
     "dataset_slug": "dataset_slug",
-    "trigger_id": "trigger_id",
     // Fields to update
 }, nil)
 if err != nil {
@@ -2761,7 +2896,7 @@ fmt.Println(result.(sdk.Entity).Data())
 Remove the entity matching the given criteria. Returns the entity, marked as deleted; `err` is non-nil on failure.
 
 ```go
-result, err := client.Trigger(nil).Remove(map[string]any{"dataset_slug": "dataset_slug", "trigger_id": "trigger_id"}, nil)
+result, err := client.Trigger(nil).Remove(map[string]any{"id": "trigger_id", "dataset_slug": "dataset_slug"}, nil)
 if err != nil {
     panic(err)
 }

@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 
-	vs "github.com/voxgig-sdk/honeycomb-sdk/go/utility/struct"
+	vs "github.com/waqar2403/honeycomb-sdk/go/utility/struct"
 )
 
 // main.kit.test.live.strict is true (the default is true): a live

@@ -153,11 +153,12 @@ main: kit: entity: trigger: {
     field: "id"
     from: {
       dataset_slug: "dataset_slug"
+      id: "id"
     }
     name: "id"
     parts: [
       "dataset_slug"
-      "trigger_id"
+      "id"
     ]
     sep: "/"
   }
@@ -198,7 +199,7 @@ main: kit: entity: trigger: {
             params: [
               {
                 k: "param"
-                n: "id"
+                n: "dataset_slug"
                 or: "datasetSlug"
                 r: true
                 t: "`$STRING`"
@@ -209,12 +210,12 @@ main: kit: entity: trigger: {
           o: "/1/triggers/{datasetSlug}"
           q: {
             exist: [
-              "id"
+              "dataset_slug"
             ]
           }
           r: {
             param: {
-              datasetSlug: "id"
+              datasetSlug: "dataset_slug"
             }
           }
           rs: {
@@ -229,7 +230,7 @@ main: kit: entity: trigger: {
               lit: "triggers"
             }
             {
-              var: "id"
+              var: "dataset_slug"
             }
           ]
           t: {
@@ -242,6 +243,55 @@ main: kit: entity: trigger: {
     list: {
       name: "list"
       points: [
+        {
+          co: {
+            id: "GET /1/triggers/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/triggers/{datasetSlug}"
+          q: {
+            exist: [
+              "dataset_slug"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "triggers"
+            }
+            {
+              var: "dataset_slug"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
         {
           co: {
             id: "GET /1/recipients/{recipientId}/triggers"
@@ -316,7 +366,7 @@ main: kit: entity: trigger: {
               }
               {
                 k: "param"
-                n: "trigger_id"
+                n: "id"
                 or: "triggerId"
                 r: true
                 t: "`$STRING`"
@@ -328,13 +378,13 @@ main: kit: entity: trigger: {
           q: {
             exist: [
               "dataset_slug"
-              "trigger_id"
+              "id"
             ]
           }
           r: {
             param: {
               datasetSlug: "dataset_slug"
-              triggerId: "trigger_id"
+              triggerId: "id"
             }
           }
           rs: {
@@ -350,55 +400,6 @@ main: kit: entity: trigger: {
             }
             {
               var: "dataset_slug"
-            }
-            {
-              var: "trigger_id"
-            }
-          ]
-          t: {
-            req: "`reqdata`"
-            res: "`body`"
-          }
-        }
-        {
-          co: {
-            id: "GET /1/triggers/{datasetSlug}"
-            source: "openapi3"
-            version: 2
-          }
-          g: {
-            params: [
-              {
-                k: "param"
-                n: "id"
-                or: "datasetSlug"
-                r: true
-                t: "`$STRING`"
-              }
-            ]
-          }
-          m: "GET"
-          o: "/1/triggers/{datasetSlug}"
-          q: {
-            exist: [
-              "id"
-            ]
-          }
-          r: {
-            param: {
-              datasetSlug: "id"
-            }
-          }
-          rs: {
-            kind: "json"
-            media: "application/json"
-          }
-          s: [
-            {
-              lit: "1"
-            }
-            {
-              lit: "triggers"
             }
             {
               var: "id"
@@ -431,7 +432,7 @@ main: kit: entity: trigger: {
               }
               {
                 k: "param"
-                n: "trigger_id"
+                n: "id"
                 or: "triggerId"
                 r: true
                 t: "`$STRING`"
@@ -443,13 +444,13 @@ main: kit: entity: trigger: {
           q: {
             exist: [
               "dataset_slug"
-              "trigger_id"
+              "id"
             ]
           }
           r: {
             param: {
               datasetSlug: "dataset_slug"
-              triggerId: "trigger_id"
+              triggerId: "id"
             }
           }
           s: [
@@ -463,7 +464,7 @@ main: kit: entity: trigger: {
               var: "dataset_slug"
             }
             {
-              var: "trigger_id"
+              var: "id"
             }
           ]
           t: {
@@ -514,7 +515,7 @@ main: kit: entity: trigger: {
               }
               {
                 k: "param"
-                n: "trigger_id"
+                n: "id"
                 or: "triggerId"
                 r: true
                 t: "`$STRING`"
@@ -526,13 +527,13 @@ main: kit: entity: trigger: {
           q: {
             exist: [
               "dataset_slug"
-              "trigger_id"
+              "id"
             ]
           }
           r: {
             param: {
               datasetSlug: "dataset_slug"
-              triggerId: "trigger_id"
+              triggerId: "id"
             }
           }
           rs: {
@@ -550,7 +551,7 @@ main: kit: entity: trigger: {
               var: "dataset_slug"
             }
             {
-              var: "trigger_id"
+              var: "id"
             }
           ]
           t: {

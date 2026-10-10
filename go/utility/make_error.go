@@ -3,7 +3,7 @@ package utility
 import (
 	"fmt"
 
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 )
 
 func makeErrorUtil(ctx *core.Context, err error) (any, error) {

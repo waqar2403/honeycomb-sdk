@@ -1,6 +1,6 @@
-# Entity: kinesi
+# Entity: kinesis_event
 
-main: kit: entity: kinesi: {
+main: kit: entity: kinesis_event: {
 
   alias: field: {}
 
@@ -31,7 +31,7 @@ main: kit: entity: kinesi: {
     }
   }
 
-  name: "kinesi"
+  name: "kinesis_event"
   op: {
     create: {
       name: "create"

@@ -64,10 +64,13 @@ main: kit: entity: query_annotation: {
 
   id: {
     field: "id"
+    from: {
+      id: "id"
+    }
     name: "id"
     parts: [
       "dataset_slug"
-      "query_annotation_id"
+      "id"
     ]
     sep: "/"
   }
@@ -96,7 +99,7 @@ main: kit: entity: query_annotation: {
             params: [
               {
                 k: "param"
-                n: "id"
+                n: "dataset_slug"
                 or: "datasetSlug"
                 r: true
                 t: "`$STRING`"
@@ -107,12 +110,12 @@ main: kit: entity: query_annotation: {
           o: "/1/query_annotations/{datasetSlug}"
           q: {
             exist: [
-              "id"
+              "dataset_slug"
             ]
           }
           r: {
             param: {
-              datasetSlug: "id"
+              datasetSlug: "dataset_slug"
             }
           }
           rs: {
@@ -127,7 +130,71 @@ main: kit: entity: query_annotation: {
               lit: "query_annotations"
             }
             {
-              var: "id"
+              var: "dataset_slug"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /1/query_annotations/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                ex: false
+                k: "query"
+                n: "include_board_annotation"
+                or: "include_board_annotations"
+                r: false
+                t: "`$BOOLEAN`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/query_annotations/{datasetSlug}"
+          q: {
+            exist: [
+              "dataset_slug"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "query_annotations"
+            }
+            {
+              var: "dataset_slug"
             }
           ]
           t: {
@@ -157,7 +224,7 @@ main: kit: entity: query_annotation: {
               }
               {
                 k: "param"
-                n: "query_annotation_id"
+                n: "id"
                 or: "queryAnnotationId"
                 r: true
                 t: "`$STRING`"
@@ -169,13 +236,13 @@ main: kit: entity: query_annotation: {
           q: {
             exist: [
               "dataset_slug"
-              "query_annotation_id"
+              "id"
             ]
           }
           r: {
             param: {
               datasetSlug: "dataset_slug"
-              queryAnnotationId: "query_annotation_id"
+              queryAnnotationId: "id"
             }
           }
           rs: {
@@ -191,65 +258,6 @@ main: kit: entity: query_annotation: {
             }
             {
               var: "dataset_slug"
-            }
-            {
-              var: "query_annotation_id"
-            }
-          ]
-          t: {
-            req: "`reqdata`"
-            res: "`body`"
-          }
-        }
-        {
-          co: {
-            id: "GET /1/query_annotations/{datasetSlug}"
-            source: "openapi3"
-            version: 2
-          }
-          g: {
-            params: [
-              {
-                k: "param"
-                n: "id"
-                or: "datasetSlug"
-                r: true
-                t: "`$STRING`"
-              }
-            ]
-            query: [
-              {
-                ex: false
-                k: "query"
-                n: "include_board_annotation"
-                or: "include_board_annotations"
-                r: false
-                t: "`$BOOLEAN`"
-              }
-            ]
-          }
-          m: "GET"
-          o: "/1/query_annotations/{datasetSlug}"
-          q: {
-            exist: [
-              "id"
-            ]
-          }
-          r: {
-            param: {
-              datasetSlug: "id"
-            }
-          }
-          rs: {
-            kind: "json"
-            media: "application/json"
-          }
-          s: [
-            {
-              lit: "1"
-            }
-            {
-              lit: "query_annotations"
             }
             {
               var: "id"
@@ -282,7 +290,7 @@ main: kit: entity: query_annotation: {
               }
               {
                 k: "param"
-                n: "query_annotation_id"
+                n: "id"
                 or: "queryAnnotationId"
                 r: true
                 t: "`$STRING`"
@@ -294,13 +302,13 @@ main: kit: entity: query_annotation: {
           q: {
             exist: [
               "dataset_slug"
-              "query_annotation_id"
+              "id"
             ]
           }
           r: {
             param: {
               datasetSlug: "dataset_slug"
-              queryAnnotationId: "query_annotation_id"
+              queryAnnotationId: "id"
             }
           }
           s: [
@@ -314,7 +322,7 @@ main: kit: entity: query_annotation: {
               var: "dataset_slug"
             }
             {
-              var: "query_annotation_id"
+              var: "id"
             }
           ]
           t: {
@@ -353,7 +361,7 @@ main: kit: entity: query_annotation: {
               }
               {
                 k: "param"
-                n: "query_annotation_id"
+                n: "id"
                 or: "queryAnnotationId"
                 r: true
                 t: "`$STRING`"
@@ -365,13 +373,13 @@ main: kit: entity: query_annotation: {
           q: {
             exist: [
               "dataset_slug"
-              "query_annotation_id"
+              "id"
             ]
           }
           r: {
             param: {
               datasetSlug: "dataset_slug"
-              queryAnnotationId: "query_annotation_id"
+              queryAnnotationId: "id"
             }
           }
           rs: {
@@ -389,7 +397,7 @@ main: kit: entity: query_annotation: {
               var: "dataset_slug"
             }
             {
-              var: "query_annotation_id"
+              var: "id"
             }
           ]
           t: {

@@ -208,66 +208,6 @@ main: kit: entity: board: {
       points: [
         {
           co: {
-            id: "DELETE /1/boards/{boardId}/views/{viewId}"
-            source: "openapi3"
-            version: 2
-          }
-          g: {
-            params: [
-              {
-                k: "param"
-                n: "id"
-                or: "boardId"
-                r: true
-                t: "`$STRING`"
-              }
-              {
-                k: "param"
-                n: "view_id"
-                or: "viewId"
-                r: true
-                t: "`$STRING`"
-              }
-            ]
-          }
-          m: "DELETE"
-          o: "/1/boards/{boardId}/views/{viewId}"
-          q: {
-            exist: [
-              "id"
-              "view_id"
-            ]
-          }
-          r: {
-            param: {
-              boardId: "id"
-              viewId: "view_id"
-            }
-          }
-          s: [
-            {
-              lit: "1"
-            }
-            {
-              lit: "boards"
-            }
-            {
-              var: "id"
-            }
-            {
-              lit: "views"
-            }
-            {
-              var: "view_id"
-            }
-          ]
-          t: {
-            req: "`reqdata`"
-            res: "`body`"
-          }
-        }
-        {
-          co: {
             id: "DELETE /1/boards/{boardId}"
             source: "openapi3"
             version: 2

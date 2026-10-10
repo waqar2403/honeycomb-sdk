@@ -10,7 +10,6 @@
         "last_written": "s55",
         "type": "s56",
         "updated_at": "s57",
-        "column_id": "COLUMN01",
         "dataset_slug": "DATASET_SLUG01"
       },
       "COLUMN01": {
@@ -22,7 +21,6 @@
         "last_written": "sa5",
         "type": "sa6",
         "updated_at": "sa7",
-        "column_id": "COLUMN01",
         "dataset_slug": "DATASET_SLUG01"
       },
       "COLUMN02": {
@@ -34,7 +32,6 @@
         "last_written": "sf5",
         "type": "sf6",
         "updated_at": "sf7",
-        "column_id": "COLUMN01",
         "dataset_slug": "DATASET_SLUG01"
       }
     }
@@ -58,12 +55,12 @@
       "version": 2,
       "source": "openapi3"
     },
-    "GET /1/columns/{datasetSlug}/{columnId}": {
+    "GET /1/columns/{datasetSlug}": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"
     },
-    "GET /1/columns/{datasetSlug}": {
+    "GET /1/columns/{datasetSlug}/{columnId}": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"

@@ -10,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 
-	vs "github.com/voxgig-sdk/honeycomb-sdk/go/utility/struct"
+	vs "github.com/waqar2403/honeycomb-sdk/go/utility/struct"
 )
 
 // main.kit.test.live.strict is true (the default is true): a live
@@ -39,7 +39,7 @@ func TestBoardViewEntity(t *testing.T) {
 		client := sdk.TestSDK(nil, map[string]any{
 			"feature": map[string]any{"validate": map[string]any{"active": true}},
 		})
-		_, err := client.BoardView(nil).List(map[string]any{"id": 1}, nil)
+		_, err := client.BoardView(nil).List(map[string]any{"board_id": 1}, nil)
 		if sdkerr, ok := err.(*core.HoneycombError); !ok || "validate_failed" != sdkerr.Code {
 			t.Fatalf("expected validate_failed, got %v", err)
 		}
@@ -54,7 +54,7 @@ func TestBoardViewEntity(t *testing.T) {
 		if setup.live {
 			_mode = "live"
 		}
-		for _, _op := range []string{"update", "load"} {
+		for _, _op := range []string{"create", "list", "update", "load", "remove"} {
 			if _shouldSkip, _reason := isControlSkipped("entityOp", "board_view." + _op, _mode); _shouldSkip {
 				if _reason == "" {
 					_reason = "skipped via sdk-test-control.json"
@@ -70,24 +70,47 @@ func TestBoardViewEntity(t *testing.T) {
 				}
 			}
 		}
-		if setup.live {
-			liveMiss(t, board_viewEntityLiveStrict, "Live entity test blocked: %s", "the flow updates a board_view record it did not create")
-		}
 		client := setup.client
 		_ = client
 
-		// Bootstrap entity data from existing test data (no create step in flow).
-		boardViewRef01DataRaw := vs.Items(core.ToMapAny(vs.GetPath(setup.data, "existing.board_view")))
-		var boardViewRef01Data map[string]any
-		if len(boardViewRef01DataRaw) > 0 {
-			boardViewRef01Data = core.ToMapAny(boardViewRef01DataRaw[0][1])
+		// CREATE
+		boardViewRef01Ent := client.BoardView(nil)
+		boardViewRef01Data := core.ToMapAny(vs.GetProp(
+			vs.GetPath(setup.data, []any{"new", "board_view"}), "board_view_ref01"))
+		boardViewRef01Data["board_id"] = setup.idmap["board01"]
+
+		boardViewRef01DataResult, err := boardViewRef01Ent.Create(boardViewRef01Data, nil)
+		if err != nil {
+			t.Fatalf("create failed: %v", err)
 		}
-		// Discard guards against Go's unused-var check when the flow's steps
-		// happen not to consume the bootstrap data (e.g. list-only flows).
-		_ = boardViewRef01Data
+		boardViewRef01Data = core.ToMapAny(entityData(boardViewRef01DataResult))
+		if boardViewRef01Data == nil {
+			t.Fatal("expected create result to be a map")
+		}
+		if boardViewRef01Data["id"] == nil {
+			t.Fatal("expected created entity to have an id")
+		}
+
+		// LIST
+		boardViewRef01Match := map[string]any{
+			"board_id": setup.idmap["board01"],
+		}
+
+		boardViewRef01ListResult, err := boardViewRef01Ent.List(boardViewRef01Match, nil)
+		if err != nil {
+			t.Fatalf("list failed: %v", err)
+		}
+		boardViewRef01List, boardViewRef01ListOk := boardViewRef01ListResult.([]any)
+		if !boardViewRef01ListOk {
+			t.Fatalf("expected list result to be an array, got %T", boardViewRef01ListResult)
+		}
+
+		foundItem := vs.Select(entityListToData(boardViewRef01List), map[string]any{"id": boardViewRef01Data["id"]})
+		if vs.IsEmpty(foundItem) {
+			t.Fatal("expected to find created entity in list")
+		}
 
 		// UPDATE
-		boardViewRef01Ent := client.BoardView(nil)
 		boardViewRef01DataUp0Up := map[string]any{
 			"id": boardViewRef01Data["id"],
 			"board_id": setup.idmap["board_id"],
@@ -131,6 +154,39 @@ func TestBoardViewEntity(t *testing.T) {
 		}
 		if boardViewRef01DataDt0LoadResult["id"] != boardViewRef01Data["id"] {
 			t.Fatal("expected load result id to match")
+		}
+
+		// REMOVE
+		boardViewRef01MatchRm0 := map[string]any{
+			"id": boardViewRef01Data["id"],
+		}
+		if v := setup.idmap["board_id"]; v != nil {
+			boardViewRef01MatchRm0["board_id"] = v
+		} else {
+			boardViewRef01MatchRm0["board_id"] = setup.idmap["board01"]
+		}
+		_, err = boardViewRef01Ent.Remove(boardViewRef01MatchRm0, nil)
+		if err != nil {
+			t.Fatalf("remove failed: %v", err)
+		}
+
+		// LIST
+		boardViewRef01MatchRt0 := map[string]any{
+			"board_id": setup.idmap["board01"],
+		}
+
+		boardViewRef01ListRt0Result, err := boardViewRef01Ent.List(boardViewRef01MatchRt0, nil)
+		if err != nil {
+			t.Fatalf("list failed: %v", err)
+		}
+		boardViewRef01ListRt0, boardViewRef01ListRt0Ok := boardViewRef01ListRt0Result.([]any)
+		if !boardViewRef01ListRt0Ok {
+			t.Fatalf("expected list result to be an array, got %T", boardViewRef01ListRt0Result)
+		}
+
+		notFoundItem := vs.Select(entityListToData(boardViewRef01ListRt0), map[string]any{"id": boardViewRef01Data["id"]})
+		if !vs.IsEmpty(notFoundItem) {
+			t.Fatal("expected removed entity to not be in list")
 		}
 
 	})

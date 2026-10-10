@@ -13,8 +13,7 @@
         "target_per_million": 118,
         "time_period_days": 119,
         "updated_at": "s78",
-        "dataset_slug": "DATASET_SLUG01",
-        "slo_id": "SLO01"
+        "dataset_slug": "DATASET_SLUG01"
       },
       "SLO01": {
         "created_at": "sdc",
@@ -28,8 +27,7 @@
         "target_per_million": 228,
         "time_period_days": 229,
         "updated_at": "se6",
-        "dataset_slug": "DATASET_SLUG01",
-        "slo_id": "SLO01"
+        "dataset_slug": "DATASET_SLUG01"
       },
       "SLO02": {
         "created_at": "s14a",
@@ -43,8 +41,7 @@
         "target_per_million": 338,
         "time_period_days": 339,
         "updated_at": "s154",
-        "dataset_slug": "DATASET_SLUG01",
-        "slo_id": "SLO01"
+        "dataset_slug": "DATASET_SLUG01"
       }
     }
   },
@@ -70,12 +67,12 @@
       "version": 2,
       "source": "openapi3"
     },
-    "GET /1/slos/{datasetSlug}/{sloId}": {
+    "GET /1/slos/{datasetSlug}": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"
     },
-    "GET /1/slos/{datasetSlug}": {
+    "GET /1/slos/{datasetSlug}/{sloId}": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"

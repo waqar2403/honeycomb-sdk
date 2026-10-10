@@ -45,6 +45,11 @@
       "version": 2,
       "source": "openapi3"
     },
+    "DELETE /1/boards/{boardId}/views/{viewId}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
     "PUT /1/boards/{boardId}/views/{viewId}": {
       "provenance": "operation-contract",
       "version": 2,

@@ -1,9 +1,9 @@
 package utility
 
 import (
-	vs "github.com/voxgig-sdk/honeycomb-sdk/go/utility/struct"
+	vs "github.com/waqar2403/honeycomb-sdk/go/utility/struct"
 
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 )
 
 func prepareParamsUtil(ctx *core.Context) map[string]any {

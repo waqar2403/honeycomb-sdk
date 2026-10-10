@@ -9,52 +9,39 @@ import (
 	"testing"
 	"time"
 
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 
-	vs "github.com/voxgig-sdk/honeycomb-sdk/go/utility/struct"
+	vs "github.com/waqar2403/honeycomb-sdk/go/utility/struct"
 )
 
 // main.kit.test.live.strict is true (the default is true): a live
 // request that fails, or a live test missing an input it needs,
 // fails the test.
 // An account with no record for a test to read skips it either way.
-const kinesiEntityLiveStrict = true
+const management_authEntityLiveStrict = true
 
 
-func TestKinesiEntity(t *testing.T) {
+func TestManagementAuthEntity(t *testing.T) {
 	t.Run("instance", func(t *testing.T) {
 		testsdk := sdk.TestSDK(nil, nil)
-		ent := testsdk.Kinesi(nil)
+		ent := testsdk.ManagementAuth(nil)
 		if ent == nil {
-			t.Fatal("expected non-nil KinesiEntity")
-		}
-	})
-
-	t.Run("validate", func(t *testing.T) {
-		if !fhHasFeature("validate") {
-			t.Skip("feature not present in this SDK: validate")
-		}
-		client := sdk.TestSDK(nil, map[string]any{
-			"feature": map[string]any{"validate": map[string]any{"active": true}},
-		})
-		_, err := client.Kinesi(nil).Create(map[string]any{"dataset_slug": 1}, nil)
-		if sdkerr, ok := err.(*core.HoneycombError); !ok || "validate_failed" != sdkerr.Code {
-			t.Fatalf("expected validate_failed, got %v", err)
+			t.Fatal("expected non-nil ManagementAuthEntity")
 		}
 	})
 
 	t.Run("basic", func(tt *testing.T) {
 		var t testing.TB = tt
-		setup := kinesiBasicSetup(nil)
+		setup := management_authBasicSetup(nil)
 		// Per-op sdk-test-control.json skip — basic test exercises a flow
 		// with multiple ops; skipping any op skips the whole flow.
 		_mode := "unit"
 		if setup.live {
 			_mode = "live"
 		}
-		for _, _op := range []string{"create"} {
-			if _shouldSkip, _reason := isControlSkipped("entityOp", "kinesi." + _op, _mode); _shouldSkip {
+		for _, _op := range []string{"load"} {
+			if _shouldSkip, _reason := isControlSkipped("entityOp", "management_auth." + _op, _mode); _shouldSkip {
 				if _reason == "" {
 					_reason = "skipped via sdk-test-control.json"
 				}
@@ -62,50 +49,49 @@ func TestKinesiEntity(t *testing.T) {
 				return
 			}
 		}
-		if setup.live {
-			for _, _liveKey := range []string{"dataset_slug01"} {
-				if setup.syntheticOnly || setup.idmap[_liveKey] == nil {
-					liveMiss(t, kinesiEntityLiveStrict, "Live entity test blocked: needs %s via HONEYCOMB_TEST_KINESI_ENTID", _liveKey)
-				}
-			}
-		}
 		client := setup.client
 		_ = client
 
-		// CREATE
-		kinesiRef01Ent := client.Kinesi(nil)
-		kinesiRef01Data := core.ToMapAny(vs.GetProp(
-			vs.GetPath(setup.data, []any{"new", "kinesi"}), "kinesi_ref01"))
-		kinesiRef01Data["dataset_slug"] = setup.idmap["dataset_slug01"]
-
-		kinesiRef01DataResult, err := kinesiRef01Ent.Create(kinesiRef01Data, nil)
-		if err != nil {
-			t.Fatalf("create failed: %v", err)
+		// Bootstrap entity data from existing test data (no create step in flow).
+		managementAuthRef01DataRaw := vs.Items(core.ToMapAny(vs.GetPath(setup.data, "existing.management_auth")))
+		var managementAuthRef01Data map[string]any
+		if len(managementAuthRef01DataRaw) > 0 {
+			managementAuthRef01Data = core.ToMapAny(managementAuthRef01DataRaw[0][1])
 		}
-		kinesiRef01Data = core.ToMapAny(entityData(kinesiRef01DataResult))
-		if kinesiRef01Data == nil {
-			t.Fatal("expected create result to be a map")
+		// Discard guards against Go's unused-var check when the flow's steps
+		// happen not to consume the bootstrap data (e.g. list-only flows).
+		_ = managementAuthRef01Data
+
+		// LOAD
+		managementAuthRef01Ent := client.ManagementAuth(nil)
+		managementAuthRef01MatchDt0 := map[string]any{}
+		managementAuthRef01DataDt0Loaded, err := managementAuthRef01Ent.Load(managementAuthRef01MatchDt0, nil)
+		if err != nil {
+			t.Fatalf("load failed: %v", err)
+		}
+		if managementAuthRef01DataDt0Loaded == nil {
+			t.Fatal("expected load result to be non-nil")
 		}
 
 	})
 }
 
-func kinesiBasicSetup(extra map[string]any) *entityTestSetup {
+func management_authBasicSetup(extra map[string]any) *entityTestSetup {
 	loadEnvLocal()
 
 	_, filename, _, _ := runtime.Caller(0)
 	dir := filepath.Dir(filename)
 
-	entityDataFile := filepath.Join(dir, "..", "..", ".sdk", "test", "entity", "kinesi", "KinesiTestData.json")
+	entityDataFile := filepath.Join(dir, "..", "..", ".sdk", "test", "entity", "management_auth", "ManagementAuthTestData.json")
 
 	entityDataSource, err := os.ReadFile(entityDataFile)
 	if err != nil {
-		panic("failed to read kinesi test data: " + err.Error())
+		panic("failed to read management_auth test data: " + err.Error())
 	}
 
 	var entityData map[string]any
 	if err := json.Unmarshal(entityDataSource, &entityData); err != nil {
-		panic("failed to parse kinesi test data: " + err.Error())
+		panic("failed to parse management_auth test data: " + err.Error())
 	}
 
 	options := map[string]any{}
@@ -115,7 +101,7 @@ func kinesiBasicSetup(extra map[string]any) *entityTestSetup {
 
 	// Generate idmap via transform, matching TS pattern.
 	idmap, _ := vs.Transform(
-		[]any{"kinesi01", "kinesi02", "kinesi03", "dataset_slug01"},
+		[]any{"management_auth01", "management_auth02", "management_auth03"},
 		map[string]any{
 			"`$PACK`": []any{"", map[string]any{
 				"`$KEY`": "`$COPY`",
@@ -126,17 +112,17 @@ func kinesiBasicSetup(extra map[string]any) *entityTestSetup {
 
 	// Whether *_ENTID supplied the idmap, read before envOverride consumes it:
 	// without it, the ids a live flow binds are the fixture's synthetic ones.
-	entidEnvRaw := os.Getenv("HONEYCOMB_TEST_KINESI_ENTID")
+	entidEnvRaw := os.Getenv("HONEYCOMB_TEST_MANAGEMENT_AUTH_ENTID")
 	idmapOverridden := entidEnvRaw != "" && strings.HasPrefix(strings.TrimSpace(entidEnvRaw), "{")
 
 	env := envOverride(map[string]any{
-		"HONEYCOMB_TEST_KINESI_ENTID": idmap,
+		"HONEYCOMB_TEST_MANAGEMENT_AUTH_ENTID": idmap,
 		"HONEYCOMB_TEST_LIVE":      "FALSE",
 		"HONEYCOMB_TEST_EXPLAIN":   "FALSE",
 		"HONEYCOMB_APIKEY":         "",
 	})
 
-	idmapResolved := core.ToMapAny(env["HONEYCOMB_TEST_KINESI_ENTID"])
+	idmapResolved := core.ToMapAny(env["HONEYCOMB_TEST_MANAGEMENT_AUTH_ENTID"])
 	if idmapResolved == nil {
 		idmapResolved = core.ToMapAny(idmap)
 	}

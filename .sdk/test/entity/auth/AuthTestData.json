@@ -39,11 +39,6 @@
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"
-    },
-    "GET /2/auth": {
-      "provenance": "operation-contract",
-      "version": 2,
-      "source": "openapi3"
     }
   }
 }

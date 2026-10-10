@@ -1,7 +1,7 @@
 package utility
 
 import (
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 )
 
 func makeFetchDefUtil(ctx *core.Context) (map[string]any, error) {

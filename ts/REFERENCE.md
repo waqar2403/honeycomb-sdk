@@ -205,9 +205,9 @@ Create a new `KeyManagement` entity instance.
 
 **Returns:** `KeyManagementEntity` instance.
 
-#### `Kinesi(data?: object)`
+#### `KinesisEvent(data?: object)`
 
-Create a new `Kinesi` entity instance.
+Create a new `KinesisEvent` entity instance.
 
 **Parameters:**
 
@@ -215,7 +215,19 @@ Create a new `Kinesi` entity instance.
 | --- | --- | --- |
 | `data` | `object` | Initial entity data. |
 
-**Returns:** `KinesiEntity` instance.
+**Returns:** `KinesisEventEntity` instance.
+
+#### `ManagementAuth(data?: object)`
+
+Create a new `ManagementAuth` entity instance.
+
+**Parameters:**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `data` | `object` | Initial entity data. |
+
+**Returns:** `ManagementAuthEntity` instance.
 
 #### `MapDependency(data?: object)`
 
@@ -596,11 +608,11 @@ const board_view = client.BoardView()
 
 ### Field Usage by Operation
 
-| Field | load | list | create | update |
-| --- | --- | --- | --- | --- |
-| `filters` | - | - | Yes | Yes |
-| `id` | - | - | - | - |
-| `name` | - | - | Yes | Yes |
+| Field | load | list | create | update | remove |
+| --- | --- | --- | --- | --- | --- |
+| `filters` | - | - | Yes | Yes | - |
+| `id` | - | - | - | - | - |
+| `name` | - | - | Yes | Yes | - |
 
 ### Operations
 
@@ -610,7 +622,7 @@ Create a new entity with the given data. Resolves to the created entity.
 
 ```ts
 const result = await client.BoardView().create({
-  id: 'example_id',
+  board_id: 'example_board_id',
 })
 ```
 
@@ -619,7 +631,7 @@ const result = await client.BoardView().create({
 List entities matching the given criteria. Resolves to an array of entities, one per record.
 
 ```ts
-const results = await client.BoardView().list({ id: "example" })
+const results = await client.BoardView().list({ board_id: "example" })
 ```
 
 #### `load(match: object, ctrl?: object)`
@@ -628,6 +640,14 @@ Load a single entity matching the given criteria. Resolves to the entity, whose 
 
 ```ts
 const result = await client.BoardView().load({ id: 'board_view_id', board_id: 'board_id' })
+```
+
+#### `remove(match: object, ctrl?: object)`
+
+Remove the entity matching the given criteria. Resolves to the entity, marked as deleted.
+
+```ts
+const result = await client.BoardView().remove({ id: 'board_view_id', board_id: 'board_id' })
 ```
 
 #### `update(data: object, ctrl?: object)`
@@ -751,9 +771,17 @@ Create a new entity with the given data. Resolves to the created entity.
 
 ```ts
 const result = await client.BurnAlert().create({
-  id: 'example_id',
+  dataset_slug: 'example_dataset_slug',
   alert_type: 'example_alert_type',
 })
+```
+
+#### `list(match: object, ctrl?: object)`
+
+List entities matching the given criteria. Resolves to an array of entities, one per record.
+
+```ts
+const results = await client.BurnAlert().list({ dataset_slug: "example", slo_id: "example" })
 ```
 
 #### `load(match: object, ctrl?: object)`
@@ -761,7 +789,7 @@ const result = await client.BurnAlert().create({
 Load a single entity matching the given criteria. Resolves to the entity, whose record `data()` reads.
 
 ```ts
-const result = await client.BurnAlert().load({ id: 'burn_alert_id', slo_id: 'slo_id' })
+const result = await client.BurnAlert().load({ id: 'burn_alert_id', dataset_slug: 'dataset_slug' })
 ```
 
 #### `remove(match: object, ctrl?: object)`
@@ -769,7 +797,7 @@ const result = await client.BurnAlert().load({ id: 'burn_alert_id', slo_id: 'slo
 Remove the entity matching the given criteria. Resolves to the entity, marked as deleted.
 
 ```ts
-const result = await client.BurnAlert().remove({ burn_alert_id: 'burn_alert_id', dataset_slug: 'dataset_slug' })
+const result = await client.BurnAlert().remove({ id: 'burn_alert_id', dataset_slug: 'dataset_slug' })
 ```
 
 #### `update(data: object, ctrl?: object)`
@@ -779,7 +807,6 @@ Update an existing entity. The data must include the entity `id`. Resolves to th
 ```ts
 const result = await client.BurnAlert().update({
   id: 'burn_alert_id',
-  burn_alert_id: 'burn_alert_id',
   dataset_slug: 'dataset_slug',
   // Fields to update
 })
@@ -847,12 +874,20 @@ const result = await client.CalculatedField().create({
 })
 ```
 
+#### `list(match: object, ctrl?: object)`
+
+List entities matching the given criteria. Resolves to an array of entities, one per record.
+
+```ts
+const results = await client.CalculatedField().list({ dataset_slug: "example" })
+```
+
 #### `load(match: object, ctrl?: object)`
 
 Load a single entity matching the given criteria. Resolves to the entity, whose record `data()` reads.
 
 ```ts
-const result = await client.CalculatedField().load({ dataset_slug: 'dataset_slug' })
+const result = await client.CalculatedField().load({ id: 'calculated_field_id', dataset_slug: 'dataset_slug' })
 ```
 
 #### `remove(match: object, ctrl?: object)`
@@ -860,7 +895,7 @@ const result = await client.CalculatedField().load({ dataset_slug: 'dataset_slug
 Remove the entity matching the given criteria. Resolves to the entity, marked as deleted.
 
 ```ts
-const result = await client.CalculatedField().remove({ dataset_slug: 'dataset_slug', derived_column_id: 'derived_column_id' })
+const result = await client.CalculatedField().remove({ id: 'calculated_field_id', dataset_slug: 'dataset_slug' })
 ```
 
 #### `update(data: object, ctrl?: object)`
@@ -869,8 +904,8 @@ Update an existing entity. The data must include the entity `id`. Resolves to th
 
 ```ts
 const result = await client.CalculatedField().update({
+  id: 'calculated_field_id',
   dataset_slug: 'dataset_slug',
-  derived_column_id: 'derived_column_id',
   // Fields to update
 })
 ```
@@ -924,16 +959,16 @@ const column = client.Column()
 
 ### Field Usage by Operation
 
-| Field | load | create | update | remove |
-| --- | --- | --- | --- | --- |
-| `created_at` | - | - | - | - |
-| `description` | - | - | - | - |
-| `hidden` | - | - | - | - |
-| `id` | - | - | - | - |
-| `key_name` | Yes | - | - | - |
-| `last_written` | - | - | - | - |
-| `type` | - | - | - | - |
-| `updated_at` | - | - | - | - |
+| Field | load | list | create | update | remove |
+| --- | --- | --- | --- | --- | --- |
+| `created_at` | - | - | - | - | - |
+| `description` | - | - | - | - | - |
+| `hidden` | - | - | - | - | - |
+| `id` | - | - | - | - | - |
+| `key_name` | - | Yes | - | - | - |
+| `last_written` | - | - | - | - | - |
+| `type` | - | - | - | - | - |
+| `updated_at` | - | - | - | - | - |
 
 ### Operations
 
@@ -943,9 +978,17 @@ Create a new entity with the given data. Resolves to the created entity.
 
 ```ts
 const result = await client.Column().create({
-  id: 'example_id',
+  dataset_slug: 'example_dataset_slug',
   key_name: 'example_key_name',
 })
+```
+
+#### `list(match: object, ctrl?: object)`
+
+List entities matching the given criteria. Resolves to an array of entities, one per record.
+
+```ts
+const results = await client.Column().list({ dataset_slug: "example" })
 ```
 
 #### `load(match: object, ctrl?: object)`
@@ -953,7 +996,7 @@ const result = await client.Column().create({
 Load a single entity matching the given criteria. Resolves to the entity, whose record `data()` reads.
 
 ```ts
-const result = await client.Column().load({ id: 'column_id' })
+const result = await client.Column().load({ id: 'column_id', dataset_slug: 'dataset_slug' })
 ```
 
 #### `remove(match: object, ctrl?: object)`
@@ -961,7 +1004,7 @@ const result = await client.Column().load({ id: 'column_id' })
 Remove the entity matching the given criteria. Resolves to the entity, marked as deleted.
 
 ```ts
-const result = await client.Column().remove({ column_id: 'column_id', dataset_slug: 'dataset_slug' })
+const result = await client.Column().remove({ id: 'column_id', dataset_slug: 'dataset_slug' })
 ```
 
 #### `update(data: object, ctrl?: object)`
@@ -971,7 +1014,6 @@ Update an existing entity. The data must include the entity `id`. Resolves to th
 ```ts
 const result = await client.Column().update({
   id: 'column_id',
-  column_id: 'column_id',
   dataset_slug: 'dataset_slug',
   // Fields to update
 })
@@ -1286,7 +1328,6 @@ const event = client.Event()
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `batch_events` | `any[]` | No | The array should contain one or more JSON objects representing Events. |
-| `id` | `string` | No |  |
 | `status` | `number` | No |  |
 
 ### Operations
@@ -1465,10 +1506,10 @@ Return a copy of the entity options.
 
 ---
 
-## KinesiEntity
+## KinesisEventEntity
 
 ```ts
-const kinesi = client.Kinesi()
+const kinesis_event = client.KinesisEvent()
 ```
 
 ### Fields
@@ -1487,7 +1528,7 @@ const kinesi = client.Kinesi()
 Create a new entity with the given data. Resolves to the created entity.
 
 ```ts
-const result = await client.Kinesi().create({
+const result = await client.KinesisEvent().create({
   dataset_slug: 'example_dataset_slug',
 })
 ```
@@ -1506,7 +1547,51 @@ Get or set the entity match criteria. Works the same as `data()`.
 
 #### `make()`
 
-Create a new `KinesiEntity` instance with the same client and
+Create a new `KinesisEventEntity` instance with the same client and
+options.
+
+#### `client()`
+
+Return the parent `HoneycombSDK` instance.
+
+#### `entopts()`
+
+Return a copy of the entity options.
+
+
+---
+
+## ManagementAuthEntity
+
+```ts
+const management_auth = client.ManagementAuth()
+```
+
+### Operations
+
+#### `load(match: object, ctrl?: object)`
+
+Load a single entity matching the given criteria. Resolves to the entity, whose record `data()` reads.
+
+```ts
+const result = await client.ManagementAuth().load()
+```
+
+### Common Methods
+
+#### `data(data?: object)`
+
+Get or set the entity data. When called with data, sets the entity's
+internal data and returns the current data. When called without
+arguments, returns a copy of the current data.
+
+#### `match(match?: object)`
+
+Get or set the entity match criteria. Works the same as `data()`.
+
+#### `make()`
+
+Create a new `ManagementAuthEntity` instance with the same client and
 options.
 
 #### `client()`
@@ -1615,16 +1700,16 @@ Create a new entity with the given data. Resolves to the created entity.
 
 ```ts
 const result = await client.Marker().create({
-  id: 'example_id',
+  dataset_slug: 'example_dataset_slug',
 })
 ```
 
-#### `load(match: object, ctrl?: object)`
+#### `list(match: object, ctrl?: object)`
 
-Load a single entity matching the given criteria. Resolves to the entity, whose record `data()` reads.
+List entities matching the given criteria. Resolves to an array of entities, one per record.
 
 ```ts
-const result = await client.Marker().load({ id: 'marker_id' })
+const results = await client.Marker().list({ dataset_slug: "example" })
 ```
 
 #### `remove(match: object, ctrl?: object)`
@@ -1632,7 +1717,7 @@ const result = await client.Marker().load({ id: 'marker_id' })
 Remove the entity matching the given criteria. Resolves to the entity, marked as deleted.
 
 ```ts
-const result = await client.Marker().remove({ dataset_slug: 'dataset_slug', marker_id: 'marker_id' })
+const result = await client.Marker().remove({ id: 'marker_id', dataset_slug: 'dataset_slug' })
 ```
 
 #### `update(data: object, ctrl?: object)`
@@ -1643,7 +1728,6 @@ Update an existing entity. The data must include the entity `id`. Resolves to th
 const result = await client.Marker().update({
   id: 'marker_id',
   dataset_slug: 'dataset_slug',
-  marker_id: 'marker_id',
   // Fields to update
 })
 ```
@@ -1700,18 +1784,18 @@ Create a new entity with the given data. Resolves to the created entity.
 
 ```ts
 const result = await client.MarkerSetting().create({
-  id: 'example_id',
+  dataset_slug: 'example_dataset_slug',
   color: 'example_color',
   type: 'example_type',
 })
 ```
 
-#### `load(match: object, ctrl?: object)`
+#### `list(match: object, ctrl?: object)`
 
-Load a single entity matching the given criteria. Resolves to the entity, whose record `data()` reads.
+List entities matching the given criteria. Resolves to an array of entities, one per record.
 
 ```ts
-const result = await client.MarkerSetting().load({ id: 'marker_setting_id' })
+const results = await client.MarkerSetting().list({ dataset_slug: "example" })
 ```
 
 #### `remove(match: object, ctrl?: object)`
@@ -1719,7 +1803,7 @@ const result = await client.MarkerSetting().load({ id: 'marker_setting_id' })
 Remove the entity matching the given criteria. Resolves to the entity, marked as deleted.
 
 ```ts
-const result = await client.MarkerSetting().remove({ dataset_slug: 'dataset_slug', marker_setting_id: 'marker_setting_id' })
+const result = await client.MarkerSetting().remove({ id: 'marker_setting_id', dataset_slug: 'dataset_slug' })
 ```
 
 #### `update(data: object, ctrl?: object)`
@@ -1730,7 +1814,6 @@ Update an existing entity. The data must include the entity `id`. Resolves to th
 const result = await client.MarkerSetting().update({
   id: 'marker_setting_id',
   dataset_slug: 'dataset_slug',
-  marker_setting_id: 'marker_setting_id',
   // Fields to update
 })
 ```
@@ -1798,7 +1881,7 @@ Create a new entity with the given data. Resolves to the created entity.
 
 ```ts
 const result = await client.Query().create({
-  id: 'example_id',
+  dataset_slug: 'example_dataset_slug',
 })
 ```
 
@@ -1807,7 +1890,7 @@ const result = await client.Query().create({
 Load a single entity matching the given criteria. Resolves to the entity, whose record `data()` reads.
 
 ```ts
-const result = await client.Query().load({ dataset_slug: 'dataset_slug', query_id: 'query_id' })
+const result = await client.Query().load({ id: 'query_id', dataset_slug: 'dataset_slug' })
 ```
 
 ### Common Methods
@@ -1864,10 +1947,18 @@ Create a new entity with the given data. Resolves to the created entity.
 
 ```ts
 const result = await client.QueryAnnotation().create({
-  id: 'example_id',
+  dataset_slug: 'example_dataset_slug',
   name: 'example_name',
   query_id: 'example_query_id',
 })
+```
+
+#### `list(match: object, ctrl?: object)`
+
+List entities matching the given criteria. Resolves to an array of entities, one per record.
+
+```ts
+const results = await client.QueryAnnotation().list({ dataset_slug: "example" })
 ```
 
 #### `load(match: object, ctrl?: object)`
@@ -1875,7 +1966,7 @@ const result = await client.QueryAnnotation().create({
 Load a single entity matching the given criteria. Resolves to the entity, whose record `data()` reads.
 
 ```ts
-const result = await client.QueryAnnotation().load({ id: 'query_annotation_id' })
+const result = await client.QueryAnnotation().load({ id: 'query_annotation_id', dataset_slug: 'dataset_slug' })
 ```
 
 #### `remove(match: object, ctrl?: object)`
@@ -1883,7 +1974,7 @@ const result = await client.QueryAnnotation().load({ id: 'query_annotation_id' }
 Remove the entity matching the given criteria. Resolves to the entity, marked as deleted.
 
 ```ts
-const result = await client.QueryAnnotation().remove({ dataset_slug: 'dataset_slug', query_annotation_id: 'query_annotation_id' })
+const result = await client.QueryAnnotation().remove({ id: 'query_annotation_id', dataset_slug: 'dataset_slug' })
 ```
 
 #### `update(data: object, ctrl?: object)`
@@ -1894,7 +1985,6 @@ Update an existing entity. The data must include the entity `id`. Resolves to th
 const result = await client.QueryAnnotation().update({
   id: 'query_annotation_id',
   dataset_slug: 'dataset_slug',
-  query_annotation_id: 'query_annotation_id',
   // Fields to update
 })
 ```
@@ -1957,7 +2047,7 @@ Create a new entity with the given data. Resolves to the created entity.
 
 ```ts
 const result = await client.QueryResult().create({
-  id: 'example_id',
+  dataset_slug: 'example_dataset_slug',
   query_id: 'example_query_id',
 })
 ```
@@ -1967,7 +2057,7 @@ const result = await client.QueryResult().create({
 Load a single entity matching the given criteria. Resolves to the entity, whose record `data()` reads.
 
 ```ts
-const result = await client.QueryResult().load({ dataset_slug: 'dataset_slug', query_result_id: 'query_result_id' })
+const result = await client.QueryResult().load({ id: 'query_result_id', dataset_slug: 'dataset_slug' })
 ```
 
 ### Common Methods
@@ -2205,7 +2295,7 @@ const slo = client.Slo()
 | `id` | `string` | No |  |
 | `name` | `string` | No | The name of the SLO. |
 | `reset_at` | `string` | No | The ISO8601-formatted time the SLO was last reset. |
-| `sli` | `Record<string, any>` | No | Reference to the [Calculated Field](/api/calculated-fields/) used as the indicator of event success. |
+| `sli` | `Record<string, any>` | No | Reference to the [Calculated Field (also called Derived Column)](/api/calculated-fields/) used as the indicator of event success. |
 | `tags` | `any[]` | No | A list of key-value pairs to help identify the SLO. |
 | `target_per_million` | `number` | No | The number of events out of one million (1,000,000) that you expected qualified events to succeed. |
 | `time_period_days` | `number` | No | The time period, in days, over which the SLO will be evaluated. |
@@ -2213,19 +2303,19 @@ const slo = client.Slo()
 
 ### Field Usage by Operation
 
-| Field | load | create | update | remove |
-| --- | --- | --- | --- | --- |
-| `created_at` | - | - | - | - |
-| `dataset_slugs` | - | - | - | - |
-| `description` | - | - | - | - |
-| `id` | - | - | - | - |
-| `name` | Yes | Yes | Yes | - |
-| `reset_at` | - | - | - | - |
-| `sli` | Yes | Yes | Yes | - |
-| `tags` | - | - | - | - |
-| `target_per_million` | Yes | Yes | Yes | - |
-| `time_period_days` | Yes | Yes | Yes | - |
-| `updated_at` | - | - | - | - |
+| Field | load | list | create | update | remove |
+| --- | --- | --- | --- | --- | --- |
+| `created_at` | - | - | - | - | - |
+| `dataset_slugs` | - | - | - | - | - |
+| `description` | - | - | - | - | - |
+| `id` | - | - | - | - | - |
+| `name` | - | Yes | Yes | Yes | - |
+| `reset_at` | - | - | - | - | - |
+| `sli` | - | Yes | Yes | Yes | - |
+| `tags` | - | - | - | - | - |
+| `target_per_million` | - | Yes | Yes | Yes | - |
+| `time_period_days` | - | Yes | Yes | Yes | - |
+| `updated_at` | - | - | - | - | - |
 
 ### Operations
 
@@ -2235,8 +2325,16 @@ Create a new entity with the given data. Resolves to the created entity.
 
 ```ts
 const result = await client.Slo().create({
-  id: 'example_id',
+  dataset_slug: 'example_dataset_slug',
 })
+```
+
+#### `list(match: object, ctrl?: object)`
+
+List entities matching the given criteria. Resolves to an array of entities, one per record.
+
+```ts
+const results = await client.Slo().list({ dataset_slug: "example" })
 ```
 
 #### `load(match: object, ctrl?: object)`
@@ -2244,7 +2342,7 @@ const result = await client.Slo().create({
 Load a single entity matching the given criteria. Resolves to the entity, whose record `data()` reads.
 
 ```ts
-const result = await client.Slo().load({ id: 'slo_id' })
+const result = await client.Slo().load({ id: 'slo_id', dataset_slug: 'dataset_slug' })
 ```
 
 #### `remove(match: object, ctrl?: object)`
@@ -2252,7 +2350,7 @@ const result = await client.Slo().load({ id: 'slo_id' })
 Remove the entity matching the given criteria. Resolves to the entity, marked as deleted.
 
 ```ts
-const result = await client.Slo().remove({ dataset_slug: 'dataset_slug', slo_id: 'slo_id' })
+const result = await client.Slo().remove({ id: 'slo_id', dataset_slug: 'dataset_slug' })
 ```
 
 #### `update(data: object, ctrl?: object)`
@@ -2263,7 +2361,6 @@ Update an existing entity. The data must include the entity `id`. Resolves to th
 const result = await client.Slo().update({
   id: 'slo_id',
   dataset_slug: 'dataset_slug',
-  slo_id: 'slo_id',
   // Fields to update
 })
 ```
@@ -2498,7 +2595,7 @@ Create a new entity with the given data. Resolves to the created entity.
 
 ```ts
 const result = await client.Trigger().create({
-  id: 'example_id',
+  dataset_slug: 'example_dataset_slug',
   evaluation_schedule: {},
   threshold: {},
 })
@@ -2509,7 +2606,7 @@ const result = await client.Trigger().create({
 List entities matching the given criteria. Resolves to an array of entities, one per record.
 
 ```ts
-const results = await client.Trigger().list({ recipient_id: "example" })
+const results = await client.Trigger().list({ dataset_slug: "example" })
 ```
 
 #### `load(match: object, ctrl?: object)`
@@ -2517,7 +2614,7 @@ const results = await client.Trigger().list({ recipient_id: "example" })
 Load a single entity matching the given criteria. Resolves to the entity, whose record `data()` reads.
 
 ```ts
-const result = await client.Trigger().load({ id: 'trigger_id' })
+const result = await client.Trigger().load({ id: 'trigger_id', dataset_slug: 'dataset_slug' })
 ```
 
 #### `remove(match: object, ctrl?: object)`
@@ -2525,7 +2622,7 @@ const result = await client.Trigger().load({ id: 'trigger_id' })
 Remove the entity matching the given criteria. Resolves to the entity, marked as deleted.
 
 ```ts
-const result = await client.Trigger().remove({ dataset_slug: 'dataset_slug', trigger_id: 'trigger_id' })
+const result = await client.Trigger().remove({ id: 'trigger_id', dataset_slug: 'dataset_slug' })
 ```
 
 #### `update(data: object, ctrl?: object)`
@@ -2536,7 +2633,6 @@ Update an existing entity. The data must include the entity `id`. Resolves to th
 const result = await client.Trigger().update({
   id: 'trigger_id',
   dataset_slug: 'dataset_slug',
-  trigger_id: 'trigger_id',
   // Fields to update
 })
 ```

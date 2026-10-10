@@ -1,6 +1,6 @@
 package utility
 
-import "github.com/voxgig-sdk/honeycomb-sdk/go/core"
+import "github.com/waqar2403/honeycomb-sdk/go/core"
 
 func makeResultUtil(ctx *core.Context) (*core.Result, error) {
 	if ctx.Out["result"] != nil {

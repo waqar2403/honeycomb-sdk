@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
 )
 
 // Features with a corpus section are read from the corpus itself (see

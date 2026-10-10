@@ -1,0 +1,28 @@
+# BasicManagementAuthFlow
+
+main: kit: flow: BasicManagementAuthFlow:
+{
+  entity: "management_auth",
+  kind: "basic",
+  name: "BasicManagementAuthFlow",
+  step: [
+    {
+      i: {
+        ref: "management_auth_ref01",
+        srcdatavar: "management_auth_ref01_data",
+        suffix: "_dt0"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-management_auth_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicManagementAuthFlow"
+}

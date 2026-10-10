@@ -13,8 +13,7 @@
         "links": {},
         "query": "s77",
         "query_id": "QUERY01",
-        "dataset_slug": "DATASET_SLUG01",
-        "query_result_id": "QUERY_RESULT01"
+        "dataset_slug": "DATASET_SLUG01"
       },
       "QUERY_RESULT01": {
         "complete": true,
@@ -28,8 +27,7 @@
         "links": {},
         "query": "se5",
         "query_id": "QUERY01",
-        "dataset_slug": "DATASET_SLUG01",
-        "query_result_id": "QUERY_RESULT01"
+        "dataset_slug": "DATASET_SLUG01"
       },
       "QUERY_RESULT02": {
         "complete": true,
@@ -43,8 +41,7 @@
         "links": {},
         "query": "s153",
         "query_id": "QUERY01",
-        "dataset_slug": "DATASET_SLUG01",
-        "query_result_id": "QUERY_RESULT01"
+        "dataset_slug": "DATASET_SLUG01"
       }
     }
   },

@@ -1,6 +1,6 @@
 package utility
 
-import "github.com/voxgig-sdk/honeycomb-sdk/go/core"
+import "github.com/waqar2403/honeycomb-sdk/go/core"
 
 func makeRequestUtil(ctx *core.Context) (*core.Response, error) {
 	if ctx.Out["request"] != nil {

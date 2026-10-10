@@ -12,23 +12,12 @@ main: kit: entity: event: {
       sh: "The array should contain one or more JSON objects representing Events."
       t: "`$ARRAY`"
     }
-    id: {
-      h: "Id"
-      n: "id"
-      r: false
-      t: "`$STRING`"
-    }
     status: {
       h: "Status"
       n: "status"
       r: false
       t: "`$INTEGER`"
     }
-  }
-
-  id: {
-    field: "id"
-    name: "id"
   }
 
   name: "event"
@@ -137,7 +126,7 @@ main: kit: entity: event: {
             params: [
               {
                 k: "param"
-                n: "id"
+                n: "dataset_slug"
                 or: "datasetSlug"
                 r: true
                 t: "`$STRING`"
@@ -148,12 +137,12 @@ main: kit: entity: event: {
           o: "/1/events/{datasetSlug}"
           q: {
             exist: [
-              "id"
+              "dataset_slug"
             ]
           }
           r: {
             param: {
-              datasetSlug: "id"
+              datasetSlug: "dataset_slug"
             }
           }
           s: [
@@ -164,7 +153,7 @@ main: kit: entity: event: {
               lit: "events"
             }
             {
-              var: "id"
+              var: "dataset_slug"
             }
           ]
           t: {

@@ -1,6 +1,6 @@
 package utility
 
-import "github.com/voxgig-sdk/honeycomb-sdk/go/core"
+import "github.com/waqar2403/honeycomb-sdk/go/core"
 
 func prepareBodyUtil(ctx *core.Context) any {
 	op := ctx.Op

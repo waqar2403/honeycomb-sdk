@@ -15,11 +15,11 @@ predictable and low-friction for both humans and AI agents.
 
 ## Install
 This package is not yet published to npm. Install it from the GitHub
-release tag (`ts/vX.Y.Z`, see [Tags](https://github.com/voxgig-sdk/honeycomb-sdk/tags)), or from a
+release tag (`ts/vX.Y.Z`, see [Tags](https://github.com/waqar2403/honeycomb-sdk/tags)), or from a
 clone, which carries the compiled `dist/`:
 
 ```bash
-git clone https://github.com/voxgig-sdk/honeycomb-sdk
+git clone https://github.com/waqar2403/honeycomb-sdk
 npm install ./honeycomb-sdk/ts
 ```
 
@@ -32,7 +32,7 @@ loading a specific record. The client sends the API key in the `X-Honeycomb-Team
 ### 1. Create a client
 
 ```ts
-import { HoneycombSDK } from '@voxgig-sdk/honeycomb-sdk'
+import { HoneycombSDK } from '@waqar2403/honeycomb-sdk'
 
 const client = new HoneycombSDK({
   apikey: process.env.HONEYCOMB_APIKEY,
@@ -63,8 +63,8 @@ Entity operations reject on failure, so wrap them in `try` / `catch`:
 
 ```ts
 try {
-  const column = await client.Column().load({ id: "example_id" })
-  console.log(column.data())
+  const mapdependency = await client.MapDependency().load({ request_id: "example" })
+  console.log(mapdependency.data())
 } catch (err) {
   console.error('load failed:', err)
 }
@@ -128,9 +128,9 @@ Create a mock client for unit testing — no server required:
 ```ts
 const client = HoneycombSDK.test()
 
-const column = await client.Column().load({ id: 'test01' })
-// column is the Column entity; .data() reads its mock record
-console.log(column.data())
+const mapdependency = await client.MapDependency().load({ request_id: 'example_request_id' })
+// mapdependency is the MapDependency entity; .data() reads its mock record
+console.log(mapdependency.data())
 ```
 
 You can also use the instance method:
@@ -145,14 +145,14 @@ const testClient = client.tester()
 Entity instances remember their last match and data:
 
 ```ts
-const entity = client.Column()
+const entity = client.MapDependency()
 
 // First call runs the operation and stores its result
-await entity.load({ id: 'example' })
+await entity.load({ request_id: 'example_request_id' })
 
 // Subsequent calls reuse the stored state
 const data = entity.data()
-console.log(data.id)
+console.log(data)
 ```
 
 ### Add custom middleware
@@ -245,7 +245,8 @@ new HoneycombSDK(options?: {
 | `Event(data?)` | `EventEntity` | Create an Event entity instance. |
 | `HistoricalAnomaly(data?)` | `HistoricalAnomalyEntity` | Create a HistoricalAnomaly entity instance. |
 | `KeyManagement(data?)` | `KeyManagementEntity` | Create a KeyManagement entity instance. |
-| `Kinesi(data?)` | `KinesiEntity` | Create a Kinesi entity instance. |
+| `KinesisEvent(data?)` | `KinesisEventEntity` | Create a KinesisEvent entity instance. |
+| `ManagementAuth(data?)` | `ManagementAuthEntity` | Create a ManagementAuth entity instance. |
 | `MapDependency(data?)` | `MapDependencyEntity` | Create a MapDependency entity instance. |
 | `Marker(data?)` | `MarkerEntity` | Create a Marker entity instance. |
 | `MarkerSetting(data?)` | `MarkerSettingEntity` | Create a MarkerSetting entity instance. |
@@ -370,7 +371,7 @@ API path: `/1/boards`
 | `id` | Unique identifier for the board view. |
 | `name` | The name of the view. |
 
-Operations: create, list, load, update.
+Operations: create, list, load, remove, update.
 
 API path: `/1/boards/{boardId}/views`
 
@@ -395,7 +396,7 @@ API path: `/1/signals/recipient_assignments`
 | `alert_type` |  |
 | `id` |  |
 
-Operations: create, load, remove, update.
+Operations: create, list, load, remove, update.
 
 API path: `/1/burn_alerts/{datasetSlug}`
 
@@ -410,7 +411,7 @@ API path: `/1/burn_alerts/{datasetSlug}`
 | `id` | Unique identifier (ID), returned in response bodies. |
 | `updated_at` | ISO8601 formatted time when the field was updated. |
 
-Operations: create, load, remove, update.
+Operations: create, list, load, remove, update.
 
 API path: `/1/derived_columns/{datasetSlug}`
 
@@ -427,7 +428,7 @@ API path: `/1/derived_columns/{datasetSlug}`
 | `type` | Type of data that the Column will contain. |
 | `updated_at` | ISO8601 formatted time the column was updated. |
 
-Operations: create, load, remove, update.
+Operations: create, list, load, remove, update.
 
 API path: `/1/columns/{datasetSlug}`
 
@@ -492,7 +493,6 @@ API path: `/2/teams/{teamSlug}/environments`
 | Field | Description |
 | --- | --- |
 | `batch_events` | The array should contain one or more JSON objects representing Events. |
-| `id` |  |
 | `status` |  |
 
 Operations: create.
@@ -524,7 +524,7 @@ Operations: create, load, remove, update.
 
 API path: `/2/teams/{teamSlug}/api-keys`
 
-#### Kinesi
+#### KinesisEvent
 
 | Field | Description |
 | --- | --- |
@@ -536,6 +536,15 @@ API path: `/2/teams/{teamSlug}/api-keys`
 Operations: create.
 
 API path: `/1/kinesis_events/{datasetSlug}`
+
+#### ManagementAuth
+
+| Field | Description |
+| --- | --- |
+
+Operations: load.
+
+API path: `/2/auth`
 
 #### MapDependency
 
@@ -568,7 +577,7 @@ API path: `/1/maps/dependencies/requests`
 | `updated_at` | The ISO8601-formatted time when the Marker was updated. |
 | `url` | A target for the marker. |
 
-Operations: create, load, remove, update.
+Operations: create, list, remove, update.
 
 API path: `/1/markers/{datasetSlug}`
 
@@ -582,7 +591,7 @@ API path: `/1/markers/{datasetSlug}`
 | `type` | Groups similar Markers. |
 | `updated_at` | The ISO8601-formatted time when the Marker Setting was updated. |
 
-Operations: create, load, remove, update.
+Operations: create, list, remove, update.
 
 API path: `/1/marker_settings/{datasetSlug}`
 
@@ -623,7 +632,7 @@ API path: `/1/queries/{datasetSlug}`
 | `source` | The source of the Query Annotation. |
 | `updated_at` | ISO8601 formatted time when the Query Annotation was updated. |
 
-Operations: create, load, remove, update.
+Operations: create, list, load, remove, update.
 
 API path: `/1/query_annotations/{datasetSlug}`
 
@@ -692,13 +701,13 @@ API path: `/1/signals`
 | `id` |  |
 | `name` | The name of the SLO. |
 | `reset_at` | The ISO8601-formatted time the SLO was last reset. |
-| `sli` | Reference to the [Calculated Field](/api/calculated-fields/) used as the indicator of event success. |
+| `sli` | Reference to the [Calculated Field (also called Derived Column)](/api/calculated-fields/) used as the indicator of event success. |
 | `tags` | A list of key-value pairs to help identify the SLO. |
 | `target_per_million` | The number of events out of one million (1,000,000) that you expected qualified events to succeed. |
 | `time_period_days` | The time period, in days, over which the SLO will be evaluated. |
 | `updated_at` | The ISO8601-formatted time when the SLO was updated. |
 
-Operations: create, load, remove, update.
+Operations: create, list, load, remove, update.
 
 API path: `/1/slos/{datasetSlug}`
 
@@ -863,6 +872,7 @@ Create an instance: `const board_view = client.BoardView()`
 | `create(data)` | Create a new entity with the given data. |
 | `list(match)` | List entities matching the criteria. |
 | `load(match)` | Load a single entity by match criteria. |
+| `remove(match)` | Remove the matching entity. |
 | `update(data)` | Update an existing entity. |
 
 #### Fields
@@ -882,14 +892,14 @@ const board_view = await client.BoardView().load({ id: 'board_view_id', board_id
 #### Example: List
 
 ```ts
-const board_views = await client.BoardView().list({ id: "example" })
+const board_views = await client.BoardView().list({ board_id: "example" })
 ```
 
 #### Example: Create
 
 ```ts
 const board_view = await client.BoardView().create({
-  id: 'example_id',
+  board_id: 'example_board_id',
 })
 ```
 
@@ -936,6 +946,7 @@ Create an instance: `const burn_alert = client.BurnAlert()`
 | Method | Description |
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
+| `list(match)` | List entities matching the criteria. |
 | `load(match)` | Load a single entity by match criteria. |
 | `remove(match)` | Remove the matching entity. |
 | `update(data)` | Update an existing entity. |
@@ -950,14 +961,20 @@ Create an instance: `const burn_alert = client.BurnAlert()`
 #### Example: Load
 
 ```ts
-const burn_alert = await client.BurnAlert().load({ id: 'burn_alert_id', slo_id: 'slo_id' })
+const burn_alert = await client.BurnAlert().load({ id: 'burn_alert_id', dataset_slug: 'dataset_slug' })
+```
+
+#### Example: List
+
+```ts
+const burn_alerts = await client.BurnAlert().list({ dataset_slug: "example", slo_id: "example" })
 ```
 
 #### Example: Create
 
 ```ts
 const burn_alert = await client.BurnAlert().create({
-  id: 'example_id',
+  dataset_slug: 'example_dataset_slug',
   alert_type: 'example_alert_type',
 })
 ```
@@ -972,6 +989,7 @@ Create an instance: `const calculated_field = client.CalculatedField()`
 | Method | Description |
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
+| `list(match)` | List entities matching the criteria. |
 | `load(match)` | Load a single entity by match criteria. |
 | `remove(match)` | Remove the matching entity. |
 | `update(data)` | Update an existing entity. |
@@ -990,7 +1008,13 @@ Create an instance: `const calculated_field = client.CalculatedField()`
 #### Example: Load
 
 ```ts
-const calculated_field = await client.CalculatedField().load({ dataset_slug: 'dataset_slug' })
+const calculated_field = await client.CalculatedField().load({ id: 'calculated_field_id', dataset_slug: 'dataset_slug' })
+```
+
+#### Example: List
+
+```ts
+const calculated_fields = await client.CalculatedField().list({ dataset_slug: "example" })
 ```
 
 #### Example: Create
@@ -1016,6 +1040,7 @@ Create an instance: `const column = client.Column()`
 | Method | Description |
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
+| `list(match)` | List entities matching the criteria. |
 | `load(match)` | Load a single entity by match criteria. |
 | `remove(match)` | Remove the matching entity. |
 | `update(data)` | Update an existing entity. |
@@ -1036,14 +1061,20 @@ Create an instance: `const column = client.Column()`
 #### Example: Load
 
 ```ts
-const column = await client.Column().load({ id: 'column_id' })
+const column = await client.Column().load({ id: 'column_id', dataset_slug: 'dataset_slug' })
+```
+
+#### Example: List
+
+```ts
+const columns = await client.Column().list({ dataset_slug: "example" })
 ```
 
 #### Example: Create
 
 ```ts
 const column = await client.Column().create({
-  id: 'example_id',
+  dataset_slug: 'example_dataset_slug',
   key_name: 'example_key_name',
 })
 ```
@@ -1190,7 +1221,6 @@ Create an instance: `const event = client.Event()`
 | Field | Type | Description |
 | --- | --- | --- |
 | `batch_events` | `any[]` | The array should contain one or more JSON objects representing Events. |
-| `id` | `string` |  |
 | `status` | `number` |  |
 
 #### Example: Create
@@ -1265,9 +1295,9 @@ const key_management = await client.KeyManagement().create({
 ```
 
 
-### Kinesi
+### KinesisEvent
 
-Create an instance: `const kinesi = client.Kinesi()`
+Create an instance: `const kinesis_event = client.KinesisEvent()`
 
 #### Operations
 
@@ -1287,9 +1317,26 @@ Create an instance: `const kinesi = client.Kinesi()`
 #### Example: Create
 
 ```ts
-const kinesi = await client.Kinesi().create({
+const kinesis_event = await client.KinesisEvent().create({
   dataset_slug: 'example_dataset_slug',
 })
+```
+
+
+### ManagementAuth
+
+Create an instance: `const management_auth = client.ManagementAuth()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `load(match)` | Load a single entity by match criteria. |
+
+#### Example: Load
+
+```ts
+const management_auth = await client.ManagementAuth().load()
 ```
 
 
@@ -1341,7 +1388,7 @@ Create an instance: `const marker = client.Marker()`
 | Method | Description |
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
-| `load(match)` | Load a single entity by match criteria. |
+| `list(match)` | List entities matching the criteria. |
 | `remove(match)` | Remove the matching entity. |
 | `update(data)` | Update an existing entity. |
 
@@ -1359,17 +1406,17 @@ Create an instance: `const marker = client.Marker()`
 | `updated_at` | `string` | The ISO8601-formatted time when the Marker was updated. |
 | `url` | `string` | A target for the marker. |
 
-#### Example: Load
+#### Example: List
 
 ```ts
-const marker = await client.Marker().load({ id: 'marker_id' })
+const markers = await client.Marker().list({ dataset_slug: "example" })
 ```
 
 #### Example: Create
 
 ```ts
 const marker = await client.Marker().create({
-  id: 'example_id',
+  dataset_slug: 'example_dataset_slug',
 })
 ```
 
@@ -1383,7 +1430,7 @@ Create an instance: `const marker_setting = client.MarkerSetting()`
 | Method | Description |
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
-| `load(match)` | Load a single entity by match criteria. |
+| `list(match)` | List entities matching the criteria. |
 | `remove(match)` | Remove the matching entity. |
 | `update(data)` | Update an existing entity. |
 
@@ -1397,17 +1444,17 @@ Create an instance: `const marker_setting = client.MarkerSetting()`
 | `type` | `string` | Groups similar Markers. |
 | `updated_at` | `null | string` | The ISO8601-formatted time when the Marker Setting was updated. |
 
-#### Example: Load
+#### Example: List
 
 ```ts
-const marker_setting = await client.MarkerSetting().load({ id: 'marker_setting_id' })
+const marker_settings = await client.MarkerSetting().list({ dataset_slug: "example" })
 ```
 
 #### Example: Create
 
 ```ts
 const marker_setting = await client.MarkerSetting().create({
-  id: 'example_id',
+  dataset_slug: 'example_dataset_slug',
   color: 'example_color',
   type: 'example_type',
 })
@@ -1449,14 +1496,14 @@ Create an instance: `const query = client.Query()`
 #### Example: Load
 
 ```ts
-const query = await client.Query().load({ dataset_slug: 'dataset_slug', query_id: 'query_id' })
+const query = await client.Query().load({ id: 'query_id', dataset_slug: 'dataset_slug' })
 ```
 
 #### Example: Create
 
 ```ts
 const query = await client.Query().create({
-  id: 'example_id',
+  dataset_slug: 'example_dataset_slug',
 })
 ```
 
@@ -1470,6 +1517,7 @@ Create an instance: `const query_annotation = client.QueryAnnotation()`
 | Method | Description |
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
+| `list(match)` | List entities matching the criteria. |
 | `load(match)` | Load a single entity by match criteria. |
 | `remove(match)` | Remove the matching entity. |
 | `update(data)` | Update an existing entity. |
@@ -1489,14 +1537,20 @@ Create an instance: `const query_annotation = client.QueryAnnotation()`
 #### Example: Load
 
 ```ts
-const query_annotation = await client.QueryAnnotation().load({ id: 'query_annotation_id' })
+const query_annotation = await client.QueryAnnotation().load({ id: 'query_annotation_id', dataset_slug: 'dataset_slug' })
+```
+
+#### Example: List
+
+```ts
+const query_annotations = await client.QueryAnnotation().list({ dataset_slug: "example" })
 ```
 
 #### Example: Create
 
 ```ts
 const query_annotation = await client.QueryAnnotation().create({
-  id: 'example_id',
+  dataset_slug: 'example_dataset_slug',
   name: 'example_name',
   query_id: 'example_query_id',
 })
@@ -1533,14 +1587,14 @@ Create an instance: `const query_result = client.QueryResult()`
 #### Example: Load
 
 ```ts
-const query_result = await client.QueryResult().load({ dataset_slug: 'dataset_slug', query_result_id: 'query_result_id' })
+const query_result = await client.QueryResult().load({ id: 'query_result_id', dataset_slug: 'dataset_slug' })
 ```
 
 #### Example: Create
 
 ```ts
 const query_result = await client.QueryResult().create({
-  id: 'example_id',
+  dataset_slug: 'example_dataset_slug',
   query_id: 'example_query_id',
 })
 ```
@@ -1642,6 +1696,7 @@ Create an instance: `const slo = client.Slo()`
 | Method | Description |
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
+| `list(match)` | List entities matching the criteria. |
 | `load(match)` | Load a single entity by match criteria. |
 | `remove(match)` | Remove the matching entity. |
 | `update(data)` | Update an existing entity. |
@@ -1656,7 +1711,7 @@ Create an instance: `const slo = client.Slo()`
 | `id` | `string` |  |
 | `name` | `string` | The name of the SLO. |
 | `reset_at` | `string` | The ISO8601-formatted time the SLO was last reset. |
-| `sli` | `Record<string, any>` | Reference to the [Calculated Field](/api/calculated-fields/) used as the indicator of event success. |
+| `sli` | `Record<string, any>` | Reference to the [Calculated Field (also called Derived Column)](/api/calculated-fields/) used as the indicator of event success. |
 | `tags` | `any[]` | A list of key-value pairs to help identify the SLO. |
 | `target_per_million` | `number` | The number of events out of one million (1,000,000) that you expected qualified events to succeed. |
 | `time_period_days` | `number` | The time period, in days, over which the SLO will be evaluated. |
@@ -1665,14 +1720,20 @@ Create an instance: `const slo = client.Slo()`
 #### Example: Load
 
 ```ts
-const slo = await client.Slo().load({ id: 'slo_id' })
+const slo = await client.Slo().load({ id: 'slo_id', dataset_slug: 'dataset_slug' })
+```
+
+#### Example: List
+
+```ts
+const slos = await client.Slo().list({ dataset_slug: "example" })
 ```
 
 #### Example: Create
 
 ```ts
 const slo = await client.Slo().create({
-  id: 'example_id',
+  dataset_slug: 'example_dataset_slug',
 })
 ```
 
@@ -1801,20 +1862,20 @@ Create an instance: `const trigger = client.Trigger()`
 #### Example: Load
 
 ```ts
-const trigger = await client.Trigger().load({ id: 'trigger_id' })
+const trigger = await client.Trigger().load({ id: 'trigger_id', dataset_slug: 'dataset_slug' })
 ```
 
 #### Example: List
 
 ```ts
-const triggers = await client.Trigger().list({ recipient_id: "example" })
+const triggers = await client.Trigger().list({ dataset_slug: "example" })
 ```
 
 #### Example: Create
 
 ```ts
 const trigger = await client.Trigger().create({
-  id: 'example_id',
+  dataset_slug: 'example_dataset_slug',
   evaluation_schedule: {},
   threshold: {},
 })
@@ -1923,7 +1984,7 @@ honeycomb/
 Import the SDK from the package root:
 
 ```ts
-import { HoneycombSDK } from '@voxgig-sdk/honeycomb-sdk'
+import { HoneycombSDK } from '@waqar2403/honeycomb-sdk'
 ```
 
 ### Entity state
@@ -1933,11 +1994,11 @@ stores the returned data and match criteria internally. Subsequent
 calls on the same instance can rely on this state.
 
 ```ts
-const column = client.Column()
-await column.load({ id: "example_id" })
+const mapdependency = client.MapDependency()
+await mapdependency.load({ request_id: "example" })
 
-// column.data() now returns the column data from the last `load`
-// column.match() returns { id: "example_id" }
+// mapdependency.data() now returns the mapdependency data from the last `load`
+// mapdependency.match() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

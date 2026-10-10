@@ -96,12 +96,8 @@ class BoardUpdateData(BoardUpdateDataRequired, total=False):
     type: str
 
 
-class BoardRemoveMatchRequired(TypedDict):
+class BoardRemoveMatch(TypedDict):
     id: str
-
-
-class BoardRemoveMatch(BoardRemoveMatchRequired, total=False):
-    view_id: str
 
 
 class BoardView(TypedDict, total=False):
@@ -116,15 +112,16 @@ class BoardViewLoadMatch(TypedDict):
 
 
 class BoardViewListMatch(TypedDict):
-    id: str
+    board_id: str
 
 
 class BoardViewCreateDataRequired(TypedDict):
-    id: str
+    board_id: str
 
 
 class BoardViewCreateData(BoardViewCreateDataRequired, total=False):
     filters: list
+    id: str
     name: str
 
 
@@ -136,6 +133,11 @@ class BoardViewUpdateDataRequired(TypedDict):
 class BoardViewUpdateData(BoardViewUpdateDataRequired, total=False):
     filters: list
     name: str
+
+
+class BoardViewRemoveMatch(TypedDict):
+    board_id: str
+    id: str
 
 
 class BulkSignalRecipientAssignment(TypedDict):
@@ -163,28 +165,36 @@ class BurnAlert(BurnAlertRequired, total=False):
 
 
 class BurnAlertLoadMatch(TypedDict):
+    dataset_slug: str
     id: str
+
+
+class BurnAlertListMatch(TypedDict):
+    dataset_slug: str
     slo_id: str
 
 
-class BurnAlertCreateData(TypedDict):
-    id: str
+class BurnAlertCreateDataRequired(TypedDict):
+    dataset_slug: str
     alert_type: str
 
 
+class BurnAlertCreateData(BurnAlertCreateDataRequired, total=False):
+    id: str
+
+
 class BurnAlertUpdateDataRequired(TypedDict):
-    burn_alert_id: str
     dataset_slug: str
+    id: str
 
 
 class BurnAlertUpdateData(BurnAlertUpdateDataRequired, total=False):
     alert_type: str
-    id: str
 
 
 class BurnAlertRemoveMatch(TypedDict):
-    burn_alert_id: str
     dataset_slug: str
+    id: str
 
 
 class CalculatedFieldRequired(TypedDict):
@@ -199,12 +209,16 @@ class CalculatedField(CalculatedFieldRequired, total=False):
     description: str
 
 
-class CalculatedFieldLoadMatchRequired(TypedDict):
+class CalculatedFieldLoadMatch(TypedDict):
+    dataset_slug: str
+    id: str
+
+
+class CalculatedFieldListMatchRequired(TypedDict):
     dataset_slug: str
 
 
-class CalculatedFieldLoadMatch(CalculatedFieldLoadMatchRequired, total=False):
-    derived_column_id: str
+class CalculatedFieldListMatch(CalculatedFieldListMatchRequired, total=False):
     alia: str
 
 
@@ -223,7 +237,7 @@ class CalculatedFieldCreateData(CalculatedFieldCreateDataRequired, total=False):
 
 class CalculatedFieldUpdateDataRequired(TypedDict):
     dataset_slug: str
-    derived_column_id: str
+    id: str
 
 
 class CalculatedFieldUpdateData(CalculatedFieldUpdateDataRequired, total=False):
@@ -231,13 +245,12 @@ class CalculatedFieldUpdateData(CalculatedFieldUpdateDataRequired, total=False):
     created_at: str
     description: str
     expression: str
-    id: str
     updated_at: str
 
 
 class CalculatedFieldRemoveMatch(TypedDict):
     dataset_slug: str
-    derived_column_id: str
+    id: str
 
 
 class ColumnRequired(TypedDict):
@@ -254,16 +267,21 @@ class Column(ColumnRequired, total=False):
     updated_at: str
 
 
-class ColumnLoadMatchRequired(TypedDict):
+class ColumnLoadMatch(TypedDict):
+    dataset_slug: str
     id: str
 
 
-class ColumnLoadMatch(ColumnLoadMatchRequired, total=False):
+class ColumnListMatchRequired(TypedDict):
+    dataset_slug: str
+
+
+class ColumnListMatch(ColumnListMatchRequired, total=False):
     key_name: str
 
 
 class ColumnCreateDataRequired(TypedDict):
-    id: str
+    dataset_slug: str
     key_name: str
 
 
@@ -271,21 +289,21 @@ class ColumnCreateData(ColumnCreateDataRequired, total=False):
     created_at: str
     description: str
     hidden: bool
+    id: str
     last_written: str
     type: str
     updated_at: str
 
 
 class ColumnUpdateDataRequired(TypedDict):
-    column_id: str
     dataset_slug: str
+    id: str
 
 
 class ColumnUpdateData(ColumnUpdateDataRequired, total=False):
     created_at: str
     description: str
     hidden: bool
-    id: str
     key_name: str
     last_written: str
     type: str
@@ -293,8 +311,8 @@ class ColumnUpdateData(ColumnUpdateDataRequired, total=False):
 
 
 class ColumnRemoveMatch(TypedDict):
-    column_id: str
     dataset_slug: str
+    id: str
 
 
 class DatasetRequired(TypedDict):
@@ -456,7 +474,6 @@ class EnvironmentRemoveMatch(TypedDict):
 
 class Event(TypedDict, total=False):
     batch_events: list
-    id: str
     status: int
 
 
@@ -466,7 +483,6 @@ class EventCreateDataRequired(TypedDict):
 
 class EventCreateData(EventCreateDataRequired, total=False):
     batch_events: list
-    id: str
     status: int
 
 
@@ -531,22 +547,30 @@ class KeyManagementRemoveMatch(TypedDict):
     team_slug: str
 
 
-class Kinesi(TypedDict, total=False):
+class KinesisEvent(TypedDict, total=False):
     errorMessage: str
     records: list
     requestId: str
     timestamp: int
 
 
-class KinesiCreateDataRequired(TypedDict):
+class KinesisEventCreateDataRequired(TypedDict):
     dataset_slug: str
 
 
-class KinesiCreateData(KinesiCreateDataRequired, total=False):
+class KinesisEventCreateData(KinesisEventCreateDataRequired, total=False):
     errorMessage: str
     records: list
     requestId: str
     timestamp: int
+
+
+class ManagementAuth(TypedDict):
+    pass
+
+
+class ManagementAuthLoadMatch(TypedDict):
+    pass
 
 
 class MapDependencyRequired(TypedDict):
@@ -599,18 +623,19 @@ class Marker(TypedDict, total=False):
     url: str
 
 
-class MarkerLoadMatch(TypedDict):
-    id: str
+class MarkerListMatch(TypedDict):
+    dataset_slug: str
 
 
 class MarkerCreateDataRequired(TypedDict):
-    id: str
+    dataset_slug: str
 
 
 class MarkerCreateData(MarkerCreateDataRequired, total=False):
     color: str
     created_at: str
     end_time: int
+    id: str
     message: str
     start_time: int
     type: str
@@ -620,14 +645,13 @@ class MarkerCreateData(MarkerCreateDataRequired, total=False):
 
 class MarkerUpdateDataRequired(TypedDict):
     dataset_slug: str
-    marker_id: str
+    id: str
 
 
 class MarkerUpdateData(MarkerUpdateDataRequired, total=False):
     color: str
     created_at: str
     end_time: int
-    id: str
     message: str
     start_time: int
     type: str
@@ -637,7 +661,7 @@ class MarkerUpdateData(MarkerUpdateDataRequired, total=False):
 
 class MarkerRemoveMatch(TypedDict):
     dataset_slug: str
-    marker_id: str
+    id: str
 
 
 class MarkerSettingRequired(TypedDict):
@@ -651,37 +675,37 @@ class MarkerSetting(MarkerSettingRequired, total=False):
     updated_at: None | str
 
 
-class MarkerSettingLoadMatch(TypedDict):
-    id: str
+class MarkerSettingListMatch(TypedDict):
+    dataset_slug: str
 
 
 class MarkerSettingCreateDataRequired(TypedDict):
-    id: str
+    dataset_slug: str
     color: str
     type: str
 
 
 class MarkerSettingCreateData(MarkerSettingCreateDataRequired, total=False):
     created_at: str
+    id: str
     updated_at: None | str
 
 
 class MarkerSettingUpdateDataRequired(TypedDict):
     dataset_slug: str
-    marker_setting_id: str
+    id: str
 
 
 class MarkerSettingUpdateData(MarkerSettingUpdateDataRequired, total=False):
     color: str
     created_at: str
-    id: str
     type: str
     updated_at: None | str
 
 
 class MarkerSettingRemoveMatch(TypedDict):
     dataset_slug: str
-    marker_setting_id: str
+    id: str
 
 
 class Query(TypedDict, total=False):
@@ -705,11 +729,11 @@ class Query(TypedDict, total=False):
 
 class QueryLoadMatch(TypedDict):
     dataset_slug: str
-    query_id: str
+    id: str
 
 
 class QueryCreateDataRequired(TypedDict):
-    id: str
+    dataset_slug: str
 
 
 class QueryCreateData(QueryCreateDataRequired, total=False):
@@ -723,6 +747,7 @@ class QueryCreateData(QueryCreateDataRequired, total=False):
     formulas: list
     granularity: int
     havings: list
+    id: str
     limit: int
     orders: list
     start_time: int
@@ -743,16 +768,21 @@ class QueryAnnotation(QueryAnnotationRequired, total=False):
     updated_at: str
 
 
-class QueryAnnotationLoadMatchRequired(TypedDict):
+class QueryAnnotationLoadMatch(TypedDict):
+    dataset_slug: str
     id: str
 
 
-class QueryAnnotationLoadMatch(QueryAnnotationLoadMatchRequired, total=False):
+class QueryAnnotationListMatchRequired(TypedDict):
+    dataset_slug: str
+
+
+class QueryAnnotationListMatch(QueryAnnotationListMatchRequired, total=False):
     include_board_annotation: bool
 
 
 class QueryAnnotationCreateDataRequired(TypedDict):
-    id: str
+    dataset_slug: str
     name: str
     query_id: str
 
@@ -760,19 +790,19 @@ class QueryAnnotationCreateDataRequired(TypedDict):
 class QueryAnnotationCreateData(QueryAnnotationCreateDataRequired, total=False):
     created_at: str
     description: str
+    id: str
     source: str
     updated_at: str
 
 
 class QueryAnnotationUpdateDataRequired(TypedDict):
     dataset_slug: str
-    query_annotation_id: str
+    id: str
 
 
 class QueryAnnotationUpdateData(QueryAnnotationUpdateDataRequired, total=False):
     created_at: str
     description: str
-    id: str
     name: str
     query_id: str
     source: str
@@ -781,7 +811,7 @@ class QueryAnnotationUpdateData(QueryAnnotationUpdateDataRequired, total=False):
 
 class QueryAnnotationRemoveMatch(TypedDict):
     dataset_slug: str
-    query_annotation_id: str
+    id: str
 
 
 class QueryResultRequired(TypedDict):
@@ -803,11 +833,11 @@ class QueryResult(QueryResultRequired, total=False):
 
 class QueryResultLoadMatch(TypedDict):
     dataset_slug: str
-    query_result_id: str
+    id: str
 
 
 class QueryResultCreateDataRequired(TypedDict):
-    id: str
+    dataset_slug: str
     query_id: str
 
 
@@ -818,6 +848,7 @@ class QueryResultCreateData(QueryResultCreateDataRequired, total=False):
     disable_series: bool
     disable_total_by_aggregate: bool
     error: str
+    id: str
     limit: int
     links: dict
     query: Any
@@ -927,18 +958,28 @@ class Slo(TypedDict, total=False):
     updated_at: str
 
 
-class SloLoadMatch(TypedDict):
+class SloLoadMatchRequired(TypedDict):
+    dataset_slug: str
     id: str
+
+
+class SloLoadMatch(SloLoadMatchRequired, total=False):
+    detailed: bool
+
+
+class SloListMatch(TypedDict):
+    dataset_slug: str
 
 
 class SloCreateDataRequired(TypedDict):
-    id: str
+    dataset_slug: str
 
 
 class SloCreateData(SloCreateDataRequired, total=False):
     created_at: str
     dataset_slugs: list
     description: str
+    id: str
     name: str
     reset_at: str
     sli: dict
@@ -950,14 +991,13 @@ class SloCreateData(SloCreateDataRequired, total=False):
 
 class SloUpdateDataRequired(TypedDict):
     dataset_slug: str
-    slo_id: str
+    id: str
 
 
 class SloUpdateData(SloUpdateDataRequired, total=False):
     created_at: str
     dataset_slugs: list
     description: str
-    id: str
     name: str
     reset_at: str
     sli: dict
@@ -969,7 +1009,7 @@ class SloUpdateData(SloUpdateDataRequired, total=False):
 
 class SloRemoveMatch(TypedDict):
     dataset_slug: str
-    slo_id: str
+    id: str
 
 
 class SloCount(TypedDict, total=False):
@@ -1040,15 +1080,16 @@ class Trigger(TriggerRequired, total=False):
 
 
 class TriggerLoadMatch(TypedDict):
+    dataset_slug: str
     id: str
 
 
 class TriggerListMatch(TypedDict):
-    recipient_id: str
+    dataset_slug: str
 
 
 class TriggerCreateDataRequired(TypedDict):
-    id: str
+    dataset_slug: str
     evaluation_schedule: dict
     threshold: dict
 
@@ -1058,11 +1099,11 @@ class TriggerCreateData(TriggerCreateDataRequired, total=False):
     auto_investigate: bool
     baseline_details: dict
     created_at: str
-    dataset_slug: str
     description: str
     disabled: bool
     evaluation_schedule_type: str
     frequency: int
+    id: str
     name: str
     query: dict
     query_id: str
@@ -1074,7 +1115,7 @@ class TriggerCreateData(TriggerCreateDataRequired, total=False):
 
 class TriggerUpdateDataRequired(TypedDict):
     dataset_slug: str
-    trigger_id: str
+    id: str
 
 
 class TriggerUpdateData(TriggerUpdateDataRequired, total=False):
@@ -1087,7 +1128,6 @@ class TriggerUpdateData(TriggerUpdateDataRequired, total=False):
     evaluation_schedule: dict
     evaluation_schedule_type: str
     frequency: int
-    id: str
     name: str
     query: dict
     query_id: str
@@ -1100,4 +1140,4 @@ class TriggerUpdateData(TriggerUpdateDataRequired, total=False):
 
 class TriggerRemoveMatch(TypedDict):
     dataset_slug: str
-    trigger_id: str
+    id: str

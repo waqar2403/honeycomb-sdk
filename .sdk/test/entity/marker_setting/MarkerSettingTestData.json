@@ -7,8 +7,7 @@
         "id": "MARKER_SETTING00",
         "type": "s35",
         "updated_at": "s36",
-        "dataset_slug": "DATASET_SLUG01",
-        "marker_setting_id": "MARKER_SETTING01"
+        "dataset_slug": "DATASET_SLUG01"
       },
       "MARKER_SETTING01": {
         "color": "s64",
@@ -16,8 +15,7 @@
         "id": "MARKER_SETTING01",
         "type": "s67",
         "updated_at": "s68",
-        "dataset_slug": "DATASET_SLUG01",
-        "marker_setting_id": "MARKER_SETTING01"
+        "dataset_slug": "DATASET_SLUG01"
       },
       "MARKER_SETTING02": {
         "color": "s96",
@@ -25,8 +23,7 @@
         "id": "MARKER_SETTING02",
         "type": "s99",
         "updated_at": "s9a",
-        "dataset_slug": "DATASET_SLUG01",
-        "marker_setting_id": "MARKER_SETTING01"
+        "dataset_slug": "DATASET_SLUG01"
       }
     }
   },

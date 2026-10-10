@@ -37,7 +37,7 @@ class TestQueryAnnotationEntity:
         client = HoneycombSDK.test(
             None, {"feature": {"validate": {"active": True}}})
         with pytest.raises(Exception) as err:
-            client.QueryAnnotation(None).load({"id": 1}, None)
+            client.QueryAnnotation(None).list({"dataset_slug": 1}, None)
         assert "validate_failed" == getattr(err.value, "code", None)
 
     def test_should_run_basic_flow(self):
@@ -46,31 +46,84 @@ class TestQueryAnnotationEntity:
         # multiple ops; skipping any one skips the whole flow (steps depend
         # on each other).
         _live = setup.get("live", False)
-        for _op in ["load"]:
+        for _op in ["create", "list", "update", "load", "remove"]:
             _skip, _reason = runner.is_control_skipped("entityOp", "query_annotation." + _op, "live" if _live else "unit")
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
                 return
         if setup["live"]:
-            runner.live_miss(LIVE_STRICT, "Live entity test blocked: " + "the flow loads a query_annotation record it has no list to find")
+            for _live_key in ["dataset_slug01"]:
+                if setup.get("synthetic_only") or setup["idmap"].get(_live_key) is None:
+                    runner.live_miss(LIVE_STRICT, f"Live entity test blocked: needs {_live_key} via HONEYCOMB_TEST_QUERY_ANNOTATION_ENTID")
         client = setup["client"]
 
-        # Bootstrap entity data from existing test data.
-        query_annotation_ref01_data_raw = vs.items(helpers.to_map(
-            vs.getpath(setup["data"], "existing.query_annotation")))
-        query_annotation_ref01_data = None
-        if len(query_annotation_ref01_data_raw) > 0:
-            query_annotation_ref01_data = helpers.to_map(query_annotation_ref01_data_raw[0][1])
+        # CREATE
+        query_annotation_ref01_ent = client.QueryAnnotation(None)
+        query_annotation_ref01_data = helpers.to_map(vs.getprop(
+            vs.getpath(setup["data"], "new.query_annotation"), "query_annotation_ref01"))
+        query_annotation_ref01_data["dataset_slug"] = setup["idmap"]["dataset_slug01"]
+
+        query_annotation_ref01_data = helpers.to_map(runner.entity_data(query_annotation_ref01_ent.create(query_annotation_ref01_data, None)))
+        assert query_annotation_ref01_data is not None
+        assert query_annotation_ref01_data["id"] is not None
+
+        # LIST
+        query_annotation_ref01_match = {
+            "dataset_slug": setup["idmap"]["dataset_slug01"],
+        }
+
+        query_annotation_ref01_list_result = query_annotation_ref01_ent.list(query_annotation_ref01_match, None)
+        assert isinstance(query_annotation_ref01_list_result, list)
+
+        found_item = vs.select(
+            runner.entity_list_to_data(query_annotation_ref01_list_result),
+            {"id": query_annotation_ref01_data["id"]})
+        assert not vs.isempty(found_item)
+
+        # UPDATE
+        query_annotation_ref01_data_up0_up = {
+            "id": query_annotation_ref01_data["id"],
+            "dataset_slug": setup["idmap"]["dataset_slug"],
+        }
+
+        query_annotation_ref01_markdef_up0_name = "description"
+        query_annotation_ref01_markdef_up0_value = "Mark01-query_annotation_ref01_" + str(setup["now"])
+        query_annotation_ref01_data_up0_up[query_annotation_ref01_markdef_up0_name] = query_annotation_ref01_markdef_up0_value
+
+        query_annotation_ref01_resdata_up0 = helpers.to_map(runner.entity_data(query_annotation_ref01_ent.update(query_annotation_ref01_data_up0_up, None)))
+        assert query_annotation_ref01_resdata_up0 is not None
+        assert query_annotation_ref01_resdata_up0["id"] == query_annotation_ref01_data_up0_up["id"]
+        assert query_annotation_ref01_resdata_up0[query_annotation_ref01_markdef_up0_name] == query_annotation_ref01_markdef_up0_value
 
         # LOAD
-        query_annotation_ref01_ent = client.QueryAnnotation(None)
         query_annotation_ref01_match_dt0 = {
             "id": query_annotation_ref01_data["id"],
         }
+        query_annotation_ref01_match_dt0["dataset_slug"] = setup["idmap"].get("dataset_slug") or setup["idmap"].get("dataset_slug01")
         query_annotation_ref01_data_dt0_loaded = query_annotation_ref01_ent.load(query_annotation_ref01_match_dt0, None)
         query_annotation_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(query_annotation_ref01_data_dt0_loaded))
         assert query_annotation_ref01_data_dt0_load_result is not None
         assert query_annotation_ref01_data_dt0_load_result["id"] == query_annotation_ref01_data["id"]
+
+        # REMOVE
+        query_annotation_ref01_match_rm0 = {
+            "id": query_annotation_ref01_data["id"],
+        }
+        query_annotation_ref01_match_rm0["dataset_slug"] = setup["idmap"].get("dataset_slug") or setup["idmap"].get("dataset_slug01")
+        query_annotation_ref01_ent.remove(query_annotation_ref01_match_rm0, None)
+
+        # LIST
+        query_annotation_ref01_match_rt0 = {
+            "dataset_slug": setup["idmap"]["dataset_slug01"],
+        }
+
+        query_annotation_ref01_list_rt0_result = query_annotation_ref01_ent.list(query_annotation_ref01_match_rt0, None)
+        assert isinstance(query_annotation_ref01_list_rt0_result, list)
+
+        not_found_item = vs.select(
+            runner.entity_list_to_data(query_annotation_ref01_list_rt0_result),
+            {"id": query_annotation_ref01_data["id"]})
+        assert vs.isempty(not_found_item)
 
 
 
@@ -90,7 +143,7 @@ def _query_annotation_basic_setup(extra):
 
     # Generate idmap via transform.
     idmap = vs.transform(
-        ["query_annotation01", "query_annotation02", "query_annotation03"],
+        ["query_annotation01", "query_annotation02", "query_annotation03", "dataset_slug01"],
         {
             "`$PACK`": ["", {
                 "`$KEY`": "`$COPY`",
@@ -116,6 +169,8 @@ def _query_annotation_basic_setup(extra):
         env.get("HONEYCOMB_TEST_QUERY_ANNOTATION_ENTID"))
     if idmap_resolved is None:
         idmap_resolved = helpers.to_map(idmap)
+    if idmap_resolved.get("dataset_slug") is None:
+        idmap_resolved["dataset_slug"] = idmap_resolved.get("dataset_slug01")
 
     if env.get("HONEYCOMB_TEST_LIVE") == "TRUE":
         merged_opts = vs.merge([

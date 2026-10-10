@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 )
 
 // main.kit.test.live.strict is true (the default is true): a live
@@ -34,7 +34,7 @@ func TestBoardViewDirect(t *testing.T) {
 			return
 		}
 		if setup.live {
-			for _, _liveKey := range []string{"board_view01"} {
+			for _, _liveKey := range []string{"board01"} {
 				if v := setup.idmap[_liveKey]; v == nil {
 					liveMiss(t, board_viewDirectLiveStrict, "Live test blocked: needs %s via HONEYCOMB_TEST_BOARD_VIEW_ENTID", _liveKey)
 					return
@@ -45,13 +45,13 @@ func TestBoardViewDirect(t *testing.T) {
 
 		params := map[string]any{}
 		if setup.live {
-			params["id"] = setup.idmap["board_view01"]
+			params["board_id"] = setup.idmap["board01"]
 		} else {
-			params["id"] = "direct01"
+			params["board_id"] = "direct01"
 		}
 
 		result, err := client.Direct(map[string]any{
-			"path":   "1/boards/{id}/views",
+			"path":   "1/boards/{board_id}/views",
 			"method": "GET",
 			"params": params,
 		})
@@ -117,7 +117,7 @@ func TestBoardViewDirect(t *testing.T) {
 			return
 		}
 		if setup.live {
-			for _, _liveKey := range []string{"board_view01", "board01"} {
+			for _, _liveKey := range []string{"board01"} {
 				if v := setup.idmap[_liveKey]; v == nil {
 					liveMiss(t, board_viewDirectLiveStrict, "Live test blocked: needs %s via HONEYCOMB_TEST_BOARD_VIEW_ENTID", _liveKey)
 					return
@@ -130,9 +130,9 @@ func TestBoardViewDirect(t *testing.T) {
 		query := map[string]any{}
 		if setup.live {
 			listParams := map[string]any{}
-			listParams["id"] = setup.idmap["board_view01"]
+			listParams["board_id"] = setup.idmap["board01"]
 			listResult, listErr := client.Direct(map[string]any{
-				"path":   "1/boards/{id}/views",
+				"path":   "1/boards/{board_id}/views",
 				"method": "GET",
 				"params": listParams,
 			})

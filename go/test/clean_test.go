@@ -12,8 +12,8 @@ import (
 	"strings"
 	"testing"
 
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 )
 
 // Generated: the credential's wire placement is fixed when the SDK is built.

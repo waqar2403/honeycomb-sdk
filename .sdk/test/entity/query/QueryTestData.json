@@ -18,8 +18,7 @@
         "start_time": 173,
         "time_range": 174,
         "usage_mode": false,
-        "dataset_slug": "DATASET_SLUG01",
-        "query_id": "QUERY01"
+        "dataset_slug": "DATASET_SLUG01"
       },
       "QUERY01": {
         "breakdowns": [],
@@ -38,8 +37,7 @@
         "start_time": 333,
         "time_range": 334,
         "usage_mode": false,
-        "dataset_slug": "DATASET_SLUG01",
-        "query_id": "QUERY01"
+        "dataset_slug": "DATASET_SLUG01"
       },
       "QUERY02": {
         "breakdowns": [],
@@ -58,8 +56,7 @@
         "start_time": 493,
         "time_range": 494,
         "usage_mode": false,
-        "dataset_slug": "DATASET_SLUG01",
-        "query_id": "QUERY01"
+        "dataset_slug": "DATASET_SLUG01"
       }
     }
   },

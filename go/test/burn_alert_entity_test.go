@@ -2,6 +2,7 @@ package sdktest
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -9,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 
-	vs "github.com/voxgig-sdk/honeycomb-sdk/go/utility/struct"
+	vs "github.com/waqar2403/honeycomb-sdk/go/utility/struct"
 )
 
 // main.kit.test.live.strict is true (the default is true): a live
@@ -38,7 +39,7 @@ func TestBurnAlertEntity(t *testing.T) {
 		client := sdk.TestSDK(nil, map[string]any{
 			"feature": map[string]any{"validate": map[string]any{"active": true}},
 		})
-		_, err := client.BurnAlert(nil).Load(map[string]any{"id": 1, "slo_id": "x"}, nil)
+		_, err := client.BurnAlert(nil).List(map[string]any{"dataset_slug": 1, "slo_id": "x"}, nil)
 		if sdkerr, ok := err.(*core.HoneycombError); !ok || "validate_failed" != sdkerr.Code {
 			t.Fatalf("expected validate_failed, got %v", err)
 		}
@@ -53,7 +54,7 @@ func TestBurnAlertEntity(t *testing.T) {
 		if setup.live {
 			_mode = "live"
 		}
-		for _, _op := range []string{"load"} {
+		for _, _op := range []string{"create", "list", "update", "load", "remove"} {
 			if _shouldSkip, _reason := isControlSkipped("entityOp", "burn_alert." + _op, _mode); _shouldSkip {
 				if _reason == "" {
 					_reason = "skipped via sdk-test-control.json"
@@ -63,25 +64,85 @@ func TestBurnAlertEntity(t *testing.T) {
 			}
 		}
 		if setup.live {
-			liveMiss(t, burn_alertEntityLiveStrict, "Live entity test blocked: %s", "the flow loads a burn_alert record it has no list to find")
+			for _, _liveKey := range []string{"dataset_slug01"} {
+				if setup.syntheticOnly || setup.idmap[_liveKey] == nil {
+					liveMiss(t, burn_alertEntityLiveStrict, "Live entity test blocked: needs %s via HONEYCOMB_TEST_BURN_ALERT_ENTID", _liveKey)
+				}
+			}
 		}
 		client := setup.client
 		_ = client
 
-		// Bootstrap entity data from existing test data (no create step in flow).
-		burnAlertRef01DataRaw := vs.Items(core.ToMapAny(vs.GetPath(setup.data, "existing.burn_alert")))
-		var burnAlertRef01Data map[string]any
-		if len(burnAlertRef01DataRaw) > 0 {
-			burnAlertRef01Data = core.ToMapAny(burnAlertRef01DataRaw[0][1])
+		// CREATE
+		burnAlertRef01Ent := client.BurnAlert(nil)
+		burnAlertRef01Data := core.ToMapAny(vs.GetProp(
+			vs.GetPath(setup.data, []any{"new", "burn_alert"}), "burn_alert_ref01"))
+		burnAlertRef01Data["dataset_slug"] = setup.idmap["dataset_slug01"]
+
+		burnAlertRef01DataResult, err := burnAlertRef01Ent.Create(burnAlertRef01Data, nil)
+		if err != nil {
+			t.Fatalf("create failed: %v", err)
 		}
-		// Discard guards against Go's unused-var check when the flow's steps
-		// happen not to consume the bootstrap data (e.g. list-only flows).
-		_ = burnAlertRef01Data
+		burnAlertRef01Data = core.ToMapAny(entityData(burnAlertRef01DataResult))
+		if burnAlertRef01Data == nil {
+			t.Fatal("expected create result to be a map")
+		}
+		if burnAlertRef01Data["id"] == nil {
+			t.Fatal("expected created entity to have an id")
+		}
+
+		// LIST
+		burnAlertRef01Match := map[string]any{
+			"dataset_slug": setup.idmap["dataset_slug01"],
+		}
+
+		burnAlertRef01ListResult, err := burnAlertRef01Ent.List(burnAlertRef01Match, nil)
+		if err != nil {
+			t.Fatalf("list failed: %v", err)
+		}
+		burnAlertRef01List, burnAlertRef01ListOk := burnAlertRef01ListResult.([]any)
+		if !burnAlertRef01ListOk {
+			t.Fatalf("expected list result to be an array, got %T", burnAlertRef01ListResult)
+		}
+
+		foundItem := vs.Select(entityListToData(burnAlertRef01List), map[string]any{"id": burnAlertRef01Data["id"]})
+		if vs.IsEmpty(foundItem) {
+			t.Fatal("expected to find created entity in list")
+		}
+
+		// UPDATE
+		burnAlertRef01DataUp0Up := map[string]any{
+			"id": burnAlertRef01Data["id"],
+			"dataset_slug": setup.idmap["dataset_slug"],
+		}
+
+		burnAlertRef01MarkdefUp0Name := "alert_type"
+		burnAlertRef01MarkdefUp0Value := fmt.Sprintf("Mark01-burn_alert_ref01_%d", setup.now)
+		burnAlertRef01DataUp0Up[burnAlertRef01MarkdefUp0Name] = burnAlertRef01MarkdefUp0Value
+
+		burnAlertRef01ResdataUp0Result, err := burnAlertRef01Ent.Update(burnAlertRef01DataUp0Up, nil)
+		if err != nil {
+			t.Fatalf("update failed: %v", err)
+		}
+		burnAlertRef01ResdataUp0 := core.ToMapAny(entityData(burnAlertRef01ResdataUp0Result))
+		if burnAlertRef01ResdataUp0 == nil {
+			t.Fatal("expected update result to be a map")
+		}
+		if burnAlertRef01ResdataUp0["id"] != burnAlertRef01DataUp0Up["id"] {
+			t.Fatal("expected update result id to match")
+		}
+		if burnAlertRef01ResdataUp0[burnAlertRef01MarkdefUp0Name] != burnAlertRef01MarkdefUp0Value {
+			t.Fatalf("expected %s to be updated, got %v", burnAlertRef01MarkdefUp0Name, burnAlertRef01ResdataUp0[burnAlertRef01MarkdefUp0Name])
+		}
 
 		// LOAD
-		burnAlertRef01Ent := client.BurnAlert(nil)
 		burnAlertRef01MatchDt0 := map[string]any{
 			"id": burnAlertRef01Data["id"],
+		}
+		if v := setup.idmap["dataset_slug"]; v != nil {
+			burnAlertRef01MatchDt0["dataset_slug"] = v
+		} else {
+			burnAlertRef01MatchDt0["dataset_slug"] = setup.idmap["dataset_slug01"]
 		}
 		burnAlertRef01DataDt0Loaded, err := burnAlertRef01Ent.Load(burnAlertRef01MatchDt0, nil)
 		if err != nil {
@@ -93,6 +154,39 @@ func TestBurnAlertEntity(t *testing.T) {
 		}
 		if burnAlertRef01DataDt0LoadResult["id"] != burnAlertRef01Data["id"] {
 			t.Fatal("expected load result id to match")
+		}
+
+		// REMOVE
+		burnAlertRef01MatchRm0 := map[string]any{
+			"id": burnAlertRef01Data["id"],
+		}
+		if v := setup.idmap["dataset_slug"]; v != nil {
+			burnAlertRef01MatchRm0["dataset_slug"] = v
+		} else {
+			burnAlertRef01MatchRm0["dataset_slug"] = setup.idmap["dataset_slug01"]
+		}
+		_, err = burnAlertRef01Ent.Remove(burnAlertRef01MatchRm0, nil)
+		if err != nil {
+			t.Fatalf("remove failed: %v", err)
+		}
+
+		// LIST
+		burnAlertRef01MatchRt0 := map[string]any{
+			"dataset_slug": setup.idmap["dataset_slug01"],
+		}
+
+		burnAlertRef01ListRt0Result, err := burnAlertRef01Ent.List(burnAlertRef01MatchRt0, nil)
+		if err != nil {
+			t.Fatalf("list failed: %v", err)
+		}
+		burnAlertRef01ListRt0, burnAlertRef01ListRt0Ok := burnAlertRef01ListRt0Result.([]any)
+		if !burnAlertRef01ListRt0Ok {
+			t.Fatalf("expected list result to be an array, got %T", burnAlertRef01ListRt0Result)
+		}
+
+		notFoundItem := vs.Select(entityListToData(burnAlertRef01ListRt0), map[string]any{"id": burnAlertRef01Data["id"]})
+		if !vs.IsEmpty(notFoundItem) {
+			t.Fatal("expected removed entity to not be in list")
 		}
 
 	})
@@ -123,7 +217,7 @@ func burn_alertBasicSetup(extra map[string]any) *entityTestSetup {
 
 	// Generate idmap via transform, matching TS pattern.
 	idmap, _ := vs.Transform(
-		[]any{"burn_alert01", "burn_alert02", "burn_alert03"},
+		[]any{"burn_alert01", "burn_alert02", "burn_alert03", "dataset_slug01"},
 		map[string]any{
 			"`$PACK`": []any{"", map[string]any{
 				"`$KEY`": "`$COPY`",
@@ -147,6 +241,10 @@ func burn_alertBasicSetup(extra map[string]any) *entityTestSetup {
 	idmapResolved := core.ToMapAny(env["HONEYCOMB_TEST_BURN_ALERT_ENTID"])
 	if idmapResolved == nil {
 		idmapResolved = core.ToMapAny(idmap)
+	}
+	// Add dataset_slug alias for update test.
+	if idmapResolved["dataset_slug"] == nil {
+		idmapResolved["dataset_slug"] = idmapResolved["dataset_slug01"]
 	}
 
 	if env["HONEYCOMB_TEST_LIVE"] == "TRUE" {

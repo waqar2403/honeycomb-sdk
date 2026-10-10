@@ -6,9 +6,9 @@ import (
 	"regexp"
 	"strings"
 
-	vs "github.com/voxgig-sdk/honeycomb-sdk/go/utility/struct"
+	vs "github.com/waqar2403/honeycomb-sdk/go/utility/struct"
 
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 )
 
 // The `body.<key>` form of an op's response transform: the mock wraps its

@@ -9,8 +9,7 @@
         "query_id": "QUERY01",
         "source": "s4b",
         "updated_at": "s4c",
-        "dataset_slug": "DATASET_SLUG01",
-        "query_annotation_id": "QUERY_ANNOTATION01"
+        "dataset_slug": "DATASET_SLUG01"
       },
       "QUERY_ANNOTATION01": {
         "created_at": "s8c",
@@ -20,8 +19,7 @@
         "query_id": "QUERY01",
         "source": "s91",
         "updated_at": "s92",
-        "dataset_slug": "DATASET_SLUG01",
-        "query_annotation_id": "QUERY_ANNOTATION01"
+        "dataset_slug": "DATASET_SLUG01"
       },
       "QUERY_ANNOTATION02": {
         "created_at": "sd2",
@@ -31,8 +29,7 @@
         "query_id": "QUERY01",
         "source": "sd7",
         "updated_at": "sd8",
-        "dataset_slug": "DATASET_SLUG01",
-        "query_annotation_id": "QUERY_ANNOTATION01"
+        "dataset_slug": "DATASET_SLUG01"
       }
     }
   },
@@ -54,12 +51,12 @@
       "version": 2,
       "source": "openapi3"
     },
-    "GET /1/query_annotations/{datasetSlug}/{queryAnnotationId}": {
+    "GET /1/query_annotations/{datasetSlug}": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"
     },
-    "GET /1/query_annotations/{datasetSlug}": {
+    "GET /1/query_annotations/{datasetSlug}/{queryAnnotationId}": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"

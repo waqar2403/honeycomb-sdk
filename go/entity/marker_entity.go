@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 
-	vs "github.com/voxgig-sdk/honeycomb-sdk/go/utility/struct"
+	vs "github.com/waqar2403/honeycomb-sdk/go/utility/struct"
 )
 
 type MarkerEntity struct {
@@ -293,11 +293,16 @@ func (e *MarkerEntity) streamSteps(ctx *core.Context) error {
 	return nil
 }
 
+func (e *MarkerEntity) Load(_ map[string]any, _ map[string]any) (any, error) {
+	return core.UnsupportedOp("load", e.name)
+}
 
-func (e *MarkerEntity) Load(reqmatch map[string]any, ctrl map[string]any) (any, error) {
+
+
+func (e *MarkerEntity) List(reqmatch map[string]any, ctrl map[string]any) (any, error) {
 	utility := e.utility
 	ctx := utility.MakeContext(map[string]any{
-		"opname":   "load",
+		"opname":   "list",
 		"ctrl":     ctrl,
 		"match":    e.match,
 		"data":     e.data,
@@ -309,32 +314,21 @@ func (e *MarkerEntity) Load(reqmatch map[string]any, ctrl map[string]any) (any, 
 			if ctx.Result.Resmatch != nil {
 				e.match = ctx.Result.Resmatch
 			}
-			if ctx.Result.Resdata != nil {
-				e.data = core.ToMapAny(vs.Clone(ctx.Result.Resdata))
-				if e.data == nil {
-					e.data = map[string]any{}
-				}
-			}
 		}
 	})
 }
 
-// LoadTyped is the statically-typed variant of Load: it takes an
-// MarkerLoadMatch and returns an Marker. It delegates to the untyped
-// Load (identical runtime) and converts at the typed boundary.
-func (e *MarkerEntity) LoadTyped(reqmatch MarkerLoadMatch, ctrl map[string]any) (Marker, error) {
-	res, err := e.Load(asMap(reqmatch), ctrl)
+// ListTyped is the statically-typed variant of List: it takes an
+// MarkerListMatch and returns []Marker. It delegates to the untyped
+// List (identical runtime) and converts at the typed boundary.
+func (e *MarkerEntity) ListTyped(reqmatch MarkerListMatch, ctrl map[string]any) ([]Marker, error) {
+	res, err := e.List(asMap(reqmatch), ctrl)
 	if err != nil {
-		return Marker{}, err
+		return nil, err
 	}
-	return typedFrom[Marker](res), nil
+	return typedSliceFrom[Marker](res), nil
 }
 
-
-
-func (e *MarkerEntity) List(_ map[string]any, _ map[string]any) (any, error) {
-	return core.UnsupportedOp("list", e.name)
-}
 
 
 

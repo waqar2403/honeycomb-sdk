@@ -9,7 +9,7 @@ package entity
 import (
 	"encoding/json"
 
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 )
 
 // Auth is the typed data model for the auth entity.
@@ -76,7 +76,6 @@ type BoardUpdateData struct {
 // BoardRemoveMatch is the typed request payload for Board.RemoveTyped.
 type BoardRemoveMatch struct {
 	Id string `json:"id"`
-	ViewId *string `json:"view_id,omitempty"`
 }
 
 // BoardView is the typed data model for the board_view entity.
@@ -91,13 +90,14 @@ type BoardViewLoadMatch struct {
 
 // BoardViewListMatch is the typed request payload for BoardView.ListTyped.
 type BoardViewListMatch struct {
-	Id string `json:"id"`
+	BoardId string `json:"board_id"`
 }
 
 // BoardViewCreateData is the typed request payload for BoardView.CreateTyped.
 type BoardViewCreateData struct {
-	Id string `json:"id"`
+	BoardId string `json:"board_id"`
 	Filters *[]any `json:"filters,omitempty"`
+	Id *string `json:"id,omitempty"`
 	Name *string `json:"name,omitempty"`
 }
 
@@ -107,6 +107,12 @@ type BoardViewUpdateData struct {
 	Id string `json:"id"`
 	Filters *[]any `json:"filters,omitempty"`
 	Name *string `json:"name,omitempty"`
+}
+
+// BoardViewRemoveMatch is the typed request payload for BoardView.RemoveTyped.
+type BoardViewRemoveMatch struct {
+	BoardId string `json:"board_id"`
+	Id string `json:"id"`
 }
 
 // BulkSignalRecipientAssignment is the typed data model for the bulk_signal_recipient_assignment entity.
@@ -128,28 +134,34 @@ type BurnAlert struct {
 
 // BurnAlertLoadMatch is the typed request payload for BurnAlert.LoadTyped.
 type BurnAlertLoadMatch struct {
+	DatasetSlug string `json:"dataset_slug"`
 	Id string `json:"id"`
+}
+
+// BurnAlertListMatch is the typed request payload for BurnAlert.ListTyped.
+type BurnAlertListMatch struct {
+	DatasetSlug string `json:"dataset_slug"`
 	SloId string `json:"slo_id"`
 }
 
 // BurnAlertCreateData is the typed request payload for BurnAlert.CreateTyped.
 type BurnAlertCreateData struct {
-	Id string `json:"id"`
+	DatasetSlug string `json:"dataset_slug"`
 	AlertType string `json:"alert_type"`
+	Id *string `json:"id,omitempty"`
 }
 
 // BurnAlertUpdateData is the typed request payload for BurnAlert.UpdateTyped.
 type BurnAlertUpdateData struct {
-	BurnAlertId string `json:"burn_alert_id"`
 	DatasetSlug string `json:"dataset_slug"`
+	Id string `json:"id"`
 	AlertType *string `json:"alert_type,omitempty"`
-	Id *string `json:"id,omitempty"`
 }
 
 // BurnAlertRemoveMatch is the typed request payload for BurnAlert.RemoveTyped.
 type BurnAlertRemoveMatch struct {
-	BurnAlertId string `json:"burn_alert_id"`
 	DatasetSlug string `json:"dataset_slug"`
+	Id string `json:"id"`
 }
 
 // CalculatedField is the typed data model for the calculated_field entity.
@@ -159,7 +171,12 @@ type CalculatedField struct {
 // CalculatedFieldLoadMatch is the typed request payload for CalculatedField.LoadTyped.
 type CalculatedFieldLoadMatch struct {
 	DatasetSlug string `json:"dataset_slug"`
-	DerivedColumnId *string `json:"derived_column_id,omitempty"`
+	Id string `json:"id"`
+}
+
+// CalculatedFieldListMatch is the typed request payload for CalculatedField.ListTyped.
+type CalculatedFieldListMatch struct {
+	DatasetSlug string `json:"dataset_slug"`
 	Alia *string `json:"alia,omitempty"`
 }
 
@@ -177,19 +194,18 @@ type CalculatedFieldCreateData struct {
 // CalculatedFieldUpdateData is the typed request payload for CalculatedField.UpdateTyped.
 type CalculatedFieldUpdateData struct {
 	DatasetSlug string `json:"dataset_slug"`
-	DerivedColumnId string `json:"derived_column_id"`
+	Id string `json:"id"`
 	Alias *string `json:"alias,omitempty"`
 	CreatedAt *string `json:"created_at,omitempty"`
 	Description *string `json:"description,omitempty"`
 	Expression *string `json:"expression,omitempty"`
-	Id *string `json:"id,omitempty"`
 	UpdatedAt *string `json:"updated_at,omitempty"`
 }
 
 // CalculatedFieldRemoveMatch is the typed request payload for CalculatedField.RemoveTyped.
 type CalculatedFieldRemoveMatch struct {
 	DatasetSlug string `json:"dataset_slug"`
-	DerivedColumnId string `json:"derived_column_id"`
+	Id string `json:"id"`
 }
 
 // Column is the typed data model for the column entity.
@@ -198,16 +214,23 @@ type Column struct {
 
 // ColumnLoadMatch is the typed request payload for Column.LoadTyped.
 type ColumnLoadMatch struct {
+	DatasetSlug string `json:"dataset_slug"`
 	Id string `json:"id"`
+}
+
+// ColumnListMatch is the typed request payload for Column.ListTyped.
+type ColumnListMatch struct {
+	DatasetSlug string `json:"dataset_slug"`
 	KeyName *string `json:"key_name,omitempty"`
 }
 
 // ColumnCreateData is the typed request payload for Column.CreateTyped.
 type ColumnCreateData struct {
-	Id string `json:"id"`
+	DatasetSlug string `json:"dataset_slug"`
 	CreatedAt *string `json:"created_at,omitempty"`
 	Description *string `json:"description,omitempty"`
 	Hidden *bool `json:"hidden,omitempty"`
+	Id *string `json:"id,omitempty"`
 	KeyName string `json:"key_name"`
 	LastWritten *string `json:"last_written,omitempty"`
 	Type *string `json:"type,omitempty"`
@@ -216,12 +239,11 @@ type ColumnCreateData struct {
 
 // ColumnUpdateData is the typed request payload for Column.UpdateTyped.
 type ColumnUpdateData struct {
-	ColumnId string `json:"column_id"`
 	DatasetSlug string `json:"dataset_slug"`
+	Id string `json:"id"`
 	CreatedAt *string `json:"created_at,omitempty"`
 	Description *string `json:"description,omitempty"`
 	Hidden *bool `json:"hidden,omitempty"`
-	Id *string `json:"id,omitempty"`
 	KeyName *string `json:"key_name,omitempty"`
 	LastWritten *string `json:"last_written,omitempty"`
 	Type *string `json:"type,omitempty"`
@@ -230,8 +252,8 @@ type ColumnUpdateData struct {
 
 // ColumnRemoveMatch is the typed request payload for Column.RemoveTyped.
 type ColumnRemoveMatch struct {
-	ColumnId string `json:"column_id"`
 	DatasetSlug string `json:"dataset_slug"`
+	Id string `json:"id"`
 }
 
 // Dataset is the typed data model for the dataset entity.
@@ -360,7 +382,6 @@ type Event struct {
 type EventCreateData struct {
 	DatasetSlug string `json:"dataset_slug"`
 	BatchEvents *[]any `json:"batch_events,omitempty"`
-	Id *string `json:"id,omitempty"`
 	Status *int `json:"status,omitempty"`
 }
 
@@ -410,17 +431,25 @@ type KeyManagementRemoveMatch struct {
 	TeamSlug string `json:"team_slug"`
 }
 
-// Kinesi is the typed data model for the kinesi entity.
-type Kinesi struct {
+// KinesisEvent is the typed data model for the kinesis_event entity.
+type KinesisEvent struct {
 }
 
-// KinesiCreateData is the typed request payload for Kinesi.CreateTyped.
-type KinesiCreateData struct {
+// KinesisEventCreateData is the typed request payload for KinesisEvent.CreateTyped.
+type KinesisEventCreateData struct {
 	DatasetSlug string `json:"dataset_slug"`
 	ErrorMessage *string `json:"errorMessage,omitempty"`
 	Records *[]any `json:"records,omitempty"`
 	RequestId *string `json:"requestId,omitempty"`
 	Timestamp *int `json:"timestamp,omitempty"`
+}
+
+// ManagementAuth is the typed data model for the management_auth entity.
+type ManagementAuth struct {
+}
+
+// ManagementAuthLoadMatch is the typed request payload for ManagementAuth.LoadTyped.
+type ManagementAuthLoadMatch struct {
 }
 
 // MapDependency is the typed data model for the map_dependency entity.
@@ -451,17 +480,18 @@ type MapDependencyCreateData struct {
 type Marker struct {
 }
 
-// MarkerLoadMatch is the typed request payload for Marker.LoadTyped.
-type MarkerLoadMatch struct {
-	Id string `json:"id"`
+// MarkerListMatch is the typed request payload for Marker.ListTyped.
+type MarkerListMatch struct {
+	DatasetSlug string `json:"dataset_slug"`
 }
 
 // MarkerCreateData is the typed request payload for Marker.CreateTyped.
 type MarkerCreateData struct {
-	Id string `json:"id"`
+	DatasetSlug string `json:"dataset_slug"`
 	Color *string `json:"color,omitempty"`
 	CreatedAt *string `json:"created_at,omitempty"`
 	EndTime *int `json:"end_time,omitempty"`
+	Id *string `json:"id,omitempty"`
 	Message *string `json:"message,omitempty"`
 	StartTime *int `json:"start_time,omitempty"`
 	Type *string `json:"type,omitempty"`
@@ -472,11 +502,10 @@ type MarkerCreateData struct {
 // MarkerUpdateData is the typed request payload for Marker.UpdateTyped.
 type MarkerUpdateData struct {
 	DatasetSlug string `json:"dataset_slug"`
-	MarkerId string `json:"marker_id"`
+	Id string `json:"id"`
 	Color *string `json:"color,omitempty"`
 	CreatedAt *string `json:"created_at,omitempty"`
 	EndTime *int `json:"end_time,omitempty"`
-	Id *string `json:"id,omitempty"`
 	Message *string `json:"message,omitempty"`
 	StartTime *int `json:"start_time,omitempty"`
 	Type *string `json:"type,omitempty"`
@@ -487,23 +516,24 @@ type MarkerUpdateData struct {
 // MarkerRemoveMatch is the typed request payload for Marker.RemoveTyped.
 type MarkerRemoveMatch struct {
 	DatasetSlug string `json:"dataset_slug"`
-	MarkerId string `json:"marker_id"`
+	Id string `json:"id"`
 }
 
 // MarkerSetting is the typed data model for the marker_setting entity.
 type MarkerSetting struct {
 }
 
-// MarkerSettingLoadMatch is the typed request payload for MarkerSetting.LoadTyped.
-type MarkerSettingLoadMatch struct {
-	Id string `json:"id"`
+// MarkerSettingListMatch is the typed request payload for MarkerSetting.ListTyped.
+type MarkerSettingListMatch struct {
+	DatasetSlug string `json:"dataset_slug"`
 }
 
 // MarkerSettingCreateData is the typed request payload for MarkerSetting.CreateTyped.
 type MarkerSettingCreateData struct {
-	Id string `json:"id"`
+	DatasetSlug string `json:"dataset_slug"`
 	Color string `json:"color"`
 	CreatedAt *string `json:"created_at,omitempty"`
+	Id *string `json:"id,omitempty"`
 	Type string `json:"type"`
 	UpdatedAt *any `json:"updated_at,omitempty"`
 }
@@ -511,10 +541,9 @@ type MarkerSettingCreateData struct {
 // MarkerSettingUpdateData is the typed request payload for MarkerSetting.UpdateTyped.
 type MarkerSettingUpdateData struct {
 	DatasetSlug string `json:"dataset_slug"`
-	MarkerSettingId string `json:"marker_setting_id"`
+	Id string `json:"id"`
 	Color *string `json:"color,omitempty"`
 	CreatedAt *string `json:"created_at,omitempty"`
-	Id *string `json:"id,omitempty"`
 	Type *string `json:"type,omitempty"`
 	UpdatedAt *any `json:"updated_at,omitempty"`
 }
@@ -522,7 +551,7 @@ type MarkerSettingUpdateData struct {
 // MarkerSettingRemoveMatch is the typed request payload for MarkerSetting.RemoveTyped.
 type MarkerSettingRemoveMatch struct {
 	DatasetSlug string `json:"dataset_slug"`
-	MarkerSettingId string `json:"marker_setting_id"`
+	Id string `json:"id"`
 }
 
 // Query is the typed data model for the query entity.
@@ -532,12 +561,12 @@ type Query struct {
 // QueryLoadMatch is the typed request payload for Query.LoadTyped.
 type QueryLoadMatch struct {
 	DatasetSlug string `json:"dataset_slug"`
-	QueryId string `json:"query_id"`
+	Id string `json:"id"`
 }
 
 // QueryCreateData is the typed request payload for Query.CreateTyped.
 type QueryCreateData struct {
-	Id string `json:"id"`
+	DatasetSlug string `json:"dataset_slug"`
 	Breakdowns *[]any `json:"breakdowns,omitempty"`
 	CalculatedFields *[]any `json:"calculated_fields,omitempty"`
 	Calculations *[]any `json:"calculations,omitempty"`
@@ -548,6 +577,7 @@ type QueryCreateData struct {
 	Formulas *[]any `json:"formulas,omitempty"`
 	Granularity *int `json:"granularity,omitempty"`
 	Havings *[]any `json:"havings,omitempty"`
+	Id *string `json:"id,omitempty"`
 	Limit *int `json:"limit,omitempty"`
 	Orders *[]any `json:"orders,omitempty"`
 	StartTime *int `json:"start_time,omitempty"`
@@ -561,15 +591,22 @@ type QueryAnnotation struct {
 
 // QueryAnnotationLoadMatch is the typed request payload for QueryAnnotation.LoadTyped.
 type QueryAnnotationLoadMatch struct {
+	DatasetSlug string `json:"dataset_slug"`
 	Id string `json:"id"`
+}
+
+// QueryAnnotationListMatch is the typed request payload for QueryAnnotation.ListTyped.
+type QueryAnnotationListMatch struct {
+	DatasetSlug string `json:"dataset_slug"`
 	IncludeBoardAnnotation *bool `json:"include_board_annotation,omitempty"`
 }
 
 // QueryAnnotationCreateData is the typed request payload for QueryAnnotation.CreateTyped.
 type QueryAnnotationCreateData struct {
-	Id string `json:"id"`
+	DatasetSlug string `json:"dataset_slug"`
 	CreatedAt *string `json:"created_at,omitempty"`
 	Description *string `json:"description,omitempty"`
+	Id *string `json:"id,omitempty"`
 	Name string `json:"name"`
 	QueryId string `json:"query_id"`
 	Source *string `json:"source,omitempty"`
@@ -579,10 +616,9 @@ type QueryAnnotationCreateData struct {
 // QueryAnnotationUpdateData is the typed request payload for QueryAnnotation.UpdateTyped.
 type QueryAnnotationUpdateData struct {
 	DatasetSlug string `json:"dataset_slug"`
-	QueryAnnotationId string `json:"query_annotation_id"`
+	Id string `json:"id"`
 	CreatedAt *string `json:"created_at,omitempty"`
 	Description *string `json:"description,omitempty"`
-	Id *string `json:"id,omitempty"`
 	Name *string `json:"name,omitempty"`
 	QueryId *string `json:"query_id,omitempty"`
 	Source *string `json:"source,omitempty"`
@@ -592,7 +628,7 @@ type QueryAnnotationUpdateData struct {
 // QueryAnnotationRemoveMatch is the typed request payload for QueryAnnotation.RemoveTyped.
 type QueryAnnotationRemoveMatch struct {
 	DatasetSlug string `json:"dataset_slug"`
-	QueryAnnotationId string `json:"query_annotation_id"`
+	Id string `json:"id"`
 }
 
 // QueryResult is the typed data model for the query_result entity.
@@ -602,18 +638,19 @@ type QueryResult struct {
 // QueryResultLoadMatch is the typed request payload for QueryResult.LoadTyped.
 type QueryResultLoadMatch struct {
 	DatasetSlug string `json:"dataset_slug"`
-	QueryResultId string `json:"query_result_id"`
+	Id string `json:"id"`
 }
 
 // QueryResultCreateData is the typed request payload for QueryResult.CreateTyped.
 type QueryResultCreateData struct {
-	Id string `json:"id"`
+	DatasetSlug string `json:"dataset_slug"`
 	Complete *bool `json:"complete,omitempty"`
 	Data *map[string]any `json:"data,omitempty"`
 	DisableOtherByAggregate *bool `json:"disable_other_by_aggregate,omitempty"`
 	DisableSeries *bool `json:"disable_series,omitempty"`
 	DisableTotalByAggregate *bool `json:"disable_total_by_aggregate,omitempty"`
 	Error *string `json:"error,omitempty"`
+	Id *string `json:"id,omitempty"`
 	Limit *int `json:"limit,omitempty"`
 	Links *map[string]any `json:"links,omitempty"`
 	Query *any `json:"query,omitempty"`
@@ -697,28 +734,19 @@ type Slo struct {
 
 // SloLoadMatch is the typed request payload for Slo.LoadTyped.
 type SloLoadMatch struct {
+	DatasetSlug string `json:"dataset_slug"`
 	Id string `json:"id"`
+	Detailed *bool `json:"detailed,omitempty"`
+}
+
+// SloListMatch is the typed request payload for Slo.ListTyped.
+type SloListMatch struct {
+	DatasetSlug string `json:"dataset_slug"`
 }
 
 // SloCreateData is the typed request payload for Slo.CreateTyped.
 type SloCreateData struct {
-	Id string `json:"id"`
-	CreatedAt *string `json:"created_at,omitempty"`
-	DatasetSlugs *[]any `json:"dataset_slugs,omitempty"`
-	Description *string `json:"description,omitempty"`
-	Name *string `json:"name,omitempty"`
-	ResetAt *string `json:"reset_at,omitempty"`
-	Sli *map[string]any `json:"sli,omitempty"`
-	Tags *[]any `json:"tags,omitempty"`
-	TargetPerMillion *int `json:"target_per_million,omitempty"`
-	TimePeriodDays *int `json:"time_period_days,omitempty"`
-	UpdatedAt *string `json:"updated_at,omitempty"`
-}
-
-// SloUpdateData is the typed request payload for Slo.UpdateTyped.
-type SloUpdateData struct {
 	DatasetSlug string `json:"dataset_slug"`
-	SloId string `json:"slo_id"`
 	CreatedAt *string `json:"created_at,omitempty"`
 	DatasetSlugs *[]any `json:"dataset_slugs,omitempty"`
 	Description *string `json:"description,omitempty"`
@@ -732,10 +760,26 @@ type SloUpdateData struct {
 	UpdatedAt *string `json:"updated_at,omitempty"`
 }
 
+// SloUpdateData is the typed request payload for Slo.UpdateTyped.
+type SloUpdateData struct {
+	DatasetSlug string `json:"dataset_slug"`
+	Id string `json:"id"`
+	CreatedAt *string `json:"created_at,omitempty"`
+	DatasetSlugs *[]any `json:"dataset_slugs,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Name *string `json:"name,omitempty"`
+	ResetAt *string `json:"reset_at,omitempty"`
+	Sli *map[string]any `json:"sli,omitempty"`
+	Tags *[]any `json:"tags,omitempty"`
+	TargetPerMillion *int `json:"target_per_million,omitempty"`
+	TimePeriodDays *int `json:"time_period_days,omitempty"`
+	UpdatedAt *string `json:"updated_at,omitempty"`
+}
+
 // SloRemoveMatch is the typed request payload for Slo.RemoveTyped.
 type SloRemoveMatch struct {
 	DatasetSlug string `json:"dataset_slug"`
-	SloId string `json:"slo_id"`
+	Id string `json:"id"`
 }
 
 // SloCount is the typed data model for the slo_count entity.
@@ -779,27 +823,28 @@ type Trigger struct {
 
 // TriggerLoadMatch is the typed request payload for Trigger.LoadTyped.
 type TriggerLoadMatch struct {
+	DatasetSlug string `json:"dataset_slug"`
 	Id string `json:"id"`
 }
 
 // TriggerListMatch is the typed request payload for Trigger.ListTyped.
 type TriggerListMatch struct {
-	RecipientId string `json:"recipient_id"`
+	DatasetSlug string `json:"dataset_slug"`
 }
 
 // TriggerCreateData is the typed request payload for Trigger.CreateTyped.
 type TriggerCreateData struct {
-	Id string `json:"id"`
+	DatasetSlug string `json:"dataset_slug"`
 	AlertType *string `json:"alert_type,omitempty"`
 	AutoInvestigate *bool `json:"auto_investigate,omitempty"`
 	BaselineDetails *map[string]any `json:"baseline_details,omitempty"`
 	CreatedAt *string `json:"created_at,omitempty"`
-	DatasetSlug *string `json:"dataset_slug,omitempty"`
 	Description *string `json:"description,omitempty"`
 	Disabled *bool `json:"disabled,omitempty"`
 	EvaluationSchedule map[string]any `json:"evaluation_schedule"`
 	EvaluationScheduleType *string `json:"evaluation_schedule_type,omitempty"`
 	Frequency *int `json:"frequency,omitempty"`
+	Id *string `json:"id,omitempty"`
 	Name *string `json:"name,omitempty"`
 	Query *map[string]any `json:"query,omitempty"`
 	QueryId *string `json:"query_id,omitempty"`
@@ -813,7 +858,7 @@ type TriggerCreateData struct {
 // TriggerUpdateData is the typed request payload for Trigger.UpdateTyped.
 type TriggerUpdateData struct {
 	DatasetSlug string `json:"dataset_slug"`
-	TriggerId string `json:"trigger_id"`
+	Id string `json:"id"`
 	AlertType *string `json:"alert_type,omitempty"`
 	AutoInvestigate *bool `json:"auto_investigate,omitempty"`
 	BaselineDetails *map[string]any `json:"baseline_details,omitempty"`
@@ -823,7 +868,6 @@ type TriggerUpdateData struct {
 	EvaluationSchedule *map[string]any `json:"evaluation_schedule,omitempty"`
 	EvaluationScheduleType *string `json:"evaluation_schedule_type,omitempty"`
 	Frequency *int `json:"frequency,omitempty"`
-	Id *string `json:"id,omitempty"`
 	Name *string `json:"name,omitempty"`
 	Query *map[string]any `json:"query,omitempty"`
 	QueryId *string `json:"query_id,omitempty"`
@@ -837,7 +881,7 @@ type TriggerUpdateData struct {
 // TriggerRemoveMatch is the typed request payload for Trigger.RemoveTyped.
 type TriggerRemoveMatch struct {
 	DatasetSlug string `json:"dataset_slug"`
-	TriggerId string `json:"trigger_id"`
+	Id string `json:"id"`
 }
 
 // asMap turns a typed request/data struct into the map[string]any the

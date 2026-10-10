@@ -16,7 +16,7 @@ import type {
 
 import type {
   Marker,
-  MarkerLoadMatch,
+  MarkerListMatch,
   MarkerCreateData,
   MarkerUpdateData,
   MarkerRemoveMatch,
@@ -38,7 +38,8 @@ class MarkerEntity extends HoneycombEntityBase<Marker> {
 
 
 
-  async load(this: any, reqmatch?: MarkerLoadMatch, ctrl?: Control): Promise<MarkerEntity> {
+
+  async list(this: any, reqmatch?: MarkerListMatch, ctrl?: Control): Promise<MarkerEntity[]> {
 
     const utility = this._utility
 
@@ -58,7 +59,7 @@ class MarkerEntity extends HoneycombEntityBase<Marker> {
     let fres: Promise<any> | undefined = undefined
 
     let ctx: Context = makeContext({
-      opname: 'load',
+      opname: 'list',
       ctrl,
       match: this._match,
       data: this._data,
@@ -124,15 +125,9 @@ class MarkerEntity extends HoneycombEntityBase<Marker> {
         if (null != ctx.result.resmatch) {
           this._match = ctx.result.resmatch
         }
-
-        if (null != ctx.result.resdata) {
-          this._data = ctx.result.resdata
-        }
       }
 
-      const out = done(ctx)
-
-      return (ctx.result && ctx.result.ok) ? this : out
+      return done(ctx)
     }
     catch (err: any) {
       // What a hook throws here must not escape the cleaning below.
@@ -152,12 +147,11 @@ class MarkerEntity extends HoneycombEntityBase<Marker> {
       }
       else {
         // Off-happy-path (throw disabled): typed as any so the method's
-        // Promise<MarkerEntity> return stays clean under strict null checks.
+        // Promise<MarkerEntity[]> return stays clean under strict null checks.
         return undefined as any
       }
     }
   }
-
 
 
 

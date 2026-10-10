@@ -10,8 +10,7 @@
         "panels": [],
         "preset_filters": [],
         "tags": [],
-        "type": "s62",
-        "view_id": "VIEW01"
+        "type": "s62"
       },
       "BOARD01": {
         "description": "sb4",
@@ -22,8 +21,7 @@
         "panels": [],
         "preset_filters": [],
         "tags": [],
-        "type": "sbc",
-        "view_id": "VIEW01"
+        "type": "sbc"
       },
       "BOARD02": {
         "description": "s10e",
@@ -34,8 +32,7 @@
         "panels": [],
         "preset_filters": [],
         "tags": [],
-        "type": "s116",
-        "view_id": "VIEW01"
+        "type": "s116"
       }
     }
   },
@@ -65,11 +62,6 @@
       "source": "openapi3"
     },
     "GET /1/boards/{boardId}": {
-      "provenance": "operation-contract",
-      "version": 2,
-      "source": "openapi3"
-    },
-    "DELETE /1/boards/{boardId}/views/{viewId}": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"

@@ -37,7 +37,7 @@ class TestQueryResultEntity:
         client = HoneycombSDK.test(
             None, {"feature": {"validate": {"active": True}}})
         with pytest.raises(Exception) as err:
-            client.QueryResult(None).load({"dataset_slug": 1, "query_result_id": "x"}, None)
+            client.QueryResult(None).load({"dataset_slug": 1, "id": "x"}, None)
         assert "validate_failed" == getattr(err.value, "code", None)
 
     def test_should_run_basic_flow(self):
@@ -46,19 +46,36 @@ class TestQueryResultEntity:
         # multiple ops; skipping any one skips the whole flow (steps depend
         # on each other).
         _live = setup.get("live", False)
-        for _op in []:
+        for _op in ["create", "load"]:
             _skip, _reason = runner.is_control_skipped("entityOp", "query_result." + _op, "live" if _live else "unit")
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
                 return
+        if setup["live"]:
+            for _live_key in ["dataset_slug01"]:
+                if setup.get("synthetic_only") or setup["idmap"].get(_live_key) is None:
+                    runner.live_miss(LIVE_STRICT, f"Live entity test blocked: needs {_live_key} via HONEYCOMB_TEST_QUERY_RESULT_ENTID")
         client = setup["client"]
 
-        # Bootstrap entity data from existing test data.
-        query_result_ref01_data_raw = vs.items(helpers.to_map(
-            vs.getpath(setup["data"], "existing.query_result")))
-        query_result_ref01_data = None
-        if len(query_result_ref01_data_raw) > 0:
-            query_result_ref01_data = helpers.to_map(query_result_ref01_data_raw[0][1])
+        # CREATE
+        query_result_ref01_ent = client.QueryResult(None)
+        query_result_ref01_data = helpers.to_map(vs.getprop(
+            vs.getpath(setup["data"], "new.query_result"), "query_result_ref01"))
+        query_result_ref01_data["dataset_slug"] = setup["idmap"]["dataset_slug01"]
+
+        query_result_ref01_data = helpers.to_map(runner.entity_data(query_result_ref01_ent.create(query_result_ref01_data, None)))
+        assert query_result_ref01_data is not None
+        assert query_result_ref01_data["id"] is not None
+
+        # LOAD
+        query_result_ref01_match_dt0 = {
+            "id": query_result_ref01_data["id"],
+        }
+        query_result_ref01_match_dt0["dataset_slug"] = setup["idmap"].get("dataset_slug") or setup["idmap"].get("dataset_slug01")
+        query_result_ref01_data_dt0_loaded = query_result_ref01_ent.load(query_result_ref01_match_dt0, None)
+        query_result_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(query_result_ref01_data_dt0_loaded))
+        assert query_result_ref01_data_dt0_load_result is not None
+        assert query_result_ref01_data_dt0_load_result["id"] == query_result_ref01_data["id"]
 
 
 
@@ -78,7 +95,7 @@ def _query_result_basic_setup(extra):
 
     # Generate idmap via transform.
     idmap = vs.transform(
-        ["query_result01", "query_result02", "query_result03"],
+        ["query_result01", "query_result02", "query_result03", "dataset_slug01"],
         {
             "`$PACK`": ["", {
                 "`$KEY`": "`$COPY`",

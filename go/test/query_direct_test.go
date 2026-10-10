@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 )
 
 // main.kit.test.live.strict is true (the default is true): a live
@@ -44,14 +44,14 @@ func TestQueryDirect(t *testing.T) {
 		query := map[string]any{}
 		if setup.live {
 			params["dataset_slug"] = setup.idmap["dataset_slug01"]
-			params["query_id"] = setup.idmap["query01"]
+			params["id"] = setup.idmap["query01"]
 		} else {
 			params["dataset_slug"] = "direct01"
-			params["query_id"] = "direct02"
+			params["id"] = "direct02"
 		}
 
 		result, err := client.Direct(map[string]any{
-			"path":   "1/queries/{dataset_slug}/{query_id}",
+			"path":   "1/queries/{dataset_slug}/{id}",
 			"method": "GET",
 			"params": params,
 			"query":  query,

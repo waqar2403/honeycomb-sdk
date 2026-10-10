@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
 )
 
 func TestNetsim(t *testing.T) {

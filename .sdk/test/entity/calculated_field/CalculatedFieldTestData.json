@@ -8,8 +8,7 @@
         "expression": "s3f",
         "id": "CALCULATED_FIELD00",
         "updated_at": "s41",
-        "dataset_slug": "DATASET_SLUG01",
-        "derived_column_id": "DERIVED_COLUMN01"
+        "dataset_slug": "DATASET_SLUG01"
       },
       "CALCULATED_FIELD01": {
         "alias": "s78",
@@ -18,8 +17,7 @@
         "expression": "s7b",
         "id": "CALCULATED_FIELD01",
         "updated_at": "s7d",
-        "dataset_slug": "DATASET_SLUG01",
-        "derived_column_id": "DERIVED_COLUMN01"
+        "dataset_slug": "DATASET_SLUG01"
       },
       "CALCULATED_FIELD02": {
         "alias": "sb4",
@@ -28,8 +26,7 @@
         "expression": "sb7",
         "id": "CALCULATED_FIELD02",
         "updated_at": "sb9",
-        "dataset_slug": "DATASET_SLUG01",
-        "derived_column_id": "DERIVED_COLUMN01"
+        "dataset_slug": "DATASET_SLUG01"
       }
     }
   },
@@ -50,12 +47,12 @@
       "version": 2,
       "source": "openapi3"
     },
-    "GET /1/derived_columns/{datasetSlug}/{derivedColumnId}": {
+    "GET /1/derived_columns/{datasetSlug}": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"
     },
-    "GET /1/derived_columns/{datasetSlug}": {
+    "GET /1/derived_columns/{datasetSlug}/{derivedColumnId}": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"

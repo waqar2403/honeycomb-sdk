@@ -137,12 +137,12 @@ failure message (e.g. unknown entity, or an API error).
 ### Entities
 
 Each tool takes as its `entity` argument one of the entities that has its
-operation, of the 27 the SDK has:
+operation, of the 28 the SDK has:
 
 | Tool | Entities |
 |------|----------|
-| `honeycomb_list` | board, board_view, dataset, historical_anomaly, recipient, signal, slo_count, slo_hourly_count, trigger |
-| `honeycomb_load` | auth, board, board_view, burn_alert, calculated_field, column, dataset, dataset_definition, environment, key_management, map_dependency, marker, marker_setting, query, query_annotation, query_result, recipient, signal, slo, trigger |
+| `honeycomb_list` | board, board_view, burn_alert, calculated_field, column, dataset, historical_anomaly, marker, marker_setting, query_annotation, recipient, signal, slo, slo_count, slo_hourly_count, trigger |
+| `honeycomb_load` | auth, board, board_view, burn_alert, calculated_field, column, dataset, dataset_definition, environment, key_management, management_auth, map_dependency, query, query_annotation, query_result, recipient, signal, slo, trigger |
 
 JSON schemas are emitted by the SDK from each tool's argument struct's
 `json` / `jsonschema` tags — no schema is hand-written. Each tool's

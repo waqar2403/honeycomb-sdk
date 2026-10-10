@@ -2,6 +2,7 @@ package sdktest
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -9,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 
-	vs "github.com/voxgig-sdk/honeycomb-sdk/go/utility/struct"
+	vs "github.com/waqar2403/honeycomb-sdk/go/utility/struct"
 )
 
 // main.kit.test.live.strict is true (the default is true): a live
@@ -38,7 +39,7 @@ func TestMarkerEntity(t *testing.T) {
 		client := sdk.TestSDK(nil, map[string]any{
 			"feature": map[string]any{"validate": map[string]any{"active": true}},
 		})
-		_, err := client.Marker(nil).Load(map[string]any{"id": 1}, nil)
+		_, err := client.Marker(nil).List(map[string]any{"dataset_slug": 1}, nil)
 		if sdkerr, ok := err.(*core.HoneycombError); !ok || "validate_failed" != sdkerr.Code {
 			t.Fatalf("expected validate_failed, got %v", err)
 		}
@@ -53,7 +54,7 @@ func TestMarkerEntity(t *testing.T) {
 		if setup.live {
 			_mode = "live"
 		}
-		for _, _op := range []string{"load"} {
+		for _, _op := range []string{"create", "list", "update", "remove"} {
 			if _shouldSkip, _reason := isControlSkipped("entityOp", "marker." + _op, _mode); _shouldSkip {
 				if _reason == "" {
 					_reason = "skipped via sdk-test-control.json"
@@ -63,36 +64,108 @@ func TestMarkerEntity(t *testing.T) {
 			}
 		}
 		if setup.live {
-			liveMiss(t, markerEntityLiveStrict, "Live entity test blocked: %s", "the flow loads a marker record it has no list to find")
+			for _, _liveKey := range []string{"dataset_slug01"} {
+				if setup.syntheticOnly || setup.idmap[_liveKey] == nil {
+					liveMiss(t, markerEntityLiveStrict, "Live entity test blocked: needs %s via HONEYCOMB_TEST_MARKER_ENTID", _liveKey)
+				}
+			}
 		}
 		client := setup.client
 		_ = client
 
-		// Bootstrap entity data from existing test data (no create step in flow).
-		markerRef01DataRaw := vs.Items(core.ToMapAny(vs.GetPath(setup.data, "existing.marker")))
-		var markerRef01Data map[string]any
-		if len(markerRef01DataRaw) > 0 {
-			markerRef01Data = core.ToMapAny(markerRef01DataRaw[0][1])
-		}
-		// Discard guards against Go's unused-var check when the flow's steps
-		// happen not to consume the bootstrap data (e.g. list-only flows).
-		_ = markerRef01Data
-
-		// LOAD
+		// CREATE
 		markerRef01Ent := client.Marker(nil)
-		markerRef01MatchDt0 := map[string]any{
+		markerRef01Data := core.ToMapAny(vs.GetProp(
+			vs.GetPath(setup.data, []any{"new", "marker"}), "marker_ref01"))
+		markerRef01Data["dataset_slug"] = setup.idmap["dataset_slug01"]
+
+		markerRef01DataResult, err := markerRef01Ent.Create(markerRef01Data, nil)
+		if err != nil {
+			t.Fatalf("create failed: %v", err)
+		}
+		markerRef01Data = core.ToMapAny(entityData(markerRef01DataResult))
+		if markerRef01Data == nil {
+			t.Fatal("expected create result to be a map")
+		}
+		if markerRef01Data["id"] == nil {
+			t.Fatal("expected created entity to have an id")
+		}
+
+		// LIST
+		markerRef01Match := map[string]any{
+			"dataset_slug": setup.idmap["dataset_slug01"],
+		}
+
+		markerRef01ListResult, err := markerRef01Ent.List(markerRef01Match, nil)
+		if err != nil {
+			t.Fatalf("list failed: %v", err)
+		}
+		markerRef01List, markerRef01ListOk := markerRef01ListResult.([]any)
+		if !markerRef01ListOk {
+			t.Fatalf("expected list result to be an array, got %T", markerRef01ListResult)
+		}
+
+		foundItem := vs.Select(entityListToData(markerRef01List), map[string]any{"id": markerRef01Data["id"]})
+		if vs.IsEmpty(foundItem) {
+			t.Fatal("expected to find created entity in list")
+		}
+
+		// UPDATE
+		markerRef01DataUp0Up := map[string]any{
+			"id": markerRef01Data["id"],
+			"dataset_slug": setup.idmap["dataset_slug"],
+		}
+
+		markerRef01MarkdefUp0Name := "message"
+		markerRef01MarkdefUp0Value := fmt.Sprintf("Mark01-marker_ref01_%d", setup.now)
+		markerRef01DataUp0Up[markerRef01MarkdefUp0Name] = markerRef01MarkdefUp0Value
+
+		markerRef01ResdataUp0Result, err := markerRef01Ent.Update(markerRef01DataUp0Up, nil)
+		if err != nil {
+			t.Fatalf("update failed: %v", err)
+		}
+		markerRef01ResdataUp0 := core.ToMapAny(entityData(markerRef01ResdataUp0Result))
+		if markerRef01ResdataUp0 == nil {
+			t.Fatal("expected update result to be a map")
+		}
+		if markerRef01ResdataUp0["id"] != markerRef01DataUp0Up["id"] {
+			t.Fatal("expected update result id to match")
+		}
+		if markerRef01ResdataUp0[markerRef01MarkdefUp0Name] != markerRef01MarkdefUp0Value {
+			t.Fatalf("expected %s to be updated, got %v", markerRef01MarkdefUp0Name, markerRef01ResdataUp0[markerRef01MarkdefUp0Name])
+		}
+
+		// REMOVE
+		markerRef01MatchRm0 := map[string]any{
 			"id": markerRef01Data["id"],
 		}
-		markerRef01DataDt0Loaded, err := markerRef01Ent.Load(markerRef01MatchDt0, nil)
+		if v := setup.idmap["dataset_slug"]; v != nil {
+			markerRef01MatchRm0["dataset_slug"] = v
+		} else {
+			markerRef01MatchRm0["dataset_slug"] = setup.idmap["dataset_slug01"]
+		}
+		_, err = markerRef01Ent.Remove(markerRef01MatchRm0, nil)
 		if err != nil {
-			t.Fatalf("load failed: %v", err)
+			t.Fatalf("remove failed: %v", err)
 		}
-		markerRef01DataDt0LoadResult := core.ToMapAny(entityData(markerRef01DataDt0Loaded))
-		if markerRef01DataDt0LoadResult == nil {
-			t.Fatal("expected load result to be a map")
+
+		// LIST
+		markerRef01MatchRt0 := map[string]any{
+			"dataset_slug": setup.idmap["dataset_slug01"],
 		}
-		if markerRef01DataDt0LoadResult["id"] != markerRef01Data["id"] {
-			t.Fatal("expected load result id to match")
+
+		markerRef01ListRt0Result, err := markerRef01Ent.List(markerRef01MatchRt0, nil)
+		if err != nil {
+			t.Fatalf("list failed: %v", err)
+		}
+		markerRef01ListRt0, markerRef01ListRt0Ok := markerRef01ListRt0Result.([]any)
+		if !markerRef01ListRt0Ok {
+			t.Fatalf("expected list result to be an array, got %T", markerRef01ListRt0Result)
+		}
+
+		notFoundItem := vs.Select(entityListToData(markerRef01ListRt0), map[string]any{"id": markerRef01Data["id"]})
+		if !vs.IsEmpty(notFoundItem) {
+			t.Fatal("expected removed entity to not be in list")
 		}
 
 	})
@@ -123,7 +196,7 @@ func markerBasicSetup(extra map[string]any) *entityTestSetup {
 
 	// Generate idmap via transform, matching TS pattern.
 	idmap, _ := vs.Transform(
-		[]any{"marker01", "marker02", "marker03"},
+		[]any{"marker01", "marker02", "marker03", "dataset_slug01"},
 		map[string]any{
 			"`$PACK`": []any{"", map[string]any{
 				"`$KEY`": "`$COPY`",
@@ -147,6 +220,10 @@ func markerBasicSetup(extra map[string]any) *entityTestSetup {
 	idmapResolved := core.ToMapAny(env["HONEYCOMB_TEST_MARKER_ENTID"])
 	if idmapResolved == nil {
 		idmapResolved = core.ToMapAny(idmap)
+	}
+	// Add dataset_slug alias for update test.
+	if idmapResolved["dataset_slug"] == nil {
+		idmapResolved["dataset_slug"] = idmapResolved["dataset_slug01"]
 	}
 
 	if env["HONEYCOMB_TEST_LIVE"] == "TRUE" {

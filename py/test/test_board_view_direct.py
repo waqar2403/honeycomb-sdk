@@ -33,7 +33,7 @@ class TestBoardViewDirect:
             pytest.skip(_reason or "skipped via sdk-test-control.json")
             return
         if setup["live"]:
-            for _live_key in ["board_view01"]:
+            for _live_key in ["board01"]:
                 if setup["idmap"].get(_live_key) is None:
                     runner.live_miss(LIVE_STRICT, f"Live test blocked: needs {_live_key} via HONEYCOMB_TEST_BOARD_VIEW_ENTID")
 
@@ -41,12 +41,12 @@ class TestBoardViewDirect:
 
         params = {}
         if setup["live"]:
-            params["id"] = setup["idmap"].get("board_view01")
+            params["board_id"] = setup["idmap"].get("board01")
         else:
-            params["id"] = "direct01"
+            params["board_id"] = "direct01"
 
         result = client.direct({
-            "path": "1/boards/{id}/views",
+            "path": "1/boards/{board_id}/views",
             "method": "GET",
             "params": params,
         })
@@ -69,7 +69,7 @@ class TestBoardViewDirect:
             pytest.skip(_reason or "skipped via sdk-test-control.json")
             return
         if setup["live"]:
-            for _live_key in ["board_view01", "board01"]:
+            for _live_key in ["board01"]:
                 if setup["idmap"].get(_live_key) is None:
                     runner.live_miss(LIVE_STRICT, f"Live test blocked: needs {_live_key} via HONEYCOMB_TEST_BOARD_VIEW_ENTID")
 
@@ -79,9 +79,9 @@ class TestBoardViewDirect:
         query = {}
         if setup["live"]:
             list_result = client.direct({
-                "path": "1/boards/{id}/views",
+                "path": "1/boards/{board_id}/views",
                 "method": "GET",
-                "params": {"id": setup["idmap"].get("board_view01")},
+                "params": {"board_id": setup["idmap"].get("board01")},
             })
             if not _live_ok(list_result):
                 runner.live_miss(LIVE_STRICT, "Live list discovery failed: " + runner.live_describe(list_result))

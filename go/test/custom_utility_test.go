@@ -3,7 +3,7 @@ package sdktest
 import (
 	"testing"
 
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
 )
 
 func TestCustomUtility(t *testing.T) {

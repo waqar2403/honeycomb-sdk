@@ -1,22 +1,21 @@
 {
-  "name": "@voxgig-sdk/honeycomb-sdk",
+  "name": "@waqar2403/honeycomb-sdk",
   "version": "0.0.1",
   "description": "Unofficial generated TypeScript SDK for the Honeycomb public API. Not affiliated with or endorsed by the upstream API provider.",
   "keywords": [
-    "voxgig",
     "sdk",
     "generated-sdk",
     "openapi",
     "api-client",
     "honeycomb"
   ],
-  "homepage": "https://github.com/voxgig-sdk/honeycomb-sdk#readme",
+  "homepage": "https://github.com/waqar2403/honeycomb-sdk#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/voxgig-sdk/honeycomb-sdk.git"
+    "url": "git+https://github.com/waqar2403/honeycomb-sdk.git"
   },
   "bugs": {
-    "url": "https://github.com/voxgig-sdk/honeycomb-sdk/issues"
+    "url": "https://github.com/waqar2403/honeycomb-sdk/issues"
   },
   "main": "dist/HoneycombSDK.js",
   "type": "commonjs",
@@ -42,8 +41,8 @@
     "reset": "npm run clean && npm i && npm run build && npm test"
   },
   "author": {
-    "name": "Voxgig",
-    "url": "https://voxgig.com"
+    "name": "Muhammad Waqar",
+    "url": "https://github.com/waqar2403"
   },
   "license": "MIT",
   "engines": {

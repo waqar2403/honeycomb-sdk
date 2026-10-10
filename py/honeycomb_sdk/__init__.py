@@ -419,10 +419,16 @@ class HoneycombSDK:
         return KeyManagementEntity(self, data)
 
 
-    def Kinesi(self, data=None) -> "KinesiEntity":
-        """Entity factory: client.Kinesi().list() / client.Kinesi().load({"id": ...})."""
-        from honeycomb_sdk.entity.kinesi_entity import KinesiEntity
-        return KinesiEntity(self, data)
+    def KinesisEvent(self, data=None) -> "KinesisEventEntity":
+        """Entity factory: client.KinesisEvent().list() / client.KinesisEvent().load({"id": ...})."""
+        from honeycomb_sdk.entity.kinesis_event_entity import KinesisEventEntity
+        return KinesisEventEntity(self, data)
+
+
+    def ManagementAuth(self, data=None) -> "ManagementAuthEntity":
+        """Entity factory: client.ManagementAuth().list() / client.ManagementAuth().load({"id": ...})."""
+        from honeycomb_sdk.entity.management_auth_entity import ManagementAuthEntity
+        return ManagementAuthEntity(self, data)
 
 
     def MapDependency(self, data=None) -> "MapDependencyEntity":
@@ -543,7 +549,8 @@ if TYPE_CHECKING:
     from honeycomb_sdk.entity.event_entity import EventEntity
     from honeycomb_sdk.entity.historical_anomaly_entity import HistoricalAnomalyEntity
     from honeycomb_sdk.entity.key_management_entity import KeyManagementEntity
-    from honeycomb_sdk.entity.kinesi_entity import KinesiEntity
+    from honeycomb_sdk.entity.kinesis_event_entity import KinesisEventEntity
+    from honeycomb_sdk.entity.management_auth_entity import ManagementAuthEntity
     from honeycomb_sdk.entity.map_dependency_entity import MapDependencyEntity
     from honeycomb_sdk.entity.marker_entity import MarkerEntity
     from honeycomb_sdk.entity.marker_setting_entity import MarkerSettingEntity

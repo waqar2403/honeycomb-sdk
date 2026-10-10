@@ -1,0 +1,22 @@
+# BasicKinesisEventFlow
+
+main: kit: flow: BasicKinesisEventFlow:
+{
+  entity: "kinesis_event",
+  kind: "basic",
+  name: "BasicKinesisEventFlow",
+  step: [
+    {
+      i: {
+        ref: "kinesis_event_ref01"
+      }
+
+      m: {
+        dataset_slug: "dataset_slug01"
+      }
+
+      o: "create"
+    }
+  ],
+  "key$": "BasicKinesisEventFlow"
+}

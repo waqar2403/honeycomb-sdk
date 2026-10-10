@@ -37,7 +37,7 @@ class TestBurnAlertEntity:
         client = HoneycombSDK.test(
             None, {"feature": {"validate": {"active": True}}})
         with pytest.raises(Exception) as err:
-            client.BurnAlert(None).load({"id": 1, "slo_id": "x"}, None)
+            client.BurnAlert(None).list({"dataset_slug": 1, "slo_id": "x"}, None)
         assert "validate_failed" == getattr(err.value, "code", None)
 
     def test_should_run_basic_flow(self):
@@ -46,31 +46,84 @@ class TestBurnAlertEntity:
         # multiple ops; skipping any one skips the whole flow (steps depend
         # on each other).
         _live = setup.get("live", False)
-        for _op in ["load"]:
+        for _op in ["create", "list", "update", "load", "remove"]:
             _skip, _reason = runner.is_control_skipped("entityOp", "burn_alert." + _op, "live" if _live else "unit")
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
                 return
         if setup["live"]:
-            runner.live_miss(LIVE_STRICT, "Live entity test blocked: " + "the flow loads a burn_alert record it has no list to find")
+            for _live_key in ["dataset_slug01"]:
+                if setup.get("synthetic_only") or setup["idmap"].get(_live_key) is None:
+                    runner.live_miss(LIVE_STRICT, f"Live entity test blocked: needs {_live_key} via HONEYCOMB_TEST_BURN_ALERT_ENTID")
         client = setup["client"]
 
-        # Bootstrap entity data from existing test data.
-        burn_alert_ref01_data_raw = vs.items(helpers.to_map(
-            vs.getpath(setup["data"], "existing.burn_alert")))
-        burn_alert_ref01_data = None
-        if len(burn_alert_ref01_data_raw) > 0:
-            burn_alert_ref01_data = helpers.to_map(burn_alert_ref01_data_raw[0][1])
+        # CREATE
+        burn_alert_ref01_ent = client.BurnAlert(None)
+        burn_alert_ref01_data = helpers.to_map(vs.getprop(
+            vs.getpath(setup["data"], "new.burn_alert"), "burn_alert_ref01"))
+        burn_alert_ref01_data["dataset_slug"] = setup["idmap"]["dataset_slug01"]
+
+        burn_alert_ref01_data = helpers.to_map(runner.entity_data(burn_alert_ref01_ent.create(burn_alert_ref01_data, None)))
+        assert burn_alert_ref01_data is not None
+        assert burn_alert_ref01_data["id"] is not None
+
+        # LIST
+        burn_alert_ref01_match = {
+            "dataset_slug": setup["idmap"]["dataset_slug01"],
+        }
+
+        burn_alert_ref01_list_result = burn_alert_ref01_ent.list(burn_alert_ref01_match, None)
+        assert isinstance(burn_alert_ref01_list_result, list)
+
+        found_item = vs.select(
+            runner.entity_list_to_data(burn_alert_ref01_list_result),
+            {"id": burn_alert_ref01_data["id"]})
+        assert not vs.isempty(found_item)
+
+        # UPDATE
+        burn_alert_ref01_data_up0_up = {
+            "id": burn_alert_ref01_data["id"],
+            "dataset_slug": setup["idmap"]["dataset_slug"],
+        }
+
+        burn_alert_ref01_markdef_up0_name = "alert_type"
+        burn_alert_ref01_markdef_up0_value = "Mark01-burn_alert_ref01_" + str(setup["now"])
+        burn_alert_ref01_data_up0_up[burn_alert_ref01_markdef_up0_name] = burn_alert_ref01_markdef_up0_value
+
+        burn_alert_ref01_resdata_up0 = helpers.to_map(runner.entity_data(burn_alert_ref01_ent.update(burn_alert_ref01_data_up0_up, None)))
+        assert burn_alert_ref01_resdata_up0 is not None
+        assert burn_alert_ref01_resdata_up0["id"] == burn_alert_ref01_data_up0_up["id"]
+        assert burn_alert_ref01_resdata_up0[burn_alert_ref01_markdef_up0_name] == burn_alert_ref01_markdef_up0_value
 
         # LOAD
-        burn_alert_ref01_ent = client.BurnAlert(None)
         burn_alert_ref01_match_dt0 = {
             "id": burn_alert_ref01_data["id"],
         }
+        burn_alert_ref01_match_dt0["dataset_slug"] = setup["idmap"].get("dataset_slug") or setup["idmap"].get("dataset_slug01")
         burn_alert_ref01_data_dt0_loaded = burn_alert_ref01_ent.load(burn_alert_ref01_match_dt0, None)
         burn_alert_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(burn_alert_ref01_data_dt0_loaded))
         assert burn_alert_ref01_data_dt0_load_result is not None
         assert burn_alert_ref01_data_dt0_load_result["id"] == burn_alert_ref01_data["id"]
+
+        # REMOVE
+        burn_alert_ref01_match_rm0 = {
+            "id": burn_alert_ref01_data["id"],
+        }
+        burn_alert_ref01_match_rm0["dataset_slug"] = setup["idmap"].get("dataset_slug") or setup["idmap"].get("dataset_slug01")
+        burn_alert_ref01_ent.remove(burn_alert_ref01_match_rm0, None)
+
+        # LIST
+        burn_alert_ref01_match_rt0 = {
+            "dataset_slug": setup["idmap"]["dataset_slug01"],
+        }
+
+        burn_alert_ref01_list_rt0_result = burn_alert_ref01_ent.list(burn_alert_ref01_match_rt0, None)
+        assert isinstance(burn_alert_ref01_list_rt0_result, list)
+
+        not_found_item = vs.select(
+            runner.entity_list_to_data(burn_alert_ref01_list_rt0_result),
+            {"id": burn_alert_ref01_data["id"]})
+        assert vs.isempty(not_found_item)
 
 
 
@@ -90,7 +143,7 @@ def _burn_alert_basic_setup(extra):
 
     # Generate idmap via transform.
     idmap = vs.transform(
-        ["burn_alert01", "burn_alert02", "burn_alert03"],
+        ["burn_alert01", "burn_alert02", "burn_alert03", "dataset_slug01"],
         {
             "`$PACK`": ["", {
                 "`$KEY`": "`$COPY`",
@@ -116,6 +169,8 @@ def _burn_alert_basic_setup(extra):
         env.get("HONEYCOMB_TEST_BURN_ALERT_ENTID"))
     if idmap_resolved is None:
         idmap_resolved = helpers.to_map(idmap)
+    if idmap_resolved.get("dataset_slug") is None:
+        idmap_resolved["dataset_slug"] = idmap_resolved.get("dataset_slug01")
 
     if env.get("HONEYCOMB_TEST_LIVE") == "TRUE":
         merged_opts = vs.merge([

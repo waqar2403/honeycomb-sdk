@@ -8,7 +8,7 @@
 
 This guide introduces the API, the client libraries, and the companion tools in this repository. Start with the API capabilities, choose a client for your application, and use the linked reference when you need exact request and response details.
 
-The selected API surface contains 27 entities and 90 HTTP routes. There are 3 SDK targets and 2 companion tools.
+The selected API surface contains 28 entities and 90 HTTP routes. There are 3 SDK targets and 2 companion tools.
 
 An entity groups related API operations. An operation can have several routes with different inputs or authentication requirements. The SDK exposes the entity and its operations using the conventions of the selected language.
 
@@ -41,9 +41,9 @@ Key fields to recognise:
 
 ### BoardView
 
-Results: Created; Success.
+Results: Created; Success; Success - no Content.
 
-SDK operations: `create`, `list`, `load`, `update`.
+SDK operations: `create`, `list`, `load`, `remove`, `update`.
 
 Key fields to recognise:
 
@@ -69,7 +69,7 @@ Key fields to recognise:
 
 Results: Created; Success; Success - no content.
 
-SDK operations: `create`, `load`, `remove`, `update`.
+SDK operations: `create`, `list`, `load`, `remove`, `update`.
 
 Key fields to recognise:
 
@@ -80,7 +80,7 @@ Key fields to recognise:
 
 Results: Success; When listing all columns, an array of CalculatedField objects will be returned. When using `key_name`, will return a single CalculatedField object if found.; Success - no content.
 
-SDK operations: `create`, `load`, `remove`, `update`.
+SDK operations: `create`, `list`, `load`, `remove`, `update`.
 
 Key fields to recognise:
 
@@ -94,7 +94,7 @@ Key fields to recognise:
 
 Results: Success; When listing all columns, an array of Column objects will be returned. When using `key_name`, will return a single Column object if found.; Success - no content.
 
-SDK operations: `create`, `load`, `remove`, `update`.
+SDK operations: `create`, `list`, `load`, `remove`, `update`.
 
 Key fields to recognise:
 
@@ -173,11 +173,17 @@ Key fields to recognise:
 
 - `id`: The unique identifier of the API Key
 
-### Kinesi
+### KinesisEvent
 
 Results: Events queued for processing.
 
 SDK operations: `create`.
+
+### ManagementAuth
+
+Results: Success.
+
+SDK operations: `load`.
 
 ### MapDependency
 
@@ -197,7 +203,7 @@ Key fields to recognise:
 
 Results: Created; Success; Success The deleted Marker will be in the body of the response.; Updated.
 
-SDK operations: `create`, `load`, `remove`, `update`.
+SDK operations: `create`, `list`, `remove`, `update`.
 
 Key fields to recognise:
 
@@ -211,7 +217,7 @@ Key fields to recognise:
 
 Results: Success.
 
-SDK operations: `create`, `load`, `remove`, `update`.
+SDK operations: `create`, `list`, `remove`, `update`.
 
 Key fields to recognise:
 
@@ -239,7 +245,7 @@ Key fields to recognise:
 
 Results: Created; Success; Success - no content.
 
-SDK operations: `create`, `load`, `remove`, `update`.
+SDK operations: `create`, `list`, `load`, `remove`, `update`.
 
 Key fields to recognise:
 
@@ -291,7 +297,7 @@ Key fields to recognise:
 
 Results: Success - SLO created; Success; Success - no content.
 
-SDK operations: `create`, `load`, `remove`, `update`.
+SDK operations: `create`, `list`, `load`, `remove`, `update`.
 
 Key fields to recognise:
 
@@ -343,7 +349,7 @@ Key fields to recognise:
 
 ### Trigger
 
-Results: Success - trigger created; Success; OK; Success - no content.
+Results: Success - trigger created; OK; Success; Success - no content.
 
 SDK operations: `create`, `list`, `load`, `remove`, `update`.
 
@@ -362,31 +368,30 @@ Use this map to locate a capability. Consult the entity reference before supplyi
 | Entity | SDK operation | HTTP route | Authentication |
 | --- | --- | --- | --- |
 | Auth | `load` | `GET /1/auth` | Required |
-| Auth | `load` | `GET /2/auth` | Required |
 | Board | `create` | `POST /1/boards` | Required |
 | Board | `list` | `GET /1/boards` | Required |
 | Board | `load` | `GET /1/boards/{boardId}` | Required |
-| Board | `remove` | `DELETE /1/boards/{boardId}/views/{viewId}` | Required |
 | Board | `remove` | `DELETE /1/boards/{boardId}` | Required |
 | Board | `update` | `PUT /1/boards/{boardId}` | Required |
 | BoardView | `create` | `POST /1/boards/{boardId}/views` | Required |
 | BoardView | `list` | `GET /1/boards/{boardId}/views` | Required |
 | BoardView | `load` | `GET /1/boards/{boardId}/views/{viewId}` | Required |
+| BoardView | `remove` | `DELETE /1/boards/{boardId}/views/{viewId}` | Required |
 | BoardView | `update` | `PUT /1/boards/{boardId}/views/{viewId}` | Required |
 | BulkSignalRecipientAssignment | `create` | `POST /1/signals/recipient_assignments` | Required |
 | BurnAlert | `create` | `POST /1/burn_alerts/{datasetSlug}` | Required |
+| BurnAlert | `list` | `GET /1/burn_alerts/{datasetSlug}` | Required |
 | BurnAlert | `load` | `GET /1/burn_alerts/{datasetSlug}/{burnAlertId}` | Required |
-| BurnAlert | `load` | `GET /1/burn_alerts/{datasetSlug}` | Required |
 | BurnAlert | `remove` | `DELETE /1/burn_alerts/{datasetSlug}/{burnAlertId}` | Required |
 | BurnAlert | `update` | `PUT /1/burn_alerts/{datasetSlug}/{burnAlertId}` | Required |
 | CalculatedField | `create` | `POST /1/derived_columns/{datasetSlug}` | Required |
+| CalculatedField | `list` | `GET /1/derived_columns/{datasetSlug}` | Required |
 | CalculatedField | `load` | `GET /1/derived_columns/{datasetSlug}/{derivedColumnId}` | Required |
-| CalculatedField | `load` | `GET /1/derived_columns/{datasetSlug}` | Required |
 | CalculatedField | `remove` | `DELETE /1/derived_columns/{datasetSlug}/{derivedColumnId}` | Required |
 | CalculatedField | `update` | `PUT /1/derived_columns/{datasetSlug}/{derivedColumnId}` | Required |
 | Column | `create` | `POST /1/columns/{datasetSlug}` | Required |
+| Column | `list` | `GET /1/columns/{datasetSlug}` | Required |
 | Column | `load` | `GET /1/columns/{datasetSlug}/{columnId}` | Required |
-| Column | `load` | `GET /1/columns/{datasetSlug}` | Required |
 | Column | `remove` | `DELETE /1/columns/{datasetSlug}/{columnId}` | Required |
 | Column | `update` | `PUT /1/columns/{datasetSlug}/{columnId}` | Required |
 | Dataset | `create` | `POST /1/datasets` | Required |
@@ -409,22 +414,23 @@ Use this map to locate a capability. Consult the entity reference before supplyi
 | KeyManagement | `load` | `GET /2/teams/{teamSlug}/api-keys` | Required |
 | KeyManagement | `remove` | `DELETE /2/teams/{teamSlug}/api-keys/{ID}` | Required |
 | KeyManagement | `update` | `PATCH /2/teams/{teamSlug}/api-keys/{ID}` | Required |
-| Kinesi | `create` | `POST /1/kinesis_events/{datasetSlug}` | Required |
+| KinesisEvent | `create` | `POST /1/kinesis_events/{datasetSlug}` | Required |
+| ManagementAuth | `load` | `GET /2/auth` | Required |
 | MapDependency | `create` | `POST /1/maps/dependencies/requests` | Required |
 | MapDependency | `load` | `GET /1/maps/dependencies/requests/{requestId}` | Required |
 | Marker | `create` | `POST /1/markers/{datasetSlug}` | Required |
-| Marker | `load` | `GET /1/markers/{datasetSlug}` | Required |
+| Marker | `list` | `GET /1/markers/{datasetSlug}` | Required |
 | Marker | `remove` | `DELETE /1/markers/{datasetSlug}/{markerId}` | Required |
 | Marker | `update` | `PUT /1/markers/{datasetSlug}/{markerId}` | Required |
 | MarkerSetting | `create` | `POST /1/marker_settings/{datasetSlug}` | Required |
-| MarkerSetting | `load` | `GET /1/marker_settings/{datasetSlug}` | Required |
+| MarkerSetting | `list` | `GET /1/marker_settings/{datasetSlug}` | Required |
 | MarkerSetting | `remove` | `DELETE /1/marker_settings/{datasetSlug}/{markerSettingId}` | Required |
 | MarkerSetting | `update` | `PUT /1/marker_settings/{datasetSlug}/{markerSettingId}` | Required |
 | Query | `create` | `POST /1/queries/{datasetSlug}` | Required |
 | Query | `load` | `GET /1/queries/{datasetSlug}/{queryId}` | Required |
 | QueryAnnotation | `create` | `POST /1/query_annotations/{datasetSlug}` | Required |
+| QueryAnnotation | `list` | `GET /1/query_annotations/{datasetSlug}` | Required |
 | QueryAnnotation | `load` | `GET /1/query_annotations/{datasetSlug}/{queryAnnotationId}` | Required |
-| QueryAnnotation | `load` | `GET /1/query_annotations/{datasetSlug}` | Required |
 | QueryAnnotation | `remove` | `DELETE /1/query_annotations/{datasetSlug}/{queryAnnotationId}` | Required |
 | QueryAnnotation | `update` | `PUT /1/query_annotations/{datasetSlug}/{queryAnnotationId}` | Required |
 | QueryResult | `create` | `POST /1/query_results/{datasetSlug}` | Required |
@@ -438,17 +444,17 @@ Use this map to locate a capability. Consult the entity reference before supplyi
 | Signal | `load` | `GET /1/signals/{signalId}` | Required |
 | Signal | `update` | `PUT /1/signals/{signalId}` | Required |
 | Slo | `create` | `POST /1/slos/{datasetSlug}` | Required |
+| Slo | `list` | `GET /1/slos/{datasetSlug}` | Required |
 | Slo | `load` | `GET /1/slos/{datasetSlug}/{sloId}` | Required |
-| Slo | `load` | `GET /1/slos/{datasetSlug}` | Required |
 | Slo | `remove` | `DELETE /1/slos/{datasetSlug}/{sloId}` | Required |
 | Slo | `update` | `PUT /1/slos/{datasetSlug}/{sloId}` | Required |
 | SloCount | `list` | `GET /1/slos/{datasetSlug}/{sloId}/counts` | Required |
 | SloHistory | `create` | `POST /1/reporting/slos/historical` | Required |
 | SloHourlyCount | `list` | `GET /1/slos/{datasetSlug}/{sloId}/counts/history` | Required |
 | Trigger | `create` | `POST /1/triggers/{datasetSlug}` | Required |
+| Trigger | `list` | `GET /1/triggers/{datasetSlug}` | Required |
 | Trigger | `list` | `GET /1/recipients/{recipientId}/triggers` | Required |
 | Trigger | `load` | `GET /1/triggers/{datasetSlug}/{triggerId}` | Required |
-| Trigger | `load` | `GET /1/triggers/{datasetSlug}` | Required |
 | Trigger | `remove` | `DELETE /1/triggers/{datasetSlug}/{triggerId}` | Required |
 | Trigger | `update` | `PUT /1/triggers/{datasetSlug}/{triggerId}` | Required |
 
@@ -537,8 +543,8 @@ Use the MCP server to expose supported API operations to an MCP client.
 
 Repository directory: `go-mcp/`. Not published. Build from the go-mcp directory.
 
-- `honeycomb_list`: List records for an entity. Supported entities: `board`, `board_view`, `dataset`, `historical_anomaly`, `recipient`, `signal`, `slo_count`, `slo_hourly_count`, `trigger`.
-- `honeycomb_load`: Load one record for an entity. Supported entities: `auth`, `board`, `board_view`, `burn_alert`, `calculated_field`, `column`, `dataset`, `dataset_definition`, `environment`, `key_management`, `map_dependency`, `marker`, `marker_setting`, `query`, `query_annotation`, `query_result`, `recipient`, `signal`, `slo`, `trigger`.
+- `honeycomb_list`: List records for an entity. Supported entities: `board`, `board_view`, `burn_alert`, `calculated_field`, `column`, `dataset`, `historical_anomaly`, `marker`, `marker_setting`, `query_annotation`, `recipient`, `signal`, `slo`, `slo_count`, `slo_hourly_count`, `trigger`.
+- `honeycomb_load`: Load one record for an entity. Supported entities: `auth`, `board`, `board_view`, `burn_alert`, `calculated_field`, `column`, `dataset`, `dataset_definition`, `environment`, `key_management`, `management_auth`, `map_dependency`, `query`, `query_annotation`, `query_result`, `recipient`, `signal`, `slo`, `trigger`.
 
 ## Operational features
 

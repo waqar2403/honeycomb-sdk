@@ -1,0 +1,27 @@
+{
+  "existing": {
+    "management_auth": {
+      "MANAGEMENT_AUTH00": {
+        "id": "MANAGEMENT_AUTH00"
+      },
+      "MANAGEMENT_AUTH01": {
+        "id": "MANAGEMENT_AUTH01"
+      },
+      "MANAGEMENT_AUTH02": {
+        "id": "MANAGEMENT_AUTH02"
+      }
+    }
+  },
+  "new": {
+    "management_auth": {
+      "management_auth_ref01": {}
+    }
+  },
+  "requests": {
+    "GET /2/auth": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

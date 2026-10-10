@@ -4,9 +4,9 @@ import (
 	"reflect"
 	"strings"
 
-	vs "github.com/voxgig-sdk/honeycomb-sdk/go/utility/struct"
+	vs "github.com/waqar2403/honeycomb-sdk/go/utility/struct"
 
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 )
 
 func prepareHeadersUtil(ctx *core.Context) map[string]any {

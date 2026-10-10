@@ -1,10 +1,10 @@
-package voxgighoneycombsdk
+package waqar2403honeycombsdk
 
 import (
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
-	"github.com/voxgig-sdk/honeycomb-sdk/go/entity"
-	"github.com/voxgig-sdk/honeycomb-sdk/go/feature"
-	_ "github.com/voxgig-sdk/honeycomb-sdk/go/utility"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
+	"github.com/waqar2403/honeycomb-sdk/go/entity"
+	"github.com/waqar2403/honeycomb-sdk/go/feature"
+	_ "github.com/waqar2403/honeycomb-sdk/go/utility"
 )
 
 // Type aliases preserve external API.
@@ -72,8 +72,11 @@ func init() {
 	core.NewKeyManagementEntityFunc = func(client *core.HoneycombSDK, entopts map[string]any) core.HoneycombEntity {
 		return entity.NewKeyManagementEntity(client, entopts)
 	}
-	core.NewKinesiEntityFunc = func(client *core.HoneycombSDK, entopts map[string]any) core.HoneycombEntity {
-		return entity.NewKinesiEntity(client, entopts)
+	core.NewKinesisEventEntityFunc = func(client *core.HoneycombSDK, entopts map[string]any) core.HoneycombEntity {
+		return entity.NewKinesisEventEntity(client, entopts)
+	}
+	core.NewManagementAuthEntityFunc = func(client *core.HoneycombSDK, entopts map[string]any) core.HoneycombEntity {
+		return entity.NewManagementAuthEntity(client, entopts)
 	}
 	core.NewMapDependencyEntityFunc = func(client *core.HoneycombSDK, entopts map[string]any) core.HoneycombEntity {
 		return entity.NewMapDependencyEntity(client, entopts)

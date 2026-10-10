@@ -1,8 +1,8 @@
-module github.com/voxgig-sdk/honeycomb-sdk/go-mcp
+module github.com/waqar2403/honeycomb-sdk/go-mcp
 
 go 1.25.0
 
-require github.com/voxgig-sdk/honeycomb-sdk/go v0.0.0
+require github.com/waqar2403/honeycomb-sdk/go v0.0.0
 require github.com/modelcontextprotocol/go-sdk v1.6.0
 
 require github.com/google/jsonschema-go v0.4.3
@@ -15,4 +15,4 @@ require (
 	golang.org/x/sys v0.41.0 // indirect
 )
 
-replace github.com/voxgig-sdk/honeycomb-sdk/go => ../go
+replace github.com/waqar2403/honeycomb-sdk/go => ../go

@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 
-	vs "github.com/voxgig-sdk/honeycomb-sdk/go/utility/struct"
+	vs "github.com/waqar2403/honeycomb-sdk/go/utility/struct"
 )
 
 type ColumnEntity struct {
@@ -332,9 +332,37 @@ func (e *ColumnEntity) LoadTyped(reqmatch ColumnLoadMatch, ctrl map[string]any) 
 
 
 
-func (e *ColumnEntity) List(_ map[string]any, _ map[string]any) (any, error) {
-	return core.UnsupportedOp("list", e.name)
+
+func (e *ColumnEntity) List(reqmatch map[string]any, ctrl map[string]any) (any, error) {
+	utility := e.utility
+	ctx := utility.MakeContext(map[string]any{
+		"opname":   "list",
+		"ctrl":     ctrl,
+		"match":    e.match,
+		"data":     e.data,
+		"reqmatch": reqmatch,
+	}, e.entctx)
+
+	return e.runOp(ctx, func() {
+		if ctx.Result != nil {
+			if ctx.Result.Resmatch != nil {
+				e.match = ctx.Result.Resmatch
+			}
+		}
+	})
 }
+
+// ListTyped is the statically-typed variant of List: it takes an
+// ColumnListMatch and returns []Column. It delegates to the untyped
+// List (identical runtime) and converts at the typed boundary.
+func (e *ColumnEntity) ListTyped(reqmatch ColumnListMatch, ctrl map[string]any) ([]Column, error) {
+	res, err := e.List(asMap(reqmatch), ctrl)
+	if err != nil {
+		return nil, err
+	}
+	return typedSliceFrom[Column](res), nil
+}
+
 
 
 

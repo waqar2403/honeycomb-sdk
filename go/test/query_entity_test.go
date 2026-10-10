@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 
-	vs "github.com/voxgig-sdk/honeycomb-sdk/go/utility/struct"
+	vs "github.com/waqar2403/honeycomb-sdk/go/utility/struct"
 )
 
 // main.kit.test.live.strict is true (the default is true): a live
@@ -38,7 +38,7 @@ func TestQueryEntity(t *testing.T) {
 		client := sdk.TestSDK(nil, map[string]any{
 			"feature": map[string]any{"validate": map[string]any{"active": true}},
 		})
-		_, err := client.Query(nil).Load(map[string]any{"dataset_slug": 1, "query_id": "x"}, nil)
+		_, err := client.Query(nil).Load(map[string]any{"dataset_slug": 1, "id": "x"}, nil)
 		if sdkerr, ok := err.(*core.HoneycombError); !ok || "validate_failed" != sdkerr.Code {
 			t.Fatalf("expected validate_failed, got %v", err)
 		}
@@ -53,7 +53,7 @@ func TestQueryEntity(t *testing.T) {
 		if setup.live {
 			_mode = "live"
 		}
-		for _, _op := range []string{} {
+		for _, _op := range []string{"create", "load"} {
 			if _shouldSkip, _reason := isControlSkipped("entityOp", "query." + _op, _mode); _shouldSkip {
 				if _reason == "" {
 					_reason = "skipped via sdk-test-control.json"
@@ -62,15 +62,54 @@ func TestQueryEntity(t *testing.T) {
 				return
 			}
 		}
-		// Bootstrap entity data from existing test data (no create step in flow).
-		queryRef01DataRaw := vs.Items(core.ToMapAny(vs.GetPath(setup.data, "existing.query")))
-		var queryRef01Data map[string]any
-		if len(queryRef01DataRaw) > 0 {
-			queryRef01Data = core.ToMapAny(queryRef01DataRaw[0][1])
+		if setup.live {
+			for _, _liveKey := range []string{"dataset_slug01"} {
+				if setup.syntheticOnly || setup.idmap[_liveKey] == nil {
+					liveMiss(t, queryEntityLiveStrict, "Live entity test blocked: needs %s via HONEYCOMB_TEST_QUERY_ENTID", _liveKey)
+				}
+			}
 		}
-		// Discard guards against Go's unused-var check when the flow's steps
-		// happen not to consume the bootstrap data (e.g. list-only flows).
-		_ = queryRef01Data
+		client := setup.client
+		_ = client
+
+		// CREATE
+		queryRef01Ent := client.Query(nil)
+		queryRef01Data := core.ToMapAny(vs.GetProp(
+			vs.GetPath(setup.data, []any{"new", "query"}), "query_ref01"))
+		queryRef01Data["dataset_slug"] = setup.idmap["dataset_slug01"]
+
+		queryRef01DataResult, err := queryRef01Ent.Create(queryRef01Data, nil)
+		if err != nil {
+			t.Fatalf("create failed: %v", err)
+		}
+		queryRef01Data = core.ToMapAny(entityData(queryRef01DataResult))
+		if queryRef01Data == nil {
+			t.Fatal("expected create result to be a map")
+		}
+		if queryRef01Data["id"] == nil {
+			t.Fatal("expected created entity to have an id")
+		}
+
+		// LOAD
+		queryRef01MatchDt0 := map[string]any{
+			"id": queryRef01Data["id"],
+		}
+		if v := setup.idmap["dataset_slug"]; v != nil {
+			queryRef01MatchDt0["dataset_slug"] = v
+		} else {
+			queryRef01MatchDt0["dataset_slug"] = setup.idmap["dataset_slug01"]
+		}
+		queryRef01DataDt0Loaded, err := queryRef01Ent.Load(queryRef01MatchDt0, nil)
+		if err != nil {
+			t.Fatalf("load failed: %v", err)
+		}
+		queryRef01DataDt0LoadResult := core.ToMapAny(entityData(queryRef01DataDt0Loaded))
+		if queryRef01DataDt0LoadResult == nil {
+			t.Fatal("expected load result to be a map")
+		}
+		if queryRef01DataDt0LoadResult["id"] != queryRef01Data["id"] {
+			t.Fatal("expected load result id to match")
+		}
 
 	})
 }
@@ -100,7 +139,7 @@ func queryBasicSetup(extra map[string]any) *entityTestSetup {
 
 	// Generate idmap via transform, matching TS pattern.
 	idmap, _ := vs.Transform(
-		[]any{"query01", "query02", "query03"},
+		[]any{"query01", "query02", "query03", "dataset_slug01"},
 		map[string]any{
 			"`$PACK`": []any{"", map[string]any{
 				"`$KEY`": "`$COPY`",

@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 )
 
 // main.kit.test.live.strict is true (the default is true): a live
@@ -34,7 +34,7 @@ func TestTriggerDirect(t *testing.T) {
 			return
 		}
 		if setup.live {
-			for _, _liveKey := range []string{"recipient01"} {
+			for _, _liveKey := range []string{"dataset_slug01"} {
 				if v := setup.idmap[_liveKey]; v == nil {
 					liveMiss(t, triggerDirectLiveStrict, "Live test blocked: needs %s via HONEYCOMB_TEST_TRIGGER_ENTID", _liveKey)
 					return
@@ -45,13 +45,13 @@ func TestTriggerDirect(t *testing.T) {
 
 		params := map[string]any{}
 		if setup.live {
-			params["recipient_id"] = setup.idmap["recipient01"]
+			params["dataset_slug"] = setup.idmap["dataset_slug01"]
 		} else {
-			params["recipient_id"] = "direct01"
+			params["dataset_slug"] = "direct01"
 		}
 
 		result, err := client.Direct(map[string]any{
-			"path":   "1/recipients/{recipient_id}/triggers",
+			"path":   "1/triggers/{dataset_slug}",
 			"method": "GET",
 			"params": params,
 		})
@@ -117,7 +117,7 @@ func TestTriggerDirect(t *testing.T) {
 			return
 		}
 		if setup.live {
-			for _, _liveKey := range []string{"recipient01", "dataset_slug01", "trigger01"} {
+			for _, _liveKey := range []string{"dataset_slug01"} {
 				if v := setup.idmap[_liveKey]; v == nil {
 					liveMiss(t, triggerDirectLiveStrict, "Live test blocked: needs %s via HONEYCOMB_TEST_TRIGGER_ENTID", _liveKey)
 					return
@@ -130,9 +130,9 @@ func TestTriggerDirect(t *testing.T) {
 		query := map[string]any{}
 		if setup.live {
 			listParams := map[string]any{}
-			listParams["recipient_id"] = setup.idmap["recipient01"]
+			listParams["dataset_slug"] = setup.idmap["dataset_slug01"]
 			listResult, listErr := client.Direct(map[string]any{
-				"path":   "1/recipients/{recipient_id}/triggers",
+				"path":   "1/triggers/{dataset_slug}",
 				"method": "GET",
 				"params": listParams,
 			})
@@ -155,14 +155,13 @@ func TestTriggerDirect(t *testing.T) {
 			}
 			params["id"] = firstEnt["id"]
 			params["dataset_slug"] = setup.idmap["dataset_slug01"]
-			params["trigger_id"] = setup.idmap["trigger01"]
 		} else {
 			params["dataset_slug"] = "direct01"
-			params["trigger_id"] = "direct02"
+			params["id"] = "direct02"
 		}
 
 		result, err := client.Direct(map[string]any{
-			"path":   "1/triggers/{dataset_slug}/{trigger_id}",
+			"path":   "1/triggers/{dataset_slug}/{id}",
 			"method": "GET",
 			"params": params,
 			"query":  query,

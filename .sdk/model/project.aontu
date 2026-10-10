@@ -23,3 +23,11 @@
 # A published package name that does not follow the derivation:
 #
 #   main: kit: target: ts: publish: registry: package: '@scope/name'
+
+
+# Publisher: the LICENSE copyright holder and default package author.
+main: kit: publisher: {
+  name: 'Muhammad Waqar'
+  url: 'https://github.com/waqar2403'
+  security: 'https://github.com/waqar2403/honeycomb-sdk/security/advisories/new'
+}

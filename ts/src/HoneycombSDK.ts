@@ -13,7 +13,8 @@ import { EnvironmentEntity } from './entity/EnvironmentEntity'
 import { EventEntity } from './entity/EventEntity'
 import { HistoricalAnomalyEntity } from './entity/HistoricalAnomalyEntity'
 import { KeyManagementEntity } from './entity/KeyManagementEntity'
-import { KinesiEntity } from './entity/KinesiEntity'
+import { KinesisEventEntity } from './entity/KinesisEventEntity'
+import { ManagementAuthEntity } from './entity/ManagementAuthEntity'
 import { MapDependencyEntity } from './entity/MapDependencyEntity'
 import { MarkerEntity } from './entity/MarkerEntity'
 import { MarkerSettingEntity } from './entity/MarkerSettingEntity'
@@ -462,12 +463,21 @@ class HoneycombSDK {
   }
 
 
-  // Entity access: `client.Kinesi().list()` / `client.Kinesi().load({ id })`.
+  // Entity access: `client.KinesisEvent().list()` / `client.KinesisEvent().load({ id })`.
   // The argument is the entity OPTIONS object (passed to the entity
   // constructor as entopts), not initial entity data.
-  Kinesi(entopts?: Record<string, any>) {
+  KinesisEvent(entopts?: Record<string, any>) {
     const self = this
-    return new KinesiEntity(self, entopts)
+    return new KinesisEventEntity(self, entopts)
+  }
+
+
+  // Entity access: `client.ManagementAuth().list()` / `client.ManagementAuth().load({ id })`.
+  // The argument is the entity OPTIONS object (passed to the entity
+  // constructor as entopts), not initial entity data.
+  ManagementAuth(entopts?: Record<string, any>) {
+    const self = this
+    return new ManagementAuthEntity(self, entopts)
   }
 
 

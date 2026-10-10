@@ -13,14 +13,14 @@ import (
 
 	eng "github.com/boru-lang/boru/eng/go"
 	"github.com/boru-lang/boru/eng/go/parser"
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
 )
 
 // prompt is the REPL prompt prefix (matches the SDK slug).
 const prompt = "honeycomb"
 
 // entitiesHelp is the space-separated entity list shown by /help.
-const entitiesHelp = "auth board board_view bulk_signal_recipient_assignment burn_alert calculated_field column dataset dataset_definition environment event historical_anomaly key_management kinesi map_dependency marker marker_setting query query_annotation query_result recipient signal slo slo_count slo_history slo_hourly_count trigger"
+const entitiesHelp = "auth board board_view bulk_signal_recipient_assignment burn_alert calculated_field column dataset dataset_definition environment event historical_anomaly key_management kinesis_event management_auth map_dependency marker marker_setting query query_annotation query_result recipient signal slo slo_count slo_history slo_hourly_count trigger"
 
 func main() {
 	os.Exit(run(os.Args[1:], os.Stdin, os.Stdout, os.Stderr))

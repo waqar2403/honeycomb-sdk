@@ -21,8 +21,7 @@
         "threshold": {},
         "triggered": false,
         "updated_at": "sd0",
-        "recipient_id": "RECIPIENT01",
-        "trigger_id": "TRIGGER01"
+        "recipient_id": "RECIPIENT01"
       },
       "TRIGGER01": {
         "alert_type": "s17c",
@@ -44,8 +43,7 @@
         "threshold": {},
         "triggered": false,
         "updated_at": "s18e",
-        "recipient_id": "RECIPIENT01",
-        "trigger_id": "TRIGGER01"
+        "recipient_id": "RECIPIENT01"
       },
       "TRIGGER02": {
         "alert_type": "s23a",
@@ -67,8 +65,7 @@
         "threshold": {},
         "triggered": false,
         "updated_at": "s24c",
-        "recipient_id": "RECIPIENT01",
-        "trigger_id": "TRIGGER01"
+        "recipient_id": "RECIPIENT01"
       }
     }
   },
@@ -102,17 +99,17 @@
       "version": 2,
       "source": "openapi3"
     },
+    "GET /1/triggers/{datasetSlug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
     "GET /1/recipients/{recipientId}/triggers": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"
     },
     "GET /1/triggers/{datasetSlug}/{triggerId}": {
-      "provenance": "operation-contract",
-      "version": 2,
-      "source": "openapi3"
-    },
-    "GET /1/triggers/{datasetSlug}": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"

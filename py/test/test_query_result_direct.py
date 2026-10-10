@@ -40,15 +40,15 @@ class TestQueryResultDirect:
         query = {}
         if setup["live"]:
             params["dataset_slug"] = setup["idmap"].get("dataset_slug01")
-            params["query_result_id"] = setup["idmap"].get("query_result01")
+            params["id"] = setup["idmap"].get("query_result01")
             pass
         else:
             params["dataset_slug"] = "direct01"
-            params["query_result_id"] = "direct02"
+            params["id"] = "direct02"
             pass
 
         result = client.direct({
-            "path": "1/query_results/{dataset_slug}/{query_result_id}",
+            "path": "1/query_results/{dataset_slug}/{id}",
             "method": "GET",
             "params": params,
             "query": query,

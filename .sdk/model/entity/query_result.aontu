@@ -99,10 +99,13 @@ main: kit: entity: query_result: {
 
   id: {
     field: "id"
+    from: {
+      id: "id"
+    }
     name: "id"
     parts: [
       "dataset_slug"
-      "query_result_id"
+      "id"
     ]
     sep: "/"
   }
@@ -129,7 +132,7 @@ main: kit: entity: query_result: {
             params: [
               {
                 k: "param"
-                n: "id"
+                n: "dataset_slug"
                 or: "datasetSlug"
                 r: true
                 t: "`$STRING`"
@@ -140,12 +143,12 @@ main: kit: entity: query_result: {
           o: "/1/query_results/{datasetSlug}"
           q: {
             exist: [
-              "id"
+              "dataset_slug"
             ]
           }
           r: {
             param: {
-              datasetSlug: "id"
+              datasetSlug: "dataset_slug"
             }
           }
           rs: {
@@ -160,7 +163,7 @@ main: kit: entity: query_result: {
               lit: "query_results"
             }
             {
-              var: "id"
+              var: "dataset_slug"
             }
           ]
           t: {
@@ -190,7 +193,7 @@ main: kit: entity: query_result: {
               }
               {
                 k: "param"
-                n: "query_result_id"
+                n: "id"
                 or: "queryResultId"
                 r: true
                 t: "`$STRING`"
@@ -202,13 +205,13 @@ main: kit: entity: query_result: {
           q: {
             exist: [
               "dataset_slug"
-              "query_result_id"
+              "id"
             ]
           }
           r: {
             param: {
               datasetSlug: "dataset_slug"
-              queryResultId: "query_result_id"
+              queryResultId: "id"
             }
           }
           rs: {
@@ -226,7 +229,7 @@ main: kit: entity: query_result: {
               var: "dataset_slug"
             }
             {
-              var: "query_result_id"
+              var: "id"
             }
           ]
           t: {

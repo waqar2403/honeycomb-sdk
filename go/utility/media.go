@@ -4,7 +4,7 @@ import (
 	"io"
 	"strings"
 
-	vs "github.com/voxgig-sdk/honeycomb-sdk/go/utility/struct"
+	vs "github.com/waqar2403/honeycomb-sdk/go/utility/struct"
 )
 
 // The media types a point declares: `response` (the model's `rs`) for the

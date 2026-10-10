@@ -7,10 +7,10 @@ import (
 	"strings"
 	"sync"
 
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
-	omni "github.com/voxgig-sdk/honeycomb-sdk/go/test/omni"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
+	omni "github.com/waqar2403/honeycomb-sdk/go/test/omni"
 
-	vs "github.com/voxgig-sdk/honeycomb-sdk/go/utility/struct"
+	vs "github.com/waqar2403/honeycomb-sdk/go/utility/struct"
 )
 
 // The shared corpus, compiled by the project build. Relative to this

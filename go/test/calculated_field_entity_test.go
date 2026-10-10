@@ -2,6 +2,7 @@ package sdktest
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -9,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 
-	vs "github.com/voxgig-sdk/honeycomb-sdk/go/utility/struct"
+	vs "github.com/waqar2403/honeycomb-sdk/go/utility/struct"
 )
 
 // main.kit.test.live.strict is true (the default is true): a live
@@ -38,7 +39,7 @@ func TestCalculatedFieldEntity(t *testing.T) {
 		client := sdk.TestSDK(nil, map[string]any{
 			"feature": map[string]any{"validate": map[string]any{"active": true}},
 		})
-		_, err := client.CalculatedField(nil).Load(map[string]any{"dataset_slug": 1}, nil)
+		_, err := client.CalculatedField(nil).List(map[string]any{"dataset_slug": 1}, nil)
 		if sdkerr, ok := err.(*core.HoneycombError); !ok || "validate_failed" != sdkerr.Code {
 			t.Fatalf("expected validate_failed, got %v", err)
 		}
@@ -53,7 +54,7 @@ func TestCalculatedFieldEntity(t *testing.T) {
 		if setup.live {
 			_mode = "live"
 		}
-		for _, _op := range []string{"create", "load"} {
+		for _, _op := range []string{"create", "list", "update", "load", "remove"} {
 			if _shouldSkip, _reason := isControlSkipped("entityOp", "calculated_field." + _op, _mode); _shouldSkip {
 				if _reason == "" {
 					_reason = "skipped via sdk-test-control.json"
@@ -90,9 +91,58 @@ func TestCalculatedFieldEntity(t *testing.T) {
 			t.Fatal("expected created entity to have an id")
 		}
 
+		// LIST
+		calculatedFieldRef01Match := map[string]any{
+			"dataset_slug": setup.idmap["dataset_slug01"],
+		}
+
+		calculatedFieldRef01ListResult, err := calculatedFieldRef01Ent.List(calculatedFieldRef01Match, nil)
+		if err != nil {
+			t.Fatalf("list failed: %v", err)
+		}
+		calculatedFieldRef01List, calculatedFieldRef01ListOk := calculatedFieldRef01ListResult.([]any)
+		if !calculatedFieldRef01ListOk {
+			t.Fatalf("expected list result to be an array, got %T", calculatedFieldRef01ListResult)
+		}
+
+		foundItem := vs.Select(entityListToData(calculatedFieldRef01List), map[string]any{"id": calculatedFieldRef01Data["id"]})
+		if vs.IsEmpty(foundItem) {
+			t.Fatal("expected to find created entity in list")
+		}
+
+		// UPDATE
+		calculatedFieldRef01DataUp0Up := map[string]any{
+			"id": calculatedFieldRef01Data["id"],
+			"dataset_slug": setup.idmap["dataset_slug"],
+		}
+
+		calculatedFieldRef01MarkdefUp0Name := "alias"
+		calculatedFieldRef01MarkdefUp0Value := fmt.Sprintf("Mark01-calculated_field_ref01_%d", setup.now)
+		calculatedFieldRef01DataUp0Up[calculatedFieldRef01MarkdefUp0Name] = calculatedFieldRef01MarkdefUp0Value
+
+		calculatedFieldRef01ResdataUp0Result, err := calculatedFieldRef01Ent.Update(calculatedFieldRef01DataUp0Up, nil)
+		if err != nil {
+			t.Fatalf("update failed: %v", err)
+		}
+		calculatedFieldRef01ResdataUp0 := core.ToMapAny(entityData(calculatedFieldRef01ResdataUp0Result))
+		if calculatedFieldRef01ResdataUp0 == nil {
+			t.Fatal("expected update result to be a map")
+		}
+		if calculatedFieldRef01ResdataUp0["id"] != calculatedFieldRef01DataUp0Up["id"] {
+			t.Fatal("expected update result id to match")
+		}
+		if calculatedFieldRef01ResdataUp0[calculatedFieldRef01MarkdefUp0Name] != calculatedFieldRef01MarkdefUp0Value {
+			t.Fatalf("expected %s to be updated, got %v", calculatedFieldRef01MarkdefUp0Name, calculatedFieldRef01ResdataUp0[calculatedFieldRef01MarkdefUp0Name])
+		}
+
 		// LOAD
 		calculatedFieldRef01MatchDt0 := map[string]any{
 			"id": calculatedFieldRef01Data["id"],
+		}
+		if v := setup.idmap["dataset_slug"]; v != nil {
+			calculatedFieldRef01MatchDt0["dataset_slug"] = v
+		} else {
+			calculatedFieldRef01MatchDt0["dataset_slug"] = setup.idmap["dataset_slug01"]
 		}
 		calculatedFieldRef01DataDt0Loaded, err := calculatedFieldRef01Ent.Load(calculatedFieldRef01MatchDt0, nil)
 		if err != nil {
@@ -104,6 +154,39 @@ func TestCalculatedFieldEntity(t *testing.T) {
 		}
 		if calculatedFieldRef01DataDt0LoadResult["id"] != calculatedFieldRef01Data["id"] {
 			t.Fatal("expected load result id to match")
+		}
+
+		// REMOVE
+		calculatedFieldRef01MatchRm0 := map[string]any{
+			"id": calculatedFieldRef01Data["id"],
+		}
+		if v := setup.idmap["dataset_slug"]; v != nil {
+			calculatedFieldRef01MatchRm0["dataset_slug"] = v
+		} else {
+			calculatedFieldRef01MatchRm0["dataset_slug"] = setup.idmap["dataset_slug01"]
+		}
+		_, err = calculatedFieldRef01Ent.Remove(calculatedFieldRef01MatchRm0, nil)
+		if err != nil {
+			t.Fatalf("remove failed: %v", err)
+		}
+
+		// LIST
+		calculatedFieldRef01MatchRt0 := map[string]any{
+			"dataset_slug": setup.idmap["dataset_slug01"],
+		}
+
+		calculatedFieldRef01ListRt0Result, err := calculatedFieldRef01Ent.List(calculatedFieldRef01MatchRt0, nil)
+		if err != nil {
+			t.Fatalf("list failed: %v", err)
+		}
+		calculatedFieldRef01ListRt0, calculatedFieldRef01ListRt0Ok := calculatedFieldRef01ListRt0Result.([]any)
+		if !calculatedFieldRef01ListRt0Ok {
+			t.Fatalf("expected list result to be an array, got %T", calculatedFieldRef01ListRt0Result)
+		}
+
+		notFoundItem := vs.Select(entityListToData(calculatedFieldRef01ListRt0), map[string]any{"id": calculatedFieldRef01Data["id"]})
+		if !vs.IsEmpty(notFoundItem) {
+			t.Fatal("expected removed entity to not be in list")
 		}
 
 	})
@@ -158,6 +241,10 @@ func calculated_fieldBasicSetup(extra map[string]any) *entityTestSetup {
 	idmapResolved := core.ToMapAny(env["HONEYCOMB_TEST_CALCULATED_FIELD_ENTID"])
 	if idmapResolved == nil {
 		idmapResolved = core.ToMapAny(idmap)
+	}
+	// Add dataset_slug alias for update test.
+	if idmapResolved["dataset_slug"] == nil {
+		idmapResolved["dataset_slug"] = idmapResolved["dataset_slug01"]
 	}
 
 	if env["HONEYCOMB_TEST_LIVE"] == "TRUE" {

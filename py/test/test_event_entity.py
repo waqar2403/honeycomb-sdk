@@ -65,7 +65,6 @@ class TestEventEntity:
 
         event_ref01_data = helpers.to_map(runner.entity_data(event_ref01_ent.create(event_ref01_data, None)))
         assert event_ref01_data is not None
-        assert event_ref01_data["id"] is not None
 
 
 

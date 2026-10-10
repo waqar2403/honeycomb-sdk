@@ -39,7 +39,7 @@ main: kit: entity: column: {
       h: "Key Name"
       n: "key_name"
       op: {
-        load: {
+        list: {
           req: false
           type: "`$STRING`"
         }
@@ -76,10 +76,13 @@ main: kit: entity: column: {
 
   id: {
     field: "id"
+    from: {
+      id: "id"
+    }
     name: "id"
     parts: [
       "dataset_slug"
-      "column_id"
+      "id"
     ]
     sep: "/"
   }
@@ -109,7 +112,7 @@ main: kit: entity: column: {
             params: [
               {
                 k: "param"
-                n: "id"
+                n: "dataset_slug"
                 or: "datasetSlug"
                 r: true
                 t: "`$STRING`"
@@ -120,12 +123,12 @@ main: kit: entity: column: {
           o: "/1/columns/{datasetSlug}"
           q: {
             exist: [
-              "id"
+              "dataset_slug"
             ]
           }
           r: {
             param: {
-              datasetSlug: "id"
+              datasetSlug: "dataset_slug"
             }
           }
           rs: {
@@ -140,7 +143,70 @@ main: kit: entity: column: {
               lit: "columns"
             }
             {
-              var: "id"
+              var: "dataset_slug"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /1/columns/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                k: "query"
+                n: "key_name"
+                or: "key_name"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/columns/{datasetSlug}"
+          q: {
+            exist: [
+              "dataset_slug"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "columns"
+            }
+            {
+              var: "dataset_slug"
             }
           ]
           t: {
@@ -163,15 +229,15 @@ main: kit: entity: column: {
             params: [
               {
                 k: "param"
-                n: "column_id"
-                or: "columnId"
+                n: "dataset_slug"
+                or: "datasetSlug"
                 r: true
                 t: "`$STRING`"
               }
               {
                 k: "param"
-                n: "dataset_slug"
-                or: "datasetSlug"
+                n: "id"
+                or: "columnId"
                 r: true
                 t: "`$STRING`"
               }
@@ -181,13 +247,13 @@ main: kit: entity: column: {
           o: "/1/columns/{datasetSlug}/{columnId}"
           q: {
             exist: [
-              "column_id"
               "dataset_slug"
+              "id"
             ]
           }
           r: {
             param: {
-              columnId: "column_id"
+              columnId: "id"
               datasetSlug: "dataset_slug"
             }
           }
@@ -204,64 +270,6 @@ main: kit: entity: column: {
             }
             {
               var: "dataset_slug"
-            }
-            {
-              var: "column_id"
-            }
-          ]
-          t: {
-            req: "`reqdata`"
-            res: "`body`"
-          }
-        }
-        {
-          co: {
-            id: "GET /1/columns/{datasetSlug}"
-            source: "openapi3"
-            version: 2
-          }
-          g: {
-            params: [
-              {
-                k: "param"
-                n: "id"
-                or: "datasetSlug"
-                r: true
-                t: "`$STRING`"
-              }
-            ]
-            query: [
-              {
-                k: "query"
-                n: "key_name"
-                or: "key_name"
-                r: false
-                t: "`$STRING`"
-              }
-            ]
-          }
-          m: "GET"
-          o: "/1/columns/{datasetSlug}"
-          q: {
-            exist: [
-              "id"
-            ]
-          }
-          r: {
-            param: {
-              datasetSlug: "id"
-            }
-          }
-          rs: {
-            kind: "json"
-            media: "application/json"
-          }
-          s: [
-            {
-              lit: "1"
-            }
-            {
-              lit: "columns"
             }
             {
               var: "id"
@@ -287,15 +295,15 @@ main: kit: entity: column: {
             params: [
               {
                 k: "param"
-                n: "column_id"
-                or: "columnId"
+                n: "dataset_slug"
+                or: "datasetSlug"
                 r: true
                 t: "`$STRING`"
               }
               {
                 k: "param"
-                n: "dataset_slug"
-                or: "datasetSlug"
+                n: "id"
+                or: "columnId"
                 r: true
                 t: "`$STRING`"
               }
@@ -305,13 +313,13 @@ main: kit: entity: column: {
           o: "/1/columns/{datasetSlug}/{columnId}"
           q: {
             exist: [
-              "column_id"
               "dataset_slug"
+              "id"
             ]
           }
           r: {
             param: {
-              columnId: "column_id"
+              columnId: "id"
               datasetSlug: "dataset_slug"
             }
           }
@@ -326,7 +334,7 @@ main: kit: entity: column: {
               var: "dataset_slug"
             }
             {
-              var: "column_id"
+              var: "id"
             }
           ]
           t: {
@@ -359,15 +367,15 @@ main: kit: entity: column: {
             params: [
               {
                 k: "param"
-                n: "column_id"
-                or: "columnId"
+                n: "dataset_slug"
+                or: "datasetSlug"
                 r: true
                 t: "`$STRING`"
               }
               {
                 k: "param"
-                n: "dataset_slug"
-                or: "datasetSlug"
+                n: "id"
+                or: "columnId"
                 r: true
                 t: "`$STRING`"
               }
@@ -377,13 +385,13 @@ main: kit: entity: column: {
           o: "/1/columns/{datasetSlug}/{columnId}"
           q: {
             exist: [
-              "column_id"
               "dataset_slug"
+              "id"
             ]
           }
           r: {
             param: {
-              columnId: "column_id"
+              columnId: "id"
               datasetSlug: "dataset_slug"
             }
           }
@@ -402,7 +410,7 @@ main: kit: entity: column: {
               var: "dataset_slug"
             }
             {
-              var: "column_id"
+              var: "id"
             }
           ]
           t: {

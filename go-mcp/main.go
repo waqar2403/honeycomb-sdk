@@ -9,7 +9,7 @@ import (
 	"os"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
 )
 
 func main() {

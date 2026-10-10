@@ -24,7 +24,7 @@ main: kit: entity: burn_alert: {
     name: "id"
     parts: [
       "dataset_slug"
-      "burn_alert_id"
+      "id"
     ]
     sep: "/"
   }
@@ -58,7 +58,7 @@ main: kit: entity: burn_alert: {
             params: [
               {
                 k: "param"
-                n: "id"
+                n: "dataset_slug"
                 or: "datasetSlug"
                 r: true
                 t: "`$STRING`"
@@ -69,12 +69,12 @@ main: kit: entity: burn_alert: {
           o: "/1/burn_alerts/{datasetSlug}"
           q: {
             exist: [
-              "id"
+              "dataset_slug"
             ]
           }
           r: {
             param: {
-              datasetSlug: "id"
+              datasetSlug: "dataset_slug"
             }
           }
           rs: {
@@ -89,7 +89,71 @@ main: kit: entity: burn_alert: {
               lit: "burn_alerts"
             }
             {
-              var: "id"
+              var: "dataset_slug"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /1/burn_alerts/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                k: "query"
+                n: "slo_id"
+                or: "slo_id"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/burn_alerts/{datasetSlug}"
+          q: {
+            exist: [
+              "dataset_slug"
+              "slo_id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "burn_alerts"
+            }
+            {
+              var: "dataset_slug"
             }
           ]
           t: {
@@ -112,15 +176,15 @@ main: kit: entity: burn_alert: {
             params: [
               {
                 k: "param"
-                n: "burn_alert_id"
-                or: "burnAlertId"
+                n: "dataset_slug"
+                or: "datasetSlug"
                 r: true
                 t: "`$STRING`"
               }
               {
                 k: "param"
-                n: "dataset_slug"
-                or: "datasetSlug"
+                n: "id"
+                or: "burnAlertId"
                 r: true
                 t: "`$STRING`"
               }
@@ -130,13 +194,13 @@ main: kit: entity: burn_alert: {
           o: "/1/burn_alerts/{datasetSlug}/{burnAlertId}"
           q: {
             exist: [
-              "burn_alert_id"
               "dataset_slug"
+              "id"
             ]
           }
           r: {
             param: {
-              burnAlertId: "burn_alert_id"
+              burnAlertId: "id"
               datasetSlug: "dataset_slug"
             }
           }
@@ -153,65 +217,6 @@ main: kit: entity: burn_alert: {
             }
             {
               var: "dataset_slug"
-            }
-            {
-              var: "burn_alert_id"
-            }
-          ]
-          t: {
-            req: "`reqdata`"
-            res: "`body`"
-          }
-        }
-        {
-          co: {
-            id: "GET /1/burn_alerts/{datasetSlug}"
-            source: "openapi3"
-            version: 2
-          }
-          g: {
-            params: [
-              {
-                k: "param"
-                n: "id"
-                or: "datasetSlug"
-                r: true
-                t: "`$STRING`"
-              }
-            ]
-            query: [
-              {
-                k: "query"
-                n: "slo_id"
-                or: "slo_id"
-                r: true
-                t: "`$STRING`"
-              }
-            ]
-          }
-          m: "GET"
-          o: "/1/burn_alerts/{datasetSlug}"
-          q: {
-            exist: [
-              "id"
-              "slo_id"
-            ]
-          }
-          r: {
-            param: {
-              datasetSlug: "id"
-            }
-          }
-          rs: {
-            kind: "json"
-            media: "application/json"
-          }
-          s: [
-            {
-              lit: "1"
-            }
-            {
-              lit: "burn_alerts"
             }
             {
               var: "id"
@@ -237,15 +242,15 @@ main: kit: entity: burn_alert: {
             params: [
               {
                 k: "param"
-                n: "burn_alert_id"
-                or: "burnAlertId"
+                n: "dataset_slug"
+                or: "datasetSlug"
                 r: true
                 t: "`$STRING`"
               }
               {
                 k: "param"
-                n: "dataset_slug"
-                or: "datasetSlug"
+                n: "id"
+                or: "burnAlertId"
                 r: true
                 t: "`$STRING`"
               }
@@ -255,13 +260,13 @@ main: kit: entity: burn_alert: {
           o: "/1/burn_alerts/{datasetSlug}/{burnAlertId}"
           q: {
             exist: [
-              "burn_alert_id"
               "dataset_slug"
+              "id"
             ]
           }
           r: {
             param: {
-              burnAlertId: "burn_alert_id"
+              burnAlertId: "id"
               datasetSlug: "dataset_slug"
             }
           }
@@ -276,7 +281,7 @@ main: kit: entity: burn_alert: {
               var: "dataset_slug"
             }
             {
-              var: "burn_alert_id"
+              var: "id"
             }
           ]
           t: {
@@ -312,15 +317,15 @@ main: kit: entity: burn_alert: {
             params: [
               {
                 k: "param"
-                n: "burn_alert_id"
-                or: "burnAlertId"
+                n: "dataset_slug"
+                or: "datasetSlug"
                 r: true
                 t: "`$STRING`"
               }
               {
                 k: "param"
-                n: "dataset_slug"
-                or: "datasetSlug"
+                n: "id"
+                or: "burnAlertId"
                 r: true
                 t: "`$STRING`"
               }
@@ -330,13 +335,13 @@ main: kit: entity: burn_alert: {
           o: "/1/burn_alerts/{datasetSlug}/{burnAlertId}"
           q: {
             exist: [
-              "burn_alert_id"
               "dataset_slug"
+              "id"
             ]
           }
           r: {
             param: {
-              burnAlertId: "burn_alert_id"
+              burnAlertId: "id"
               datasetSlug: "dataset_slug"
             }
           }
@@ -355,7 +360,7 @@ main: kit: entity: burn_alert: {
               var: "dataset_slug"
             }
             {
-              var: "burn_alert_id"
+              var: "id"
             }
           ]
           t: {

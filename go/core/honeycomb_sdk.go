@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	vs "github.com/voxgig-sdk/honeycomb-sdk/go/utility/struct"
+	vs "github.com/waqar2403/honeycomb-sdk/go/utility/struct"
 )
 
 type HoneycombSDK struct {
@@ -476,11 +476,19 @@ func (sdk *HoneycombSDK) KeyManagement(data map[string]any) HoneycombEntity {
 }
 
 
-// Kinesi returns a Kinesi entity bound to this client.
-// Idiomatic usage: client.Kinesi(nil).List(nil, nil) or
-// client.Kinesi(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *HoneycombSDK) Kinesi(data map[string]any) HoneycombEntity {
-	return NewKinesiEntityFunc(sdk, data)
+// KinesisEvent returns a KinesisEvent entity bound to this client.
+// Idiomatic usage: client.KinesisEvent(nil).List(nil, nil) or
+// client.KinesisEvent(nil).Load(map[string]any{"id": ...}, nil).
+func (sdk *HoneycombSDK) KinesisEvent(data map[string]any) HoneycombEntity {
+	return NewKinesisEventEntityFunc(sdk, data)
+}
+
+
+// ManagementAuth returns a ManagementAuth entity bound to this client.
+// Idiomatic usage: client.ManagementAuth(nil).List(nil, nil) or
+// client.ManagementAuth(nil).Load(map[string]any{"id": ...}, nil).
+func (sdk *HoneycombSDK) ManagementAuth(data map[string]any) HoneycombEntity {
+	return NewManagementAuthEntityFunc(sdk, data)
 }
 
 

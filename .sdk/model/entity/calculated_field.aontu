@@ -54,10 +54,13 @@ main: kit: entity: calculated_field: {
 
   id: {
     field: "id"
+    from: {
+      id: "id"
+    }
     name: "id"
     parts: [
       "dataset_slug"
-      "derived_column_id"
+      "id"
     ]
     sep: "/"
   }
@@ -126,70 +129,9 @@ main: kit: entity: calculated_field: {
         }
       ]
     }
-    load: {
-      name: "load"
+    list: {
+      name: "list"
       points: [
-        {
-          co: {
-            id: "GET /1/derived_columns/{datasetSlug}/{derivedColumnId}"
-            source: "openapi3"
-            version: 2
-          }
-          g: {
-            params: [
-              {
-                k: "param"
-                n: "dataset_slug"
-                or: "datasetSlug"
-                r: true
-                t: "`$STRING`"
-              }
-              {
-                k: "param"
-                n: "derived_column_id"
-                or: "derivedColumnId"
-                r: true
-                t: "`$STRING`"
-              }
-            ]
-          }
-          m: "GET"
-          o: "/1/derived_columns/{datasetSlug}/{derivedColumnId}"
-          q: {
-            exist: [
-              "dataset_slug"
-              "derived_column_id"
-            ]
-          }
-          r: {
-            param: {
-              datasetSlug: "dataset_slug"
-              derivedColumnId: "derived_column_id"
-            }
-          }
-          rs: {
-            kind: "json"
-            media: "application/json"
-          }
-          s: [
-            {
-              lit: "1"
-            }
-            {
-              lit: "derived_columns"
-            }
-            {
-              var: "dataset_slug"
-            }
-            {
-              var: "derived_column_id"
-            }
-          ]
-          t: {
-            req: "`reqdata`"
-            res: "`body`"
-          }
-        }
         {
           co: {
             id: "GET /1/derived_columns/{datasetSlug}"
@@ -250,6 +192,72 @@ main: kit: entity: calculated_field: {
         }
       ]
     }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /1/derived_columns/{datasetSlug}/{derivedColumnId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "id"
+                or: "derivedColumnId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/derived_columns/{datasetSlug}/{derivedColumnId}"
+          q: {
+            exist: [
+              "dataset_slug"
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+              derivedColumnId: "id"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "derived_columns"
+            }
+            {
+              var: "dataset_slug"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
     remove: {
       name: "remove"
       points: [
@@ -270,7 +278,7 @@ main: kit: entity: calculated_field: {
               }
               {
                 k: "param"
-                n: "derived_column_id"
+                n: "id"
                 or: "derivedColumnId"
                 r: true
                 t: "`$STRING`"
@@ -282,13 +290,13 @@ main: kit: entity: calculated_field: {
           q: {
             exist: [
               "dataset_slug"
-              "derived_column_id"
+              "id"
             ]
           }
           r: {
             param: {
               datasetSlug: "dataset_slug"
-              derivedColumnId: "derived_column_id"
+              derivedColumnId: "id"
             }
           }
           s: [
@@ -302,7 +310,7 @@ main: kit: entity: calculated_field: {
               var: "dataset_slug"
             }
             {
-              var: "derived_column_id"
+              var: "id"
             }
           ]
           t: {
@@ -340,7 +348,7 @@ main: kit: entity: calculated_field: {
               }
               {
                 k: "param"
-                n: "derived_column_id"
+                n: "id"
                 or: "derivedColumnId"
                 r: true
                 t: "`$STRING`"
@@ -352,13 +360,13 @@ main: kit: entity: calculated_field: {
           q: {
             exist: [
               "dataset_slug"
-              "derived_column_id"
+              "id"
             ]
           }
           r: {
             param: {
               datasetSlug: "dataset_slug"
-              derivedColumnId: "derived_column_id"
+              derivedColumnId: "id"
             }
           }
           rs: {
@@ -376,7 +384,7 @@ main: kit: entity: calculated_field: {
               var: "dataset_slug"
             }
             {
-              var: "derived_column_id"
+              var: "id"
             }
           ]
           t: {

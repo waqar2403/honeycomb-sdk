@@ -23,6 +23,45 @@ def _live_ok(result):
 
 class TestCalculatedFieldDirect:
 
+    def test_should_direct_list_calculated_field(self):
+        setup = _calculated_field_direct_setup([
+            {"id": "direct01"},
+            {"id": "direct02"},
+        ])
+        _skip, _reason = runner.is_control_skipped("direct", "direct-list-calculated_field", "live" if setup["live"] else "unit")
+        if _skip:
+            pytest.skip(_reason or "skipped via sdk-test-control.json")
+            return
+        if setup["live"]:
+            for _live_key in ["dataset_slug01"]:
+                if setup["idmap"].get(_live_key) is None:
+                    runner.live_miss(LIVE_STRICT, f"Live test blocked: needs {_live_key} via HONEYCOMB_TEST_CALCULATED_FIELD_ENTID")
+
+        client = setup["client"]
+
+        params = {}
+        if setup["live"]:
+            params["dataset_slug"] = setup["idmap"].get("dataset_slug01")
+        else:
+            params["dataset_slug"] = "direct01"
+
+        result = client.direct({
+            "path": "1/derived_columns/{dataset_slug}",
+            "method": "GET",
+            "params": params,
+        })
+        if setup["live"]:
+            if not _live_ok(result):
+                runner.live_miss(LIVE_STRICT, "Live list failed: " + runner.live_describe(result))
+            if runner.live_list(result.get("data")) is None:
+                runner.live_miss(LIVE_STRICT, "Live list returned no list: " + runner.live_describe(result))
+        else:
+            assert result["ok"] is True
+            assert helpers.to_int(result["status"]) == 200
+            assert isinstance(result["data"], list)
+            assert len(result["data"]) == 2
+            assert len(setup["calls"]) == 1
+
     def test_should_direct_load_calculated_field(self):
         setup = _calculated_field_direct_setup({"id": "direct01"})
         _skip, _reason = runner.is_control_skipped("direct", "direct-load-calculated_field", "live" if setup["live"] else "unit")
@@ -30,7 +69,7 @@ class TestCalculatedFieldDirect:
             pytest.skip(_reason or "skipped via sdk-test-control.json")
             return
         if setup["live"]:
-            for _live_key in ["dataset_slug01", "derived_column01"]:
+            for _live_key in ["dataset_slug01"]:
                 if setup["idmap"].get(_live_key) is None:
                     runner.live_miss(LIVE_STRICT, f"Live test blocked: needs {_live_key} via HONEYCOMB_TEST_CALCULATED_FIELD_ENTID")
 
@@ -39,16 +78,31 @@ class TestCalculatedFieldDirect:
         params = {}
         query = {}
         if setup["live"]:
+            list_result = client.direct({
+                "path": "1/derived_columns/{dataset_slug}",
+                "method": "GET",
+                "params": {"dataset_slug": setup["idmap"].get("dataset_slug01")},
+            })
+            if not _live_ok(list_result):
+                runner.live_miss(LIVE_STRICT, "Live list discovery failed: " + runner.live_describe(list_result))
+            records = runner.live_list(list_result.get("data"))
+            if records is None:
+                runner.live_miss(LIVE_STRICT, "Live list discovery returned no list: " + runner.live_describe(list_result))
+            if 0 == len(records):
+                runner.live_empty("The account has no calculated_field record to load")
+            first = records[0] if isinstance(records[0], dict) else {}
+            if first.get("id", first.get("id")) is None:
+                runner.live_miss(LIVE_STRICT, "Live load blocked: discovery returned no usable identity")
+            params["id"] = first.get("id", first.get("id"))
             params["dataset_slug"] = setup["idmap"].get("dataset_slug01")
-            params["derived_column_id"] = setup["idmap"].get("derived_column01")
             pass
         else:
             params["dataset_slug"] = "direct01"
-            params["derived_column_id"] = "direct02"
+            params["id"] = "direct02"
             pass
 
         result = client.direct({
-            "path": "1/derived_columns/{dataset_slug}/{derived_column_id}",
+            "path": "1/derived_columns/{dataset_slug}/{id}",
             "method": "GET",
             "params": params,
             "query": query,

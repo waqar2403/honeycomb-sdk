@@ -3,21 +3,21 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "voxgig-sdk-honeycomb-sdk"
+name = "waqar2403-honeycomb-sdk"
 version = "0.0.1"
 description = "Unofficial generated Python SDK for the Honeycomb public API. Not affiliated with or endorsed by the upstream API provider."
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.8"
-keywords = ["voxgig", "sdk", "generated-sdk", "openapi", "api-client", "honeycomb"]
+keywords = ["sdk", "generated-sdk", "openapi", "api-client", "honeycomb"]
 dependencies = [
     "requests>=2.33",
 ]
 
 [project.urls]
-Homepage = "https://github.com/voxgig-sdk/honeycomb-sdk"
-Repository = "https://github.com/voxgig-sdk/honeycomb-sdk"
-Issues = "https://github.com/voxgig-sdk/honeycomb-sdk/issues"
+Homepage = "https://github.com/waqar2403/honeycomb-sdk"
+Repository = "https://github.com/waqar2403/honeycomb-sdk"
+Issues = "https://github.com/waqar2403/honeycomb-sdk/issues"
 
 # ONE package. core/entity/feature/utility were previously top-level packages;
 # those names are real PyPI distributions and common scratch filenames, and

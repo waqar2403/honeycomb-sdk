@@ -79,6 +79,40 @@ main: kit: flow: BasicBoardViewFlow:
         }
       ]
     }
+
+    {
+      i: {
+        ref: "board_view_ref01",
+        suffix: "_rm0"
+      }
+
+      m: {
+        board_id: "board01",
+        id: "board_view01"
+      }
+
+      o: "remove"
+    }
+
+    {
+      i: {
+        suffix: "_rt0"
+      }
+
+      m: {
+        board_id: "board01"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemNotExists",
+          def: {
+            ref: "board_view_ref01"
+          }
+        }
+      ]
+    }
   ],
   "key$": "BasicBoardViewFlow"
 }

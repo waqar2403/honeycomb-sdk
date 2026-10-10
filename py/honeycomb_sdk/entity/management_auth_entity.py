@@ -1,16 +1,16 @@
-# Honeycomb SDK Kinesi entity
+# Honeycomb SDK ManagementAuth entity
 
 from __future__ import annotations
 
 from honeycomb_sdk.utility.voxgig_struct import voxgig_struct as vs
 from honeycomb_sdk.core import helpers
 from honeycomb_sdk.honeycomb_types import (
-    Kinesi,
-    KinesiCreateData,
+    ManagementAuth,
+    ManagementAuthLoadMatch,
 )
 
 
-class KinesiEntity:
+class ManagementAuthEntity:
 
     def __init__(self, client, entopts=None):
         if entopts is None:
@@ -22,7 +22,7 @@ class KinesiEntity:
         else:
             entopts["active"] = True
 
-        self._name = "kinesi"
+        self._name = "management_auth"
         self._client = client
         self._utility = client.get_utility()
         self._entopts = entopts
@@ -54,14 +54,14 @@ class KinesiEntity:
         opts = {}
         for k, v in self._entopts.items():
             opts[k] = v
-        return KinesiEntity(self._client, opts)
+        return ManagementAuthEntity(self._client, opts)
 
     def data_set(self, args=None):
         if args is not None:
             self._data = helpers.to_map(vs.clone(args)) or {}
             self._utility.feature_hook(self._entctx, "SetData")
 
-    def data_get(self) -> Kinesi:
+    def data_get(self) -> ManagementAuth:
         self._utility.feature_hook(self._entctx, "GetData")
         return vs.clone(self._data)
 
@@ -70,7 +70,7 @@ class KinesiEntity:
             self._match = helpers.to_map(vs.clone(args)) or {}
             self._utility.feature_hook(self._entctx, "SetMatch")
 
-    def match_get(self) -> Kinesi:
+    def match_get(self) -> ManagementAuth:
         self._utility.feature_hook(self._entctx, "GetMatch")
         return vs.clone(self._match)
 
@@ -199,28 +199,35 @@ class KinesiEntity:
         return None
 
     
-
-    
-
-    
-    def create(self, reqdata: KinesiCreateData, ctrl=None) -> KinesiEntity:
+    def load(self, reqmatch=None, ctrl=None) -> ManagementAuthEntity:
         utility = self._utility
+        # reqmatch is optional: an entity with no id-like key loads with no
+        # match. Treat None as an empty match so client.ManagementAuth().load()
+        # works with no args.
+        if reqmatch is None:
+            reqmatch = {}
         ctx = utility.make_context({
-            "opname": "create",
+            "opname": "load",
             "ctrl": ctrl,
             "match": self._match,
             "data": self._data,
-            "reqdata": reqdata,
+            "reqmatch": reqmatch,
         }, self._entctx)
 
         def post_done():
             if ctx.result is not None:
+                if ctx.result.resmatch is not None:
+                    self._match = ctx.result.resmatch
                 if ctx.result.resdata is not None:
                     self._data = helpers.to_map(vs.clone(ctx.result.resdata)) or {}
 
         return self._run_op(ctx, post_done)
 
 
+
+    
+
+    
 
     
 

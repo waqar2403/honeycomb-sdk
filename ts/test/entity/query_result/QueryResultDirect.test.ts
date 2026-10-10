@@ -50,14 +50,14 @@ describe('QueryResultDirect', async () => {
     const query: any = {}
     if (setup.live) {
       params.dataset_slug = setup.idmap['dataset_slug01']
-      params.query_result_id = setup.idmap['query_result01']
+      params.id = setup.idmap['query_result01']
     } else {
       params.dataset_slug = 'direct01'
-      params.query_result_id = 'direct02'
+      params.id = 'direct02'
     }
 
     const result: any = await client.direct({
-      path: '1/query_results/{dataset_slug}/{query_result_id}',
+      path: '1/query_results/{dataset_slug}/{id}',
       method: 'GET',
       params,
       query,

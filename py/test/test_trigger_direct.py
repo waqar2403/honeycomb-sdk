@@ -33,7 +33,7 @@ class TestTriggerDirect:
             pytest.skip(_reason or "skipped via sdk-test-control.json")
             return
         if setup["live"]:
-            for _live_key in ["recipient01"]:
+            for _live_key in ["dataset_slug01"]:
                 if setup["idmap"].get(_live_key) is None:
                     runner.live_miss(LIVE_STRICT, f"Live test blocked: needs {_live_key} via HONEYCOMB_TEST_TRIGGER_ENTID")
 
@@ -41,12 +41,12 @@ class TestTriggerDirect:
 
         params = {}
         if setup["live"]:
-            params["recipient_id"] = setup["idmap"].get("recipient01")
+            params["dataset_slug"] = setup["idmap"].get("dataset_slug01")
         else:
-            params["recipient_id"] = "direct01"
+            params["dataset_slug"] = "direct01"
 
         result = client.direct({
-            "path": "1/recipients/{recipient_id}/triggers",
+            "path": "1/triggers/{dataset_slug}",
             "method": "GET",
             "params": params,
         })
@@ -69,7 +69,7 @@ class TestTriggerDirect:
             pytest.skip(_reason or "skipped via sdk-test-control.json")
             return
         if setup["live"]:
-            for _live_key in ["recipient01", "trigger01"]:
+            for _live_key in ["dataset_slug01"]:
                 if setup["idmap"].get(_live_key) is None:
                     runner.live_miss(LIVE_STRICT, f"Live test blocked: needs {_live_key} via HONEYCOMB_TEST_TRIGGER_ENTID")
 
@@ -79,9 +79,9 @@ class TestTriggerDirect:
         query = {}
         if setup["live"]:
             list_result = client.direct({
-                "path": "1/recipients/{recipient_id}/triggers",
+                "path": "1/triggers/{dataset_slug}",
                 "method": "GET",
-                "params": {"recipient_id": setup["idmap"].get("recipient01")},
+                "params": {"dataset_slug": setup["idmap"].get("dataset_slug01")},
             })
             if not _live_ok(list_result):
                 runner.live_miss(LIVE_STRICT, "Live list discovery failed: " + runner.live_describe(list_result))
@@ -91,18 +91,18 @@ class TestTriggerDirect:
             if 0 == len(records):
                 runner.live_empty("The account has no trigger record to load")
             first = records[0] if isinstance(records[0], dict) else {}
-            if first.get("dataset_slug", first.get("id")) is None:
+            if first.get("id", first.get("id")) is None:
                 runner.live_miss(LIVE_STRICT, "Live load blocked: discovery returned no usable identity")
-            params["dataset_slug"] = first.get("dataset_slug", first.get("id"))
-            params["trigger_id"] = setup["idmap"].get("trigger01")
+            params["id"] = first.get("id", first.get("id"))
+            params["dataset_slug"] = setup["idmap"].get("dataset_slug01")
             pass
         else:
             params["dataset_slug"] = "direct01"
-            params["trigger_id"] = "direct02"
+            params["id"] = "direct02"
             pass
 
         result = client.direct({
-            "path": "1/triggers/{dataset_slug}/{trigger_id}",
+            "path": "1/triggers/{dataset_slug}/{id}",
             "method": "GET",
             "params": params,
             "query": query,

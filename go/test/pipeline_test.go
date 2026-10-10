@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"testing"
 
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
 )
 
 // plClient builds a client + isolated utility + context factory for

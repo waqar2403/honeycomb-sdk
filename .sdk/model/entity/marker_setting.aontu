@@ -53,10 +53,13 @@ main: kit: entity: marker_setting: {
 
   id: {
     field: "id"
+    from: {
+      id: "id"
+    }
     name: "id"
     parts: [
       "dataset_slug"
-      "marker_setting_id"
+      "id"
     ]
     sep: "/"
   }
@@ -83,7 +86,7 @@ main: kit: entity: marker_setting: {
             params: [
               {
                 k: "param"
-                n: "id"
+                n: "dataset_slug"
                 or: "datasetSlug"
                 r: true
                 t: "`$STRING`"
@@ -94,12 +97,12 @@ main: kit: entity: marker_setting: {
           o: "/1/marker_settings/{datasetSlug}"
           q: {
             exist: [
-              "id"
+              "dataset_slug"
             ]
           }
           r: {
             param: {
-              datasetSlug: "id"
+              datasetSlug: "dataset_slug"
             }
           }
           rs: {
@@ -114,7 +117,7 @@ main: kit: entity: marker_setting: {
               lit: "marker_settings"
             }
             {
-              var: "id"
+              var: "dataset_slug"
             }
           ]
           t: {
@@ -124,8 +127,8 @@ main: kit: entity: marker_setting: {
         }
       ]
     }
-    load: {
-      name: "load"
+    list: {
+      name: "list"
       points: [
         {
           co: {
@@ -137,7 +140,7 @@ main: kit: entity: marker_setting: {
             params: [
               {
                 k: "param"
-                n: "id"
+                n: "dataset_slug"
                 or: "datasetSlug"
                 r: true
                 t: "`$STRING`"
@@ -148,12 +151,12 @@ main: kit: entity: marker_setting: {
           o: "/1/marker_settings/{datasetSlug}"
           q: {
             exist: [
-              "id"
+              "dataset_slug"
             ]
           }
           r: {
             param: {
-              datasetSlug: "id"
+              datasetSlug: "dataset_slug"
             }
           }
           rs: {
@@ -168,7 +171,7 @@ main: kit: entity: marker_setting: {
               lit: "marker_settings"
             }
             {
-              var: "id"
+              var: "dataset_slug"
             }
           ]
           t: {
@@ -198,7 +201,7 @@ main: kit: entity: marker_setting: {
               }
               {
                 k: "param"
-                n: "marker_setting_id"
+                n: "id"
                 or: "markerSettingId"
                 r: true
                 t: "`$STRING`"
@@ -210,13 +213,13 @@ main: kit: entity: marker_setting: {
           q: {
             exist: [
               "dataset_slug"
-              "marker_setting_id"
+              "id"
             ]
           }
           r: {
             param: {
               datasetSlug: "dataset_slug"
-              markerSettingId: "marker_setting_id"
+              markerSettingId: "id"
             }
           }
           rs: {
@@ -234,7 +237,7 @@ main: kit: entity: marker_setting: {
               var: "dataset_slug"
             }
             {
-              var: "marker_setting_id"
+              var: "id"
             }
           ]
           t: {
@@ -271,7 +274,7 @@ main: kit: entity: marker_setting: {
               }
               {
                 k: "param"
-                n: "marker_setting_id"
+                n: "id"
                 or: "markerSettingId"
                 r: true
                 t: "`$STRING`"
@@ -283,13 +286,13 @@ main: kit: entity: marker_setting: {
           q: {
             exist: [
               "dataset_slug"
-              "marker_setting_id"
+              "id"
             ]
           }
           r: {
             param: {
               datasetSlug: "dataset_slug"
-              markerSettingId: "marker_setting_id"
+              markerSettingId: "id"
             }
           }
           rs: {
@@ -307,7 +310,7 @@ main: kit: entity: marker_setting: {
               var: "dataset_slug"
             }
             {
-              var: "marker_setting_id"
+              var: "id"
             }
           ]
           t: {

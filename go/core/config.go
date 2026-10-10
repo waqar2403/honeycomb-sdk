@@ -51,7 +51,8 @@ func MakeConfig() map[string]any {
 				"event": map[string]any{},
 				"historical_anomaly": map[string]any{},
 				"key_management": map[string]any{},
-				"kinesi": map[string]any{},
+				"kinesis_event": map[string]any{},
+				"management_auth": map[string]any{},
 				"map_dependency": map[string]any{},
 				"marker": map[string]any{},
 				"marker_setting": map[string]any{},
@@ -139,34 +140,6 @@ func MakeConfig() map[string]any {
 								"response": map[string]any{
 									"kind": "json",
 									"media": "application/json",
-								},
-							},
-							map[string]any{
-								"kind": "http",
-								"method": "GET",
-								"orig": "/2/auth",
-								"segments": []any{
-									map[string]any{
-										"lit": "2",
-									},
-									map[string]any{
-										"lit": "auth",
-									},
-								},
-								"parts": []any{
-									"2",
-									"auth",
-								},
-								"rename": map[string]any{},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{},
-								"select": map[string]any{},
-								"response": map[string]any{
-									"kind": "json",
-									"media": "application/vnd.api+json",
 								},
 							},
 						},
@@ -373,69 +346,6 @@ func MakeConfig() map[string]any {
 							map[string]any{
 								"kind": "http",
 								"method": "DELETE",
-								"orig": "/1/boards/{boardId}/views/{viewId}",
-								"segments": []any{
-									map[string]any{
-										"lit": "1",
-									},
-									map[string]any{
-										"lit": "boards",
-									},
-									map[string]any{
-										"var": "id",
-									},
-									map[string]any{
-										"lit": "views",
-									},
-									map[string]any{
-										"var": "view_id",
-									},
-								},
-								"parts": []any{
-									"1",
-									"boards",
-									"{id}",
-									"views",
-									"{view_id}",
-								},
-								"rename": map[string]any{
-									"param": map[string]any{
-										"boardId": "id",
-										"viewId": "view_id",
-									},
-								},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{
-									"params": []any{
-										map[string]any{
-											"name": "id",
-											"orig": "boardId",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-										map[string]any{
-											"name": "view_id",
-											"orig": "viewId",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-									},
-								},
-								"select": map[string]any{
-									"exist": []any{
-										"id",
-										"view_id",
-									},
-								},
-							},
-							map[string]any{
-								"kind": "http",
-								"method": "DELETE",
 								"orig": "/1/boards/{boardId}",
 								"segments": []any{
 									map[string]any{
@@ -605,7 +515,7 @@ func MakeConfig() map[string]any {
 										"lit": "boards",
 									},
 									map[string]any{
-										"var": "id",
+										"var": "board_id",
 									},
 									map[string]any{
 										"lit": "views",
@@ -614,12 +524,12 @@ func MakeConfig() map[string]any {
 								"parts": []any{
 									"1",
 									"boards",
-									"{id}",
+									"{board_id}",
 									"views",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
-										"boardId": "id",
+										"boardId": "board_id",
 									},
 								},
 								"transform": map[string]any{
@@ -629,7 +539,7 @@ func MakeConfig() map[string]any {
 								"args": map[string]any{
 									"params": []any{
 										map[string]any{
-											"name": "id",
+											"name": "board_id",
 											"orig": "boardId",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -639,7 +549,7 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"id",
+										"board_id",
 									},
 								},
 								"response": map[string]any{
@@ -665,7 +575,7 @@ func MakeConfig() map[string]any {
 										"lit": "boards",
 									},
 									map[string]any{
-										"var": "id",
+										"var": "board_id",
 									},
 									map[string]any{
 										"lit": "views",
@@ -674,12 +584,12 @@ func MakeConfig() map[string]any {
 								"parts": []any{
 									"1",
 									"boards",
-									"{id}",
+									"{board_id}",
 									"views",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
-										"boardId": "id",
+										"boardId": "board_id",
 									},
 								},
 								"transform": map[string]any{
@@ -689,7 +599,7 @@ func MakeConfig() map[string]any {
 								"args": map[string]any{
 									"params": []any{
 										map[string]any{
-											"name": "id",
+											"name": "board_id",
 											"orig": "boardId",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -699,7 +609,7 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"id",
+										"board_id",
 									},
 								},
 								"response": map[string]any{
@@ -778,6 +688,75 @@ func MakeConfig() map[string]any {
 								"response": map[string]any{
 									"kind": "json",
 									"media": "application/json",
+								},
+							},
+						},
+					},
+					"remove": map[string]any{
+						"input": "data",
+						"name": "remove",
+						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "DELETE",
+								"orig": "/1/boards/{boardId}/views/{viewId}",
+								"segments": []any{
+									map[string]any{
+										"lit": "1",
+									},
+									map[string]any{
+										"lit": "boards",
+									},
+									map[string]any{
+										"var": "board_id",
+									},
+									map[string]any{
+										"lit": "views",
+									},
+									map[string]any{
+										"var": "id",
+									},
+								},
+								"parts": []any{
+									"1",
+									"boards",
+									"{board_id}",
+									"views",
+									"{id}",
+								},
+								"rename": map[string]any{
+									"param": map[string]any{
+										"boardId": "board_id",
+										"viewId": "id",
+									},
+								},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body`",
+								},
+								"args": map[string]any{
+									"params": []any{
+										map[string]any{
+											"name": "board_id",
+											"orig": "boardId",
+											"type": "`$STRING`",
+											"kind": "param",
+											"reqd": true,
+										},
+										map[string]any{
+											"name": "id",
+											"orig": "viewId",
+											"type": "`$STRING`",
+											"kind": "param",
+											"reqd": true,
+										},
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"board_id",
+										"id",
+									},
 								},
 							},
 						},
@@ -966,7 +945,7 @@ func MakeConfig() map[string]any {
 					"name": "id",
 					"parts": []any{
 						"dataset_slug",
-						"burn_alert_id",
+						"id",
 					},
 					"sep": "/",
 				},
@@ -988,17 +967,17 @@ func MakeConfig() map[string]any {
 										"lit": "burn_alerts",
 									},
 									map[string]any{
-										"var": "id",
+										"var": "dataset_slug",
 									},
 								},
 								"parts": []any{
 									"1",
 									"burn_alerts",
-									"{id}",
+									"{dataset_slug}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
-										"datasetSlug": "id",
+										"datasetSlug": "dataset_slug",
 									},
 								},
 								"transform": map[string]any{
@@ -1008,7 +987,7 @@ func MakeConfig() map[string]any {
 								"args": map[string]any{
 									"params": []any{
 										map[string]any{
-											"name": "id",
+											"name": "dataset_slug",
 											"orig": "datasetSlug",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -1018,7 +997,73 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"id",
+										"dataset_slug",
+									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
+								},
+							},
+						},
+					},
+					"list": map[string]any{
+						"input": "data",
+						"name": "list",
+						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "GET",
+								"orig": "/1/burn_alerts/{datasetSlug}",
+								"segments": []any{
+									map[string]any{
+										"lit": "1",
+									},
+									map[string]any{
+										"lit": "burn_alerts",
+									},
+									map[string]any{
+										"var": "dataset_slug",
+									},
+								},
+								"parts": []any{
+									"1",
+									"burn_alerts",
+									"{dataset_slug}",
+								},
+								"rename": map[string]any{
+									"param": map[string]any{
+										"datasetSlug": "dataset_slug",
+									},
+								},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body`",
+								},
+								"args": map[string]any{
+									"params": []any{
+										map[string]any{
+											"name": "dataset_slug",
+											"orig": "datasetSlug",
+											"type": "`$STRING`",
+											"kind": "param",
+											"reqd": true,
+										},
+									},
+									"query": []any{
+										map[string]any{
+											"name": "slo_id",
+											"orig": "slo_id",
+											"type": "`$STRING`",
+											"kind": "query",
+											"reqd": true,
+										},
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"dataset_slug",
+										"slo_id",
 									},
 								},
 								"response": map[string]any{
@@ -1047,18 +1092,18 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "burn_alert_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"burn_alerts",
 									"{dataset_slug}",
-									"{burn_alert_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
-										"burnAlertId": "burn_alert_id",
+										"burnAlertId": "id",
 										"datasetSlug": "dataset_slug",
 									},
 								},
@@ -1069,85 +1114,25 @@ func MakeConfig() map[string]any {
 								"args": map[string]any{
 									"params": []any{
 										map[string]any{
-											"name": "burn_alert_id",
-											"orig": "burnAlertId",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-										map[string]any{
 											"name": "dataset_slug",
 											"orig": "datasetSlug",
 											"type": "`$STRING`",
 											"kind": "param",
 											"reqd": true,
 										},
-									},
-								},
-								"select": map[string]any{
-									"exist": []any{
-										"burn_alert_id",
-										"dataset_slug",
-									},
-								},
-								"response": map[string]any{
-									"kind": "json",
-									"media": "application/json",
-								},
-							},
-							map[string]any{
-								"kind": "http",
-								"method": "GET",
-								"orig": "/1/burn_alerts/{datasetSlug}",
-								"segments": []any{
-									map[string]any{
-										"lit": "1",
-									},
-									map[string]any{
-										"lit": "burn_alerts",
-									},
-									map[string]any{
-										"var": "id",
-									},
-								},
-								"parts": []any{
-									"1",
-									"burn_alerts",
-									"{id}",
-								},
-								"rename": map[string]any{
-									"param": map[string]any{
-										"datasetSlug": "id",
-									},
-								},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{
-									"params": []any{
 										map[string]any{
 											"name": "id",
-											"orig": "datasetSlug",
+											"orig": "burnAlertId",
 											"type": "`$STRING`",
 											"kind": "param",
 											"reqd": true,
 										},
 									},
-									"query": []any{
-										map[string]any{
-											"name": "slo_id",
-											"orig": "slo_id",
-											"type": "`$STRING`",
-											"kind": "query",
-											"reqd": true,
-										},
-									},
 								},
 								"select": map[string]any{
 									"exist": []any{
+										"dataset_slug",
 										"id",
-										"slo_id",
 									},
 								},
 								"response": map[string]any{
@@ -1176,18 +1161,18 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "burn_alert_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"burn_alerts",
 									"{dataset_slug}",
-									"{burn_alert_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
-										"burnAlertId": "burn_alert_id",
+										"burnAlertId": "id",
 										"datasetSlug": "dataset_slug",
 									},
 								},
@@ -1198,15 +1183,15 @@ func MakeConfig() map[string]any {
 								"args": map[string]any{
 									"params": []any{
 										map[string]any{
-											"name": "burn_alert_id",
-											"orig": "burnAlertId",
+											"name": "dataset_slug",
+											"orig": "datasetSlug",
 											"type": "`$STRING`",
 											"kind": "param",
 											"reqd": true,
 										},
 										map[string]any{
-											"name": "dataset_slug",
-											"orig": "datasetSlug",
+											"name": "id",
+											"orig": "burnAlertId",
 											"type": "`$STRING`",
 											"kind": "param",
 											"reqd": true,
@@ -1215,8 +1200,8 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"burn_alert_id",
 										"dataset_slug",
+										"id",
 									},
 								},
 							},
@@ -1241,18 +1226,18 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "burn_alert_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"burn_alerts",
 									"{dataset_slug}",
-									"{burn_alert_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
-										"burnAlertId": "burn_alert_id",
+										"burnAlertId": "id",
 										"datasetSlug": "dataset_slug",
 									},
 								},
@@ -1263,15 +1248,15 @@ func MakeConfig() map[string]any {
 								"args": map[string]any{
 									"params": []any{
 										map[string]any{
-											"name": "burn_alert_id",
-											"orig": "burnAlertId",
+											"name": "dataset_slug",
+											"orig": "datasetSlug",
 											"type": "`$STRING`",
 											"kind": "param",
 											"reqd": true,
 										},
 										map[string]any{
-											"name": "dataset_slug",
-											"orig": "datasetSlug",
+											"name": "id",
+											"orig": "burnAlertId",
 											"type": "`$STRING`",
 											"kind": "param",
 											"reqd": true,
@@ -1280,8 +1265,8 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"burn_alert_id",
 										"dataset_slug",
+										"id",
 									},
 								},
 								"response": map[string]any{
@@ -1345,10 +1330,13 @@ func MakeConfig() map[string]any {
 				},
 				"id": map[string]any{
 					"field": "id",
+					"from": map[string]any{
+						"id": "id",
+					},
 					"name": "id",
 					"parts": []any{
 						"dataset_slug",
-						"derived_column_id",
+						"id",
 					},
 					"sep": "/",
 				},
@@ -1410,73 +1398,10 @@ func MakeConfig() map[string]any {
 							},
 						},
 					},
-					"load": map[string]any{
+					"list": map[string]any{
 						"input": "data",
-						"name": "load",
+						"name": "list",
 						"points": []any{
-							map[string]any{
-								"kind": "http",
-								"method": "GET",
-								"orig": "/1/derived_columns/{datasetSlug}/{derivedColumnId}",
-								"segments": []any{
-									map[string]any{
-										"lit": "1",
-									},
-									map[string]any{
-										"lit": "derived_columns",
-									},
-									map[string]any{
-										"var": "dataset_slug",
-									},
-									map[string]any{
-										"var": "derived_column_id",
-									},
-								},
-								"parts": []any{
-									"1",
-									"derived_columns",
-									"{dataset_slug}",
-									"{derived_column_id}",
-								},
-								"rename": map[string]any{
-									"param": map[string]any{
-										"datasetSlug": "dataset_slug",
-										"derivedColumnId": "derived_column_id",
-									},
-								},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{
-									"params": []any{
-										map[string]any{
-											"name": "dataset_slug",
-											"orig": "datasetSlug",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-										map[string]any{
-											"name": "derived_column_id",
-											"orig": "derivedColumnId",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-									},
-								},
-								"select": map[string]any{
-									"exist": []any{
-										"dataset_slug",
-										"derived_column_id",
-									},
-								},
-								"response": map[string]any{
-									"kind": "json",
-									"media": "application/json",
-								},
-							},
 							map[string]any{
 								"kind": "http",
 								"method": "GET",
@@ -1537,6 +1462,75 @@ func MakeConfig() map[string]any {
 							},
 						},
 					},
+					"load": map[string]any{
+						"input": "data",
+						"name": "load",
+						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "GET",
+								"orig": "/1/derived_columns/{datasetSlug}/{derivedColumnId}",
+								"segments": []any{
+									map[string]any{
+										"lit": "1",
+									},
+									map[string]any{
+										"lit": "derived_columns",
+									},
+									map[string]any{
+										"var": "dataset_slug",
+									},
+									map[string]any{
+										"var": "id",
+									},
+								},
+								"parts": []any{
+									"1",
+									"derived_columns",
+									"{dataset_slug}",
+									"{id}",
+								},
+								"rename": map[string]any{
+									"param": map[string]any{
+										"datasetSlug": "dataset_slug",
+										"derivedColumnId": "id",
+									},
+								},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body`",
+								},
+								"args": map[string]any{
+									"params": []any{
+										map[string]any{
+											"name": "dataset_slug",
+											"orig": "datasetSlug",
+											"type": "`$STRING`",
+											"kind": "param",
+											"reqd": true,
+										},
+										map[string]any{
+											"name": "id",
+											"orig": "derivedColumnId",
+											"type": "`$STRING`",
+											"kind": "param",
+											"reqd": true,
+										},
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"dataset_slug",
+										"id",
+									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
+								},
+							},
+						},
+					},
 					"remove": map[string]any{
 						"input": "data",
 						"name": "remove",
@@ -1556,19 +1550,19 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "derived_column_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"derived_columns",
 									"{dataset_slug}",
-									"{derived_column_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
 										"datasetSlug": "dataset_slug",
-										"derivedColumnId": "derived_column_id",
+										"derivedColumnId": "id",
 									},
 								},
 								"transform": map[string]any{
@@ -1585,7 +1579,7 @@ func MakeConfig() map[string]any {
 											"reqd": true,
 										},
 										map[string]any{
-											"name": "derived_column_id",
+											"name": "id",
 											"orig": "derivedColumnId",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -1596,7 +1590,7 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"exist": []any{
 										"dataset_slug",
-										"derived_column_id",
+										"id",
 									},
 								},
 							},
@@ -1621,19 +1615,19 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "derived_column_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"derived_columns",
 									"{dataset_slug}",
-									"{derived_column_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
 										"datasetSlug": "dataset_slug",
-										"derivedColumnId": "derived_column_id",
+										"derivedColumnId": "id",
 									},
 								},
 								"transform": map[string]any{
@@ -1650,7 +1644,7 @@ func MakeConfig() map[string]any {
 											"reqd": true,
 										},
 										map[string]any{
-											"name": "derived_column_id",
+											"name": "id",
 											"orig": "derivedColumnId",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -1661,7 +1655,7 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"exist": []any{
 										"dataset_slug",
-										"derived_column_id",
+										"id",
 									},
 								},
 								"response": map[string]any{
@@ -1710,7 +1704,7 @@ func MakeConfig() map[string]any {
 						"type": "`$STRING`",
 						"req": true,
 						"op": map[string]any{
-							"load": map[string]any{
+							"list": map[string]any{
 								"type": "`$STRING`",
 							},
 						},
@@ -1740,10 +1734,13 @@ func MakeConfig() map[string]any {
 				},
 				"id": map[string]any{
 					"field": "id",
+					"from": map[string]any{
+						"id": "id",
+					},
 					"name": "id",
 					"parts": []any{
 						"dataset_slug",
-						"column_id",
+						"id",
 					},
 					"sep": "/",
 				},
@@ -1765,17 +1762,17 @@ func MakeConfig() map[string]any {
 										"lit": "columns",
 									},
 									map[string]any{
-										"var": "id",
+										"var": "dataset_slug",
 									},
 								},
 								"parts": []any{
 									"1",
 									"columns",
-									"{id}",
+									"{dataset_slug}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
-										"datasetSlug": "id",
+										"datasetSlug": "dataset_slug",
 									},
 								},
 								"transform": map[string]any{
@@ -1785,7 +1782,7 @@ func MakeConfig() map[string]any {
 								"args": map[string]any{
 									"params": []any{
 										map[string]any{
-											"name": "id",
+											"name": "dataset_slug",
 											"orig": "datasetSlug",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -1795,7 +1792,71 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"id",
+										"dataset_slug",
+									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
+								},
+							},
+						},
+					},
+					"list": map[string]any{
+						"input": "data",
+						"name": "list",
+						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "GET",
+								"orig": "/1/columns/{datasetSlug}",
+								"segments": []any{
+									map[string]any{
+										"lit": "1",
+									},
+									map[string]any{
+										"lit": "columns",
+									},
+									map[string]any{
+										"var": "dataset_slug",
+									},
+								},
+								"parts": []any{
+									"1",
+									"columns",
+									"{dataset_slug}",
+								},
+								"rename": map[string]any{
+									"param": map[string]any{
+										"datasetSlug": "dataset_slug",
+									},
+								},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body`",
+								},
+								"args": map[string]any{
+									"params": []any{
+										map[string]any{
+											"name": "dataset_slug",
+											"orig": "datasetSlug",
+											"type": "`$STRING`",
+											"kind": "param",
+											"reqd": true,
+										},
+									},
+									"query": []any{
+										map[string]any{
+											"name": "key_name",
+											"orig": "key_name",
+											"type": "`$STRING`",
+											"kind": "query",
+										},
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"dataset_slug",
 									},
 								},
 								"response": map[string]any{
@@ -1824,18 +1885,18 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "column_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"columns",
 									"{dataset_slug}",
-									"{column_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
-										"columnId": "column_id",
+										"columnId": "id",
 										"datasetSlug": "dataset_slug",
 									},
 								},
@@ -1846,82 +1907,24 @@ func MakeConfig() map[string]any {
 								"args": map[string]any{
 									"params": []any{
 										map[string]any{
-											"name": "column_id",
-											"orig": "columnId",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-										map[string]any{
 											"name": "dataset_slug",
 											"orig": "datasetSlug",
 											"type": "`$STRING`",
 											"kind": "param",
 											"reqd": true,
 										},
-									},
-								},
-								"select": map[string]any{
-									"exist": []any{
-										"column_id",
-										"dataset_slug",
-									},
-								},
-								"response": map[string]any{
-									"kind": "json",
-									"media": "application/json",
-								},
-							},
-							map[string]any{
-								"kind": "http",
-								"method": "GET",
-								"orig": "/1/columns/{datasetSlug}",
-								"segments": []any{
-									map[string]any{
-										"lit": "1",
-									},
-									map[string]any{
-										"lit": "columns",
-									},
-									map[string]any{
-										"var": "id",
-									},
-								},
-								"parts": []any{
-									"1",
-									"columns",
-									"{id}",
-								},
-								"rename": map[string]any{
-									"param": map[string]any{
-										"datasetSlug": "id",
-									},
-								},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{
-									"params": []any{
 										map[string]any{
 											"name": "id",
-											"orig": "datasetSlug",
+											"orig": "columnId",
 											"type": "`$STRING`",
 											"kind": "param",
 											"reqd": true,
 										},
 									},
-									"query": []any{
-										map[string]any{
-											"name": "key_name",
-											"orig": "key_name",
-											"type": "`$STRING`",
-											"kind": "query",
-										},
-									},
 								},
 								"select": map[string]any{
 									"exist": []any{
+										"dataset_slug",
 										"id",
 									},
 								},
@@ -1951,18 +1954,18 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "column_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"columns",
 									"{dataset_slug}",
-									"{column_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
-										"columnId": "column_id",
+										"columnId": "id",
 										"datasetSlug": "dataset_slug",
 									},
 								},
@@ -1973,15 +1976,15 @@ func MakeConfig() map[string]any {
 								"args": map[string]any{
 									"params": []any{
 										map[string]any{
-											"name": "column_id",
-											"orig": "columnId",
+											"name": "dataset_slug",
+											"orig": "datasetSlug",
 											"type": "`$STRING`",
 											"kind": "param",
 											"reqd": true,
 										},
 										map[string]any{
-											"name": "dataset_slug",
-											"orig": "datasetSlug",
+											"name": "id",
+											"orig": "columnId",
 											"type": "`$STRING`",
 											"kind": "param",
 											"reqd": true,
@@ -1990,8 +1993,8 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"column_id",
 										"dataset_slug",
+										"id",
 									},
 								},
 							},
@@ -2016,18 +2019,18 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "column_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"columns",
 									"{dataset_slug}",
-									"{column_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
-										"columnId": "column_id",
+										"columnId": "id",
 										"datasetSlug": "dataset_slug",
 									},
 								},
@@ -2038,15 +2041,15 @@ func MakeConfig() map[string]any {
 								"args": map[string]any{
 									"params": []any{
 										map[string]any{
-											"name": "column_id",
-											"orig": "columnId",
+											"name": "dataset_slug",
+											"orig": "datasetSlug",
 											"type": "`$STRING`",
 											"kind": "param",
 											"reqd": true,
 										},
 										map[string]any{
-											"name": "dataset_slug",
-											"orig": "datasetSlug",
+											"name": "id",
+											"orig": "columnId",
 											"type": "`$STRING`",
 											"kind": "param",
 											"reqd": true,
@@ -2055,8 +2058,8 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"column_id",
 										"dataset_slug",
+										"id",
 									},
 								},
 								"response": map[string]any{
@@ -3023,19 +3026,10 @@ func MakeConfig() map[string]any {
 						"short": "The array should contain one or more JSON objects representing Events.",
 					},
 					map[string]any{
-						"name": "id",
-						"title": "Id",
-						"type": "`$STRING`",
-					},
-					map[string]any{
 						"name": "status",
 						"title": "Status",
 						"type": "`$INTEGER`",
 					},
-				},
-				"id": map[string]any{
-					"field": "id",
-					"name": "id",
 				},
 				"name": "event",
 				"op": map[string]any{
@@ -3126,17 +3120,17 @@ func MakeConfig() map[string]any {
 										"lit": "events",
 									},
 									map[string]any{
-										"var": "id",
+										"var": "dataset_slug",
 									},
 								},
 								"parts": []any{
 									"1",
 									"events",
-									"{id}",
+									"{dataset_slug}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
-										"datasetSlug": "id",
+										"datasetSlug": "dataset_slug",
 									},
 								},
 								"transform": map[string]any{
@@ -3160,7 +3154,7 @@ func MakeConfig() map[string]any {
 									},
 									"params": []any{
 										map[string]any{
-											"name": "id",
+											"name": "dataset_slug",
 											"orig": "datasetSlug",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -3170,7 +3164,7 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"id",
+										"dataset_slug",
 									},
 								},
 							},
@@ -3716,7 +3710,7 @@ func MakeConfig() map[string]any {
 					"ancestors": []any{},
 				},
 			},
-			"kinesi": map[string]any{
+			"kinesis_event": map[string]any{
 				"fields": []any{
 					map[string]any{
 						"name": "errorMessage",
@@ -3739,7 +3733,7 @@ func MakeConfig() map[string]any {
 						"type": "`$INTEGER`",
 					},
 				},
-				"name": "kinesi",
+				"name": "kinesis_event",
 				"op": map[string]any{
 					"create": map[string]any{
 						"input": "data",
@@ -3804,6 +3798,49 @@ func MakeConfig() map[string]any {
 								"response": map[string]any{
 									"kind": "json",
 									"media": "application/json",
+								},
+							},
+						},
+					},
+				},
+				"relations": map[string]any{
+					"ancestors": []any{},
+				},
+			},
+			"management_auth": map[string]any{
+				"fields": []any{},
+				"name": "management_auth",
+				"op": map[string]any{
+					"load": map[string]any{
+						"input": "data",
+						"name": "load",
+						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "GET",
+								"orig": "/2/auth",
+								"segments": []any{
+									map[string]any{
+										"lit": "2",
+									},
+									map[string]any{
+										"lit": "auth",
+									},
+								},
+								"parts": []any{
+									"2",
+									"auth",
+								},
+								"rename": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body`",
+								},
+								"args": map[string]any{},
+								"select": map[string]any{},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/vnd.api+json",
 								},
 							},
 						},
@@ -4067,10 +4104,13 @@ func MakeConfig() map[string]any {
 				},
 				"id": map[string]any{
 					"field": "id",
+					"from": map[string]any{
+						"id": "id",
+					},
 					"name": "id",
 					"parts": []any{
 						"dataset_slug",
-						"marker_id",
+						"id",
 					},
 					"sep": "/",
 				},
@@ -4092,17 +4132,17 @@ func MakeConfig() map[string]any {
 										"lit": "markers",
 									},
 									map[string]any{
-										"var": "id",
+										"var": "dataset_slug",
 									},
 								},
 								"parts": []any{
 									"1",
 									"markers",
-									"{id}",
+									"{dataset_slug}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
-										"datasetSlug": "id",
+										"datasetSlug": "dataset_slug",
 									},
 								},
 								"transform": map[string]any{
@@ -4112,7 +4152,7 @@ func MakeConfig() map[string]any {
 								"args": map[string]any{
 									"params": []any{
 										map[string]any{
-											"name": "id",
+											"name": "dataset_slug",
 											"orig": "datasetSlug",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -4122,7 +4162,7 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"id",
+										"dataset_slug",
 									},
 								},
 								"response": map[string]any{
@@ -4132,9 +4172,9 @@ func MakeConfig() map[string]any {
 							},
 						},
 					},
-					"load": map[string]any{
+					"list": map[string]any{
 						"input": "data",
-						"name": "load",
+						"name": "list",
 						"points": []any{
 							map[string]any{
 								"kind": "http",
@@ -4148,17 +4188,17 @@ func MakeConfig() map[string]any {
 										"lit": "markers",
 									},
 									map[string]any{
-										"var": "id",
+										"var": "dataset_slug",
 									},
 								},
 								"parts": []any{
 									"1",
 									"markers",
-									"{id}",
+									"{dataset_slug}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
-										"datasetSlug": "id",
+										"datasetSlug": "dataset_slug",
 									},
 								},
 								"transform": map[string]any{
@@ -4168,7 +4208,7 @@ func MakeConfig() map[string]any {
 								"args": map[string]any{
 									"params": []any{
 										map[string]any{
-											"name": "id",
+											"name": "dataset_slug",
 											"orig": "datasetSlug",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -4178,7 +4218,7 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"id",
+										"dataset_slug",
 									},
 								},
 								"response": map[string]any{
@@ -4207,19 +4247,19 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "marker_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"markers",
 									"{dataset_slug}",
-									"{marker_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
 										"datasetSlug": "dataset_slug",
-										"markerId": "marker_id",
+										"markerId": "id",
 									},
 								},
 								"transform": map[string]any{
@@ -4236,7 +4276,7 @@ func MakeConfig() map[string]any {
 											"reqd": true,
 										},
 										map[string]any{
-											"name": "marker_id",
+											"name": "id",
 											"orig": "markerId",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -4247,7 +4287,7 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"exist": []any{
 										"dataset_slug",
-										"marker_id",
+										"id",
 									},
 								},
 								"response": map[string]any{
@@ -4276,19 +4316,19 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "marker_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"markers",
 									"{dataset_slug}",
-									"{marker_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
 										"datasetSlug": "dataset_slug",
-										"markerId": "marker_id",
+										"markerId": "id",
 									},
 								},
 								"transform": map[string]any{
@@ -4305,7 +4345,7 @@ func MakeConfig() map[string]any {
 											"reqd": true,
 										},
 										map[string]any{
-											"name": "marker_id",
+											"name": "id",
 											"orig": "markerId",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -4316,7 +4356,7 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"exist": []any{
 										"dataset_slug",
-										"marker_id",
+										"id",
 									},
 								},
 								"response": map[string]any{
@@ -4377,10 +4417,13 @@ func MakeConfig() map[string]any {
 				},
 				"id": map[string]any{
 					"field": "id",
+					"from": map[string]any{
+						"id": "id",
+					},
 					"name": "id",
 					"parts": []any{
 						"dataset_slug",
-						"marker_setting_id",
+						"id",
 					},
 					"sep": "/",
 				},
@@ -4402,17 +4445,17 @@ func MakeConfig() map[string]any {
 										"lit": "marker_settings",
 									},
 									map[string]any{
-										"var": "id",
+										"var": "dataset_slug",
 									},
 								},
 								"parts": []any{
 									"1",
 									"marker_settings",
-									"{id}",
+									"{dataset_slug}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
-										"datasetSlug": "id",
+										"datasetSlug": "dataset_slug",
 									},
 								},
 								"transform": map[string]any{
@@ -4422,7 +4465,7 @@ func MakeConfig() map[string]any {
 								"args": map[string]any{
 									"params": []any{
 										map[string]any{
-											"name": "id",
+											"name": "dataset_slug",
 											"orig": "datasetSlug",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -4432,7 +4475,7 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"id",
+										"dataset_slug",
 									},
 								},
 								"response": map[string]any{
@@ -4442,9 +4485,9 @@ func MakeConfig() map[string]any {
 							},
 						},
 					},
-					"load": map[string]any{
+					"list": map[string]any{
 						"input": "data",
-						"name": "load",
+						"name": "list",
 						"points": []any{
 							map[string]any{
 								"kind": "http",
@@ -4458,17 +4501,17 @@ func MakeConfig() map[string]any {
 										"lit": "marker_settings",
 									},
 									map[string]any{
-										"var": "id",
+										"var": "dataset_slug",
 									},
 								},
 								"parts": []any{
 									"1",
 									"marker_settings",
-									"{id}",
+									"{dataset_slug}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
-										"datasetSlug": "id",
+										"datasetSlug": "dataset_slug",
 									},
 								},
 								"transform": map[string]any{
@@ -4478,7 +4521,7 @@ func MakeConfig() map[string]any {
 								"args": map[string]any{
 									"params": []any{
 										map[string]any{
-											"name": "id",
+											"name": "dataset_slug",
 											"orig": "datasetSlug",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -4488,7 +4531,7 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"id",
+										"dataset_slug",
 									},
 								},
 								"response": map[string]any{
@@ -4517,19 +4560,19 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "marker_setting_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"marker_settings",
 									"{dataset_slug}",
-									"{marker_setting_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
 										"datasetSlug": "dataset_slug",
-										"markerSettingId": "marker_setting_id",
+										"markerSettingId": "id",
 									},
 								},
 								"transform": map[string]any{
@@ -4546,7 +4589,7 @@ func MakeConfig() map[string]any {
 											"reqd": true,
 										},
 										map[string]any{
-											"name": "marker_setting_id",
+											"name": "id",
 											"orig": "markerSettingId",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -4557,7 +4600,7 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"exist": []any{
 										"dataset_slug",
-										"marker_setting_id",
+										"id",
 									},
 								},
 								"response": map[string]any{
@@ -4586,19 +4629,19 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "marker_setting_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"marker_settings",
 									"{dataset_slug}",
-									"{marker_setting_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
 										"datasetSlug": "dataset_slug",
-										"markerSettingId": "marker_setting_id",
+										"markerSettingId": "id",
 									},
 								},
 								"transform": map[string]any{
@@ -4615,7 +4658,7 @@ func MakeConfig() map[string]any {
 											"reqd": true,
 										},
 										map[string]any{
-											"name": "marker_setting_id",
+											"name": "id",
 											"orig": "markerSettingId",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -4626,7 +4669,7 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"exist": []any{
 										"dataset_slug",
-										"marker_setting_id",
+										"id",
 									},
 								},
 								"response": map[string]any{
@@ -4742,10 +4785,13 @@ func MakeConfig() map[string]any {
 				},
 				"id": map[string]any{
 					"field": "id",
+					"from": map[string]any{
+						"id": "id",
+					},
 					"name": "id",
 					"parts": []any{
 						"dataset_slug",
-						"query_id",
+						"id",
 					},
 					"sep": "/",
 				},
@@ -4767,17 +4813,17 @@ func MakeConfig() map[string]any {
 										"lit": "queries",
 									},
 									map[string]any{
-										"var": "id",
+										"var": "dataset_slug",
 									},
 								},
 								"parts": []any{
 									"1",
 									"queries",
-									"{id}",
+									"{dataset_slug}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
-										"datasetSlug": "id",
+										"datasetSlug": "dataset_slug",
 									},
 								},
 								"transform": map[string]any{
@@ -4787,7 +4833,7 @@ func MakeConfig() map[string]any {
 								"args": map[string]any{
 									"params": []any{
 										map[string]any{
-											"name": "id",
+											"name": "dataset_slug",
 											"orig": "datasetSlug",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -4797,7 +4843,7 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"id",
+										"dataset_slug",
 									},
 								},
 								"response": map[string]any{
@@ -4826,19 +4872,19 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "query_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"queries",
 									"{dataset_slug}",
-									"{query_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
 										"datasetSlug": "dataset_slug",
-										"queryId": "query_id",
+										"queryId": "id",
 									},
 								},
 								"transform": map[string]any{
@@ -4855,7 +4901,7 @@ func MakeConfig() map[string]any {
 											"reqd": true,
 										},
 										map[string]any{
-											"name": "query_id",
+											"name": "id",
 											"orig": "queryId",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -4866,7 +4912,7 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"exist": []any{
 										"dataset_slug",
-										"query_id",
+										"id",
 									},
 								},
 								"response": map[string]any{
@@ -4936,10 +4982,13 @@ func MakeConfig() map[string]any {
 				},
 				"id": map[string]any{
 					"field": "id",
+					"from": map[string]any{
+						"id": "id",
+					},
 					"name": "id",
 					"parts": []any{
 						"dataset_slug",
-						"query_annotation_id",
+						"id",
 					},
 					"sep": "/",
 				},
@@ -4961,17 +5010,17 @@ func MakeConfig() map[string]any {
 										"lit": "query_annotations",
 									},
 									map[string]any{
-										"var": "id",
+										"var": "dataset_slug",
 									},
 								},
 								"parts": []any{
 									"1",
 									"query_annotations",
-									"{id}",
+									"{dataset_slug}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
-										"datasetSlug": "id",
+										"datasetSlug": "dataset_slug",
 									},
 								},
 								"transform": map[string]any{
@@ -4981,7 +5030,7 @@ func MakeConfig() map[string]any {
 								"args": map[string]any{
 									"params": []any{
 										map[string]any{
-											"name": "id",
+											"name": "dataset_slug",
 											"orig": "datasetSlug",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -4991,7 +5040,72 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"id",
+										"dataset_slug",
+									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
+								},
+							},
+						},
+					},
+					"list": map[string]any{
+						"input": "data",
+						"name": "list",
+						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "GET",
+								"orig": "/1/query_annotations/{datasetSlug}",
+								"segments": []any{
+									map[string]any{
+										"lit": "1",
+									},
+									map[string]any{
+										"lit": "query_annotations",
+									},
+									map[string]any{
+										"var": "dataset_slug",
+									},
+								},
+								"parts": []any{
+									"1",
+									"query_annotations",
+									"{dataset_slug}",
+								},
+								"rename": map[string]any{
+									"param": map[string]any{
+										"datasetSlug": "dataset_slug",
+									},
+								},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body`",
+								},
+								"args": map[string]any{
+									"params": []any{
+										map[string]any{
+											"name": "dataset_slug",
+											"orig": "datasetSlug",
+											"type": "`$STRING`",
+											"kind": "param",
+											"reqd": true,
+										},
+									},
+									"query": []any{
+										map[string]any{
+											"name": "include_board_annotation",
+											"orig": "include_board_annotations",
+											"type": "`$BOOLEAN`",
+											"kind": "query",
+											"example": false,
+										},
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"dataset_slug",
 									},
 								},
 								"response": map[string]any{
@@ -5020,19 +5134,19 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "query_annotation_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"query_annotations",
 									"{dataset_slug}",
-									"{query_annotation_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
 										"datasetSlug": "dataset_slug",
-										"queryAnnotationId": "query_annotation_id",
+										"queryAnnotationId": "id",
 									},
 								},
 								"transform": map[string]any{
@@ -5049,7 +5163,7 @@ func MakeConfig() map[string]any {
 											"reqd": true,
 										},
 										map[string]any{
-											"name": "query_annotation_id",
+											"name": "id",
 											"orig": "queryAnnotationId",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -5060,65 +5174,6 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"exist": []any{
 										"dataset_slug",
-										"query_annotation_id",
-									},
-								},
-								"response": map[string]any{
-									"kind": "json",
-									"media": "application/json",
-								},
-							},
-							map[string]any{
-								"kind": "http",
-								"method": "GET",
-								"orig": "/1/query_annotations/{datasetSlug}",
-								"segments": []any{
-									map[string]any{
-										"lit": "1",
-									},
-									map[string]any{
-										"lit": "query_annotations",
-									},
-									map[string]any{
-										"var": "id",
-									},
-								},
-								"parts": []any{
-									"1",
-									"query_annotations",
-									"{id}",
-								},
-								"rename": map[string]any{
-									"param": map[string]any{
-										"datasetSlug": "id",
-									},
-								},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{
-									"params": []any{
-										map[string]any{
-											"name": "id",
-											"orig": "datasetSlug",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-									},
-									"query": []any{
-										map[string]any{
-											"name": "include_board_annotation",
-											"orig": "include_board_annotations",
-											"type": "`$BOOLEAN`",
-											"kind": "query",
-											"example": false,
-										},
-									},
-								},
-								"select": map[string]any{
-									"exist": []any{
 										"id",
 									},
 								},
@@ -5148,19 +5203,19 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "query_annotation_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"query_annotations",
 									"{dataset_slug}",
-									"{query_annotation_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
 										"datasetSlug": "dataset_slug",
-										"queryAnnotationId": "query_annotation_id",
+										"queryAnnotationId": "id",
 									},
 								},
 								"transform": map[string]any{
@@ -5177,7 +5232,7 @@ func MakeConfig() map[string]any {
 											"reqd": true,
 										},
 										map[string]any{
-											"name": "query_annotation_id",
+											"name": "id",
 											"orig": "queryAnnotationId",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -5188,7 +5243,7 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"exist": []any{
 										"dataset_slug",
-										"query_annotation_id",
+										"id",
 									},
 								},
 							},
@@ -5213,19 +5268,19 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "query_annotation_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"query_annotations",
 									"{dataset_slug}",
-									"{query_annotation_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
 										"datasetSlug": "dataset_slug",
-										"queryAnnotationId": "query_annotation_id",
+										"queryAnnotationId": "id",
 									},
 								},
 								"transform": map[string]any{
@@ -5242,7 +5297,7 @@ func MakeConfig() map[string]any {
 											"reqd": true,
 										},
 										map[string]any{
-											"name": "query_annotation_id",
+											"name": "id",
 											"orig": "queryAnnotationId",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -5253,7 +5308,7 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"exist": []any{
 										"dataset_slug",
-										"query_annotation_id",
+										"id",
 									},
 								},
 								"response": map[string]any{
@@ -5348,10 +5403,13 @@ func MakeConfig() map[string]any {
 				},
 				"id": map[string]any{
 					"field": "id",
+					"from": map[string]any{
+						"id": "id",
+					},
 					"name": "id",
 					"parts": []any{
 						"dataset_slug",
-						"query_result_id",
+						"id",
 					},
 					"sep": "/",
 				},
@@ -5373,17 +5431,17 @@ func MakeConfig() map[string]any {
 										"lit": "query_results",
 									},
 									map[string]any{
-										"var": "id",
+										"var": "dataset_slug",
 									},
 								},
 								"parts": []any{
 									"1",
 									"query_results",
-									"{id}",
+									"{dataset_slug}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
-										"datasetSlug": "id",
+										"datasetSlug": "dataset_slug",
 									},
 								},
 								"transform": map[string]any{
@@ -5393,7 +5451,7 @@ func MakeConfig() map[string]any {
 								"args": map[string]any{
 									"params": []any{
 										map[string]any{
-											"name": "id",
+											"name": "dataset_slug",
 											"orig": "datasetSlug",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -5403,7 +5461,7 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"id",
+										"dataset_slug",
 									},
 								},
 								"response": map[string]any{
@@ -5432,19 +5490,19 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "query_result_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"query_results",
 									"{dataset_slug}",
-									"{query_result_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
 										"datasetSlug": "dataset_slug",
-										"queryResultId": "query_result_id",
+										"queryResultId": "id",
 									},
 								},
 								"transform": map[string]any{
@@ -5461,7 +5519,7 @@ func MakeConfig() map[string]any {
 											"reqd": true,
 										},
 										map[string]any{
-											"name": "query_result_id",
+											"name": "id",
 											"orig": "queryResultId",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -5472,7 +5530,7 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"exist": []any{
 										"dataset_slug",
-										"query_result_id",
+										"id",
 									},
 								},
 								"response": map[string]any{
@@ -6138,7 +6196,7 @@ func MakeConfig() map[string]any {
 								"req": true,
 								"type": "`$STRING`",
 							},
-							"load": map[string]any{
+							"list": map[string]any{
 								"req": true,
 								"type": "`$STRING`",
 							},
@@ -6166,7 +6224,7 @@ func MakeConfig() map[string]any {
 								"req": true,
 								"type": "`$OBJECT`",
 							},
-							"load": map[string]any{
+							"list": map[string]any{
 								"req": true,
 								"type": "`$OBJECT`",
 							},
@@ -6175,7 +6233,7 @@ func MakeConfig() map[string]any {
 								"type": "`$OBJECT`",
 							},
 						},
-						"short": "Reference to the [Calculated Field](/api/calculated-fields/) used as the indicator of event success.",
+						"short": "Reference to the [Calculated Field (also called Derived Column)](/api/calculated-fields/) used as the indicator of event success.",
 					},
 					map[string]any{
 						"name": "tags",
@@ -6192,7 +6250,7 @@ func MakeConfig() map[string]any {
 								"req": true,
 								"type": "`$INTEGER`",
 							},
-							"load": map[string]any{
+							"list": map[string]any{
 								"req": true,
 								"type": "`$INTEGER`",
 							},
@@ -6212,7 +6270,7 @@ func MakeConfig() map[string]any {
 								"req": true,
 								"type": "`$INTEGER`",
 							},
-							"load": map[string]any{
+							"list": map[string]any{
 								"req": true,
 								"type": "`$INTEGER`",
 							},
@@ -6234,10 +6292,13 @@ func MakeConfig() map[string]any {
 				},
 				"id": map[string]any{
 					"field": "id",
+					"from": map[string]any{
+						"id": "id",
+					},
 					"name": "id",
 					"parts": []any{
 						"dataset_slug",
-						"slo_id",
+						"id",
 					},
 					"sep": "/",
 				},
@@ -6259,17 +6320,17 @@ func MakeConfig() map[string]any {
 										"lit": "slos",
 									},
 									map[string]any{
-										"var": "id",
+										"var": "dataset_slug",
 									},
 								},
 								"parts": []any{
 									"1",
 									"slos",
-									"{id}",
+									"{dataset_slug}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
-										"datasetSlug": "id",
+										"datasetSlug": "dataset_slug",
 									},
 								},
 								"transform": map[string]any{
@@ -6279,7 +6340,7 @@ func MakeConfig() map[string]any {
 								"args": map[string]any{
 									"params": []any{
 										map[string]any{
-											"name": "id",
+											"name": "dataset_slug",
 											"orig": "datasetSlug",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -6289,7 +6350,63 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"id",
+										"dataset_slug",
+									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
+								},
+							},
+						},
+					},
+					"list": map[string]any{
+						"input": "data",
+						"name": "list",
+						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "GET",
+								"orig": "/1/slos/{datasetSlug}",
+								"segments": []any{
+									map[string]any{
+										"lit": "1",
+									},
+									map[string]any{
+										"lit": "slos",
+									},
+									map[string]any{
+										"var": "dataset_slug",
+									},
+								},
+								"parts": []any{
+									"1",
+									"slos",
+									"{dataset_slug}",
+								},
+								"rename": map[string]any{
+									"param": map[string]any{
+										"datasetSlug": "dataset_slug",
+									},
+								},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body`",
+								},
+								"args": map[string]any{
+									"params": []any{
+										map[string]any{
+											"name": "dataset_slug",
+											"orig": "datasetSlug",
+											"type": "`$STRING`",
+											"kind": "param",
+											"reqd": true,
+										},
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"dataset_slug",
 									},
 								},
 								"response": map[string]any{
@@ -6318,19 +6435,19 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "slo_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"slos",
 									"{dataset_slug}",
-									"{slo_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
 										"datasetSlug": "dataset_slug",
-										"sloId": "slo_id",
+										"sloId": "id",
 									},
 								},
 								"transform": map[string]any{
@@ -6347,7 +6464,7 @@ func MakeConfig() map[string]any {
 											"reqd": true,
 										},
 										map[string]any{
-											"name": "slo_id",
+											"name": "id",
 											"orig": "sloId",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -6367,56 +6484,6 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"exist": []any{
 										"dataset_slug",
-										"slo_id",
-									},
-								},
-								"response": map[string]any{
-									"kind": "json",
-									"media": "application/json",
-								},
-							},
-							map[string]any{
-								"kind": "http",
-								"method": "GET",
-								"orig": "/1/slos/{datasetSlug}",
-								"segments": []any{
-									map[string]any{
-										"lit": "1",
-									},
-									map[string]any{
-										"lit": "slos",
-									},
-									map[string]any{
-										"var": "id",
-									},
-								},
-								"parts": []any{
-									"1",
-									"slos",
-									"{id}",
-								},
-								"rename": map[string]any{
-									"param": map[string]any{
-										"datasetSlug": "id",
-									},
-								},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{
-									"params": []any{
-										map[string]any{
-											"name": "id",
-											"orig": "datasetSlug",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-									},
-								},
-								"select": map[string]any{
-									"exist": []any{
 										"id",
 									},
 								},
@@ -6446,19 +6513,19 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "slo_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"slos",
 									"{dataset_slug}",
-									"{slo_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
 										"datasetSlug": "dataset_slug",
-										"sloId": "slo_id",
+										"sloId": "id",
 									},
 								},
 								"transform": map[string]any{
@@ -6475,7 +6542,7 @@ func MakeConfig() map[string]any {
 											"reqd": true,
 										},
 										map[string]any{
-											"name": "slo_id",
+											"name": "id",
 											"orig": "sloId",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -6486,7 +6553,7 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"exist": []any{
 										"dataset_slug",
-										"slo_id",
+										"id",
 									},
 								},
 							},
@@ -6511,19 +6578,19 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "slo_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"slos",
 									"{dataset_slug}",
-									"{slo_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
 										"datasetSlug": "dataset_slug",
-										"sloId": "slo_id",
+										"sloId": "id",
 									},
 								},
 								"transform": map[string]any{
@@ -6540,7 +6607,7 @@ func MakeConfig() map[string]any {
 											"reqd": true,
 										},
 										map[string]any{
-											"name": "slo_id",
+											"name": "id",
 											"orig": "sloId",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -6551,7 +6618,7 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"exist": []any{
 										"dataset_slug",
-										"slo_id",
+										"id",
 									},
 								},
 								"response": map[string]any{
@@ -7056,11 +7123,12 @@ func MakeConfig() map[string]any {
 					"field": "id",
 					"from": map[string]any{
 						"dataset_slug": "dataset_slug",
+						"id": "id",
 					},
 					"name": "id",
 					"parts": []any{
 						"dataset_slug",
-						"trigger_id",
+						"id",
 					},
 					"sep": "/",
 				},
@@ -7082,17 +7150,17 @@ func MakeConfig() map[string]any {
 										"lit": "triggers",
 									},
 									map[string]any{
-										"var": "id",
+										"var": "dataset_slug",
 									},
 								},
 								"parts": []any{
 									"1",
 									"triggers",
-									"{id}",
+									"{dataset_slug}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
-										"datasetSlug": "id",
+										"datasetSlug": "dataset_slug",
 									},
 								},
 								"transform": map[string]any{
@@ -7102,7 +7170,7 @@ func MakeConfig() map[string]any {
 								"args": map[string]any{
 									"params": []any{
 										map[string]any{
-											"name": "id",
+											"name": "dataset_slug",
 											"orig": "datasetSlug",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -7112,7 +7180,7 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"id",
+										"dataset_slug",
 									},
 								},
 								"response": map[string]any{
@@ -7126,6 +7194,56 @@ func MakeConfig() map[string]any {
 						"input": "data",
 						"name": "list",
 						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "GET",
+								"orig": "/1/triggers/{datasetSlug}",
+								"segments": []any{
+									map[string]any{
+										"lit": "1",
+									},
+									map[string]any{
+										"lit": "triggers",
+									},
+									map[string]any{
+										"var": "dataset_slug",
+									},
+								},
+								"parts": []any{
+									"1",
+									"triggers",
+									"{dataset_slug}",
+								},
+								"rename": map[string]any{
+									"param": map[string]any{
+										"datasetSlug": "dataset_slug",
+									},
+								},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body`",
+								},
+								"args": map[string]any{
+									"params": []any{
+										map[string]any{
+											"name": "dataset_slug",
+											"orig": "datasetSlug",
+											"type": "`$STRING`",
+											"kind": "param",
+											"reqd": true,
+										},
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"dataset_slug",
+									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
+								},
+							},
 							map[string]any{
 								"kind": "http",
 								"method": "GET",
@@ -7201,19 +7319,19 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "trigger_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"triggers",
 									"{dataset_slug}",
-									"{trigger_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
 										"datasetSlug": "dataset_slug",
-										"triggerId": "trigger_id",
+										"triggerId": "id",
 									},
 								},
 								"transform": map[string]any{
@@ -7230,7 +7348,7 @@ func MakeConfig() map[string]any {
 											"reqd": true,
 										},
 										map[string]any{
-											"name": "trigger_id",
+											"name": "id",
 											"orig": "triggerId",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -7241,56 +7359,6 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"exist": []any{
 										"dataset_slug",
-										"trigger_id",
-									},
-								},
-								"response": map[string]any{
-									"kind": "json",
-									"media": "application/json",
-								},
-							},
-							map[string]any{
-								"kind": "http",
-								"method": "GET",
-								"orig": "/1/triggers/{datasetSlug}",
-								"segments": []any{
-									map[string]any{
-										"lit": "1",
-									},
-									map[string]any{
-										"lit": "triggers",
-									},
-									map[string]any{
-										"var": "id",
-									},
-								},
-								"parts": []any{
-									"1",
-									"triggers",
-									"{id}",
-								},
-								"rename": map[string]any{
-									"param": map[string]any{
-										"datasetSlug": "id",
-									},
-								},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{
-									"params": []any{
-										map[string]any{
-											"name": "id",
-											"orig": "datasetSlug",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-									},
-								},
-								"select": map[string]any{
-									"exist": []any{
 										"id",
 									},
 								},
@@ -7320,19 +7388,19 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "trigger_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"triggers",
 									"{dataset_slug}",
-									"{trigger_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
 										"datasetSlug": "dataset_slug",
-										"triggerId": "trigger_id",
+										"triggerId": "id",
 									},
 								},
 								"transform": map[string]any{
@@ -7349,7 +7417,7 @@ func MakeConfig() map[string]any {
 											"reqd": true,
 										},
 										map[string]any{
-											"name": "trigger_id",
+											"name": "id",
 											"orig": "triggerId",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -7360,7 +7428,7 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"exist": []any{
 										"dataset_slug",
-										"trigger_id",
+										"id",
 									},
 								},
 							},
@@ -7385,19 +7453,19 @@ func MakeConfig() map[string]any {
 										"var": "dataset_slug",
 									},
 									map[string]any{
-										"var": "trigger_id",
+										"var": "id",
 									},
 								},
 								"parts": []any{
 									"1",
 									"triggers",
 									"{dataset_slug}",
-									"{trigger_id}",
+									"{id}",
 								},
 								"rename": map[string]any{
 									"param": map[string]any{
 										"datasetSlug": "dataset_slug",
-										"triggerId": "trigger_id",
+										"triggerId": "id",
 									},
 								},
 								"transform": map[string]any{
@@ -7414,7 +7482,7 @@ func MakeConfig() map[string]any {
 											"reqd": true,
 										},
 										map[string]any{
-											"name": "trigger_id",
+											"name": "id",
 											"orig": "triggerId",
 											"type": "`$STRING`",
 											"kind": "param",
@@ -7425,7 +7493,7 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"exist": []any{
 										"dataset_slug",
-										"trigger_id",
+										"id",
 									},
 								},
 								"response": map[string]any{

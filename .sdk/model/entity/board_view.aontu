@@ -72,7 +72,7 @@ main: kit: entity: board_view: {
             params: [
               {
                 k: "param"
-                n: "id"
+                n: "board_id"
                 or: "boardId"
                 r: true
                 t: "`$STRING`"
@@ -83,12 +83,12 @@ main: kit: entity: board_view: {
           o: "/1/boards/{boardId}/views"
           q: {
             exist: [
-              "id"
+              "board_id"
             ]
           }
           r: {
             param: {
-              boardId: "id"
+              boardId: "board_id"
             }
           }
           rs: {
@@ -103,7 +103,7 @@ main: kit: entity: board_view: {
               lit: "boards"
             }
             {
-              var: "id"
+              var: "board_id"
             }
             {
               lit: "views"
@@ -129,7 +129,7 @@ main: kit: entity: board_view: {
             params: [
               {
                 k: "param"
-                n: "id"
+                n: "board_id"
                 or: "boardId"
                 r: true
                 t: "`$STRING`"
@@ -140,12 +140,12 @@ main: kit: entity: board_view: {
           o: "/1/boards/{boardId}/views"
           q: {
             exist: [
-              "id"
+              "board_id"
             ]
           }
           r: {
             param: {
-              boardId: "id"
+              boardId: "board_id"
             }
           }
           rs: {
@@ -160,7 +160,7 @@ main: kit: entity: board_view: {
               lit: "boards"
             }
             {
-              var: "id"
+              var: "board_id"
             }
             {
               lit: "views"
@@ -217,6 +217,71 @@ main: kit: entity: board_view: {
           rs: {
             kind: "json"
             media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "boards"
+            }
+            {
+              var: "board_id"
+            }
+            {
+              lit: "views"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    remove: {
+      name: "remove"
+      points: [
+        {
+          co: {
+            id: "DELETE /1/boards/{boardId}/views/{viewId}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "board_id"
+                or: "boardId"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "id"
+                or: "viewId"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "DELETE"
+          o: "/1/boards/{boardId}/views/{viewId}"
+          q: {
+            exist: [
+              "board_id"
+              "id"
+            ]
+          }
+          r: {
+            param: {
+              boardId: "board_id"
+              viewId: "id"
+            }
           }
           s: [
             {

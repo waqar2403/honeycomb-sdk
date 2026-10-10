@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 
-	vs "github.com/voxgig-sdk/honeycomb-sdk/go/utility/struct"
+	vs "github.com/waqar2403/honeycomb-sdk/go/utility/struct"
 )
 
 // main.kit.test.live.strict is true (the default is true): a live
@@ -38,7 +38,7 @@ func TestQueryResultEntity(t *testing.T) {
 		client := sdk.TestSDK(nil, map[string]any{
 			"feature": map[string]any{"validate": map[string]any{"active": true}},
 		})
-		_, err := client.QueryResult(nil).Load(map[string]any{"dataset_slug": 1, "query_result_id": "x"}, nil)
+		_, err := client.QueryResult(nil).Load(map[string]any{"dataset_slug": 1, "id": "x"}, nil)
 		if sdkerr, ok := err.(*core.HoneycombError); !ok || "validate_failed" != sdkerr.Code {
 			t.Fatalf("expected validate_failed, got %v", err)
 		}
@@ -53,7 +53,7 @@ func TestQueryResultEntity(t *testing.T) {
 		if setup.live {
 			_mode = "live"
 		}
-		for _, _op := range []string{} {
+		for _, _op := range []string{"create", "load"} {
 			if _shouldSkip, _reason := isControlSkipped("entityOp", "query_result." + _op, _mode); _shouldSkip {
 				if _reason == "" {
 					_reason = "skipped via sdk-test-control.json"
@@ -62,15 +62,54 @@ func TestQueryResultEntity(t *testing.T) {
 				return
 			}
 		}
-		// Bootstrap entity data from existing test data (no create step in flow).
-		queryResultRef01DataRaw := vs.Items(core.ToMapAny(vs.GetPath(setup.data, "existing.query_result")))
-		var queryResultRef01Data map[string]any
-		if len(queryResultRef01DataRaw) > 0 {
-			queryResultRef01Data = core.ToMapAny(queryResultRef01DataRaw[0][1])
+		if setup.live {
+			for _, _liveKey := range []string{"dataset_slug01"} {
+				if setup.syntheticOnly || setup.idmap[_liveKey] == nil {
+					liveMiss(t, query_resultEntityLiveStrict, "Live entity test blocked: needs %s via HONEYCOMB_TEST_QUERY_RESULT_ENTID", _liveKey)
+				}
+			}
 		}
-		// Discard guards against Go's unused-var check when the flow's steps
-		// happen not to consume the bootstrap data (e.g. list-only flows).
-		_ = queryResultRef01Data
+		client := setup.client
+		_ = client
+
+		// CREATE
+		queryResultRef01Ent := client.QueryResult(nil)
+		queryResultRef01Data := core.ToMapAny(vs.GetProp(
+			vs.GetPath(setup.data, []any{"new", "query_result"}), "query_result_ref01"))
+		queryResultRef01Data["dataset_slug"] = setup.idmap["dataset_slug01"]
+
+		queryResultRef01DataResult, err := queryResultRef01Ent.Create(queryResultRef01Data, nil)
+		if err != nil {
+			t.Fatalf("create failed: %v", err)
+		}
+		queryResultRef01Data = core.ToMapAny(entityData(queryResultRef01DataResult))
+		if queryResultRef01Data == nil {
+			t.Fatal("expected create result to be a map")
+		}
+		if queryResultRef01Data["id"] == nil {
+			t.Fatal("expected created entity to have an id")
+		}
+
+		// LOAD
+		queryResultRef01MatchDt0 := map[string]any{
+			"id": queryResultRef01Data["id"],
+		}
+		if v := setup.idmap["dataset_slug"]; v != nil {
+			queryResultRef01MatchDt0["dataset_slug"] = v
+		} else {
+			queryResultRef01MatchDt0["dataset_slug"] = setup.idmap["dataset_slug01"]
+		}
+		queryResultRef01DataDt0Loaded, err := queryResultRef01Ent.Load(queryResultRef01MatchDt0, nil)
+		if err != nil {
+			t.Fatalf("load failed: %v", err)
+		}
+		queryResultRef01DataDt0LoadResult := core.ToMapAny(entityData(queryResultRef01DataDt0Loaded))
+		if queryResultRef01DataDt0LoadResult == nil {
+			t.Fatal("expected load result to be a map")
+		}
+		if queryResultRef01DataDt0LoadResult["id"] != queryResultRef01Data["id"] {
+			t.Fatal("expected load result id to match")
+		}
 
 	})
 }
@@ -100,7 +139,7 @@ func query_resultBasicSetup(extra map[string]any) *entityTestSetup {
 
 	// Generate idmap via transform, matching TS pattern.
 	idmap, _ := vs.Transform(
-		[]any{"query_result01", "query_result02", "query_result03"},
+		[]any{"query_result01", "query_result02", "query_result03", "dataset_slug01"},
 		map[string]any{
 			"`$PACK`": []any{"", map[string]any{
 				"`$KEY`": "`$COPY`",

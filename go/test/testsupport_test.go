@@ -12,7 +12,7 @@ import (
 	"sync"
 	"testing"
 
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
 )
 
 var envLocalOnce sync.Once

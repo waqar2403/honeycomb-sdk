@@ -66,6 +66,7 @@ main: kit: flow: BasicTriggerFlow:
       }
 
       m: {
+        dataset_slug: "dataset_slug01",
         id: "trigger01"
       }
 

@@ -8,18 +8,18 @@ import (
 
 	"github.com/google/jsonschema-go/jsonschema"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
 )
 
 // ListArgs is what an agent sends to honeycomb_list.
 type ListArgs struct {
-	Entity string         `json:"entity" jsonschema:"one of: board | board_view | dataset | historical_anomaly | recipient | signal | slo_count | slo_hourly_count | trigger"`
+	Entity string         `json:"entity" jsonschema:"one of: board | board_view | burn_alert | calculated_field | column | dataset | historical_anomaly | marker | marker_setting | query_annotation | recipient | signal | slo | slo_count | slo_hourly_count | trigger"`
 	Query  map[string]any `json:"query,omitempty" jsonschema:"optional filter map; omit it for the first page"`
 }
 
 // LoadArgs is what an agent sends to honeycomb_load.
 type LoadArgs struct {
-	Entity string         `json:"entity" jsonschema:"one of: auth | board | board_view | burn_alert | calculated_field | column | dataset | dataset_definition | environment | key_management | map_dependency | marker | marker_setting | query | query_annotation | query_result | recipient | signal | slo | trigger"`
+	Entity string         `json:"entity" jsonschema:"one of: auth | board | board_view | burn_alert | calculated_field | column | dataset | dataset_definition | environment | key_management | management_auth | map_dependency | query | query_annotation | query_result | recipient | signal | slo | trigger"`
 	Query  map[string]any `json:"query" jsonschema:"match map naming the record, such as {\"id\":1}"`
 }
 
@@ -28,7 +28,7 @@ func registerTools(server *mcp.Server, client *sdk.HoneycombSDK) {
 		Name:        "honeycomb_list",
 		Description: "List records from Honeycomb. Args: entity, query (optional filter map; omit it for the first page). Returns the first page of records as JSON.",
 		Annotations: &mcp.ToolAnnotations{ReadOnlyHint: true},
-		InputSchema: entitySchema[ListArgs]("board", "board_view", "dataset", "historical_anomaly", "recipient", "signal", "slo_count", "slo_hourly_count", "trigger"),
+		InputSchema: entitySchema[ListArgs]("board", "board_view", "burn_alert", "calculated_field", "column", "dataset", "historical_anomaly", "marker", "marker_setting", "query_annotation", "recipient", "signal", "slo", "slo_count", "slo_hourly_count", "trigger"),
 	}, func(ctx context.Context, req *mcp.CallToolRequest, args ListArgs) (*mcp.CallToolResult, any, error) {
 		return runOp(ctx, client, "list", args.Entity, args.Query)
 	})
@@ -36,7 +36,7 @@ func registerTools(server *mcp.Server, client *sdk.HoneycombSDK) {
 		Name:        "honeycomb_load",
 		Description: "Load one record from Honeycomb. Args: entity, query (match map naming the record, such as {\"id\":1}). Returns the record as JSON.",
 		Annotations: &mcp.ToolAnnotations{ReadOnlyHint: true},
-		InputSchema: entitySchema[LoadArgs]("auth", "board", "board_view", "burn_alert", "calculated_field", "column", "dataset", "dataset_definition", "environment", "key_management", "map_dependency", "marker", "marker_setting", "query", "query_annotation", "query_result", "recipient", "signal", "slo", "trigger"),
+		InputSchema: entitySchema[LoadArgs]("auth", "board", "board_view", "burn_alert", "calculated_field", "column", "dataset", "dataset_definition", "environment", "key_management", "management_auth", "map_dependency", "query", "query_annotation", "query_result", "recipient", "signal", "slo", "trigger"),
 	}, func(ctx context.Context, req *mcp.CallToolRequest, args LoadArgs) (*mcp.CallToolResult, any, error) {
 		return runOp(ctx, client, "load", args.Entity, args.Query)
 	})
@@ -129,8 +129,10 @@ func entityFor(client *sdk.HoneycombSDK, name string) (sdk.HoneycombEntity, erro
 		return client.HistoricalAnomaly(nil), nil
 	case "key_management":
 		return client.KeyManagement(nil), nil
-	case "kinesi":
-		return client.Kinesi(nil), nil
+	case "kinesis_event":
+		return client.KinesisEvent(nil), nil
+	case "management_auth":
+		return client.ManagementAuth(nil), nil
 	case "map_dependency":
 		return client.MapDependency(nil), nil
 	case "marker":

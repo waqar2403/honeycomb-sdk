@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 
-	vs "github.com/voxgig-sdk/honeycomb-sdk/go/utility/struct"
+	vs "github.com/waqar2403/honeycomb-sdk/go/utility/struct"
 )
 
 // main.kit.test.live.strict is true (the default is true): a live
@@ -85,9 +85,6 @@ func TestEventEntity(t *testing.T) {
 		eventRef01Data = core.ToMapAny(entityData(eventRef01DataResult))
 		if eventRef01Data == nil {
 			t.Fatal("expected create result to be a map")
-		}
-		if eventRef01Data["id"] == nil {
-			t.Fatal("expected created entity to have an id")
 		}
 
 	})

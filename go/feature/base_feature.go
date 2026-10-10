@@ -1,7 +1,7 @@
 package feature
 
 import (
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 )
 
 type BaseFeature struct {

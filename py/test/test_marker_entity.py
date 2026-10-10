@@ -37,7 +37,7 @@ class TestMarkerEntity:
         client = HoneycombSDK.test(
             None, {"feature": {"validate": {"active": True}}})
         with pytest.raises(Exception) as err:
-            client.Marker(None).load({"id": 1}, None)
+            client.Marker(None).list({"dataset_slug": 1}, None)
         assert "validate_failed" == getattr(err.value, "code", None)
 
     def test_should_run_basic_flow(self):
@@ -46,31 +46,74 @@ class TestMarkerEntity:
         # multiple ops; skipping any one skips the whole flow (steps depend
         # on each other).
         _live = setup.get("live", False)
-        for _op in ["load"]:
+        for _op in ["create", "list", "update", "remove"]:
             _skip, _reason = runner.is_control_skipped("entityOp", "marker." + _op, "live" if _live else "unit")
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
                 return
         if setup["live"]:
-            runner.live_miss(LIVE_STRICT, "Live entity test blocked: " + "the flow loads a marker record it has no list to find")
+            for _live_key in ["dataset_slug01"]:
+                if setup.get("synthetic_only") or setup["idmap"].get(_live_key) is None:
+                    runner.live_miss(LIVE_STRICT, f"Live entity test blocked: needs {_live_key} via HONEYCOMB_TEST_MARKER_ENTID")
         client = setup["client"]
 
-        # Bootstrap entity data from existing test data.
-        marker_ref01_data_raw = vs.items(helpers.to_map(
-            vs.getpath(setup["data"], "existing.marker")))
-        marker_ref01_data = None
-        if len(marker_ref01_data_raw) > 0:
-            marker_ref01_data = helpers.to_map(marker_ref01_data_raw[0][1])
-
-        # LOAD
+        # CREATE
         marker_ref01_ent = client.Marker(None)
-        marker_ref01_match_dt0 = {
+        marker_ref01_data = helpers.to_map(vs.getprop(
+            vs.getpath(setup["data"], "new.marker"), "marker_ref01"))
+        marker_ref01_data["dataset_slug"] = setup["idmap"]["dataset_slug01"]
+
+        marker_ref01_data = helpers.to_map(runner.entity_data(marker_ref01_ent.create(marker_ref01_data, None)))
+        assert marker_ref01_data is not None
+        assert marker_ref01_data["id"] is not None
+
+        # LIST
+        marker_ref01_match = {
+            "dataset_slug": setup["idmap"]["dataset_slug01"],
+        }
+
+        marker_ref01_list_result = marker_ref01_ent.list(marker_ref01_match, None)
+        assert isinstance(marker_ref01_list_result, list)
+
+        found_item = vs.select(
+            runner.entity_list_to_data(marker_ref01_list_result),
+            {"id": marker_ref01_data["id"]})
+        assert not vs.isempty(found_item)
+
+        # UPDATE
+        marker_ref01_data_up0_up = {
+            "id": marker_ref01_data["id"],
+            "dataset_slug": setup["idmap"]["dataset_slug"],
+        }
+
+        marker_ref01_markdef_up0_name = "message"
+        marker_ref01_markdef_up0_value = "Mark01-marker_ref01_" + str(setup["now"])
+        marker_ref01_data_up0_up[marker_ref01_markdef_up0_name] = marker_ref01_markdef_up0_value
+
+        marker_ref01_resdata_up0 = helpers.to_map(runner.entity_data(marker_ref01_ent.update(marker_ref01_data_up0_up, None)))
+        assert marker_ref01_resdata_up0 is not None
+        assert marker_ref01_resdata_up0["id"] == marker_ref01_data_up0_up["id"]
+        assert marker_ref01_resdata_up0[marker_ref01_markdef_up0_name] == marker_ref01_markdef_up0_value
+
+        # REMOVE
+        marker_ref01_match_rm0 = {
             "id": marker_ref01_data["id"],
         }
-        marker_ref01_data_dt0_loaded = marker_ref01_ent.load(marker_ref01_match_dt0, None)
-        marker_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(marker_ref01_data_dt0_loaded))
-        assert marker_ref01_data_dt0_load_result is not None
-        assert marker_ref01_data_dt0_load_result["id"] == marker_ref01_data["id"]
+        marker_ref01_match_rm0["dataset_slug"] = setup["idmap"].get("dataset_slug") or setup["idmap"].get("dataset_slug01")
+        marker_ref01_ent.remove(marker_ref01_match_rm0, None)
+
+        # LIST
+        marker_ref01_match_rt0 = {
+            "dataset_slug": setup["idmap"]["dataset_slug01"],
+        }
+
+        marker_ref01_list_rt0_result = marker_ref01_ent.list(marker_ref01_match_rt0, None)
+        assert isinstance(marker_ref01_list_rt0_result, list)
+
+        not_found_item = vs.select(
+            runner.entity_list_to_data(marker_ref01_list_rt0_result),
+            {"id": marker_ref01_data["id"]})
+        assert vs.isempty(not_found_item)
 
 
 
@@ -90,7 +133,7 @@ def _marker_basic_setup(extra):
 
     # Generate idmap via transform.
     idmap = vs.transform(
-        ["marker01", "marker02", "marker03"],
+        ["marker01", "marker02", "marker03", "dataset_slug01"],
         {
             "`$PACK`": ["", {
                 "`$KEY`": "`$COPY`",
@@ -116,6 +159,8 @@ def _marker_basic_setup(extra):
         env.get("HONEYCOMB_TEST_MARKER_ENTID"))
     if idmap_resolved is None:
         idmap_resolved = helpers.to_map(idmap)
+    if idmap_resolved.get("dataset_slug") is None:
+        idmap_resolved["dataset_slug"] = idmap_resolved.get("dataset_slug01")
 
     if env.get("HONEYCOMB_TEST_LIVE") == "TRUE":
         merged_opts = vs.merge([

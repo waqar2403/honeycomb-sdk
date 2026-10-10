@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/voxgig-sdk/honeycomb-sdk/go/core"
+	"github.com/waqar2403/honeycomb-sdk/go/core"
 
-	vs "github.com/voxgig-sdk/honeycomb-sdk/go/utility/struct"
+	vs "github.com/waqar2403/honeycomb-sdk/go/utility/struct"
 )
 
-type KinesiEntity struct {
+type ManagementAuthEntity struct {
 	name    string
 	client  *core.HoneycombSDK
 	utility *core.Utility
@@ -20,7 +20,7 @@ type KinesiEntity struct {
 	deleted bool
 }
 
-func NewKinesiEntity(client *core.HoneycombSDK, entopts map[string]any) *KinesiEntity {
+func NewManagementAuthEntity(client *core.HoneycombSDK, entopts map[string]any) *ManagementAuthEntity {
 	if entopts == nil {
 		entopts = map[string]any{}
 	}
@@ -32,8 +32,8 @@ func NewKinesiEntity(client *core.HoneycombSDK, entopts map[string]any) *KinesiE
 		entopts["active"] = true
 	}
 
-	e := &KinesiEntity{
-		name:    "kinesi",
+	e := &ManagementAuthEntity{
+		name:    "management_auth",
 		client:  client,
 		utility: client.GetUtility(),
 		entopts: entopts,
@@ -51,47 +51,47 @@ func NewKinesiEntity(client *core.HoneycombSDK, entopts map[string]any) *KinesiE
 	return e
 }
 
-func (e *KinesiEntity) GetName() string { return e.name }
+func (e *ManagementAuthEntity) GetName() string { return e.name }
 
 // An entity prints and serialises as its data, as ts's toString and toJSON
 // do: the client it holds carries the options.
-func (e *KinesiEntity) String() string {
-	return "Kinesi " + vs.Jsonify(e.data, map[string]any{"indent": 0})
+func (e *ManagementAuthEntity) String() string {
+	return "ManagementAuth " + vs.Jsonify(e.data, map[string]any{"indent": 0})
 }
 
-func (e *KinesiEntity) GoString() string {
+func (e *ManagementAuthEntity) GoString() string {
 	return e.String()
 }
 
-func (e *KinesiEntity) MarshalJSON() ([]byte, error) {
+func (e *ManagementAuthEntity) MarshalJSON() ([]byte, error) {
 	out := map[string]any{}
 	for k, v := range e.data {
 		out[k] = v
 	}
-	out["voxgig$entity"] = "Kinesi"
+	out["voxgig$entity"] = "ManagementAuth"
 	return json.Marshal(out)
 }
 
-func (e *KinesiEntity) MarkDeleted() {
+func (e *ManagementAuthEntity) MarkDeleted() {
 	e.deleted = true
 }
 
 
 // Deleted reports whether a successful Remove has resolved on this instance.
-func (e *KinesiEntity) Deleted() bool {
+func (e *ManagementAuthEntity) Deleted() bool {
 	return e.deleted
 }
 
 
-func (e *KinesiEntity) Make() core.Entity {
+func (e *ManagementAuthEntity) Make() core.Entity {
 	opts := map[string]any{}
 	for k, v := range e.entopts {
 		opts[k] = v
 	}
-	return NewKinesiEntity(e.client, opts)
+	return NewManagementAuthEntity(e.client, opts)
 }
 
-func (e *KinesiEntity) Data(args ...any) any {
+func (e *ManagementAuthEntity) Data(args ...any) any {
 	if len(args) > 0 && args[0] != nil {
 		e.data = core.ToMapAny(vs.Clone(args[0]))
 		if e.data == nil {
@@ -105,7 +105,7 @@ func (e *KinesiEntity) Data(args ...any) any {
 	return out
 }
 
-func (e *KinesiEntity) Match(args ...any) any {
+func (e *ManagementAuthEntity) Match(args ...any) any {
 	if len(args) > 0 && args[0] != nil {
 		e.match = core.ToMapAny(vs.Clone(args[0]))
 		if e.match == nil {
@@ -120,27 +120,27 @@ func (e *KinesiEntity) Match(args ...any) any {
 }
 
 // DataTyped is the statically-typed accessor for this entity's data. With no
-// argument it returns the current data as an Kinesi; with an argument it
+// argument it returns the current data as an ManagementAuth; with an argument it
 // sets the data and returns the stored value. It delegates to the untyped Data
 // (identical runtime) and converts at the typed boundary.
-func (e *KinesiEntity) DataTyped(data ...Kinesi) Kinesi {
+func (e *ManagementAuthEntity) DataTyped(data ...ManagementAuth) ManagementAuth {
 	if len(data) > 0 {
-		return typedFrom[Kinesi](e.Data(asMap(data[0])))
+		return typedFrom[ManagementAuth](e.Data(asMap(data[0])))
 	}
-	return typedFrom[Kinesi](e.Data())
+	return typedFrom[ManagementAuth](e.Data())
 }
 
 // MatchTyped mirrors DataTyped for the entity's match filter. The match is a
-// partial of the entity, so it round-trips through Kinesi (all fields
+// partial of the entity, so it round-trips through ManagementAuth (all fields
 // optional at the wire level).
-func (e *KinesiEntity) MatchTyped(match ...Kinesi) Kinesi {
+func (e *ManagementAuthEntity) MatchTyped(match ...ManagementAuth) ManagementAuth {
 	if len(match) > 0 {
-		return typedFrom[Kinesi](e.Match(asMap(match[0])))
+		return typedFrom[ManagementAuth](e.Match(asMap(match[0])))
 	}
-	return typedFrom[Kinesi](e.Match())
+	return typedFrom[ManagementAuth](e.Match())
 }
 
-func (e *KinesiEntity) Stream(action string, args map[string]any, callopts map[string]any) <-chan core.StreamItem {
+func (e *ManagementAuthEntity) Stream(action string, args map[string]any, callopts map[string]any) <-chan core.StreamItem {
 	out := make(chan core.StreamItem)
 
 	if callopts == nil {
@@ -251,7 +251,7 @@ func (e *KinesiEntity) Stream(action string, args map[string]any, callopts map[s
 
 // The steps an operation runs, with their hooks; the first that fails hands
 // back its error.
-func (e *KinesiEntity) streamSteps(ctx *core.Context) error {
+func (e *ManagementAuthEntity) streamSteps(ctx *core.Context) error {
 	utility := e.utility
 
 	utility.FeatureHook(ctx, "PrePoint")
@@ -293,29 +293,22 @@ func (e *KinesiEntity) streamSteps(ctx *core.Context) error {
 	return nil
 }
 
-func (e *KinesiEntity) Load(_ map[string]any, _ map[string]any) (any, error) {
-	return core.UnsupportedOp("load", e.name)
-}
 
-
-func (e *KinesiEntity) List(_ map[string]any, _ map[string]any) (any, error) {
-	return core.UnsupportedOp("list", e.name)
-}
-
-
-
-func (e *KinesiEntity) Create(reqdata map[string]any, ctrl map[string]any) (any, error) {
+func (e *ManagementAuthEntity) Load(reqmatch map[string]any, ctrl map[string]any) (any, error) {
 	utility := e.utility
 	ctx := utility.MakeContext(map[string]any{
-		"opname":  "create",
-		"ctrl":    ctrl,
-		"match":   e.match,
-		"data":    e.data,
-		"reqdata": reqdata,
+		"opname":   "load",
+		"ctrl":     ctrl,
+		"match":    e.match,
+		"data":     e.data,
+		"reqmatch": reqmatch,
 	}, e.entctx)
 
 	return e.runOp(ctx, func() {
 		if ctx.Result != nil {
+			if ctx.Result.Resmatch != nil {
+				e.match = ctx.Result.Resmatch
+			}
 			if ctx.Result.Resdata != nil {
 				e.data = core.ToMapAny(vs.Clone(ctx.Result.Resdata))
 				if e.data == nil {
@@ -326,35 +319,45 @@ func (e *KinesiEntity) Create(reqdata map[string]any, ctrl map[string]any) (any,
 	})
 }
 
-// CreateTyped is the statically-typed variant of Create: it takes an
-// KinesiCreateData and returns an Kinesi. It delegates to the untyped
-// Create (identical runtime) and converts at the typed boundary.
-func (e *KinesiEntity) CreateTyped(reqdata KinesiCreateData, ctrl map[string]any) (Kinesi, error) {
-	res, err := e.Create(asMap(reqdata), ctrl)
+// LoadTyped is the statically-typed variant of Load: it takes an
+// ManagementAuthLoadMatch and returns an ManagementAuth. It delegates to the untyped
+// Load (identical runtime) and converts at the typed boundary.
+func (e *ManagementAuthEntity) LoadTyped(reqmatch ManagementAuthLoadMatch, ctrl map[string]any) (ManagementAuth, error) {
+	res, err := e.Load(asMap(reqmatch), ctrl)
 	if err != nil {
-		return Kinesi{}, err
+		return ManagementAuth{}, err
 	}
-	return typedFrom[Kinesi](res), nil
+	return typedFrom[ManagementAuth](res), nil
 }
 
 
 
-func (e *KinesiEntity) Update(_ map[string]any, _ map[string]any) (any, error) {
+func (e *ManagementAuthEntity) List(_ map[string]any, _ map[string]any) (any, error) {
+	return core.UnsupportedOp("list", e.name)
+}
+
+
+func (e *ManagementAuthEntity) Create(_ map[string]any, _ map[string]any) (any, error) {
+	return core.UnsupportedOp("create", e.name)
+}
+
+
+func (e *ManagementAuthEntity) Update(_ map[string]any, _ map[string]any) (any, error) {
 	return core.UnsupportedOp("update", e.name)
 }
 
 
-func (e *KinesiEntity) Patch(_ map[string]any, _ map[string]any) (any, error) {
+func (e *ManagementAuthEntity) Patch(_ map[string]any, _ map[string]any) (any, error) {
 	return core.UnsupportedOp("patch", e.name)
 }
 
 
-func (e *KinesiEntity) Remove(_ map[string]any, _ map[string]any) (any, error) {
+func (e *ManagementAuthEntity) Remove(_ map[string]any, _ map[string]any) (any, error) {
 	return core.UnsupportedOp("remove", e.name)
 }
 
 
-func (e *KinesiEntity) runOp(ctx *core.Context, postDone func()) (out any, err error) {
+func (e *ManagementAuthEntity) runOp(ctx *core.Context, postDone func()) (out any, err error) {
 	utility := e.utility
 
 	defer func() {
@@ -423,7 +426,7 @@ func (e *KinesiEntity) runOp(ctx *core.Context, postDone func()) (out any, err e
 
 // A hook, fetcher or parser that panics never reached MakeError, and its
 // message can quote the request.
-func (e *KinesiEntity) recovered(ctx *core.Context, r any) (any, error) {
+func (e *ManagementAuthEntity) recovered(ctx *core.Context, r any) (any, error) {
 	perr, ok := r.(error)
 	if !ok {
 		perr = fmt.Errorf("%v", r)

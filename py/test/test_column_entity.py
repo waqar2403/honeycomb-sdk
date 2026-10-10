@@ -37,7 +37,7 @@ class TestColumnEntity:
         client = HoneycombSDK.test(
             None, {"feature": {"validate": {"active": True}}})
         with pytest.raises(Exception) as err:
-            client.Column(None).load({"id": 1}, None)
+            client.Column(None).list({"dataset_slug": 1}, None)
         assert "validate_failed" == getattr(err.value, "code", None)
 
     def test_should_run_basic_flow(self):
@@ -46,31 +46,84 @@ class TestColumnEntity:
         # multiple ops; skipping any one skips the whole flow (steps depend
         # on each other).
         _live = setup.get("live", False)
-        for _op in ["load"]:
+        for _op in ["create", "list", "update", "load", "remove"]:
             _skip, _reason = runner.is_control_skipped("entityOp", "column." + _op, "live" if _live else "unit")
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
                 return
         if setup["live"]:
-            runner.live_miss(LIVE_STRICT, "Live entity test blocked: " + "the flow loads a column record it has no list to find")
+            for _live_key in ["dataset_slug01"]:
+                if setup.get("synthetic_only") or setup["idmap"].get(_live_key) is None:
+                    runner.live_miss(LIVE_STRICT, f"Live entity test blocked: needs {_live_key} via HONEYCOMB_TEST_COLUMN_ENTID")
         client = setup["client"]
 
-        # Bootstrap entity data from existing test data.
-        column_ref01_data_raw = vs.items(helpers.to_map(
-            vs.getpath(setup["data"], "existing.column")))
-        column_ref01_data = None
-        if len(column_ref01_data_raw) > 0:
-            column_ref01_data = helpers.to_map(column_ref01_data_raw[0][1])
+        # CREATE
+        column_ref01_ent = client.Column(None)
+        column_ref01_data = helpers.to_map(vs.getprop(
+            vs.getpath(setup["data"], "new.column"), "column_ref01"))
+        column_ref01_data["dataset_slug"] = setup["idmap"]["dataset_slug01"]
+
+        column_ref01_data = helpers.to_map(runner.entity_data(column_ref01_ent.create(column_ref01_data, None)))
+        assert column_ref01_data is not None
+        assert column_ref01_data["id"] is not None
+
+        # LIST
+        column_ref01_match = {
+            "dataset_slug": setup["idmap"]["dataset_slug01"],
+        }
+
+        column_ref01_list_result = column_ref01_ent.list(column_ref01_match, None)
+        assert isinstance(column_ref01_list_result, list)
+
+        found_item = vs.select(
+            runner.entity_list_to_data(column_ref01_list_result),
+            {"id": column_ref01_data["id"]})
+        assert not vs.isempty(found_item)
+
+        # UPDATE
+        column_ref01_data_up0_up = {
+            "id": column_ref01_data["id"],
+            "dataset_slug": setup["idmap"]["dataset_slug"],
+        }
+
+        column_ref01_markdef_up0_name = "description"
+        column_ref01_markdef_up0_value = "Mark01-column_ref01_" + str(setup["now"])
+        column_ref01_data_up0_up[column_ref01_markdef_up0_name] = column_ref01_markdef_up0_value
+
+        column_ref01_resdata_up0 = helpers.to_map(runner.entity_data(column_ref01_ent.update(column_ref01_data_up0_up, None)))
+        assert column_ref01_resdata_up0 is not None
+        assert column_ref01_resdata_up0["id"] == column_ref01_data_up0_up["id"]
+        assert column_ref01_resdata_up0[column_ref01_markdef_up0_name] == column_ref01_markdef_up0_value
 
         # LOAD
-        column_ref01_ent = client.Column(None)
         column_ref01_match_dt0 = {
             "id": column_ref01_data["id"],
         }
+        column_ref01_match_dt0["dataset_slug"] = setup["idmap"].get("dataset_slug") or setup["idmap"].get("dataset_slug01")
         column_ref01_data_dt0_loaded = column_ref01_ent.load(column_ref01_match_dt0, None)
         column_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(column_ref01_data_dt0_loaded))
         assert column_ref01_data_dt0_load_result is not None
         assert column_ref01_data_dt0_load_result["id"] == column_ref01_data["id"]
+
+        # REMOVE
+        column_ref01_match_rm0 = {
+            "id": column_ref01_data["id"],
+        }
+        column_ref01_match_rm0["dataset_slug"] = setup["idmap"].get("dataset_slug") or setup["idmap"].get("dataset_slug01")
+        column_ref01_ent.remove(column_ref01_match_rm0, None)
+
+        # LIST
+        column_ref01_match_rt0 = {
+            "dataset_slug": setup["idmap"]["dataset_slug01"],
+        }
+
+        column_ref01_list_rt0_result = column_ref01_ent.list(column_ref01_match_rt0, None)
+        assert isinstance(column_ref01_list_rt0_result, list)
+
+        not_found_item = vs.select(
+            runner.entity_list_to_data(column_ref01_list_rt0_result),
+            {"id": column_ref01_data["id"]})
+        assert vs.isempty(not_found_item)
 
 
 
@@ -90,7 +143,7 @@ def _column_basic_setup(extra):
 
     # Generate idmap via transform.
     idmap = vs.transform(
-        ["column01", "column02", "column03"],
+        ["column01", "column02", "column03", "dataset_slug01"],
         {
             "`$PACK`": ["", {
                 "`$KEY`": "`$COPY`",
@@ -116,6 +169,8 @@ def _column_basic_setup(extra):
         env.get("HONEYCOMB_TEST_COLUMN_ENTID"))
     if idmap_resolved is None:
         idmap_resolved = helpers.to_map(idmap)
+    if idmap_resolved.get("dataset_slug") is None:
+        idmap_resolved["dataset_slug"] = idmap_resolved.get("dataset_slug01")
 
     if env.get("HONEYCOMB_TEST_LIVE") == "TRUE":
         merged_opts = vs.merge([

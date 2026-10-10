@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	voxgigstruct "github.com/voxgig-sdk/honeycomb-sdk/go/utility/struct"
+	voxgigstruct "github.com/waqar2403/honeycomb-sdk/go/utility/struct"
 )
 
 const STRUCT_TEST_JSON = "../../.sdk/test/test.json"

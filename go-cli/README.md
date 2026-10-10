@@ -108,7 +108,7 @@ make build-all   # linux/darwin/windows x amd64/arm64, under dist/<os>-<arch>/
 ### Discover the available entities
 
 `/help` in the REPL prints the full entity list, or see [Entities](#entities)
-below — this SDK exposes 27 entities.
+below — this SDK exposes 28 entities.
 
 ## Reference
 
@@ -163,9 +163,9 @@ Meta-commands use the `/` prefix (everything else on a line is evaluated as boru
 
 ### Entities
 
-The 27 entities this SDK exposes (any is valid as `<entity>`):
+The 28 entities this SDK exposes (any is valid as `<entity>`):
 
-auth board board_view bulk_signal_recipient_assignment burn_alert calculated_field column dataset dataset_definition environment event historical_anomaly key_management kinesi map_dependency marker marker_setting query query_annotation query_result recipient signal slo slo_count slo_history slo_hourly_count trigger
+auth board board_view bulk_signal_recipient_assignment burn_alert calculated_field column dataset dataset_definition environment event historical_anomaly key_management kinesis_event management_auth map_dependency marker marker_setting query query_annotation query_result recipient signal slo slo_count slo_history slo_hourly_count trigger
 
 ## Explanation
 

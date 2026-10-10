@@ -44,7 +44,7 @@ main: kit: entity: slo: {
           req: true
           type: "`$STRING`"
         }
-        load: {
+        list: {
           req: true
           type: "`$STRING`"
         }
@@ -74,7 +74,7 @@ main: kit: entity: slo: {
           req: true
           type: "`$OBJECT`"
         }
-        load: {
+        list: {
           req: true
           type: "`$OBJECT`"
         }
@@ -84,7 +84,7 @@ main: kit: entity: slo: {
         }
       }
       r: false
-      sh: "Reference to the [Calculated Field](/api/calculated-fields/) used as the indicator of event success."
+      sh: "Reference to the [Calculated Field (also called Derived Column)](/api/calculated-fields/) used as the indicator of event success."
       t: "`$OBJECT`"
     }
     tags: {
@@ -102,7 +102,7 @@ main: kit: entity: slo: {
           req: true
           type: "`$INTEGER`"
         }
-        load: {
+        list: {
           req: true
           type: "`$INTEGER`"
         }
@@ -123,7 +123,7 @@ main: kit: entity: slo: {
           req: true
           type: "`$INTEGER`"
         }
-        load: {
+        list: {
           req: true
           type: "`$INTEGER`"
         }
@@ -149,10 +149,13 @@ main: kit: entity: slo: {
 
   id: {
     field: "id"
+    from: {
+      id: "id"
+    }
     name: "id"
     parts: [
       "dataset_slug"
-      "slo_id"
+      "id"
     ]
     sep: "/"
   }
@@ -185,7 +188,7 @@ main: kit: entity: slo: {
             params: [
               {
                 k: "param"
-                n: "id"
+                n: "dataset_slug"
                 or: "datasetSlug"
                 r: true
                 t: "`$STRING`"
@@ -196,12 +199,12 @@ main: kit: entity: slo: {
           o: "/1/slos/{datasetSlug}"
           q: {
             exist: [
-              "id"
+              "dataset_slug"
             ]
           }
           r: {
             param: {
-              datasetSlug: "id"
+              datasetSlug: "dataset_slug"
             }
           }
           rs: {
@@ -216,7 +219,61 @@ main: kit: entity: slo: {
               lit: "slos"
             }
             {
-              var: "id"
+              var: "dataset_slug"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /1/slos/{datasetSlug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "dataset_slug"
+                or: "datasetSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/1/slos/{datasetSlug}"
+          q: {
+            exist: [
+              "dataset_slug"
+            ]
+          }
+          r: {
+            param: {
+              datasetSlug: "dataset_slug"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "1"
+            }
+            {
+              lit: "slos"
+            }
+            {
+              var: "dataset_slug"
             }
           ]
           t: {
@@ -246,7 +303,7 @@ main: kit: entity: slo: {
               }
               {
                 k: "param"
-                n: "slo_id"
+                n: "id"
                 or: "sloId"
                 r: true
                 t: "`$STRING`"
@@ -268,13 +325,13 @@ main: kit: entity: slo: {
           q: {
             exist: [
               "dataset_slug"
-              "slo_id"
+              "id"
             ]
           }
           r: {
             param: {
               datasetSlug: "dataset_slug"
-              sloId: "slo_id"
+              sloId: "id"
             }
           }
           rs: {
@@ -290,55 +347,6 @@ main: kit: entity: slo: {
             }
             {
               var: "dataset_slug"
-            }
-            {
-              var: "slo_id"
-            }
-          ]
-          t: {
-            req: "`reqdata`"
-            res: "`body`"
-          }
-        }
-        {
-          co: {
-            id: "GET /1/slos/{datasetSlug}"
-            source: "openapi3"
-            version: 2
-          }
-          g: {
-            params: [
-              {
-                k: "param"
-                n: "id"
-                or: "datasetSlug"
-                r: true
-                t: "`$STRING`"
-              }
-            ]
-          }
-          m: "GET"
-          o: "/1/slos/{datasetSlug}"
-          q: {
-            exist: [
-              "id"
-            ]
-          }
-          r: {
-            param: {
-              datasetSlug: "id"
-            }
-          }
-          rs: {
-            kind: "json"
-            media: "application/json"
-          }
-          s: [
-            {
-              lit: "1"
-            }
-            {
-              lit: "slos"
             }
             {
               var: "id"
@@ -371,7 +379,7 @@ main: kit: entity: slo: {
               }
               {
                 k: "param"
-                n: "slo_id"
+                n: "id"
                 or: "sloId"
                 r: true
                 t: "`$STRING`"
@@ -383,13 +391,13 @@ main: kit: entity: slo: {
           q: {
             exist: [
               "dataset_slug"
-              "slo_id"
+              "id"
             ]
           }
           r: {
             param: {
               datasetSlug: "dataset_slug"
-              sloId: "slo_id"
+              sloId: "id"
             }
           }
           s: [
@@ -403,7 +411,7 @@ main: kit: entity: slo: {
               var: "dataset_slug"
             }
             {
-              var: "slo_id"
+              var: "id"
             }
           ]
           t: {
@@ -446,7 +454,7 @@ main: kit: entity: slo: {
               }
               {
                 k: "param"
-                n: "slo_id"
+                n: "id"
                 or: "sloId"
                 r: true
                 t: "`$STRING`"
@@ -458,13 +466,13 @@ main: kit: entity: slo: {
           q: {
             exist: [
               "dataset_slug"
-              "slo_id"
+              "id"
             ]
           }
           r: {
             param: {
               datasetSlug: "dataset_slug"
-              sloId: "slo_id"
+              sloId: "id"
             }
           }
           rs: {
@@ -482,7 +490,7 @@ main: kit: entity: slo: {
               var: "dataset_slug"
             }
             {
-              var: "slo_id"
+              var: "id"
             }
           ]
           t: {

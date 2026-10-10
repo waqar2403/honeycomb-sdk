@@ -15,7 +15,7 @@ keeps the cognitive load low.
 
 ## Install
 This package is not yet published to PyPI. Install it from the GitHub
-release tag (`py/vX.Y.Z`, see [Tags](https://github.com/voxgig-sdk/honeycomb-sdk/tags)) or
+release tag (`py/vX.Y.Z`, see [Tags](https://github.com/waqar2403/honeycomb-sdk/tags)) or
 from a source checkout:
 
 ```bash
@@ -59,8 +59,8 @@ Entity operations raise on failure, so wrap them in `try` / `except`:
 
 ```python
 try:
-    column = client.Column().load({"id": "example_id"})
-    print(column.data_get())
+    mapdependency = client.MapDependency().load({"request_id": "example"})
+    print(mapdependency.data_get())
 except Exception as err:
     print(f"load failed: {err}")
 ```
@@ -127,7 +127,7 @@ Create a mock client for unit testing — no server required:
 client = HoneycombSDK.test()
 
 # Entity ops return the entity, and list one per record; they raise on error.
-column = client.Column().load({"id": "test01"})
+mapdependency = client.MapDependency().load({"request_id": "example"})
 # data_get() on an entity reads its mock response record
 ```
 
@@ -219,7 +219,8 @@ Creates a test-mode client with mock transport. Both arguments may be `None`.
 | `Event` | `(data) -> EventEntity` | Create an Event entity instance. |
 | `HistoricalAnomaly` | `(data) -> HistoricalAnomalyEntity` | Create a HistoricalAnomaly entity instance. |
 | `KeyManagement` | `(data) -> KeyManagementEntity` | Create a KeyManagement entity instance. |
-| `Kinesi` | `(data) -> KinesiEntity` | Create a Kinesi entity instance. |
+| `KinesisEvent` | `(data) -> KinesisEventEntity` | Create a KinesisEvent entity instance. |
+| `ManagementAuth` | `(data) -> ManagementAuthEntity` | Create a ManagementAuth entity instance. |
 | `MapDependency` | `(data) -> MapDependencyEntity` | Create a MapDependency entity instance. |
 | `Marker` | `(data) -> MarkerEntity` | Create a Marker entity instance. |
 | `MarkerSetting` | `(data) -> MarkerSettingEntity` | Create a MarkerSetting entity instance. |
@@ -312,7 +313,7 @@ API path: `/1/boards`
 | `id` | Unique identifier for the board view. |
 | `name` | The name of the view. |
 
-Operations: Create, List, Load, Update.
+Operations: Create, List, Load, Remove, Update.
 
 API path: `/1/boards/{boardId}/views`
 
@@ -337,7 +338,7 @@ API path: `/1/signals/recipient_assignments`
 | `alert_type` |  |
 | `id` |  |
 
-Operations: Create, Load, Remove, Update.
+Operations: Create, List, Load, Remove, Update.
 
 API path: `/1/burn_alerts/{datasetSlug}`
 
@@ -352,7 +353,7 @@ API path: `/1/burn_alerts/{datasetSlug}`
 | `id` | Unique identifier (ID), returned in response bodies. |
 | `updated_at` | ISO8601 formatted time when the field was updated. |
 
-Operations: Create, Load, Remove, Update.
+Operations: Create, List, Load, Remove, Update.
 
 API path: `/1/derived_columns/{datasetSlug}`
 
@@ -369,7 +370,7 @@ API path: `/1/derived_columns/{datasetSlug}`
 | `type` | Type of data that the Column will contain. |
 | `updated_at` | ISO8601 formatted time the column was updated. |
 
-Operations: Create, Load, Remove, Update.
+Operations: Create, List, Load, Remove, Update.
 
 API path: `/1/columns/{datasetSlug}`
 
@@ -434,7 +435,6 @@ API path: `/2/teams/{teamSlug}/environments`
 | Field | Description |
 | --- | --- |
 | `batch_events` | The array should contain one or more JSON objects representing Events. |
-| `id` |  |
 | `status` |  |
 
 Operations: Create.
@@ -466,7 +466,7 @@ Operations: Create, Load, Remove, Update.
 
 API path: `/2/teams/{teamSlug}/api-keys`
 
-#### Kinesi
+#### KinesisEvent
 
 | Field | Description |
 | --- | --- |
@@ -478,6 +478,15 @@ API path: `/2/teams/{teamSlug}/api-keys`
 Operations: Create.
 
 API path: `/1/kinesis_events/{datasetSlug}`
+
+#### ManagementAuth
+
+| Field | Description |
+| --- | --- |
+
+Operations: Load.
+
+API path: `/2/auth`
 
 #### MapDependency
 
@@ -510,7 +519,7 @@ API path: `/1/maps/dependencies/requests`
 | `updated_at` | The ISO8601-formatted time when the Marker was updated. |
 | `url` | A target for the marker. |
 
-Operations: Create, Load, Remove, Update.
+Operations: Create, List, Remove, Update.
 
 API path: `/1/markers/{datasetSlug}`
 
@@ -524,7 +533,7 @@ API path: `/1/markers/{datasetSlug}`
 | `type` | Groups similar Markers. |
 | `updated_at` | The ISO8601-formatted time when the Marker Setting was updated. |
 
-Operations: Create, Load, Remove, Update.
+Operations: Create, List, Remove, Update.
 
 API path: `/1/marker_settings/{datasetSlug}`
 
@@ -565,7 +574,7 @@ API path: `/1/queries/{datasetSlug}`
 | `source` | The source of the Query Annotation. |
 | `updated_at` | ISO8601 formatted time when the Query Annotation was updated. |
 
-Operations: Create, Load, Remove, Update.
+Operations: Create, List, Load, Remove, Update.
 
 API path: `/1/query_annotations/{datasetSlug}`
 
@@ -634,13 +643,13 @@ API path: `/1/signals`
 | `id` |  |
 | `name` | The name of the SLO. |
 | `reset_at` | The ISO8601-formatted time the SLO was last reset. |
-| `sli` | Reference to the [Calculated Field](/api/calculated-fields/) used as the indicator of event success. |
+| `sli` | Reference to the [Calculated Field (also called Derived Column)](/api/calculated-fields/) used as the indicator of event success. |
 | `tags` | A list of key-value pairs to help identify the SLO. |
 | `target_per_million` | The number of events out of one million (1,000,000) that you expected qualified events to succeed. |
 | `time_period_days` | The time period, in days, over which the SLO will be evaluated. |
 | `updated_at` | The ISO8601-formatted time when the SLO was updated. |
 
-Operations: Create, Load, Remove, Update.
+Operations: Create, List, Load, Remove, Update.
 
 API path: `/1/slos/{datasetSlug}`
 
@@ -805,6 +814,7 @@ Create an instance: `board_view = client.BoardView()`
 | `create(data)` | Create a new entity with the given data. |
 | `list()` | List entities, optionally matching the given criteria. |
 | `load(match)` | Load a single entity by match criteria. |
+| `remove(match)` | Remove the matching entity. |
 | `update(data)` | Update an existing entity. |
 
 #### Fields
@@ -824,14 +834,14 @@ board_view = client.BoardView().load({"id": "board_view_id", "board_id": "board_
 #### Example: List
 
 ```python
-board_views = client.BoardView().list({"id": "example"})
+board_views = client.BoardView().list({"board_id": "example"})
 ```
 
 #### Example: Create
 
 ```python
 board_view = client.BoardView().create({
-    "id": "example_id",  # str
+    "board_id": "example_board_id",  # str
 })
 ```
 
@@ -878,6 +888,7 @@ Create an instance: `burn_alert = client.BurnAlert()`
 | Method | Description |
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
+| `list()` | List entities, optionally matching the given criteria. |
 | `load(match)` | Load a single entity by match criteria. |
 | `remove(match)` | Remove the matching entity. |
 | `update(data)` | Update an existing entity. |
@@ -892,14 +903,20 @@ Create an instance: `burn_alert = client.BurnAlert()`
 #### Example: Load
 
 ```python
-burn_alert = client.BurnAlert().load({"id": "burn_alert_id", "slo_id": "slo_id"})
+burn_alert = client.BurnAlert().load({"id": "burn_alert_id", "dataset_slug": "dataset_slug"})
+```
+
+#### Example: List
+
+```python
+burn_alerts = client.BurnAlert().list({"dataset_slug": "example", "slo_id": "example"})
 ```
 
 #### Example: Create
 
 ```python
 burn_alert = client.BurnAlert().create({
-    "id": "example_id",  # str
+    "dataset_slug": "example_dataset_slug",  # str
     "alert_type": "example_alert_type",  # str
 })
 ```
@@ -914,6 +931,7 @@ Create an instance: `calculated_field = client.CalculatedField()`
 | Method | Description |
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
+| `list()` | List entities, optionally matching the given criteria. |
 | `load(match)` | Load a single entity by match criteria. |
 | `remove(match)` | Remove the matching entity. |
 | `update(data)` | Update an existing entity. |
@@ -932,7 +950,13 @@ Create an instance: `calculated_field = client.CalculatedField()`
 #### Example: Load
 
 ```python
-calculated_field = client.CalculatedField().load({"dataset_slug": "dataset_slug"})
+calculated_field = client.CalculatedField().load({"id": "calculated_field_id", "dataset_slug": "dataset_slug"})
+```
+
+#### Example: List
+
+```python
+calculated_fields = client.CalculatedField().list({"dataset_slug": "example"})
 ```
 
 #### Example: Create
@@ -958,6 +982,7 @@ Create an instance: `column = client.Column()`
 | Method | Description |
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
+| `list()` | List entities, optionally matching the given criteria. |
 | `load(match)` | Load a single entity by match criteria. |
 | `remove(match)` | Remove the matching entity. |
 | `update(data)` | Update an existing entity. |
@@ -978,14 +1003,20 @@ Create an instance: `column = client.Column()`
 #### Example: Load
 
 ```python
-column = client.Column().load({"id": "column_id"})
+column = client.Column().load({"id": "column_id", "dataset_slug": "dataset_slug"})
+```
+
+#### Example: List
+
+```python
+columns = client.Column().list({"dataset_slug": "example"})
 ```
 
 #### Example: Create
 
 ```python
 column = client.Column().create({
-    "id": "example_id",  # str
+    "dataset_slug": "example_dataset_slug",  # str
     "key_name": "example_key_name",  # str
 })
 ```
@@ -1132,7 +1163,6 @@ Create an instance: `event = client.Event()`
 | Field | Type | Description |
 | --- | --- | --- |
 | `batch_events` | `list` | The array should contain one or more JSON objects representing Events. |
-| `id` | `str` |  |
 | `status` | `int` |  |
 
 #### Example: Create
@@ -1207,9 +1237,9 @@ key_management = client.KeyManagement().create({
 ```
 
 
-### Kinesi
+### KinesisEvent
 
-Create an instance: `kinesi = client.Kinesi()`
+Create an instance: `kinesis_event = client.KinesisEvent()`
 
 #### Operations
 
@@ -1229,9 +1259,26 @@ Create an instance: `kinesi = client.Kinesi()`
 #### Example: Create
 
 ```python
-kinesi = client.Kinesi().create({
+kinesis_event = client.KinesisEvent().create({
     "dataset_slug": "example_dataset_slug",  # str
 })
+```
+
+
+### ManagementAuth
+
+Create an instance: `management_auth = client.ManagementAuth()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `load(match)` | Load a single entity by match criteria. |
+
+#### Example: Load
+
+```python
+management_auth = client.ManagementAuth().load()
 ```
 
 
@@ -1283,7 +1330,7 @@ Create an instance: `marker = client.Marker()`
 | Method | Description |
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
-| `load(match)` | Load a single entity by match criteria. |
+| `list()` | List entities, optionally matching the given criteria. |
 | `remove(match)` | Remove the matching entity. |
 | `update(data)` | Update an existing entity. |
 
@@ -1301,17 +1348,17 @@ Create an instance: `marker = client.Marker()`
 | `updated_at` | `str` | The ISO8601-formatted time when the Marker was updated. |
 | `url` | `str` | A target for the marker. |
 
-#### Example: Load
+#### Example: List
 
 ```python
-marker = client.Marker().load({"id": "marker_id"})
+markers = client.Marker().list({"dataset_slug": "example"})
 ```
 
 #### Example: Create
 
 ```python
 marker = client.Marker().create({
-    "id": "example_id",  # str
+    "dataset_slug": "example_dataset_slug",  # str
 })
 ```
 
@@ -1325,7 +1372,7 @@ Create an instance: `marker_setting = client.MarkerSetting()`
 | Method | Description |
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
-| `load(match)` | Load a single entity by match criteria. |
+| `list()` | List entities, optionally matching the given criteria. |
 | `remove(match)` | Remove the matching entity. |
 | `update(data)` | Update an existing entity. |
 
@@ -1339,17 +1386,17 @@ Create an instance: `marker_setting = client.MarkerSetting()`
 | `type` | `str` | Groups similar Markers. |
 | `updated_at` | `None | str` | The ISO8601-formatted time when the Marker Setting was updated. |
 
-#### Example: Load
+#### Example: List
 
 ```python
-marker_setting = client.MarkerSetting().load({"id": "marker_setting_id"})
+marker_settings = client.MarkerSetting().list({"dataset_slug": "example"})
 ```
 
 #### Example: Create
 
 ```python
 marker_setting = client.MarkerSetting().create({
-    "id": "example_id",  # str
+    "dataset_slug": "example_dataset_slug",  # str
     "color": "example_color",  # str
     "type": "example_type",  # str
 })
@@ -1391,14 +1438,14 @@ Create an instance: `query = client.Query()`
 #### Example: Load
 
 ```python
-query = client.Query().load({"dataset_slug": "dataset_slug", "query_id": "query_id"})
+query = client.Query().load({"id": "query_id", "dataset_slug": "dataset_slug"})
 ```
 
 #### Example: Create
 
 ```python
 query = client.Query().create({
-    "id": "example_id",  # str
+    "dataset_slug": "example_dataset_slug",  # str
 })
 ```
 
@@ -1412,6 +1459,7 @@ Create an instance: `query_annotation = client.QueryAnnotation()`
 | Method | Description |
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
+| `list()` | List entities, optionally matching the given criteria. |
 | `load(match)` | Load a single entity by match criteria. |
 | `remove(match)` | Remove the matching entity. |
 | `update(data)` | Update an existing entity. |
@@ -1431,14 +1479,20 @@ Create an instance: `query_annotation = client.QueryAnnotation()`
 #### Example: Load
 
 ```python
-query_annotation = client.QueryAnnotation().load({"id": "query_annotation_id"})
+query_annotation = client.QueryAnnotation().load({"id": "query_annotation_id", "dataset_slug": "dataset_slug"})
+```
+
+#### Example: List
+
+```python
+query_annotations = client.QueryAnnotation().list({"dataset_slug": "example"})
 ```
 
 #### Example: Create
 
 ```python
 query_annotation = client.QueryAnnotation().create({
-    "id": "example_id",  # str
+    "dataset_slug": "example_dataset_slug",  # str
     "name": "example_name",  # str
     "query_id": "example_query_id",  # str
 })
@@ -1475,14 +1529,14 @@ Create an instance: `query_result = client.QueryResult()`
 #### Example: Load
 
 ```python
-query_result = client.QueryResult().load({"dataset_slug": "dataset_slug", "query_result_id": "query_result_id"})
+query_result = client.QueryResult().load({"id": "query_result_id", "dataset_slug": "dataset_slug"})
 ```
 
 #### Example: Create
 
 ```python
 query_result = client.QueryResult().create({
-    "id": "example_id",  # str
+    "dataset_slug": "example_dataset_slug",  # str
     "query_id": "example_query_id",  # str
 })
 ```
@@ -1584,6 +1638,7 @@ Create an instance: `slo = client.Slo()`
 | Method | Description |
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
+| `list()` | List entities, optionally matching the given criteria. |
 | `load(match)` | Load a single entity by match criteria. |
 | `remove(match)` | Remove the matching entity. |
 | `update(data)` | Update an existing entity. |
@@ -1598,7 +1653,7 @@ Create an instance: `slo = client.Slo()`
 | `id` | `str` |  |
 | `name` | `str` | The name of the SLO. |
 | `reset_at` | `str` | The ISO8601-formatted time the SLO was last reset. |
-| `sli` | `dict` | Reference to the [Calculated Field](/api/calculated-fields/) used as the indicator of event success. |
+| `sli` | `dict` | Reference to the [Calculated Field (also called Derived Column)](/api/calculated-fields/) used as the indicator of event success. |
 | `tags` | `list` | A list of key-value pairs to help identify the SLO. |
 | `target_per_million` | `int` | The number of events out of one million (1,000,000) that you expected qualified events to succeed. |
 | `time_period_days` | `int` | The time period, in days, over which the SLO will be evaluated. |
@@ -1607,14 +1662,20 @@ Create an instance: `slo = client.Slo()`
 #### Example: Load
 
 ```python
-slo = client.Slo().load({"id": "slo_id"})
+slo = client.Slo().load({"id": "slo_id", "dataset_slug": "dataset_slug"})
+```
+
+#### Example: List
+
+```python
+slos = client.Slo().list({"dataset_slug": "example"})
 ```
 
 #### Example: Create
 
 ```python
 slo = client.Slo().create({
-    "id": "example_id",  # str
+    "dataset_slug": "example_dataset_slug",  # str
 })
 ```
 
@@ -1743,20 +1804,20 @@ Create an instance: `trigger = client.Trigger()`
 #### Example: Load
 
 ```python
-trigger = client.Trigger().load({"id": "trigger_id"})
+trigger = client.Trigger().load({"id": "trigger_id", "dataset_slug": "dataset_slug"})
 ```
 
 #### Example: List
 
 ```python
-triggers = client.Trigger().list({"recipient_id": "example"})
+triggers = client.Trigger().list({"dataset_slug": "example"})
 ```
 
 #### Example: Create
 
 ```python
 trigger = client.Trigger().create({
-    "id": "example_id",  # str
+    "dataset_slug": "example_dataset_slug",  # str
     "evaluation_schedule": {},  # dict
     "threshold": {},  # dict
 })
@@ -1882,11 +1943,11 @@ Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```python
-column = client.Column()
-column.load({"id": "example_id"})
+mapdependency = client.MapDependency()
+mapdependency.load({"request_id": "example"})
 
-# column.data_get() now returns the column data from the last load
-# column.match_get() returns the last match criteria
+# mapdependency.data_get() now returns the mapdependency data from the last load
+# mapdependency.match_get() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

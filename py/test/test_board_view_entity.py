@@ -37,7 +37,7 @@ class TestBoardViewEntity:
         client = HoneycombSDK.test(
             None, {"feature": {"validate": {"active": True}}})
         with pytest.raises(Exception) as err:
-            client.BoardView(None).list({"id": 1}, None)
+            client.BoardView(None).list({"board_id": 1}, None)
         assert "validate_failed" == getattr(err.value, "code", None)
 
     def test_should_run_basic_flow(self):
@@ -46,7 +46,7 @@ class TestBoardViewEntity:
         # multiple ops; skipping any one skips the whole flow (steps depend
         # on each other).
         _live = setup.get("live", False)
-        for _op in ["update", "load"]:
+        for _op in ["create", "list", "update", "load", "remove"]:
             _skip, _reason = runner.is_control_skipped("entityOp", "board_view." + _op, "live" if _live else "unit")
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
@@ -55,19 +55,32 @@ class TestBoardViewEntity:
             for _live_key in ["board01"]:
                 if setup.get("synthetic_only") or setup["idmap"].get(_live_key) is None:
                     runner.live_miss(LIVE_STRICT, f"Live entity test blocked: needs {_live_key} via HONEYCOMB_TEST_BOARD_VIEW_ENTID")
-        if setup["live"]:
-            runner.live_miss(LIVE_STRICT, "Live entity test blocked: " + "the flow updates a board_view record it did not create")
         client = setup["client"]
 
-        # Bootstrap entity data from existing test data.
-        board_view_ref01_data_raw = vs.items(helpers.to_map(
-            vs.getpath(setup["data"], "existing.board_view")))
-        board_view_ref01_data = None
-        if len(board_view_ref01_data_raw) > 0:
-            board_view_ref01_data = helpers.to_map(board_view_ref01_data_raw[0][1])
+        # CREATE
+        board_view_ref01_ent = client.BoardView(None)
+        board_view_ref01_data = helpers.to_map(vs.getprop(
+            vs.getpath(setup["data"], "new.board_view"), "board_view_ref01"))
+        board_view_ref01_data["board_id"] = setup["idmap"]["board01"]
+
+        board_view_ref01_data = helpers.to_map(runner.entity_data(board_view_ref01_ent.create(board_view_ref01_data, None)))
+        assert board_view_ref01_data is not None
+        assert board_view_ref01_data["id"] is not None
+
+        # LIST
+        board_view_ref01_match = {
+            "board_id": setup["idmap"]["board01"],
+        }
+
+        board_view_ref01_list_result = board_view_ref01_ent.list(board_view_ref01_match, None)
+        assert isinstance(board_view_ref01_list_result, list)
+
+        found_item = vs.select(
+            runner.entity_list_to_data(board_view_ref01_list_result),
+            {"id": board_view_ref01_data["id"]})
+        assert not vs.isempty(found_item)
 
         # UPDATE
-        board_view_ref01_ent = client.BoardView(None)
         board_view_ref01_data_up0_up = {
             "id": board_view_ref01_data["id"],
             "board_id": setup["idmap"]["board_id"],
@@ -91,6 +104,26 @@ class TestBoardViewEntity:
         board_view_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(board_view_ref01_data_dt0_loaded))
         assert board_view_ref01_data_dt0_load_result is not None
         assert board_view_ref01_data_dt0_load_result["id"] == board_view_ref01_data["id"]
+
+        # REMOVE
+        board_view_ref01_match_rm0 = {
+            "id": board_view_ref01_data["id"],
+        }
+        board_view_ref01_match_rm0["board_id"] = setup["idmap"].get("board_id") or setup["idmap"].get("board01")
+        board_view_ref01_ent.remove(board_view_ref01_match_rm0, None)
+
+        # LIST
+        board_view_ref01_match_rt0 = {
+            "board_id": setup["idmap"]["board01"],
+        }
+
+        board_view_ref01_list_rt0_result = board_view_ref01_ent.list(board_view_ref01_match_rt0, None)
+        assert isinstance(board_view_ref01_list_rt0_result, list)
+
+        not_found_item = vs.select(
+            runner.entity_list_to_data(board_view_ref01_list_rt0_result),
+            {"id": board_view_ref01_data["id"]})
+        assert vs.isempty(not_found_item)
 
 
 

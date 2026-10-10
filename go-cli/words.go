@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	eng "github.com/boru-lang/boru/eng/go"
-	sdk "github.com/voxgig-sdk/honeycomb-sdk/go"
+	sdk "github.com/waqar2403/honeycomb-sdk/go"
 )
 
 func registerSDKWords(r *eng.Registry, client *sdk.HoneycombSDK) {
@@ -103,8 +103,10 @@ func entityFor(client *sdk.HoneycombSDK, name string) (sdk.HoneycombEntity, erro
 		return client.HistoricalAnomaly(nil), nil
 	case "key_management":
 		return client.KeyManagement(nil), nil
-	case "kinesi":
-		return client.Kinesi(nil), nil
+	case "kinesis_event":
+		return client.KinesisEvent(nil), nil
+	case "management_auth":
+		return client.ManagementAuth(nil), nil
 	case "map_dependency":
 		return client.MapDependency(nil), nil
 	case "marker":

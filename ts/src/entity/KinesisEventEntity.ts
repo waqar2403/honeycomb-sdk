@@ -15,29 +15,29 @@ import type {
 } from '../types'
 
 import type {
-  Kinesi,
-  KinesiCreateData,
+  KinesisEvent,
+  KinesisEventCreateData,
 } from '../HoneycombTypes'
 
-class KinesiEntity extends HoneycombEntityBase<Kinesi> {
+class KinesisEventEntity extends HoneycombEntityBase<KinesisEvent> {
 
   constructor(client: HoneycombSDK, entopts: any) {
     super(client, entopts)
-    this.name = 'kinesi'
-    this.name_ = 'kinesi'
-    this.Name = 'Kinesi'
+    this.name = 'kinesis_event'
+    this.name_ = 'kinesis_event'
+    this.Name = 'KinesisEvent'
   }
 
 
-  make(this: KinesiEntity) {
-    return new KinesiEntity(this._client, this.entopts())
+  make(this: KinesisEventEntity) {
+    return new KinesisEventEntity(this._client, this.entopts())
   }
 
 
 
 
 
-  async create(this: any, reqdata?: KinesiCreateData, ctrl?: Control): Promise<KinesiEntity> {
+  async create(this: any, reqdata?: KinesisEventCreateData, ctrl?: Control): Promise<KinesisEventEntity> {
 
     const utility = this._utility
     const {
@@ -146,7 +146,7 @@ class KinesiEntity extends HoneycombEntityBase<Kinesi> {
       }
       else {
         // Off-happy-path (throw disabled): typed as any so the method's
-        // Promise<KinesiEntity> return stays clean under strict null checks.
+        // Promise<KinesisEventEntity> return stays clean under strict null checks.
         return undefined as any
       }
     }
@@ -160,5 +160,5 @@ class KinesiEntity extends HoneycombEntityBase<Kinesi> {
 
 
 export {
-  KinesiEntity
+  KinesisEventEntity
 }

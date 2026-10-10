@@ -39,23 +39,23 @@ describe('MarkerSettingDirect', async () => {
   })
 
 
-  test('direct-load-marker_setting', async (t: any) => {
+  test('direct-list-marker_setting', async (t: any) => {
     if (liveScenariosActive()) { t.skip('Covered by live operation scenarios'); return }
-    const setup = directSetup({ id: 'direct01' })
-    if (maybeSkipControl(t, 'direct', 'direct-load-marker_setting', setup.live)) return
-    if (skipIfMissingIds(t, setup, ["marker_setting01"], LIVE_STRICT)) return
+    const setup = directSetup([{ id: 'direct01' }, { id: 'direct02' }])
+    if (maybeSkipControl(t, 'direct', 'direct-list-marker_setting', setup.live)) return
+    if (skipIfMissingIds(t, setup, ["dataset_slug01"], LIVE_STRICT)) return
     const { client, calls } = setup
 
     const params: any = {}
     const query: any = {}
     if (setup.live) {
-      params.id = setup.idmap['marker_setting01']
+      params.dataset_slug = setup.idmap['dataset_slug01']
     } else {
-      params.id = 'direct01'
+      params.dataset_slug = 'direct01'
     }
 
     const result: any = await client.direct({
-      path: '1/marker_settings/{id}',
+      path: '1/marker_settings/{dataset_slug}',
       method: 'GET',
       params,
       query,
@@ -63,16 +63,18 @@ describe('MarkerSettingDirect', async () => {
 
     if (setup.live) {
       if (!result.ok || result.status < 200 || result.status >= 300) {
-        return void liveMiss(t, LIVE_STRICT, 'Live load failed: ' + describeLive(result))
+        return void liveMiss(t, LIVE_STRICT, 'Live list failed: ' + describeLive(result))
       }
-      if (!(null != result.data)) {
-        return void liveMiss(t, LIVE_STRICT, 'Live load returned no data: ' + describeLive(result))
+      if (!(Array.isArray(unwrapListData(result.data)))) {
+        return void liveMiss(t, LIVE_STRICT, 'Live list returned no list: ' + describeLive(result))
       }
     } else {
       assert(result.ok === true)
       assert(result.status === 200)
       assert(null != result.data)
-      assert(result.data.id === 'direct01')
+      const listArr = unwrapListData(result.data)
+      assert(Array.isArray(listArr))
+      assert(listArr!.length === 2)
       assert(calls.length === 1)
       assert(calls[0].init.method === 'GET')
       assert(calls[0].url.includes('direct01'))
