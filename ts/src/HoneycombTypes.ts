@@ -5,6 +5,40 @@
 // canonical type sentinels via @voxgig/sdkgen canonToType (source of truth:
 // @voxgig/apidef VALID_CANON). Do not edit by hand.
 
+export interface ApiKey {
+  data: Record<string, any>
+  id?: string
+}
+
+export interface ApiKeyLoadMatch {
+  id: string
+  team_slug: string
+}
+
+export interface ApiKeyListMatch {
+  team_slug: string
+  filter_type?: string
+  page_after?: string
+  page_size?: number
+}
+
+export interface ApiKeyCreateData {
+  team_slug: string
+  data: Record<string, any>
+  id?: string
+}
+
+export interface ApiKeyUpdateData {
+  id: string
+  team_slug: string
+  data?: Record<string, any>
+}
+
+export interface ApiKeyRemoveMatch {
+  id: string
+  team_slug: string
+}
+
 export interface Auth {
   api_key_access: Record<string, any>
   environment: Record<string, any>
@@ -363,7 +397,11 @@ export interface Environment {
 }
 
 export interface EnvironmentLoadMatch {
-  id?: string
+  id: string
+  team_slug: string
+}
+
+export interface EnvironmentListMatch {
   team_slug: string
   page_after?: string
   page_size?: number
@@ -411,36 +449,6 @@ export interface HistoricalAnomalyListMatch {
   page_after?: string
   page_size?: number
   start_time: number
-}
-
-export interface KeyManagement {
-  data: Record<string, any>
-  id?: string
-}
-
-export interface KeyManagementLoadMatch {
-  id?: string
-  team_slug: string
-  filter_type?: string
-  page_after?: string
-  page_size?: number
-}
-
-export interface KeyManagementCreateData {
-  team_slug: string
-  data: Record<string, any>
-  id?: string
-}
-
-export interface KeyManagementUpdateData {
-  id: string
-  team_slug: string
-  data?: Record<string, any>
-}
-
-export interface KeyManagementRemoveMatch {
-  id: string
-  team_slug: string
 }
 
 export interface KinesisEvent {

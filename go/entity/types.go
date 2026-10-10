@@ -12,6 +12,44 @@ import (
 	"github.com/waqar2403/honeycomb-sdk/go/core"
 )
 
+// ApiKey is the typed data model for the api_key entity.
+type ApiKey struct {
+}
+
+// ApiKeyLoadMatch is the typed request payload for ApiKey.LoadTyped.
+type ApiKeyLoadMatch struct {
+	Id string `json:"id"`
+	TeamSlug string `json:"team_slug"`
+}
+
+// ApiKeyListMatch is the typed request payload for ApiKey.ListTyped.
+type ApiKeyListMatch struct {
+	TeamSlug string `json:"team_slug"`
+	FilterType *string `json:"filter_type,omitempty"`
+	PageAfter *string `json:"page_after,omitempty"`
+	PageSize *float64 `json:"page_size,omitempty"`
+}
+
+// ApiKeyCreateData is the typed request payload for ApiKey.CreateTyped.
+type ApiKeyCreateData struct {
+	TeamSlug string `json:"team_slug"`
+	Data map[string]any `json:"data"`
+	Id *string `json:"id,omitempty"`
+}
+
+// ApiKeyUpdateData is the typed request payload for ApiKey.UpdateTyped.
+type ApiKeyUpdateData struct {
+	Id string `json:"id"`
+	TeamSlug string `json:"team_slug"`
+	Data *map[string]any `json:"data,omitempty"`
+}
+
+// ApiKeyRemoveMatch is the typed request payload for ApiKey.RemoveTyped.
+type ApiKeyRemoveMatch struct {
+	Id string `json:"id"`
+	TeamSlug string `json:"team_slug"`
+}
+
 // Auth is the typed data model for the auth entity.
 type Auth struct {
 }
@@ -348,7 +386,12 @@ type Environment struct {
 
 // EnvironmentLoadMatch is the typed request payload for Environment.LoadTyped.
 type EnvironmentLoadMatch struct {
-	Id *string `json:"id,omitempty"`
+	Id string `json:"id"`
+	TeamSlug string `json:"team_slug"`
+}
+
+// EnvironmentListMatch is the typed request payload for Environment.ListTyped.
+type EnvironmentListMatch struct {
 	TeamSlug string `json:"team_slug"`
 	PageAfter *string `json:"page_after,omitempty"`
 	PageSize *float64 `json:"page_size,omitempty"`
@@ -396,39 +439,6 @@ type HistoricalAnomalyListMatch struct {
 	PageAfter *string `json:"page_after,omitempty"`
 	PageSize *float64 `json:"page_size,omitempty"`
 	StartTime int `json:"start_time"`
-}
-
-// KeyManagement is the typed data model for the key_management entity.
-type KeyManagement struct {
-}
-
-// KeyManagementLoadMatch is the typed request payload for KeyManagement.LoadTyped.
-type KeyManagementLoadMatch struct {
-	Id *string `json:"id,omitempty"`
-	TeamSlug string `json:"team_slug"`
-	FilterType *string `json:"filter_type,omitempty"`
-	PageAfter *string `json:"page_after,omitempty"`
-	PageSize *float64 `json:"page_size,omitempty"`
-}
-
-// KeyManagementCreateData is the typed request payload for KeyManagement.CreateTyped.
-type KeyManagementCreateData struct {
-	TeamSlug string `json:"team_slug"`
-	Data map[string]any `json:"data"`
-	Id *string `json:"id,omitempty"`
-}
-
-// KeyManagementUpdateData is the typed request payload for KeyManagement.UpdateTyped.
-type KeyManagementUpdateData struct {
-	Id string `json:"id"`
-	TeamSlug string `json:"team_slug"`
-	Data *map[string]any `json:"data,omitempty"`
-}
-
-// KeyManagementRemoveMatch is the typed request payload for KeyManagement.RemoveTyped.
-type KeyManagementRemoveMatch struct {
-	Id string `json:"id"`
-	TeamSlug string `json:"team_slug"`
 }
 
 // KinesisEvent is the typed data model for the kinesis_event entity.

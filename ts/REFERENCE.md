@@ -49,6 +49,18 @@ const client = HoneycombSDK.test()
 
 ### Instance Methods
 
+#### `ApiKey(data?: object)`
+
+Create a new `ApiKey` entity instance.
+
+**Parameters:**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `data` | `object` | Initial entity data. |
+
+**Returns:** `ApiKeyEntity` instance.
+
 #### `Auth(data?: object)`
 
 Create a new `Auth` entity instance.
@@ -192,18 +204,6 @@ Create a new `HistoricalAnomaly` entity instance.
 | `data` | `object` | Initial entity data. |
 
 **Returns:** `HistoricalAnomalyEntity` instance.
-
-#### `KeyManagement(data?: object)`
-
-Create a new `KeyManagement` entity instance.
-
-**Parameters:**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| `data` | `object` | Initial entity data. |
-
-**Returns:** `KeyManagementEntity` instance.
 
 #### `KinesisEvent(data?: object)`
 
@@ -438,6 +438,96 @@ The operation then rejects with an error whose `code` is
 `request_aborted` and whose `cause` is the signal's reason. A request
 whose signal has already aborted is not sent. `stream()` takes the signal
 as `callopts.signal`, and ends when it aborts.
+
+
+---
+
+## ApiKeyEntity
+
+```ts
+const api_key = client.ApiKey()
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `data` | `Record<string, any>` | Yes |  |
+| `id` | `string` | No |  |
+
+### Operations
+
+#### `create(data: object, ctrl?: object)`
+
+Create a new entity with the given data. Resolves to the created entity.
+
+```ts
+const result = await client.ApiKey().create({
+  team_slug: 'example_team_slug',
+  data: {},
+})
+```
+
+#### `list(match: object, ctrl?: object)`
+
+List entities matching the given criteria. Resolves to an array of entities, one per record.
+
+```ts
+const results = await client.ApiKey().list({ team_slug: "example" })
+```
+
+#### `load(match: object, ctrl?: object)`
+
+Load a single entity matching the given criteria. Resolves to the entity, whose record `data()` reads.
+
+```ts
+const result = await client.ApiKey().load({ id: 'api_key_id', team_slug: 'team_slug' })
+```
+
+#### `remove(match: object, ctrl?: object)`
+
+Remove the entity matching the given criteria. Resolves to the entity, marked as deleted.
+
+```ts
+const result = await client.ApiKey().remove({ id: 'api_key_id', team_slug: 'team_slug' })
+```
+
+#### `update(data: object, ctrl?: object)`
+
+Update an existing entity. The data must include the entity `id`. Resolves to the updated entity.
+
+```ts
+const result = await client.ApiKey().update({
+  id: 'api_key_id',
+  team_slug: 'team_slug',
+  // Fields to update
+})
+```
+
+### Common Methods
+
+#### `data(data?: object)`
+
+Get or set the entity data. When called with data, sets the entity's
+internal data and returns the current data. When called without
+arguments, returns a copy of the current data.
+
+#### `match(match?: object)`
+
+Get or set the entity match criteria. Works the same as `data()`.
+
+#### `make()`
+
+Create a new `ApiKeyEntity` instance with the same client and
+options.
+
+#### `client()`
+
+Return the parent `HoneycombSDK` instance.
+
+#### `entopts()`
+
+Return a copy of the entity options.
 
 
 ---
@@ -1261,6 +1351,14 @@ const result = await client.Environment().create({
 })
 ```
 
+#### `list(match: object, ctrl?: object)`
+
+List entities matching the given criteria. Resolves to an array of entities, one per record.
+
+```ts
+const results = await client.Environment().list({ team_slug: "example" })
+```
+
 #### `load(match: object, ctrl?: object)`
 
 Load a single entity matching the given criteria. Resolves to the entity, whose record `data()` reads.
@@ -1411,88 +1509,6 @@ Get or set the entity match criteria. Works the same as `data()`.
 #### `make()`
 
 Create a new `HistoricalAnomalyEntity` instance with the same client and
-options.
-
-#### `client()`
-
-Return the parent `HoneycombSDK` instance.
-
-#### `entopts()`
-
-Return a copy of the entity options.
-
-
----
-
-## KeyManagementEntity
-
-```ts
-const key_management = client.KeyManagement()
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `data` | `Record<string, any>` | Yes |  |
-| `id` | `string` | No |  |
-
-### Operations
-
-#### `create(data: object, ctrl?: object)`
-
-Create a new entity with the given data. Resolves to the created entity.
-
-```ts
-const result = await client.KeyManagement().create({
-  team_slug: 'example_team_slug',
-  data: {},
-})
-```
-
-#### `load(match: object, ctrl?: object)`
-
-Load a single entity matching the given criteria. Resolves to the entity, whose record `data()` reads.
-
-```ts
-const result = await client.KeyManagement().load({ id: 'key_management_id', team_slug: 'team_slug' })
-```
-
-#### `remove(match: object, ctrl?: object)`
-
-Remove the entity matching the given criteria. Resolves to the entity, marked as deleted.
-
-```ts
-const result = await client.KeyManagement().remove({ id: 'key_management_id', team_slug: 'team_slug' })
-```
-
-#### `update(data: object, ctrl?: object)`
-
-Update an existing entity. The data must include the entity `id`. Resolves to the updated entity.
-
-```ts
-const result = await client.KeyManagement().update({
-  id: 'key_management_id',
-  team_slug: 'team_slug',
-  // Fields to update
-})
-```
-
-### Common Methods
-
-#### `data(data?: object)`
-
-Get or set the entity data. When called with data, sets the entity's
-internal data and returns the current data. When called without
-arguments, returns a copy of the current data.
-
-#### `match(match?: object)`
-
-Get or set the entity match criteria. Works the same as `data()`.
-
-#### `make()`
-
-Create a new `KeyManagementEntity` instance with the same client and
 options.
 
 #### `client()`

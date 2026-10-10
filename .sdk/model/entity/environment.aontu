@@ -85,7 +85,82 @@ main: kit: entity: environment: {
           ]
           t: {
             req: "`reqdata`"
-            res: "`body`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /2/teams/{teamSlug}/environments"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "team_slug"
+                or: "teamSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                ex: "eyxJjcmAVhdGVkX"
+                k: "query"
+                n: "page_after"
+                or: "page[after]"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: 10
+                k: "query"
+                n: "page_size"
+                or: "page[size]"
+                r: false
+                t: "`$NUMBER`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/2/teams/{teamSlug}/environments"
+          q: {
+            exist: [
+              "team_slug"
+            ]
+          }
+          r: {
+            param: {
+              teamSlug: "team_slug"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/vnd.api+json"
+          }
+          s: [
+            {
+              lit: "2"
+            }
+            {
+              lit: "teams"
+            }
+            {
+              var: "team_slug"
+            }
+            {
+              lit: "environments"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
           }
         }
       ]
@@ -154,77 +229,7 @@ main: kit: entity: environment: {
           ]
           t: {
             req: "`reqdata`"
-            res: "`body`"
-          }
-        }
-        {
-          co: {
-            id: "GET /2/teams/{teamSlug}/environments"
-            source: "openapi3"
-            version: 2
-          }
-          g: {
-            params: [
-              {
-                k: "param"
-                n: "team_slug"
-                or: "teamSlug"
-                r: true
-                t: "`$STRING`"
-              }
-            ]
-            query: [
-              {
-                ex: "eyxJjcmAVhdGVkX"
-                k: "query"
-                n: "page_after"
-                or: "page[after]"
-                r: false
-                t: "`$STRING`"
-              }
-              {
-                ex: 10
-                k: "query"
-                n: "page_size"
-                or: "page[size]"
-                r: false
-                t: "`$NUMBER`"
-              }
-            ]
-          }
-          m: "GET"
-          o: "/2/teams/{teamSlug}/environments"
-          q: {
-            exist: [
-              "team_slug"
-            ]
-          }
-          r: {
-            param: {
-              teamSlug: "team_slug"
-            }
-          }
-          rs: {
-            kind: "json"
-            media: "application/vnd.api+json"
-          }
-          s: [
-            {
-              lit: "2"
-            }
-            {
-              lit: "teams"
-            }
-            {
-              var: "team_slug"
-            }
-            {
-              lit: "environments"
-            }
-          ]
-          t: {
-            req: "`reqdata`"
-            res: "`body`"
+            res: "`body.data`"
           }
         }
       ]
@@ -365,7 +370,7 @@ main: kit: entity: environment: {
           ]
           t: {
             req: "`reqdata`"
-            res: "`body`"
+            res: "`body.data`"
           }
         }
       ]

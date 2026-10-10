@@ -4,7 +4,7 @@
 
 The Python SDK for the Honeycomb API — an entity-oriented client following Pythonic conventions.
 
-The SDK exposes the API as capitalised, semantic **Entities** — for example `client.Auth()` — each
+The SDK exposes the API as capitalised, semantic **Entities** — for example `client.ApiKey()` — each
 carrying a small, uniform set of operations (`list`, `load`, `create`, `update`, `remove`) instead of raw URL
 paths and query strings. You work with named resources and verbs, which
 keeps the cognitive load low.
@@ -39,6 +39,20 @@ client = HoneycombSDK({
 })
 ```
 
+### 2. List apikey records
+
+`list()` returns a `list` of entities, one per record, and raises on
+error; an entity's `data_get()` reads its record (a `dict`).
+
+```python
+try:
+    apikeys = client.ApiKey().list({"team_slug": "example"})
+    for apikey in apikeys:
+        print(apikey.data_get())
+except Exception as err:
+    print(f"list failed: {err}")
+```
+
 ### 3. Load a boardview
 
 BoardView is nested under board, so provide the `board_id`.
@@ -52,6 +66,19 @@ except Exception as err:
     print(f"load failed: {err}")
 ```
 
+### 4. Create, update, and remove
+
+```python
+# Create — returns the ENTITY (call data_get() for the record)
+created = client.ApiKey().create({"team_slug": "example_team_slug", "data": {}})
+
+# Update — the created entity's record holds its id
+client.ApiKey().update({"id": created.data_get()["id"], "team_slug": "example_team_slug", "data": {}})
+
+# Remove
+client.ApiKey().remove({"id": created.data_get()["id"], "team_slug": "example_team_slug"})
+```
+
 
 ## Error handling
 
@@ -59,10 +86,10 @@ Entity operations raise on failure, so wrap them in `try` / `except`:
 
 ```python
 try:
-    mapdependency = client.MapDependency().load({"request_id": "example"})
-    print(mapdependency.data_get())
+    datasets = client.Dataset().list()
+    print([item.data_get() for item in datasets])
 except Exception as err:
-    print(f"load failed: {err}")
+    print(f"list failed: {err}")
 ```
 
 `direct()` does **not** raise — it returns the result envelope. Branch
@@ -127,7 +154,7 @@ Create a mock client for unit testing — no server required:
 client = HoneycombSDK.test()
 
 # Entity ops return the entity, and list one per record; they raise on error.
-mapdependency = client.MapDependency().load({"request_id": "example"})
+dataset = client.Dataset().list()
 # data_get() on an entity reads its mock response record
 ```
 
@@ -206,6 +233,7 @@ Creates a test-mode client with mock transport. Both arguments may be `None`.
 | `get_utility` | `() -> Utility` | Copy of the SDK utility object. |
 | `prepare` | `(fetchargs) -> dict` | Build an HTTP request definition without sending. Raises on error. |
 | `direct` | `(fetchargs) -> dict` | Build and send an HTTP request. Returns a result dict (branch on `ok`). |
+| `ApiKey` | `(data) -> ApiKeyEntity` | Create an ApiKey entity instance. |
 | `Auth` | `(data) -> AuthEntity` | Create an Auth entity instance. |
 | `Board` | `(data) -> BoardEntity` | Create a Board entity instance. |
 | `BoardView` | `(data) -> BoardViewEntity` | Create a BoardView entity instance. |
@@ -218,7 +246,6 @@ Creates a test-mode client with mock transport. Both arguments may be `None`.
 | `Environment` | `(data) -> EnvironmentEntity` | Create an Environment entity instance. |
 | `Event` | `(data) -> EventEntity` | Create an Event entity instance. |
 | `HistoricalAnomaly` | `(data) -> HistoricalAnomalyEntity` | Create a HistoricalAnomaly entity instance. |
-| `KeyManagement` | `(data) -> KeyManagementEntity` | Create a KeyManagement entity instance. |
 | `KinesisEvent` | `(data) -> KinesisEventEntity` | Create a KinesisEvent entity instance. |
 | `ManagementAuth` | `(data) -> ManagementAuthEntity` | Create a ManagementAuth entity instance. |
 | `MapDependency` | `(data) -> MapDependencyEntity` | Create a MapDependency entity instance. |
@@ -272,6 +299,17 @@ you branch on via `result["ok"]`:
 On error, `ok` is `False` and `err` contains the error value.
 
 ### Entities
+
+#### ApiKey
+
+| Field | Description |
+| --- | --- |
+| `data` |  |
+| `id` |  |
+
+Operations: Create, List, Load, Remove, Update.
+
+API path: `/2/teams/{teamSlug}/api-keys`
 
 #### Auth
 
@@ -426,7 +464,7 @@ API path: `/1/dataset_definitions/{datasetSlug}`
 | `data` |  |
 | `id` |  |
 
-Operations: Create, Load, Remove, Update.
+Operations: Create, List, Load, Remove, Update.
 
 API path: `/2/teams/{teamSlug}/environments`
 
@@ -454,17 +492,6 @@ API path: `/1/batch/{datasetSlug}`
 Operations: List.
 
 API path: `/1/signals/{signalId}/historical_anomalies`
-
-#### KeyManagement
-
-| Field | Description |
-| --- | --- |
-| `data` |  |
-| `id` |  |
-
-Operations: Create, Load, Remove, Update.
-
-API path: `/2/teams/{teamSlug}/api-keys`
 
 #### KinesisEvent
 
@@ -724,6 +751,49 @@ API path: `/1/triggers/{datasetSlug}`
 
 
 ## Entities
+
+
+### ApiKey
+
+Create an instance: `api_key = client.ApiKey()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+| `list()` | List entities, optionally matching the given criteria. |
+| `load(match)` | Load a single entity by match criteria. |
+| `remove(match)` | Remove the matching entity. |
+| `update(data)` | Update an existing entity. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `data` | `dict` |  |
+| `id` | `str` |  |
+
+#### Example: Load
+
+```python
+api_key = client.ApiKey().load({"id": "api_key_id", "team_slug": "team_slug"})
+```
+
+#### Example: List
+
+```python
+api_keys = client.ApiKey().list({"team_slug": "example"})
+```
+
+#### Example: Create
+
+```python
+api_key = client.ApiKey().create({
+    "team_slug": "example_team_slug",  # str
+    "data": {},  # dict
+})
+```
 
 
 ### Auth
@@ -1121,6 +1191,7 @@ Create an instance: `environment = client.Environment()`
 | Method | Description |
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
+| `list()` | List entities, optionally matching the given criteria. |
 | `load(match)` | Load a single entity by match criteria. |
 | `remove(match)` | Remove the matching entity. |
 | `update(data)` | Update an existing entity. |
@@ -1136,6 +1207,12 @@ Create an instance: `environment = client.Environment()`
 
 ```python
 environment = client.Environment().load({"id": "environment_id", "team_slug": "team_slug"})
+```
+
+#### Example: List
+
+```python
+environments = client.Environment().list({"team_slug": "example"})
 ```
 
 #### Example: Create
@@ -1198,42 +1275,6 @@ Create an instance: `historical_anomaly = client.HistoricalAnomaly()`
 
 ```python
 historical_anomalys = client.HistoricalAnomaly().list({"signal_id": "example", "end_time": 1, "start_time": 1})
-```
-
-
-### KeyManagement
-
-Create an instance: `key_management = client.KeyManagement()`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `create(data)` | Create a new entity with the given data. |
-| `load(match)` | Load a single entity by match criteria. |
-| `remove(match)` | Remove the matching entity. |
-| `update(data)` | Update an existing entity. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `data` | `dict` |  |
-| `id` | `str` |  |
-
-#### Example: Load
-
-```python
-key_management = client.KeyManagement().load({"id": "key_management_id", "team_slug": "team_slug"})
-```
-
-#### Example: Create
-
-```python
-key_management = client.KeyManagement().create({
-    "team_slug": "example_team_slug",  # str
-    "data": {},  # dict
-})
 ```
 
 
@@ -1939,15 +1980,15 @@ Import entity or utility modules directly only when needed.
 
 ### Entity state
 
-Entity instances are stateful. After a successful `load`, the entity
+Entity instances are stateful. After a successful `list`, the entity
 stores the returned data and match criteria internally.
 
 ```python
-mapdependency = client.MapDependency()
-mapdependency.load({"request_id": "example"})
+dataset = client.Dataset()
+dataset.list()
 
-# mapdependency.data_get() now returns the mapdependency data from the last load
-# mapdependency.match_get() returns the last match criteria
+# dataset.data_get() now returns the dataset data from the last list
+# dataset.match_get() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

@@ -1,5 +1,6 @@
 # Flows
 
+@"./BasicApiKeyFlow.aontu"
 @"./BasicAuthFlow.aontu"
 @"./BasicBoardFlow.aontu"
 @"./BasicBoardViewFlow.aontu"
@@ -12,7 +13,6 @@
 @"./BasicEnvironmentFlow.aontu"
 @"./BasicEventFlow.aontu"
 @"./BasicHistoricalAnomalyFlow.aontu"
-@"./BasicKeyManagementFlow.aontu"
 @"./BasicKinesisEventFlow.aontu"
 @"./BasicManagementAuthFlow.aontu"
 @"./BasicMapDependencyFlow.aontu"

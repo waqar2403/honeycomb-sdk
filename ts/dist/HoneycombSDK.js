@@ -2,6 +2,7 @@
 // Honeycomb Ts SDK
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SDK = exports.HoneycombSDK = exports.HoneycombEntityBase = exports.BaseFeature = exports.config = exports.stdutil = void 0;
+const ApiKeyEntity_1 = require("./entity/ApiKeyEntity");
 const AuthEntity_1 = require("./entity/AuthEntity");
 const BoardEntity_1 = require("./entity/BoardEntity");
 const BoardViewEntity_1 = require("./entity/BoardViewEntity");
@@ -14,8 +15,8 @@ const DatasetDefinitionEntity_1 = require("./entity/DatasetDefinitionEntity");
 const EnvironmentEntity_1 = require("./entity/EnvironmentEntity");
 const EventEntity_1 = require("./entity/EventEntity");
 const HistoricalAnomalyEntity_1 = require("./entity/HistoricalAnomalyEntity");
-const KeyManagementEntity_1 = require("./entity/KeyManagementEntity");
-const KinesiEntity_1 = require("./entity/KinesiEntity");
+const KinesisEventEntity_1 = require("./entity/KinesisEventEntity");
+const ManagementAuthEntity_1 = require("./entity/ManagementAuthEntity");
 const MapDependencyEntity_1 = require("./entity/MapDependencyEntity");
 const MarkerEntity_1 = require("./entity/MarkerEntity");
 const MarkerSettingEntity_1 = require("./entity/MarkerSettingEntity");
@@ -264,6 +265,13 @@ class HoneycombSDK {
         }
         return res;
     }
+    // Entity access: `client.ApiKey().list()` / `client.ApiKey().load({ id })`.
+    // The argument is the entity OPTIONS object (passed to the entity
+    // constructor as entopts), not initial entity data.
+    ApiKey(entopts) {
+        const self = this;
+        return new ApiKeyEntity_1.ApiKeyEntity(self, entopts);
+    }
     // Entity access: `client.Auth().list()` / `client.Auth().load({ id })`.
     // The argument is the entity OPTIONS object (passed to the entity
     // constructor as entopts), not initial entity data.
@@ -348,19 +356,19 @@ class HoneycombSDK {
         const self = this;
         return new HistoricalAnomalyEntity_1.HistoricalAnomalyEntity(self, entopts);
     }
-    // Entity access: `client.KeyManagement().list()` / `client.KeyManagement().load({ id })`.
+    // Entity access: `client.KinesisEvent().list()` / `client.KinesisEvent().load({ id })`.
     // The argument is the entity OPTIONS object (passed to the entity
     // constructor as entopts), not initial entity data.
-    KeyManagement(entopts) {
+    KinesisEvent(entopts) {
         const self = this;
-        return new KeyManagementEntity_1.KeyManagementEntity(self, entopts);
+        return new KinesisEventEntity_1.KinesisEventEntity(self, entopts);
     }
-    // Entity access: `client.Kinesi().list()` / `client.Kinesi().load({ id })`.
+    // Entity access: `client.ManagementAuth().list()` / `client.ManagementAuth().load({ id })`.
     // The argument is the entity OPTIONS object (passed to the entity
     // constructor as entopts), not initial entity data.
-    Kinesi(entopts) {
+    ManagementAuth(entopts) {
         const self = this;
-        return new KinesiEntity_1.KinesiEntity(self, entopts);
+        return new ManagementAuthEntity_1.ManagementAuthEntity(self, entopts);
     }
     // Entity access: `client.MapDependency().list()` / `client.MapDependency().load({ id })`.
     // The argument is the entity OPTIONS object (passed to the entity

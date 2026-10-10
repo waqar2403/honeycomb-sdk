@@ -16,6 +16,52 @@ from __future__ import annotations
 from typing import TypedDict, Any
 
 
+class ApiKeyRequired(TypedDict):
+    data: dict
+
+
+class ApiKey(ApiKeyRequired, total=False):
+    id: str
+
+
+class ApiKeyLoadMatch(TypedDict):
+    id: str
+    team_slug: str
+
+
+class ApiKeyListMatchRequired(TypedDict):
+    team_slug: str
+
+
+class ApiKeyListMatch(ApiKeyListMatchRequired, total=False):
+    filter_type: str
+    page_after: str
+    page_size: float
+
+
+class ApiKeyCreateDataRequired(TypedDict):
+    team_slug: str
+    data: dict
+
+
+class ApiKeyCreateData(ApiKeyCreateDataRequired, total=False):
+    id: str
+
+
+class ApiKeyUpdateDataRequired(TypedDict):
+    id: str
+    team_slug: str
+
+
+class ApiKeyUpdateData(ApiKeyUpdateDataRequired, total=False):
+    data: dict
+
+
+class ApiKeyRemoveMatch(TypedDict):
+    id: str
+    team_slug: str
+
+
 class Auth(TypedDict):
     api_key_access: dict
     environment: dict
@@ -439,12 +485,16 @@ class Environment(EnvironmentRequired, total=False):
     id: str
 
 
-class EnvironmentLoadMatchRequired(TypedDict):
+class EnvironmentLoadMatch(TypedDict):
+    id: str
     team_slug: str
 
 
-class EnvironmentLoadMatch(EnvironmentLoadMatchRequired, total=False):
-    id: str
+class EnvironmentListMatchRequired(TypedDict):
+    team_slug: str
+
+
+class EnvironmentListMatch(EnvironmentListMatchRequired, total=False):
     page_after: str
     page_size: float
 
@@ -503,48 +553,6 @@ class HistoricalAnomalyListMatchRequired(TypedDict):
 class HistoricalAnomalyListMatch(HistoricalAnomalyListMatchRequired, total=False):
     page_after: str
     page_size: float
-
-
-class KeyManagementRequired(TypedDict):
-    data: dict
-
-
-class KeyManagement(KeyManagementRequired, total=False):
-    id: str
-
-
-class KeyManagementLoadMatchRequired(TypedDict):
-    team_slug: str
-
-
-class KeyManagementLoadMatch(KeyManagementLoadMatchRequired, total=False):
-    id: str
-    filter_type: str
-    page_after: str
-    page_size: float
-
-
-class KeyManagementCreateDataRequired(TypedDict):
-    team_slug: str
-    data: dict
-
-
-class KeyManagementCreateData(KeyManagementCreateDataRequired, total=False):
-    id: str
-
-
-class KeyManagementUpdateDataRequired(TypedDict):
-    id: str
-    team_slug: str
-
-
-class KeyManagementUpdateData(KeyManagementUpdateDataRequired, total=False):
-    data: dict
-
-
-class KeyManagementRemoveMatch(TypedDict):
-    id: str
-    team_slug: str
 
 
 class KinesisEvent(TypedDict, total=False):

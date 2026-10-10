@@ -1,16 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.KinesiEntity = void 0;
+exports.KinesisEventEntity = void 0;
 const HoneycombEntityBase_1 = require("../HoneycombEntityBase");
-class KinesiEntity extends HoneycombEntityBase_1.HoneycombEntityBase {
+class KinesisEventEntity extends HoneycombEntityBase_1.HoneycombEntityBase {
     constructor(client, entopts) {
         super(client, entopts);
-        this.name = 'kinesi';
-        this.name_ = 'kinesi';
-        this.Name = 'Kinesi';
+        this.name = 'kinesis_event';
+        this.name_ = 'kinesis_event';
+        this.Name = 'KinesisEvent';
     }
     make() {
-        return new KinesiEntity(this._client, this.entopts());
+        return new KinesisEventEntity(this._client, this.entopts());
     }
     async create(reqdata, ctrl) {
         const utility = this._utility;
@@ -95,11 +95,11 @@ class KinesiEntity extends HoneycombEntityBase_1.HoneycombEntityBase {
             }
             else {
                 // Off-happy-path (throw disabled): typed as any so the method's
-                // Promise<KinesiEntity> return stays clean under strict null checks.
+                // Promise<KinesisEventEntity> return stays clean under strict null checks.
                 return undefined;
             }
         }
     }
 }
-exports.KinesiEntity = KinesiEntity;
-//# sourceMappingURL=KinesiEntity.js.map
+exports.KinesisEventEntity = KinesisEventEntity;
+//# sourceMappingURL=KinesisEventEntity.js.map

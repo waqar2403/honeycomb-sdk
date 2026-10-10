@@ -1,26 +1,26 @@
 {
   "existing": {
-    "key_management": {
-      "KEY_MANAGEMENT00": {
+    "api_key": {
+      "API_KEY00": {
         "data": {},
-        "id": "KEY_MANAGEMENT00",
+        "id": "API_KEY00",
         "team_slug": "TEAM_SLUG01"
       },
-      "KEY_MANAGEMENT01": {
+      "API_KEY01": {
         "data": {},
-        "id": "KEY_MANAGEMENT01",
+        "id": "API_KEY01",
         "team_slug": "TEAM_SLUG01"
       },
-      "KEY_MANAGEMENT02": {
+      "API_KEY02": {
         "data": {},
-        "id": "KEY_MANAGEMENT02",
+        "id": "API_KEY02",
         "team_slug": "TEAM_SLUG01"
       }
     }
   },
   "new": {
-    "key_management": {
-      "key_management_ref01": {
+    "api_key": {
+      "api_key_ref01": {
         "data": {}
       }
     }
@@ -31,12 +31,12 @@
       "version": 2,
       "source": "openapi3"
     },
-    "GET /2/teams/{teamSlug}/api-keys/{ID}": {
+    "GET /2/teams/{teamSlug}/api-keys": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"
     },
-    "GET /2/teams/{teamSlug}/api-keys": {
+    "GET /2/teams/{teamSlug}/api-keys/{ID}": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"

@@ -1,3 +1,31 @@
+export interface ApiKey {
+    data: Record<string, any>;
+    id?: string;
+}
+export interface ApiKeyLoadMatch {
+    id: string;
+    team_slug: string;
+}
+export interface ApiKeyListMatch {
+    team_slug: string;
+    filter_type?: string;
+    page_after?: string;
+    page_size?: number;
+}
+export interface ApiKeyCreateData {
+    team_slug: string;
+    data: Record<string, any>;
+    id?: string;
+}
+export interface ApiKeyUpdateData {
+    id: string;
+    team_slug: string;
+    data?: Record<string, any>;
+}
+export interface ApiKeyRemoveMatch {
+    id: string;
+    team_slug: string;
+}
 export interface Auth {
     api_key_access: Record<string, any>;
     environment: Record<string, any>;
@@ -61,7 +89,6 @@ export interface BoardUpdateData {
 }
 export interface BoardRemoveMatch {
     id: string;
-    view_id?: string;
 }
 export interface BoardView {
     filters?: any[];
@@ -73,11 +100,12 @@ export interface BoardViewLoadMatch {
     id: string;
 }
 export interface BoardViewListMatch {
-    id: string;
+    board_id: string;
 }
 export interface BoardViewCreateData {
-    id: string;
+    board_id: string;
     filters?: any[];
+    id?: string;
     name?: string;
 }
 export interface BoardViewUpdateData {
@@ -85,6 +113,10 @@ export interface BoardViewUpdateData {
     id: string;
     filters?: any[];
     name?: string;
+}
+export interface BoardViewRemoveMatch {
+    board_id: string;
+    id: string;
 }
 export interface BulkSignalRecipientAssignment {
     failed: any[];
@@ -105,22 +137,26 @@ export interface BurnAlert {
     id?: string;
 }
 export interface BurnAlertLoadMatch {
+    dataset_slug: string;
     id: string;
+}
+export interface BurnAlertListMatch {
+    dataset_slug: string;
     slo_id: string;
 }
 export interface BurnAlertCreateData {
-    id: string;
-    alert_type: string;
-}
-export interface BurnAlertUpdateData {
-    burn_alert_id: string;
     dataset_slug: string;
-    alert_type?: string;
+    alert_type: string;
     id?: string;
 }
-export interface BurnAlertRemoveMatch {
-    burn_alert_id: string;
+export interface BurnAlertUpdateData {
     dataset_slug: string;
+    id: string;
+    alert_type?: string;
+}
+export interface BurnAlertRemoveMatch {
+    dataset_slug: string;
+    id: string;
 }
 export interface CalculatedField {
     alias: string;
@@ -132,7 +168,10 @@ export interface CalculatedField {
 }
 export interface CalculatedFieldLoadMatch {
     dataset_slug: string;
-    derived_column_id?: string;
+    id: string;
+}
+export interface CalculatedFieldListMatch {
+    dataset_slug: string;
     alia?: string;
 }
 export interface CalculatedFieldCreateData {
@@ -146,17 +185,16 @@ export interface CalculatedFieldCreateData {
 }
 export interface CalculatedFieldUpdateData {
     dataset_slug: string;
-    derived_column_id: string;
+    id: string;
     alias?: string;
     created_at?: string;
     description?: string;
     expression?: string;
-    id?: string;
     updated_at?: string;
 }
 export interface CalculatedFieldRemoveMatch {
     dataset_slug: string;
-    derived_column_id: string;
+    id: string;
 }
 export interface Column {
     created_at?: string;
@@ -169,34 +207,38 @@ export interface Column {
     updated_at?: string;
 }
 export interface ColumnLoadMatch {
+    dataset_slug: string;
     id: string;
+}
+export interface ColumnListMatch {
+    dataset_slug: string;
     key_name?: string;
 }
 export interface ColumnCreateData {
-    id: string;
+    dataset_slug: string;
     created_at?: string;
     description?: string;
     hidden?: boolean;
+    id?: string;
     key_name: string;
     last_written?: string;
     type?: string;
     updated_at?: string;
 }
 export interface ColumnUpdateData {
-    column_id: string;
     dataset_slug: string;
+    id: string;
     created_at?: string;
     description?: string;
     hidden?: boolean;
-    id?: string;
     key_name?: string;
     last_written?: string;
     type?: string;
     updated_at?: string;
 }
 export interface ColumnRemoveMatch {
-    column_id: string;
     dataset_slug: string;
+    id: string;
 }
 export interface Dataset {
     created_at?: string;
@@ -298,7 +340,10 @@ export interface Environment {
     id?: string;
 }
 export interface EnvironmentLoadMatch {
-    id?: string;
+    id: string;
+    team_slug: string;
+}
+export interface EnvironmentListMatch {
     team_slug: string;
     page_after?: string;
     page_size?: number;
@@ -319,13 +364,11 @@ export interface EnvironmentRemoveMatch {
 }
 export interface Event {
     batch_events?: any[];
-    id?: string;
     status?: number;
 }
 export interface EventCreateData {
     dataset_slug: string;
     batch_events?: any[];
-    id?: string;
     status?: number;
 }
 export interface HistoricalAnomaly {
@@ -342,43 +385,22 @@ export interface HistoricalAnomalyListMatch {
     page_size?: number;
     start_time: number;
 }
-export interface KeyManagement {
-    data: Record<string, any>;
-    id?: string;
-}
-export interface KeyManagementLoadMatch {
-    id?: string;
-    team_slug: string;
-    filter_type?: string;
-    page_after?: string;
-    page_size?: number;
-}
-export interface KeyManagementCreateData {
-    team_slug: string;
-    data: Record<string, any>;
-    id?: string;
-}
-export interface KeyManagementUpdateData {
-    id: string;
-    team_slug: string;
-    data?: Record<string, any>;
-}
-export interface KeyManagementRemoveMatch {
-    id: string;
-    team_slug: string;
-}
-export interface Kinesi {
+export interface KinesisEvent {
     errorMessage?: string;
     records?: any[];
     requestId?: string;
     timestamp?: number;
 }
-export interface KinesiCreateData {
+export interface KinesisEventCreateData {
     dataset_slug: string;
     errorMessage?: string;
     records?: any[];
     requestId?: string;
     timestamp?: number;
+}
+export interface ManagementAuth {
+}
+export interface ManagementAuthLoadMatch {
 }
 export interface MapDependency {
     dependencies?: any;
@@ -417,14 +439,15 @@ export interface Marker {
     updated_at?: string;
     url?: string;
 }
-export interface MarkerLoadMatch {
-    id: string;
+export interface MarkerListMatch {
+    dataset_slug: string;
 }
 export interface MarkerCreateData {
-    id: string;
+    dataset_slug: string;
     color?: string;
     created_at?: string;
     end_time?: number;
+    id?: string;
     message?: string;
     start_time?: number;
     type?: string;
@@ -433,11 +456,10 @@ export interface MarkerCreateData {
 }
 export interface MarkerUpdateData {
     dataset_slug: string;
-    marker_id: string;
+    id: string;
     color?: string;
     created_at?: string;
     end_time?: number;
-    id?: string;
     message?: string;
     start_time?: number;
     type?: string;
@@ -446,7 +468,7 @@ export interface MarkerUpdateData {
 }
 export interface MarkerRemoveMatch {
     dataset_slug: string;
-    marker_id: string;
+    id: string;
 }
 export interface MarkerSetting {
     color: string;
@@ -455,28 +477,28 @@ export interface MarkerSetting {
     type: string;
     updated_at?: null | string;
 }
-export interface MarkerSettingLoadMatch {
-    id: string;
+export interface MarkerSettingListMatch {
+    dataset_slug: string;
 }
 export interface MarkerSettingCreateData {
-    id: string;
+    dataset_slug: string;
     color: string;
     created_at?: string;
+    id?: string;
     type: string;
     updated_at?: null | string;
 }
 export interface MarkerSettingUpdateData {
     dataset_slug: string;
-    marker_setting_id: string;
+    id: string;
     color?: string;
     created_at?: string;
-    id?: string;
     type?: string;
     updated_at?: null | string;
 }
 export interface MarkerSettingRemoveMatch {
     dataset_slug: string;
-    marker_setting_id: string;
+    id: string;
 }
 export interface Query {
     breakdowns?: any[];
@@ -498,10 +520,10 @@ export interface Query {
 }
 export interface QueryLoadMatch {
     dataset_slug: string;
-    query_id: string;
+    id: string;
 }
 export interface QueryCreateData {
-    id: string;
+    dataset_slug: string;
     breakdowns?: any[];
     calculated_fields?: any[];
     calculations?: any[];
@@ -512,6 +534,7 @@ export interface QueryCreateData {
     formulas?: any[];
     granularity?: number;
     havings?: any[];
+    id?: string;
     limit?: number;
     orders?: any[];
     start_time?: number;
@@ -528,13 +551,18 @@ export interface QueryAnnotation {
     updated_at?: string;
 }
 export interface QueryAnnotationLoadMatch {
+    dataset_slug: string;
     id: string;
+}
+export interface QueryAnnotationListMatch {
+    dataset_slug: string;
     include_board_annotation?: boolean;
 }
 export interface QueryAnnotationCreateData {
-    id: string;
+    dataset_slug: string;
     created_at?: string;
     description?: string;
+    id?: string;
     name: string;
     query_id: string;
     source?: string;
@@ -542,10 +570,9 @@ export interface QueryAnnotationCreateData {
 }
 export interface QueryAnnotationUpdateData {
     dataset_slug: string;
-    query_annotation_id: string;
+    id: string;
     created_at?: string;
     description?: string;
-    id?: string;
     name?: string;
     query_id?: string;
     source?: string;
@@ -553,7 +580,7 @@ export interface QueryAnnotationUpdateData {
 }
 export interface QueryAnnotationRemoveMatch {
     dataset_slug: string;
-    query_annotation_id: string;
+    id: string;
 }
 export interface QueryResult {
     complete?: boolean;
@@ -570,16 +597,17 @@ export interface QueryResult {
 }
 export interface QueryResultLoadMatch {
     dataset_slug: string;
-    query_result_id: string;
+    id: string;
 }
 export interface QueryResultCreateData {
-    id: string;
+    dataset_slug: string;
     complete?: boolean;
     data?: Record<string, any>;
     disable_other_by_aggregate?: boolean;
     disable_series?: boolean;
     disable_total_by_aggregate?: boolean;
     error?: string;
+    id?: string;
     limit?: number;
     links?: Record<string, any>;
     query?: any;
@@ -667,24 +695,15 @@ export interface Slo {
     updated_at?: string;
 }
 export interface SloLoadMatch {
+    dataset_slug: string;
     id: string;
+    detailed?: boolean;
+}
+export interface SloListMatch {
+    dataset_slug: string;
 }
 export interface SloCreateData {
-    id: string;
-    created_at?: string;
-    dataset_slugs?: any[];
-    description?: string;
-    name?: string;
-    reset_at?: string;
-    sli?: Record<string, any>;
-    tags?: any[];
-    target_per_million?: number;
-    time_period_days?: number;
-    updated_at?: string;
-}
-export interface SloUpdateData {
     dataset_slug: string;
-    slo_id: string;
     created_at?: string;
     dataset_slugs?: any[];
     description?: string;
@@ -697,9 +716,23 @@ export interface SloUpdateData {
     time_period_days?: number;
     updated_at?: string;
 }
+export interface SloUpdateData {
+    dataset_slug: string;
+    id: string;
+    created_at?: string;
+    dataset_slugs?: any[];
+    description?: string;
+    name?: string;
+    reset_at?: string;
+    sli?: Record<string, any>;
+    tags?: any[];
+    target_per_million?: number;
+    time_period_days?: number;
+    updated_at?: string;
+}
 export interface SloRemoveMatch {
     dataset_slug: string;
-    slo_id: string;
+    id: string;
 }
 export interface SloCount {
     error_count?: number;
@@ -759,23 +792,24 @@ export interface Trigger {
     updated_at?: string;
 }
 export interface TriggerLoadMatch {
+    dataset_slug: string;
     id: string;
 }
 export interface TriggerListMatch {
-    recipient_id: string;
+    dataset_slug: string;
 }
 export interface TriggerCreateData {
-    id: string;
+    dataset_slug: string;
     alert_type?: string;
     auto_investigate?: boolean;
     baseline_details?: Record<string, any>;
     created_at?: string;
-    dataset_slug?: string;
     description?: string;
     disabled?: boolean;
     evaluation_schedule: Record<string, any>;
     evaluation_schedule_type?: string;
     frequency?: number;
+    id?: string;
     name?: string;
     query?: Record<string, any>;
     query_id?: string;
@@ -787,7 +821,7 @@ export interface TriggerCreateData {
 }
 export interface TriggerUpdateData {
     dataset_slug: string;
-    trigger_id: string;
+    id: string;
     alert_type?: string;
     auto_investigate?: boolean;
     baseline_details?: Record<string, any>;
@@ -797,7 +831,6 @@ export interface TriggerUpdateData {
     evaluation_schedule?: Record<string, any>;
     evaluation_schedule_type?: string;
     frequency?: number;
-    id?: string;
     name?: string;
     query?: Record<string, any>;
     query_id?: string;
@@ -809,5 +842,5 @@ export interface TriggerUpdateData {
 }
 export interface TriggerRemoveMatch {
     dataset_slug: string;
-    trigger_id: string;
+    id: string;
 }

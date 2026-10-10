@@ -38,6 +38,7 @@ func MakeConfig() map[string]any {
 				"content-type": "application/json",
 			},
 			"entity": map[string]any{
+				"api_key": map[string]any{},
 				"auth": map[string]any{},
 				"board": map[string]any{},
 				"board_view": map[string]any{},
@@ -50,7 +51,6 @@ func MakeConfig() map[string]any {
 				"environment": map[string]any{},
 				"event": map[string]any{},
 				"historical_anomaly": map[string]any{},
-				"key_management": map[string]any{},
 				"kinesis_event": map[string]any{},
 				"management_auth": map[string]any{},
 				"map_dependency": map[string]any{},
@@ -69,6 +69,396 @@ func MakeConfig() map[string]any {
 			},
 		},
 		"entity": map[string]any{
+			"api_key": map[string]any{
+				"fields": []any{
+					map[string]any{
+						"name": "data",
+						"title": "Data",
+						"type": "`$OBJECT`",
+						"req": true,
+					},
+					map[string]any{
+						"name": "id",
+						"title": "Id",
+						"type": "`$STRING`",
+					},
+				},
+				"id": map[string]any{
+					"field": "id",
+					"name": "id",
+				},
+				"name": "api_key",
+				"op": map[string]any{
+					"create": map[string]any{
+						"input": "data",
+						"name": "create",
+						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "POST",
+								"orig": "/2/teams/{teamSlug}/api-keys",
+								"segments": []any{
+									map[string]any{
+										"lit": "2",
+									},
+									map[string]any{
+										"lit": "teams",
+									},
+									map[string]any{
+										"var": "team_slug",
+									},
+									map[string]any{
+										"lit": "api-keys",
+									},
+								},
+								"parts": []any{
+									"2",
+									"teams",
+									"{team_slug}",
+									"api-keys",
+								},
+								"rename": map[string]any{
+									"param": map[string]any{
+										"teamSlug": "team_slug",
+									},
+								},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"args": map[string]any{
+									"params": []any{
+										map[string]any{
+											"name": "team_slug",
+											"orig": "teamSlug",
+											"type": "`$STRING`",
+											"kind": "param",
+											"reqd": true,
+										},
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"team_slug",
+									},
+								},
+								"body": map[string]any{
+									"kind": "json",
+									"media": "application/vnd.api+json",
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/vnd.api+json",
+								},
+							},
+						},
+					},
+					"list": map[string]any{
+						"input": "data",
+						"name": "list",
+						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "GET",
+								"orig": "/2/teams/{teamSlug}/api-keys",
+								"segments": []any{
+									map[string]any{
+										"lit": "2",
+									},
+									map[string]any{
+										"lit": "teams",
+									},
+									map[string]any{
+										"var": "team_slug",
+									},
+									map[string]any{
+										"lit": "api-keys",
+									},
+								},
+								"parts": []any{
+									"2",
+									"teams",
+									"{team_slug}",
+									"api-keys",
+								},
+								"rename": map[string]any{
+									"param": map[string]any{
+										"teamSlug": "team_slug",
+									},
+								},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"args": map[string]any{
+									"params": []any{
+										map[string]any{
+											"name": "team_slug",
+											"orig": "teamSlug",
+											"type": "`$STRING`",
+											"kind": "param",
+											"reqd": true,
+										},
+									},
+									"query": []any{
+										map[string]any{
+											"name": "filter_type",
+											"orig": "filter[type]",
+											"type": "`$STRING`",
+											"kind": "query",
+										},
+										map[string]any{
+											"name": "page_after",
+											"orig": "page[after]",
+											"type": "`$STRING`",
+											"kind": "query",
+											"example": "eyxJjcmAVhdGVkX",
+										},
+										map[string]any{
+											"name": "page_size",
+											"orig": "page[size]",
+											"type": "`$NUMBER`",
+											"kind": "query",
+											"example": 10,
+										},
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"team_slug",
+									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/vnd.api+json",
+								},
+							},
+						},
+					},
+					"load": map[string]any{
+						"input": "data",
+						"name": "load",
+						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "GET",
+								"orig": "/2/teams/{teamSlug}/api-keys/{ID}",
+								"segments": []any{
+									map[string]any{
+										"lit": "2",
+									},
+									map[string]any{
+										"lit": "teams",
+									},
+									map[string]any{
+										"var": "team_slug",
+									},
+									map[string]any{
+										"lit": "api-keys",
+									},
+									map[string]any{
+										"var": "id",
+									},
+								},
+								"parts": []any{
+									"2",
+									"teams",
+									"{team_slug}",
+									"api-keys",
+									"{id}",
+								},
+								"rename": map[string]any{
+									"param": map[string]any{
+										"ID": "id",
+										"teamSlug": "team_slug",
+									},
+								},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"args": map[string]any{
+									"params": []any{
+										map[string]any{
+											"name": "id",
+											"orig": "ID",
+											"type": "`$STRING`",
+											"kind": "param",
+											"reqd": true,
+										},
+										map[string]any{
+											"name": "team_slug",
+											"orig": "teamSlug",
+											"type": "`$STRING`",
+											"kind": "param",
+											"reqd": true,
+										},
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"id",
+										"team_slug",
+									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/vnd.api+json",
+								},
+							},
+						},
+					},
+					"remove": map[string]any{
+						"input": "data",
+						"name": "remove",
+						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "DELETE",
+								"orig": "/2/teams/{teamSlug}/api-keys/{ID}",
+								"segments": []any{
+									map[string]any{
+										"lit": "2",
+									},
+									map[string]any{
+										"lit": "teams",
+									},
+									map[string]any{
+										"var": "team_slug",
+									},
+									map[string]any{
+										"lit": "api-keys",
+									},
+									map[string]any{
+										"var": "id",
+									},
+								},
+								"parts": []any{
+									"2",
+									"teams",
+									"{team_slug}",
+									"api-keys",
+									"{id}",
+								},
+								"rename": map[string]any{
+									"param": map[string]any{
+										"ID": "id",
+										"teamSlug": "team_slug",
+									},
+								},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body`",
+								},
+								"args": map[string]any{
+									"params": []any{
+										map[string]any{
+											"name": "id",
+											"orig": "ID",
+											"type": "`$STRING`",
+											"kind": "param",
+											"reqd": true,
+										},
+										map[string]any{
+											"name": "team_slug",
+											"orig": "teamSlug",
+											"type": "`$STRING`",
+											"kind": "param",
+											"reqd": true,
+										},
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"id",
+										"team_slug",
+									},
+								},
+							},
+						},
+					},
+					"update": map[string]any{
+						"input": "data",
+						"name": "update",
+						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "PATCH",
+								"orig": "/2/teams/{teamSlug}/api-keys/{ID}",
+								"segments": []any{
+									map[string]any{
+										"lit": "2",
+									},
+									map[string]any{
+										"lit": "teams",
+									},
+									map[string]any{
+										"var": "team_slug",
+									},
+									map[string]any{
+										"lit": "api-keys",
+									},
+									map[string]any{
+										"var": "id",
+									},
+								},
+								"parts": []any{
+									"2",
+									"teams",
+									"{team_slug}",
+									"api-keys",
+									"{id}",
+								},
+								"rename": map[string]any{
+									"param": map[string]any{
+										"ID": "id",
+										"teamSlug": "team_slug",
+									},
+								},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"args": map[string]any{
+									"params": []any{
+										map[string]any{
+											"name": "id",
+											"orig": "ID",
+											"type": "`$STRING`",
+											"kind": "param",
+											"reqd": true,
+										},
+										map[string]any{
+											"name": "team_slug",
+											"orig": "teamSlug",
+											"type": "`$STRING`",
+											"kind": "param",
+											"reqd": true,
+										},
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"id",
+										"team_slug",
+									},
+								},
+								"body": map[string]any{
+									"kind": "json",
+									"media": "application/vnd.api+json",
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/vnd.api+json",
+								},
+							},
+						},
+					},
+				},
+				"relations": map[string]any{
+					"ancestors": []any{},
+				},
+			},
 			"auth": map[string]any{
 				"fields": []any{
 					map[string]any{
@@ -2694,7 +3084,7 @@ func MakeConfig() map[string]any {
 								},
 								"transform": map[string]any{
 									"req": "`reqdata`",
-									"res": "`body`",
+									"res": "`body.data`",
 								},
 								"args": map[string]any{
 									"params": []any{
@@ -2715,6 +3105,82 @@ func MakeConfig() map[string]any {
 								"body": map[string]any{
 									"kind": "json",
 									"media": "application/vnd.api+json",
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/vnd.api+json",
+								},
+							},
+						},
+					},
+					"list": map[string]any{
+						"input": "data",
+						"name": "list",
+						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "GET",
+								"orig": "/2/teams/{teamSlug}/environments",
+								"segments": []any{
+									map[string]any{
+										"lit": "2",
+									},
+									map[string]any{
+										"lit": "teams",
+									},
+									map[string]any{
+										"var": "team_slug",
+									},
+									map[string]any{
+										"lit": "environments",
+									},
+								},
+								"parts": []any{
+									"2",
+									"teams",
+									"{team_slug}",
+									"environments",
+								},
+								"rename": map[string]any{
+									"param": map[string]any{
+										"teamSlug": "team_slug",
+									},
+								},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"args": map[string]any{
+									"params": []any{
+										map[string]any{
+											"name": "team_slug",
+											"orig": "teamSlug",
+											"type": "`$STRING`",
+											"kind": "param",
+											"reqd": true,
+										},
+									},
+									"query": []any{
+										map[string]any{
+											"name": "page_after",
+											"orig": "page[after]",
+											"type": "`$STRING`",
+											"kind": "query",
+											"example": "eyxJjcmAVhdGVkX",
+										},
+										map[string]any{
+											"name": "page_size",
+											"orig": "page[size]",
+											"type": "`$NUMBER`",
+											"kind": "query",
+											"example": 10,
+										},
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"team_slug",
+									},
 								},
 								"response": map[string]any{
 									"kind": "json",
@@ -2763,7 +3229,7 @@ func MakeConfig() map[string]any {
 								},
 								"transform": map[string]any{
 									"req": "`reqdata`",
-									"res": "`body`",
+									"res": "`body.data`",
 								},
 								"args": map[string]any{
 									"params": []any{
@@ -2786,76 +3252,6 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"exist": []any{
 										"id",
-										"team_slug",
-									},
-								},
-								"response": map[string]any{
-									"kind": "json",
-									"media": "application/vnd.api+json",
-								},
-							},
-							map[string]any{
-								"kind": "http",
-								"method": "GET",
-								"orig": "/2/teams/{teamSlug}/environments",
-								"segments": []any{
-									map[string]any{
-										"lit": "2",
-									},
-									map[string]any{
-										"lit": "teams",
-									},
-									map[string]any{
-										"var": "team_slug",
-									},
-									map[string]any{
-										"lit": "environments",
-									},
-								},
-								"parts": []any{
-									"2",
-									"teams",
-									"{team_slug}",
-									"environments",
-								},
-								"rename": map[string]any{
-									"param": map[string]any{
-										"teamSlug": "team_slug",
-									},
-								},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{
-									"params": []any{
-										map[string]any{
-											"name": "team_slug",
-											"orig": "teamSlug",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-									},
-									"query": []any{
-										map[string]any{
-											"name": "page_after",
-											"orig": "page[after]",
-											"type": "`$STRING`",
-											"kind": "query",
-											"example": "eyxJjcmAVhdGVkX",
-										},
-										map[string]any{
-											"name": "page_size",
-											"orig": "page[size]",
-											"type": "`$NUMBER`",
-											"kind": "query",
-											"example": 10,
-										},
-									},
-								},
-								"select": map[string]any{
-									"exist": []any{
 										"team_slug",
 									},
 								},
@@ -2975,7 +3371,7 @@ func MakeConfig() map[string]any {
 								},
 								"transform": map[string]any{
 									"req": "`reqdata`",
-									"res": "`body`",
+									"res": "`body.data`",
 								},
 								"args": map[string]any{
 									"params": []any{
@@ -3324,390 +3720,6 @@ func MakeConfig() map[string]any {
 							"$.main.kit.entity.signal",
 						},
 					},
-				},
-			},
-			"key_management": map[string]any{
-				"fields": []any{
-					map[string]any{
-						"name": "data",
-						"title": "Data",
-						"type": "`$OBJECT`",
-						"req": true,
-					},
-					map[string]any{
-						"name": "id",
-						"title": "Id",
-						"type": "`$STRING`",
-					},
-				},
-				"id": map[string]any{
-					"field": "id",
-					"name": "id",
-				},
-				"name": "key_management",
-				"op": map[string]any{
-					"create": map[string]any{
-						"input": "data",
-						"name": "create",
-						"points": []any{
-							map[string]any{
-								"kind": "http",
-								"method": "POST",
-								"orig": "/2/teams/{teamSlug}/api-keys",
-								"segments": []any{
-									map[string]any{
-										"lit": "2",
-									},
-									map[string]any{
-										"lit": "teams",
-									},
-									map[string]any{
-										"var": "team_slug",
-									},
-									map[string]any{
-										"lit": "api-keys",
-									},
-								},
-								"parts": []any{
-									"2",
-									"teams",
-									"{team_slug}",
-									"api-keys",
-								},
-								"rename": map[string]any{
-									"param": map[string]any{
-										"teamSlug": "team_slug",
-									},
-								},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{
-									"params": []any{
-										map[string]any{
-											"name": "team_slug",
-											"orig": "teamSlug",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-									},
-								},
-								"select": map[string]any{
-									"exist": []any{
-										"team_slug",
-									},
-								},
-								"body": map[string]any{
-									"kind": "json",
-									"media": "application/vnd.api+json",
-								},
-								"response": map[string]any{
-									"kind": "json",
-									"media": "application/vnd.api+json",
-								},
-							},
-						},
-					},
-					"load": map[string]any{
-						"input": "data",
-						"name": "load",
-						"points": []any{
-							map[string]any{
-								"kind": "http",
-								"method": "GET",
-								"orig": "/2/teams/{teamSlug}/api-keys/{ID}",
-								"segments": []any{
-									map[string]any{
-										"lit": "2",
-									},
-									map[string]any{
-										"lit": "teams",
-									},
-									map[string]any{
-										"var": "team_slug",
-									},
-									map[string]any{
-										"lit": "api-keys",
-									},
-									map[string]any{
-										"var": "id",
-									},
-								},
-								"parts": []any{
-									"2",
-									"teams",
-									"{team_slug}",
-									"api-keys",
-									"{id}",
-								},
-								"rename": map[string]any{
-									"param": map[string]any{
-										"ID": "id",
-										"teamSlug": "team_slug",
-									},
-								},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{
-									"params": []any{
-										map[string]any{
-											"name": "id",
-											"orig": "ID",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-										map[string]any{
-											"name": "team_slug",
-											"orig": "teamSlug",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-									},
-								},
-								"select": map[string]any{
-									"exist": []any{
-										"id",
-										"team_slug",
-									},
-								},
-								"response": map[string]any{
-									"kind": "json",
-									"media": "application/vnd.api+json",
-								},
-							},
-							map[string]any{
-								"kind": "http",
-								"method": "GET",
-								"orig": "/2/teams/{teamSlug}/api-keys",
-								"segments": []any{
-									map[string]any{
-										"lit": "2",
-									},
-									map[string]any{
-										"lit": "teams",
-									},
-									map[string]any{
-										"var": "team_slug",
-									},
-									map[string]any{
-										"lit": "api-keys",
-									},
-								},
-								"parts": []any{
-									"2",
-									"teams",
-									"{team_slug}",
-									"api-keys",
-								},
-								"rename": map[string]any{
-									"param": map[string]any{
-										"teamSlug": "team_slug",
-									},
-								},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{
-									"params": []any{
-										map[string]any{
-											"name": "team_slug",
-											"orig": "teamSlug",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-									},
-									"query": []any{
-										map[string]any{
-											"name": "filter_type",
-											"orig": "filter[type]",
-											"type": "`$STRING`",
-											"kind": "query",
-										},
-										map[string]any{
-											"name": "page_after",
-											"orig": "page[after]",
-											"type": "`$STRING`",
-											"kind": "query",
-											"example": "eyxJjcmAVhdGVkX",
-										},
-										map[string]any{
-											"name": "page_size",
-											"orig": "page[size]",
-											"type": "`$NUMBER`",
-											"kind": "query",
-											"example": 10,
-										},
-									},
-								},
-								"select": map[string]any{
-									"exist": []any{
-										"team_slug",
-									},
-								},
-								"response": map[string]any{
-									"kind": "json",
-									"media": "application/vnd.api+json",
-								},
-							},
-						},
-					},
-					"remove": map[string]any{
-						"input": "data",
-						"name": "remove",
-						"points": []any{
-							map[string]any{
-								"kind": "http",
-								"method": "DELETE",
-								"orig": "/2/teams/{teamSlug}/api-keys/{ID}",
-								"segments": []any{
-									map[string]any{
-										"lit": "2",
-									},
-									map[string]any{
-										"lit": "teams",
-									},
-									map[string]any{
-										"var": "team_slug",
-									},
-									map[string]any{
-										"lit": "api-keys",
-									},
-									map[string]any{
-										"var": "id",
-									},
-								},
-								"parts": []any{
-									"2",
-									"teams",
-									"{team_slug}",
-									"api-keys",
-									"{id}",
-								},
-								"rename": map[string]any{
-									"param": map[string]any{
-										"ID": "id",
-										"teamSlug": "team_slug",
-									},
-								},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{
-									"params": []any{
-										map[string]any{
-											"name": "id",
-											"orig": "ID",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-										map[string]any{
-											"name": "team_slug",
-											"orig": "teamSlug",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-									},
-								},
-								"select": map[string]any{
-									"exist": []any{
-										"id",
-										"team_slug",
-									},
-								},
-							},
-						},
-					},
-					"update": map[string]any{
-						"input": "data",
-						"name": "update",
-						"points": []any{
-							map[string]any{
-								"kind": "http",
-								"method": "PATCH",
-								"orig": "/2/teams/{teamSlug}/api-keys/{ID}",
-								"segments": []any{
-									map[string]any{
-										"lit": "2",
-									},
-									map[string]any{
-										"lit": "teams",
-									},
-									map[string]any{
-										"var": "team_slug",
-									},
-									map[string]any{
-										"lit": "api-keys",
-									},
-									map[string]any{
-										"var": "id",
-									},
-								},
-								"parts": []any{
-									"2",
-									"teams",
-									"{team_slug}",
-									"api-keys",
-									"{id}",
-								},
-								"rename": map[string]any{
-									"param": map[string]any{
-										"ID": "id",
-										"teamSlug": "team_slug",
-									},
-								},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{
-									"params": []any{
-										map[string]any{
-											"name": "id",
-											"orig": "ID",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-										map[string]any{
-											"name": "team_slug",
-											"orig": "teamSlug",
-											"type": "`$STRING`",
-											"kind": "param",
-											"reqd": true,
-										},
-									},
-								},
-								"select": map[string]any{
-									"exist": []any{
-										"id",
-										"team_slug",
-									},
-								},
-								"body": map[string]any{
-									"kind": "json",
-									"media": "application/vnd.api+json",
-								},
-								"response": map[string]any{
-									"kind": "json",
-									"media": "application/vnd.api+json",
-								},
-							},
-						},
-					},
-				},
-				"relations": map[string]any{
-					"ancestors": []any{},
 				},
 			},
 			"kinesis_event": map[string]any{

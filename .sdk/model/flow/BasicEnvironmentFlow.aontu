@@ -19,6 +19,22 @@ main: kit: flow: BasicEnvironmentFlow:
     }
 
     {
+      m: {
+        team_slug: "team_slug01"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "environment_ref01"
+          }
+        }
+      ]
+    }
+
+    {
       d: {
         team_slug: "team_slug01"
       }
@@ -48,7 +64,8 @@ main: kit: flow: BasicEnvironmentFlow:
       }
 
       m: {
-        id: "environment01"
+        id: "environment01",
+        team_slug: "team_slug01"
       }
 
       o: "load",
@@ -74,6 +91,26 @@ main: kit: flow: BasicEnvironmentFlow:
       }
 
       o: "remove"
+    }
+
+    {
+      i: {
+        suffix: "_rt0"
+      }
+
+      m: {
+        team_slug: "team_slug01"
+      }
+
+      o: "list",
+      v: [
+        {
+          apply: "ItemNotExists",
+          def: {
+            ref: "environment_ref01"
+          }
+        }
+      ]
     }
   ],
   "key$": "BasicEnvironmentFlow"

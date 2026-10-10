@@ -1,5 +1,6 @@
 // Honeycomb Ts SDK
 
+import { ApiKeyEntity } from './entity/ApiKeyEntity'
 import { AuthEntity } from './entity/AuthEntity'
 import { BoardEntity } from './entity/BoardEntity'
 import { BoardViewEntity } from './entity/BoardViewEntity'
@@ -12,7 +13,6 @@ import { DatasetDefinitionEntity } from './entity/DatasetDefinitionEntity'
 import { EnvironmentEntity } from './entity/EnvironmentEntity'
 import { EventEntity } from './entity/EventEntity'
 import { HistoricalAnomalyEntity } from './entity/HistoricalAnomalyEntity'
-import { KeyManagementEntity } from './entity/KeyManagementEntity'
 import { KinesisEventEntity } from './entity/KinesisEventEntity'
 import { ManagementAuthEntity } from './entity/ManagementAuthEntity'
 import { MapDependencyEntity } from './entity/MapDependencyEntity'
@@ -346,6 +346,15 @@ class HoneycombSDK {
 
 
 
+  // Entity access: `client.ApiKey().list()` / `client.ApiKey().load({ id })`.
+  // The argument is the entity OPTIONS object (passed to the entity
+  // constructor as entopts), not initial entity data.
+  ApiKey(entopts?: Record<string, any>) {
+    const self = this
+    return new ApiKeyEntity(self, entopts)
+  }
+
+
   // Entity access: `client.Auth().list()` / `client.Auth().load({ id })`.
   // The argument is the entity OPTIONS object (passed to the entity
   // constructor as entopts), not initial entity data.
@@ -451,15 +460,6 @@ class HoneycombSDK {
   HistoricalAnomaly(entopts?: Record<string, any>) {
     const self = this
     return new HistoricalAnomalyEntity(self, entopts)
-  }
-
-
-  // Entity access: `client.KeyManagement().list()` / `client.KeyManagement().load({ id })`.
-  // The argument is the entity OPTIONS object (passed to the entity
-  // constructor as entopts), not initial entity data.
-  KeyManagement(entopts?: Record<string, any>) {
-    const self = this
-    return new KeyManagementEntity(self, entopts)
   }
 
 

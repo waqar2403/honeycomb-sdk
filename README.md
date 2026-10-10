@@ -23,7 +23,7 @@ support (`list`, `load`, `create`, `update`, `remove`):
 
 ```ts
 const client = new HoneycombSDK()
-const auth = await client.Auth().load({ id: "example_id" })
+const items = await client.ApiKey().list({ team_slug: "example" })
 ```
 
 Thinking in entities keeps the mental model small — for people and AI agents alike —
@@ -42,29 +42,29 @@ network, and no credentials:
 // Shape: { entity: { <entity-name>: { <id>: <record> } } }
 const client = HoneycombSDK.test({
   entity: {
-    map_dependency: {
-      test01: { id: 'test01', links: {} },
+    dataset: {
+      test01: { id: 'test01', name: 'example_name' },
     },
   },
 })
-const mapdependency = await client.MapDependency().load({ request_id: 'example_request_id' })
-// mapdependency is the MapDependency entity; .data() reads its mock record
-console.log(mapdependency.data())
+const datasets = await client.Dataset().list()
+// datasets is an array of Dataset entities, one per mock record
+console.log(datasets.map((dataset) => dataset.data()))
 ```
 
 ### Python
 
 ```python
 client = HoneycombSDK.test()
-mapdependency = client.MapDependency().load({"request_id": "example"})
-print(mapdependency.data_get())
+datasets = client.Dataset().list()
+print([item.data_get() for item in datasets])
 ```
 
 ### Golang
 
 ```go
 client := sdk.Test()
-result, err := client.MapDependency(nil).Load(
+result, err := client.Dataset(nil).List(
     nil, nil,
 )
 ```
@@ -90,6 +90,11 @@ const client = new HoneycombSDK({
   apikey: process.env.HONEYCOMB_APIKEY,
 })
 
+// List all apikeys (returns ApiKeyEntity[], one entity per record)
+const apikeys = await client.ApiKey().list({ team_slug: "example" })
+for (const apikey of apikeys) {
+  console.log(apikey.data())
+}
 
 // Load a specific boardview (returns the entity, a BoardViewEntity)
 const boardview = await client.BoardView().load({
@@ -140,6 +145,7 @@ The API exposes 28 entities:
 
 | Entity | Description | API path |
 | --- | --- | --- |
+| **ApiKey** | The ApiKey entity (create, list, load, remove, update). | `/2/teams/{teamSlug}/api-keys` |
 | **Auth** | The Auth entity (load). | `/1/auth` |
 | **Board** | The Board entity (create, list, load, remove, update). | `/1/boards` |
 | **BoardView** | The BoardView entity (create, list, load, remove, update). | `/1/boards/{boardId}/views` |
@@ -149,10 +155,9 @@ The API exposes 28 entities:
 | **Column** | The Column entity (create, list, load, remove, update). | `/1/columns/{datasetSlug}` |
 | **Dataset** | The Dataset entity (create, list, load, remove, update). | `/1/datasets` |
 | **DatasetDefinition** | The DatasetDefinition entity (load, update). | `/1/dataset_definitions/{datasetSlug}` |
-| **Environment** | The Environment entity (create, load, remove, update). | `/2/teams/{teamSlug}/environments/{ID}` |
+| **Environment** | The Environment entity (create, list, load, remove, update). | `/2/teams/{teamSlug}/environments` |
 | **Event** | The Event entity (create). | `/1/batch/{datasetSlug}` |
 | **HistoricalAnomaly** | The HistoricalAnomaly entity (list). | `/1/signals/{signalId}/historical_anomalies` |
-| **KeyManagement** | The KeyManagement entity (create, load, remove, update). | `/2/teams/{teamSlug}/api-keys/{ID}` |
 | **KinesisEvent** | The KinesisEvent entity (create). | `/1/kinesis_events/{datasetSlug}` |
 | **ManagementAuth** | The ManagementAuth entity (load). | `/2/auth` |
 | **MapDependency** | The MapDependency entity (create, load). | `/1/maps/dependencies/requests/{requestId}` |
@@ -184,10 +189,14 @@ client = HoneycombSDK({
     "apikey": os.environ.get("HONEYCOMB_APIKEY"),
 })
 
+# List all apikeys (a list of entities, one per record; raises on error)
+apikeys = client.ApiKey().list({"team_slug": "example"})
+for apikey in apikeys:
+    print(apikey.data_get())
 
-# Load a specific auth (returns the entity, raises on error)
-auth = client.Auth().load({"id": "example_id"})
-print(auth.data_get())
+# Load a specific apikey (returns the entity, raises on error)
+apikey = client.ApiKey().load({"id": "example_id", "team_slug": "example_team_slug"})
+print(apikey.data_get())
 ```
 
 ### Golang
@@ -199,6 +208,14 @@ client := sdk.NewHoneycombSDK(map[string]any{
     "apikey": os.Getenv("HONEYCOMB_APIKEY"),
 })
 
+// List all apikeys (one entity per record; err is non-nil on failure)
+apiKeys, err := client.ApiKey(nil).List(map[string]any{"team_slug": "example"}, nil)
+if err != nil {
+    panic(err)
+}
+for _, apiKey := range apiKeys.([]any) {
+    fmt.Println(apiKey.(sdk.Entity).Data())
+}
 
 // Load a specific boardview (returns the entity; err is non-nil on failure)
 boardView, err := client.BoardView(nil).Load(

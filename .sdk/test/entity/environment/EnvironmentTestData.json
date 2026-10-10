@@ -31,12 +31,12 @@
       "version": 2,
       "source": "openapi3"
     },
-    "GET /2/teams/{teamSlug}/environments/{ID}": {
+    "GET /2/teams/{teamSlug}/environments": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"
     },
-    "GET /2/teams/{teamSlug}/environments": {
+    "GET /2/teams/{teamSlug}/environments/{ID}": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"

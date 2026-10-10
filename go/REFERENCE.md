@@ -48,6 +48,10 @@ client := sdk.TestSDK(testopts, sdkopts)
 
 ### Instance Methods
 
+#### `ApiKey(data map[string]any) HoneycombEntity`
+
+Create a new `ApiKey` entity instance. Pass `nil` for no initial data.
+
 #### `Auth(data map[string]any) HoneycombEntity`
 
 Create a new `Auth` entity instance. Pass `nil` for no initial data.
@@ -95,10 +99,6 @@ Create a new `Event` entity instance. Pass `nil` for no initial data.
 #### `HistoricalAnomaly(data map[string]any) HoneycombEntity`
 
 Create a new `HistoricalAnomaly` entity instance. Pass `nil` for no initial data.
-
-#### `KeyManagement(data map[string]any) HoneycombEntity`
-
-Create a new `KeyManagement` entity instance. Pass `nil` for no initial data.
 
 #### `KinesisEvent(data map[string]any) HoneycombEntity`
 
@@ -192,6 +192,123 @@ Prepare a fetch definition without sending the request. Accepts the
 same parameters as `Direct()`.
 
 **Returns:** `(map[string]any, error)`
+
+
+---
+
+## ApiKeyEntity
+
+```go
+apiKey := client.ApiKey(nil)
+fmt.Println(apiKey.GetName()) // "api_key"
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `data` | `map[string]any` | Yes |  |
+| `id` | `string` | No |  |
+
+### Operations
+
+#### `List(reqmatch, ctrl map[string]any) (any, error)`
+
+List entities matching the given criteria. Returns a `[]any` of entities, one per record; `err` is non-nil on failure.
+
+```go
+results, err := client.ApiKey(nil).List(map[string]any{"team_slug": "example"}, nil)
+if err != nil {
+    panic(err)
+}
+for _, item := range results.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
+```
+
+#### `Load(reqmatch, ctrl map[string]any) (any, error)`
+
+Load a single entity matching the given criteria. Returns the entity, whose record `Data()` reads; `err` is non-nil on failure.
+
+```go
+result, err := client.ApiKey(nil).Load(map[string]any{"id": "api_key_id", "team_slug": "team_slug"}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result.(sdk.Entity).Data())
+```
+
+#### `Create(reqdata, ctrl map[string]any) (any, error)`
+
+Create a new entity with the given data. Returns the created entity; `err` is non-nil on failure.
+
+```go
+result, err := client.ApiKey(nil).Create(map[string]any{
+    "team_slug": "example_team_slug",
+    "data": map[string]any{},
+}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result.(sdk.Entity).Data())
+```
+
+#### `Update(reqdata, ctrl map[string]any) (any, error)`
+
+Update an existing entity. The data must include the entity `id`. Returns the updated entity; `err` is non-nil on failure.
+
+```go
+result, err := client.ApiKey(nil).Update(map[string]any{
+    "id": "api_key_id",
+    "team_slug": "team_slug",
+    // Fields to update
+}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result.(sdk.Entity).Data())
+```
+
+#### `Remove(reqmatch, ctrl map[string]any) (any, error)`
+
+Remove the entity matching the given criteria. Returns the entity, marked as deleted; `err` is non-nil on failure.
+
+```go
+result, err := client.ApiKey(nil).Remove(map[string]any{"id": "api_key_id", "team_slug": "team_slug"}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result.(sdk.Entity).Data())
+```
+
+### Common Methods
+
+#### `Data(args ...any) any`
+
+Get or set the entity data. When called with data, sets the entity's
+internal data and returns the current data. When called without
+arguments, returns a copy of the current data.
+
+#### `Match(args ...any) any`
+
+Get or set the entity match criteria. Works the same as `Data()`.
+
+#### `Make() Entity`
+
+Create a new `ApiKeyEntity` instance with the same client and
+options.
+
+#### `Stream(action string, args map[string]any, callopts map[string]any) <-chan StreamItem`
+
+Run an operation through the pipeline and send its result items on the
+returned channel, which closes when the stream ends. A `StreamItem` holds
+one item in `Item`, or in `Err` the error that ended the stream: the
+error the operation itself would return, sent as the last value. Under
+`throw: false` in `callopts["ctrl"]`, no error is sent.
+
+#### `GetName() string`
+
+Return the entity name.
 
 
 ---
@@ -1198,6 +1315,20 @@ fmt.Println(environment.GetName()) // "environment"
 
 ### Operations
 
+#### `List(reqmatch, ctrl map[string]any) (any, error)`
+
+List entities matching the given criteria. Returns a `[]any` of entities, one per record; `err` is non-nil on failure.
+
+```go
+results, err := client.Environment(nil).List(map[string]any{"team_slug": "example"}, nil)
+if err != nil {
+    panic(err)
+}
+for _, item := range results.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
+```
+
 #### `Load(reqmatch, ctrl map[string]any) (any, error)`
 
 Load a single entity matching the given criteria. Returns the entity, whose record `Data()` reads; `err` is non-nil on failure.
@@ -1395,109 +1526,6 @@ Get or set the entity match criteria. Works the same as `Data()`.
 #### `Make() Entity`
 
 Create a new `HistoricalAnomalyEntity` instance with the same client and
-options.
-
-#### `Stream(action string, args map[string]any, callopts map[string]any) <-chan StreamItem`
-
-Run an operation through the pipeline and send its result items on the
-returned channel, which closes when the stream ends. A `StreamItem` holds
-one item in `Item`, or in `Err` the error that ended the stream: the
-error the operation itself would return, sent as the last value. Under
-`throw: false` in `callopts["ctrl"]`, no error is sent.
-
-#### `GetName() string`
-
-Return the entity name.
-
-
----
-
-## KeyManagementEntity
-
-```go
-keyManagement := client.KeyManagement(nil)
-fmt.Println(keyManagement.GetName()) // "key_management"
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `data` | `map[string]any` | Yes |  |
-| `id` | `string` | No |  |
-
-### Operations
-
-#### `Load(reqmatch, ctrl map[string]any) (any, error)`
-
-Load a single entity matching the given criteria. Returns the entity, whose record `Data()` reads; `err` is non-nil on failure.
-
-```go
-result, err := client.KeyManagement(nil).Load(map[string]any{"id": "key_management_id", "team_slug": "team_slug"}, nil)
-if err != nil {
-    panic(err)
-}
-fmt.Println(result.(sdk.Entity).Data())
-```
-
-#### `Create(reqdata, ctrl map[string]any) (any, error)`
-
-Create a new entity with the given data. Returns the created entity; `err` is non-nil on failure.
-
-```go
-result, err := client.KeyManagement(nil).Create(map[string]any{
-    "team_slug": "example_team_slug",
-    "data": map[string]any{},
-}, nil)
-if err != nil {
-    panic(err)
-}
-fmt.Println(result.(sdk.Entity).Data())
-```
-
-#### `Update(reqdata, ctrl map[string]any) (any, error)`
-
-Update an existing entity. The data must include the entity `id`. Returns the updated entity; `err` is non-nil on failure.
-
-```go
-result, err := client.KeyManagement(nil).Update(map[string]any{
-    "id": "key_management_id",
-    "team_slug": "team_slug",
-    // Fields to update
-}, nil)
-if err != nil {
-    panic(err)
-}
-fmt.Println(result.(sdk.Entity).Data())
-```
-
-#### `Remove(reqmatch, ctrl map[string]any) (any, error)`
-
-Remove the entity matching the given criteria. Returns the entity, marked as deleted; `err` is non-nil on failure.
-
-```go
-result, err := client.KeyManagement(nil).Remove(map[string]any{"id": "key_management_id", "team_slug": "team_slug"}, nil)
-if err != nil {
-    panic(err)
-}
-fmt.Println(result.(sdk.Entity).Data())
-```
-
-### Common Methods
-
-#### `Data(args ...any) any`
-
-Get or set the entity data. When called with data, sets the entity's
-internal data and returns the current data. When called without
-arguments, returns a copy of the current data.
-
-#### `Match(args ...any) any`
-
-Get or set the entity match criteria. Works the same as `Data()`.
-
-#### `Make() Entity`
-
-Create a new `KeyManagementEntity` instance with the same client and
 options.
 
 #### `Stream(action string, args map[string]any, callopts map[string]any) <-chan StreamItem`

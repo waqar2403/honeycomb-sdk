@@ -1,4 +1,4 @@
-# KeyManagement direct test
+# ApiKey direct test
 
 import json
 import pytest
@@ -21,25 +21,79 @@ def _live_ok(result):
     return result.get("err") is None and bool(result.get("ok")) and 200 <= status < 300
 
 
-class TestKeyManagementDirect:
+class TestApiKeyDirect:
 
-    def test_should_direct_load_key_management(self):
-        setup = _key_management_direct_setup({"id": "direct01"})
-        _skip, _reason = runner.is_control_skipped("direct", "direct-load-key_management", "live" if setup["live"] else "unit")
+    def test_should_direct_list_api_key(self):
+        setup = _api_key_direct_setup([
+            {"id": "direct01"},
+            {"id": "direct02"},
+        ])
+        _skip, _reason = runner.is_control_skipped("direct", "direct-list-api_key", "live" if setup["live"] else "unit")
         if _skip:
             pytest.skip(_reason or "skipped via sdk-test-control.json")
             return
         if setup["live"]:
-            for _live_key in ["key_management01", "team_slug01"]:
+            for _live_key in ["team_slug01"]:
                 if setup["idmap"].get(_live_key) is None:
-                    runner.live_miss(LIVE_STRICT, f"Live test blocked: needs {_live_key} via HONEYCOMB_TEST_KEY_MANAGEMENT_ENTID")
+                    runner.live_miss(LIVE_STRICT, f"Live test blocked: needs {_live_key} via HONEYCOMB_TEST_API_KEY_ENTID")
+
+        client = setup["client"]
+
+        params = {}
+        if setup["live"]:
+            params["team_slug"] = setup["idmap"].get("team_slug01")
+        else:
+            params["team_slug"] = "direct01"
+
+        result = client.direct({
+            "path": "2/teams/{team_slug}/api-keys",
+            "method": "GET",
+            "params": params,
+        })
+        if setup["live"]:
+            if not _live_ok(result):
+                runner.live_miss(LIVE_STRICT, "Live list failed: " + runner.live_describe(result))
+            if runner.live_list(result.get("data")) is None:
+                runner.live_miss(LIVE_STRICT, "Live list returned no list: " + runner.live_describe(result))
+        else:
+            assert result["ok"] is True
+            assert helpers.to_int(result["status"]) == 200
+            assert isinstance(result["data"], list)
+            assert len(result["data"]) == 2
+            assert len(setup["calls"]) == 1
+
+    def test_should_direct_load_api_key(self):
+        setup = _api_key_direct_setup({"id": "direct01"})
+        _skip, _reason = runner.is_control_skipped("direct", "direct-load-api_key", "live" if setup["live"] else "unit")
+        if _skip:
+            pytest.skip(_reason or "skipped via sdk-test-control.json")
+            return
+        if setup["live"]:
+            for _live_key in ["team_slug01"]:
+                if setup["idmap"].get(_live_key) is None:
+                    runner.live_miss(LIVE_STRICT, f"Live test blocked: needs {_live_key} via HONEYCOMB_TEST_API_KEY_ENTID")
 
         client = setup["client"]
 
         params = {}
         query = {}
         if setup["live"]:
-            params["id"] = setup["idmap"].get("key_management01")
+            list_result = client.direct({
+                "path": "2/teams/{team_slug}/api-keys",
+                "method": "GET",
+                "params": {"team_slug": setup["idmap"].get("team_slug01")},
+            })
+            if not _live_ok(list_result):
+                runner.live_miss(LIVE_STRICT, "Live list discovery failed: " + runner.live_describe(list_result))
+            records = runner.live_list(list_result.get("data"))
+            if records is None:
+                runner.live_miss(LIVE_STRICT, "Live list discovery returned no list: " + runner.live_describe(list_result))
+            if 0 == len(records):
+                runner.live_empty("The account has no api_key record to load")
+            first = records[0] if isinstance(records[0], dict) else {}
+            if first.get("id", first.get("id")) is None:
+                runner.live_miss(LIVE_STRICT, "Live load blocked: discovery returned no usable identity")
+            params["id"] = first.get("id", first.get("id"))
             params["team_slug"] = setup["idmap"].get("team_slug01")
             pass
         else:
@@ -68,13 +122,13 @@ class TestKeyManagementDirect:
 
 
 
-def _key_management_direct_setup(mockres):
+def _api_key_direct_setup(mockres):
     runner.load_env_local()
 
     calls = []
 
     env = runner.env_override({
-        "HONEYCOMB_TEST_KEY_MANAGEMENT_ENTID": {},
+        "HONEYCOMB_TEST_API_KEY_ENTID": {},
         "HONEYCOMB_TEST_LIVE": "FALSE",
         "HONEYCOMB_APIKEY": "",
     })
@@ -89,7 +143,7 @@ def _key_management_direct_setup(mockres):
             "apikey": env.get("HONEYCOMB_APIKEY"),
         })
         client = HoneycombSDK(merged_opts)
-        idmap = env.get("HONEYCOMB_TEST_KEY_MANAGEMENT_ENTID")
+        idmap = env.get("HONEYCOMB_TEST_API_KEY_ENTID")
         return {
             "client": client,
             "calls": calls,

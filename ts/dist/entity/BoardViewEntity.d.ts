@@ -1,7 +1,7 @@
 import { HoneycombEntityBase } from '../HoneycombEntityBase';
 import type { HoneycombSDK } from '../HoneycombSDK';
 import type { Control } from '../types';
-import type { BoardView, BoardViewLoadMatch, BoardViewListMatch, BoardViewCreateData, BoardViewUpdateData } from '../HoneycombTypes';
+import type { BoardView, BoardViewLoadMatch, BoardViewListMatch, BoardViewCreateData, BoardViewUpdateData, BoardViewRemoveMatch } from '../HoneycombTypes';
 declare class BoardViewEntity extends HoneycombEntityBase<BoardView> {
     constructor(client: HoneycombSDK, entopts: any);
     make(this: BoardViewEntity): BoardViewEntity;
@@ -9,5 +9,6 @@ declare class BoardViewEntity extends HoneycombEntityBase<BoardView> {
     list(this: any, reqmatch?: BoardViewListMatch, ctrl?: Control): Promise<BoardViewEntity[]>;
     create(this: any, reqdata?: BoardViewCreateData, ctrl?: Control): Promise<BoardViewEntity>;
     update(this: any, reqdata?: BoardViewUpdateData, ctrl?: Control): Promise<BoardViewEntity>;
+    remove(this: any, reqmatch?: BoardViewRemoveMatch, ctrl?: Control): Promise<BoardViewEntity>;
 }
 export { BoardViewEntity };

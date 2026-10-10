@@ -21,44 +21,46 @@ const utility_1 = require("../../utility");
         (0, node_assert_1.default)('function' === typeof sdk.direct);
         (0, node_assert_1.default)('function' === typeof sdk.prepare);
     });
-    (0, node_test_1.test)('direct-load-marker_setting', async (t) => {
+    (0, node_test_1.test)('direct-list-marker_setting', async (t) => {
         if (liveScenariosActive()) {
             t.skip('Covered by live operation scenarios');
             return;
         }
-        const setup = directSetup({ id: 'direct01' });
-        if ((0, utility_1.maybeSkipControl)(t, 'direct', 'direct-load-marker_setting', setup.live))
+        const setup = directSetup([{ id: 'direct01' }, { id: 'direct02' }]);
+        if ((0, utility_1.maybeSkipControl)(t, 'direct', 'direct-list-marker_setting', setup.live))
             return;
-        if ((0, utility_1.skipIfMissingIds)(t, setup, ["marker_setting01"], LIVE_STRICT))
+        if ((0, utility_1.skipIfMissingIds)(t, setup, ["dataset_slug01"], LIVE_STRICT))
             return;
         const { client, calls } = setup;
         const params = {};
         const query = {};
         if (setup.live) {
-            params.id = setup.idmap['marker_setting01'];
+            params.dataset_slug = setup.idmap['dataset_slug01'];
         }
         else {
-            params.id = 'direct01';
+            params.dataset_slug = 'direct01';
         }
         const result = await client.direct({
-            path: '1/marker_settings/{id}',
+            path: '1/marker_settings/{dataset_slug}',
             method: 'GET',
             params,
             query,
         });
         if (setup.live) {
             if (!result.ok || result.status < 200 || result.status >= 300) {
-                return void (0, utility_1.liveMiss)(t, LIVE_STRICT, 'Live load failed: ' + (0, utility_1.describeLive)(result));
+                return void (0, utility_1.liveMiss)(t, LIVE_STRICT, 'Live list failed: ' + (0, utility_1.describeLive)(result));
             }
-            if (!(null != result.data)) {
-                return void (0, utility_1.liveMiss)(t, LIVE_STRICT, 'Live load returned no data: ' + (0, utility_1.describeLive)(result));
+            if (!(Array.isArray(unwrapListData(result.data)))) {
+                return void (0, utility_1.liveMiss)(t, LIVE_STRICT, 'Live list returned no list: ' + (0, utility_1.describeLive)(result));
             }
         }
         else {
             (0, node_assert_1.default)(result.ok === true);
             (0, node_assert_1.default)(result.status === 200);
             (0, node_assert_1.default)(null != result.data);
-            (0, node_assert_1.default)(result.data.id === 'direct01');
+            const listArr = unwrapListData(result.data);
+            (0, node_assert_1.default)(Array.isArray(listArr));
+            (0, node_assert_1.default)(listArr.length === 2);
             (0, node_assert_1.default)(calls.length === 1);
             (0, node_assert_1.default)(calls[0].init.method === 'GET');
             (0, node_assert_1.default)(calls[0].url.includes('direct01'));

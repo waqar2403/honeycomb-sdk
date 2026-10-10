@@ -38,7 +38,7 @@ func TestEnvironmentEntity(t *testing.T) {
 		client := sdk.TestSDK(nil, map[string]any{
 			"feature": map[string]any{"validate": map[string]any{"active": true}},
 		})
-		_, err := client.Environment(nil).Load(map[string]any{"id": 1, "team_slug": "x"}, nil)
+		_, err := client.Environment(nil).List(map[string]any{"team_slug": 1}, nil)
 		if sdkerr, ok := err.(*core.HoneycombError); !ok || "validate_failed" != sdkerr.Code {
 			t.Fatalf("expected validate_failed, got %v", err)
 		}
@@ -53,7 +53,7 @@ func TestEnvironmentEntity(t *testing.T) {
 		if setup.live {
 			_mode = "live"
 		}
-		for _, _op := range []string{"create", "update", "load", "remove"} {
+		for _, _op := range []string{"create", "list", "update", "load", "remove"} {
 			if _shouldSkip, _reason := isControlSkipped("entityOp", "environment." + _op, _mode); _shouldSkip {
 				if _reason == "" {
 					_reason = "skipped via sdk-test-control.json"
@@ -90,6 +90,25 @@ func TestEnvironmentEntity(t *testing.T) {
 			t.Fatal("expected created entity to have an id")
 		}
 
+		// LIST
+		environmentRef01Match := map[string]any{
+			"team_slug": setup.idmap["team_slug01"],
+		}
+
+		environmentRef01ListResult, err := environmentRef01Ent.List(environmentRef01Match, nil)
+		if err != nil {
+			t.Fatalf("list failed: %v", err)
+		}
+		environmentRef01List, environmentRef01ListOk := environmentRef01ListResult.([]any)
+		if !environmentRef01ListOk {
+			t.Fatalf("expected list result to be an array, got %T", environmentRef01ListResult)
+		}
+
+		foundItem := vs.Select(entityListToData(environmentRef01List), map[string]any{"id": environmentRef01Data["id"]})
+		if vs.IsEmpty(foundItem) {
+			t.Fatal("expected to find created entity in list")
+		}
+
 		// UPDATE
 		environmentRef01DataUp0Up := map[string]any{
 			"id": environmentRef01Data["id"],
@@ -111,6 +130,11 @@ func TestEnvironmentEntity(t *testing.T) {
 		// LOAD
 		environmentRef01MatchDt0 := map[string]any{
 			"id": environmentRef01Data["id"],
+		}
+		if v := setup.idmap["team_slug"]; v != nil {
+			environmentRef01MatchDt0["team_slug"] = v
+		} else {
+			environmentRef01MatchDt0["team_slug"] = setup.idmap["team_slug01"]
 		}
 		environmentRef01DataDt0Loaded, err := environmentRef01Ent.Load(environmentRef01MatchDt0, nil)
 		if err != nil {
@@ -136,6 +160,25 @@ func TestEnvironmentEntity(t *testing.T) {
 		_, err = environmentRef01Ent.Remove(environmentRef01MatchRm0, nil)
 		if err != nil {
 			t.Fatalf("remove failed: %v", err)
+		}
+
+		// LIST
+		environmentRef01MatchRt0 := map[string]any{
+			"team_slug": setup.idmap["team_slug01"],
+		}
+
+		environmentRef01ListRt0Result, err := environmentRef01Ent.List(environmentRef01MatchRt0, nil)
+		if err != nil {
+			t.Fatalf("list failed: %v", err)
+		}
+		environmentRef01ListRt0, environmentRef01ListRt0Ok := environmentRef01ListRt0Result.([]any)
+		if !environmentRef01ListRt0Ok {
+			t.Fatalf("expected list result to be an array, got %T", environmentRef01ListRt0Result)
+		}
+
+		notFoundItem := vs.Select(entityListToData(environmentRef01ListRt0), map[string]any{"id": environmentRef01Data["id"]})
+		if !vs.IsEmpty(notFoundItem) {
+			t.Fatal("expected removed entity to not be in list")
 		}
 
 	})

@@ -4,7 +4,7 @@
 
 The Golang SDK for the Honeycomb API — an entity-oriented client using standard Go conventions. No generics required; data flows as `map[string]any`.
 
-It exposes the API as capitalised, semantic **Entities** — e.g. `client.Auth(nil)` — each with the same small set of operations (`List`, `Load`, `Create`, `Update`, `Remove`) instead of raw URL paths and query strings. You call meaning, not endpoints, which keeps the cognitive load low.
+It exposes the API as capitalised, semantic **Entities** — e.g. `client.ApiKey(nil)` — each with the same small set of operations (`List`, `Load`, `Create`, `Update`, `Remove`) instead of raw URL paths and query strings. You call meaning, not endpoints, which keeps the cognitive load low.
 
 > Also generated from this model: `go-cli`, `go-mcp`, `py`, `ts` — see
 > the [top-level README](../README.md).
@@ -54,12 +54,42 @@ func main() {
         "apikey": os.Getenv("HONEYCOMB_APIKEY"),
     })
 
-    // Load a single auth — the value is the entity; Data() reads its record.
-    auth, err := client.Auth(nil).Load(map[string]any{"id": "example_id"}, nil)
+    // List apiKey records — the value is a []any of entities, one per record.
+    apiKeys, err := client.ApiKey(nil).List(map[string]any{"team_slug": "example"}, nil)
     if err != nil {
         panic(err)
     }
-    fmt.Println(auth.(sdk.Entity).Data())
+    for _, item := range apiKeys.([]any) {
+        fmt.Println(item.(sdk.Entity).Data())
+    }
+
+    // Load a single apiKey — the value is the entity; Data() reads its record.
+    apiKey, err := client.ApiKey(nil).Load(map[string]any{"id": "example_id", "team_slug": "example_team_slug"}, nil)
+    if err != nil {
+        panic(err)
+    }
+    fmt.Println(apiKey.(sdk.Entity).Data())
+
+    // Create a apiKey.
+    created, err := client.ApiKey(nil).Create(map[string]any{"team_slug": "example_team_slug", "data": map[string]any{}}, nil)
+    if err != nil {
+        panic(err)
+    }
+    fmt.Println(created.(sdk.Entity).Data())
+
+    // Update a apiKey.
+    updated, err := client.ApiKey(nil).Update(map[string]any{"id": "example_id", "team_slug": "example_team_slug", "data": map[string]any{}}, nil)
+    if err != nil {
+        panic(err)
+    }
+    fmt.Println(updated.(sdk.Entity).Data())
+
+    // Remove a apiKey.
+    removed, err := client.ApiKey(nil).Remove(map[string]any{"id": "example_id", "team_slug": "example_team_slug"}, nil)
+    if err != nil {
+        panic(err)
+    }
+    fmt.Println(removed.(sdk.Entity).Data())
 }
 ```
 
@@ -70,12 +100,12 @@ Every entity operation returns `(value, error)`. Check `err` before
 using the value — there is no exception to catch:
 
 ```go
-mapdependency, err := client.MapDependency(nil).Load(map[string]any{"request_id": "example"}, nil)
+datasets, err := client.Dataset(nil).List(nil, nil)
 if err != nil {
     // handle err
     return
 }
-_ = mapdependency
+_ = datasets
 ```
 
 `Direct` follows the same `(value, error)` convention:
@@ -139,13 +169,16 @@ Create a mock client for unit testing — no server required:
 ```go
 client := sdk.Test()
 
-mapDependency, err := client.MapDependency(nil).Load(
-    map[string]any{"request_id": "example"}, nil,
+datasets, err := client.Dataset(nil).List(
+    nil, nil,
 )
 if err != nil {
     panic(err)
 }
-fmt.Println(mapDependency.(sdk.Entity).Data()) // the entity's mock record
+// A []any of entities, one per mock record.
+for _, item := range datasets.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 ### Use a custom fetch function
@@ -224,6 +257,7 @@ Creates a test-mode client with mock transport. Both arguments may be `nil`.
 | `GetUtility` | `() *Utility` | Copy of the SDK utility object. |
 | `Prepare` | `(fetchargs map[string]any) (map[string]any, error)` | Build an HTTP request definition without sending. |
 | `Direct` | `(fetchargs map[string]any) (map[string]any, error)` | Build and send an HTTP request. |
+| `ApiKey` | `(data map[string]any) HoneycombEntity` | Create an ApiKey entity instance. |
 | `Auth` | `(data map[string]any) HoneycombEntity` | Create an Auth entity instance. |
 | `Board` | `(data map[string]any) HoneycombEntity` | Create a Board entity instance. |
 | `BoardView` | `(data map[string]any) HoneycombEntity` | Create a BoardView entity instance. |
@@ -236,7 +270,6 @@ Creates a test-mode client with mock transport. Both arguments may be `nil`.
 | `Environment` | `(data map[string]any) HoneycombEntity` | Create an Environment entity instance. |
 | `Event` | `(data map[string]any) HoneycombEntity` | Create an Event entity instance. |
 | `HistoricalAnomaly` | `(data map[string]any) HoneycombEntity` | Create a HistoricalAnomaly entity instance. |
-| `KeyManagement` | `(data map[string]any) HoneycombEntity` | Create a KeyManagement entity instance. |
 | `KinesisEvent` | `(data map[string]any) HoneycombEntity` | Create a KinesisEvent entity instance. |
 | `ManagementAuth` | `(data map[string]any) HoneycombEntity` | Create a ManagementAuth entity instance. |
 | `MapDependency` | `(data map[string]any) HoneycombEntity` | Create a MapDependency entity instance. |
@@ -283,14 +316,25 @@ Check `err` first, then use the value directly (or the typed
 `...Typed` variants, which return the entity's model struct and a typed
 slice):
 
-    auth, err := client.Auth(nil).Load(map[string]any{"id": "example_id"}, nil)
+    apiKey, err := client.ApiKey(nil).List(map[string]any{"team_slug": "example"}, nil)
     if err != nil { /* handle */ }
-    // auth is the entity; auth.(sdk.Entity).Data() reads its record
+    // apiKey is a []any of entities, one per record
 
 Only `Direct()` returns a response envelope — a `map[string]any` with
 `"ok"`, `"status"`, `"headers"`, and `"data"` keys.
 
 ### Entities
+
+#### ApiKey
+
+| Field | Description |
+| --- | --- |
+| `"data"` |  |
+| `"id"` |  |
+
+Operations: Create, List, Load, Remove, Update.
+
+API path: `/2/teams/{teamSlug}/api-keys`
 
 #### Auth
 
@@ -445,7 +489,7 @@ API path: `/1/dataset_definitions/{datasetSlug}`
 | `"data"` |  |
 | `"id"` |  |
 
-Operations: Create, Load, Remove, Update.
+Operations: Create, List, Load, Remove, Update.
 
 API path: `/2/teams/{teamSlug}/environments`
 
@@ -473,17 +517,6 @@ API path: `/1/batch/{datasetSlug}`
 Operations: List.
 
 API path: `/1/signals/{signalId}/historical_anomalies`
-
-#### KeyManagement
-
-| Field | Description |
-| --- | --- |
-| `"data"` |  |
-| `"id"` |  |
-
-Operations: Create, Load, Remove, Update.
-
-API path: `/2/teams/{teamSlug}/api-keys`
 
 #### KinesisEvent
 
@@ -743,6 +776,64 @@ API path: `/1/triggers/{datasetSlug}`
 
 
 ## Entities
+
+
+### ApiKey
+
+Create an instance: `apiKey := client.ApiKey(nil)`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `List(match, ctrl)` | List entities matching the criteria. |
+| `Load(match, ctrl)` | Load a single entity by match criteria. |
+| `Create(data, ctrl)` | Create a new entity with the given data. |
+| `Update(data, ctrl)` | Update an existing entity. |
+| `Remove(match, ctrl)` | Remove the matching entity. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `data` | `map[string]any` |  |
+| `id` | `string` |  |
+
+#### Example: Load
+
+```go
+apiKey, err := client.ApiKey(nil).Load(map[string]any{"id": "api_key_id", "team_slug": "team_slug"}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(apiKey.(sdk.Entity).Data()) // the loaded entity's record
+```
+
+#### Example: List
+
+```go
+apiKeys, err := client.ApiKey(nil).List(map[string]any{"team_slug": "example"}, nil)
+if err != nil {
+    panic(err)
+}
+// A []any of entities, one per record.
+for _, item := range apiKeys.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
+```
+
+#### Example: Create
+
+```go
+result, err := client.ApiKey(nil).Create(map[string]any{
+    "team_slug": "example_team_slug",
+    "data": map[string]any{},
+}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
+```
 
 
 ### Auth
@@ -1241,6 +1332,7 @@ Create an instance: `environment := client.Environment(nil)`
 
 | Method | Description |
 | --- | --- |
+| `List(match, ctrl)` | List entities matching the criteria. |
 | `Load(match, ctrl)` | Load a single entity by match criteria. |
 | `Create(data, ctrl)` | Create a new entity with the given data. |
 | `Update(data, ctrl)` | Update an existing entity. |
@@ -1261,6 +1353,19 @@ if err != nil {
     panic(err)
 }
 fmt.Println(environment.(sdk.Entity).Data()) // the loaded entity's record
+```
+
+#### Example: List
+
+```go
+environments, err := client.Environment(nil).List(map[string]any{"team_slug": "example"}, nil)
+if err != nil {
+    panic(err)
+}
+// A []any of entities, one per record.
+for _, item := range environments.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 #### Example: Create
@@ -1338,50 +1443,6 @@ if err != nil {
 for _, item := range historicalAnomalys.([]any) {
     fmt.Println(item.(sdk.Entity).Data())
 }
-```
-
-
-### KeyManagement
-
-Create an instance: `keyManagement := client.KeyManagement(nil)`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `Load(match, ctrl)` | Load a single entity by match criteria. |
-| `Create(data, ctrl)` | Create a new entity with the given data. |
-| `Update(data, ctrl)` | Update an existing entity. |
-| `Remove(match, ctrl)` | Remove the matching entity. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `data` | `map[string]any` |  |
-| `id` | `string` |  |
-
-#### Example: Load
-
-```go
-keyManagement, err := client.KeyManagement(nil).Load(map[string]any{"id": "key_management_id", "team_slug": "team_slug"}, nil)
-if err != nil {
-    panic(err)
-}
-fmt.Println(keyManagement.(sdk.Entity).Data()) // the loaded entity's record
-```
-
-#### Example: Create
-
-```go
-result, err := client.KeyManagement(nil).Create(map[string]any{
-    "team_slug": "example_team_slug",
-    "data": map[string]any{},
-}, nil)
-if err != nil {
-    panic(err)
-}
-fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
 ```
 
 
@@ -2229,15 +2290,15 @@ like `core.ToMapAny`.
 
 ### Entity state
 
-Entity instances are stateful. After a successful `Load`, the entity
+Entity instances are stateful. After a successful `List`, the entity
 stores the returned data and match criteria internally.
 
 ```go
-mapdependency := client.MapDependency(nil)
-mapdependency.Load(map[string]any{"request_id": "example"}, nil)
+dataset := client.Dataset(nil)
+dataset.List(nil, nil)
 
-// mapdependency.Data() now returns the mapdependency data from the last load
-// mapdependency.Match() returns the last match criteria
+// dataset.Data() now returns the dataset data from the last list
+// dataset.Match() returns the last match criteria
 ```
 
 Call `Make()` to create a fresh instance with the same configuration

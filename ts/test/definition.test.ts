@@ -9,6 +9,319 @@ import { isControlSkipped } from './utility'
 // scheme names, and the definition's own response example.
 const PLAN: any[] = [
   {
+    "entity": "api_key",
+    "accessor": "ApiKey",
+    "op": "create",
+    "method": "POST",
+    "path": "/2/teams/{teamSlug}/api-keys",
+    "args": [
+      {
+        "name": "team_slug",
+        "wire": "teamSlug",
+        "value": "p1"
+      }
+    ],
+    "select": {},
+    "headers": [],
+    "cookies": [],
+    "responseMedia": [
+      "application/vnd.api+json"
+    ],
+    "query": [],
+    "queryArgs": [],
+    "auth": null,
+    "status": 201,
+    "sample": {
+      "data": {
+        "id": "hcxik_12345678901234567890123456",
+        "type": "api-keys",
+        "attributes": {
+          "key_type": "ingest",
+          "name": "us-west-2 collectors key",
+          "disabled": false,
+          "permissions": {},
+          "timestamps": {},
+          "secret": "12345678901234567890123456789"
+        },
+        "relationships": {
+          "environment": {
+            "data": {
+              "id": "hxenv_12345678901234567890123456",
+              "type": "environments"
+            }
+          },
+          "creator": {
+            "data": {
+              "id": "x",
+              "type": "users"
+            }
+          },
+          "editor": {
+            "data": {
+              "id": "x",
+              "type": "users"
+            }
+          }
+        },
+        "links": {
+          "self": "/2/teams/my-team/api-keys/hcxik_12345678901234567890123456"
+        }
+      }
+    },
+    "idField": "id"
+  },
+  {
+    "entity": "api_key",
+    "accessor": "ApiKey",
+    "op": "list",
+    "method": "GET",
+    "path": "/2/teams/{teamSlug}/api-keys",
+    "args": [
+      {
+        "name": "team_slug",
+        "wire": "teamSlug",
+        "value": "p1"
+      }
+    ],
+    "select": {
+      "filter_type": "v1",
+      "page_after": "eyxJjcmAVhdGVkX",
+      "page_size": 10
+    },
+    "headers": [],
+    "cookies": [],
+    "responseMedia": [
+      "application/vnd.api+json"
+    ],
+    "query": [
+      "page[after]",
+      "page[size]",
+      "filter[type]"
+    ],
+    "queryArgs": [
+      {
+        "name": "filter_type",
+        "wire": "filter[type]"
+      },
+      {
+        "name": "page_after",
+        "wire": "page[after]"
+      },
+      {
+        "name": "page_size",
+        "wire": "page[size]"
+      }
+    ],
+    "auth": null,
+    "status": 200,
+    "sample": {
+      "data": [
+        {
+          "id": "hcxik_12345678901234567890123456",
+          "type": "api-keys",
+          "attributes": {
+            "key_type": "ingest",
+            "name": "us-west-2 collectors key",
+            "disabled": false,
+            "permissions": {},
+            "timestamps": {}
+          },
+          "relationships": {
+            "environment": {
+              "data": {
+                "id": "hxenv_12345678901234567890123456",
+                "type": "environments"
+              }
+            },
+            "creator": {
+              "data": {}
+            },
+            "editor": {
+              "data": {}
+            }
+          },
+          "links": {
+            "self": "/2/teams/my-team/api-keys/hcxik_12345678901234567890123456"
+          }
+        }
+      ],
+      "links": {
+        "next": "/2/teams/my-team/api-keys?page[after]=3025fa645ad1100d&page[size]=10"
+      }
+    },
+    "idField": "id"
+  },
+  {
+    "entity": "api_key",
+    "accessor": "ApiKey",
+    "op": "load",
+    "method": "GET",
+    "path": "/2/teams/{teamSlug}/api-keys/{ID}",
+    "args": [
+      {
+        "name": "id",
+        "wire": "ID",
+        "value": "p1"
+      },
+      {
+        "name": "team_slug",
+        "wire": "teamSlug",
+        "value": "p2"
+      }
+    ],
+    "select": {},
+    "headers": [],
+    "cookies": [],
+    "responseMedia": [
+      "application/vnd.api+json"
+    ],
+    "query": [],
+    "queryArgs": [],
+    "auth": null,
+    "status": 200,
+    "sample": {
+      "data": {
+        "id": "hcxik_12345678901234567890123456",
+        "type": "api-keys",
+        "attributes": {
+          "key_type": "ingest",
+          "name": "us-west-2 collectors key",
+          "disabled": false,
+          "permissions": {
+            "create_datasets": true
+          },
+          "timestamps": {
+            "created": "2022-09-22T17:32:11Z",
+            "updated": "2022-10-31T15:08:11Z"
+          }
+        },
+        "relationships": {
+          "environment": {
+            "data": {
+              "id": "hxenv_12345678901234567890123456",
+              "type": "environments"
+            }
+          },
+          "creator": {
+            "data": {
+              "id": "x",
+              "type": "users"
+            }
+          },
+          "editor": {
+            "data": {
+              "id": "x",
+              "type": "users"
+            }
+          }
+        },
+        "links": {
+          "self": "/2/teams/my-team/api-keys/hcxik_12345678901234567890123456"
+        }
+      }
+    },
+    "idField": "id"
+  },
+  {
+    "entity": "api_key",
+    "accessor": "ApiKey",
+    "op": "remove",
+    "method": "DELETE",
+    "path": "/2/teams/{teamSlug}/api-keys/{ID}",
+    "args": [
+      {
+        "name": "id",
+        "wire": "ID",
+        "value": "p1"
+      },
+      {
+        "name": "team_slug",
+        "wire": "teamSlug",
+        "value": "p2"
+      }
+    ],
+    "select": {},
+    "headers": [],
+    "cookies": [],
+    "query": [],
+    "queryArgs": [],
+    "auth": null,
+    "status": 204,
+    "sample": null,
+    "idField": "id"
+  },
+  {
+    "entity": "api_key",
+    "accessor": "ApiKey",
+    "op": "update",
+    "method": "PATCH",
+    "path": "/2/teams/{teamSlug}/api-keys/{ID}",
+    "args": [
+      {
+        "name": "id",
+        "wire": "ID",
+        "value": "p1"
+      },
+      {
+        "name": "team_slug",
+        "wire": "teamSlug",
+        "value": "p2"
+      }
+    ],
+    "select": {},
+    "headers": [],
+    "cookies": [],
+    "responseMedia": [
+      "application/vnd.api+json"
+    ],
+    "query": [],
+    "queryArgs": [],
+    "auth": null,
+    "status": 200,
+    "sample": {
+      "data": {
+        "id": "hcxik_12345678901234567890123456",
+        "type": "api-keys",
+        "attributes": {
+          "key_type": "ingest",
+          "name": "us-west-2 collectors key",
+          "disabled": false,
+          "permissions": {
+            "create_datasets": true
+          },
+          "timestamps": {
+            "created": "2022-09-22T17:32:11Z",
+            "updated": "2022-10-31T15:08:11Z"
+          }
+        },
+        "relationships": {
+          "environment": {
+            "data": {
+              "id": "hxenv_12345678901234567890123456",
+              "type": "environments"
+            }
+          },
+          "creator": {
+            "data": {
+              "id": "x",
+              "type": "users"
+            }
+          },
+          "editor": {
+            "data": {
+              "id": "x",
+              "type": "users"
+            }
+          }
+        },
+        "links": {
+          "self": "/2/teams/my-team/api-keys/hcxik_12345678901234567890123456"
+        }
+      }
+    },
+    "idField": "id"
+  },
+  {
     "entity": "auth",
     "accessor": "Auth",
     "op": "load",
@@ -1792,55 +2105,7 @@ const PLAN: any[] = [
   {
     "entity": "environment",
     "accessor": "Environment",
-    "op": "load",
-    "method": "GET",
-    "path": "/2/teams/{teamSlug}/environments/{ID}",
-    "args": [
-      {
-        "name": "id",
-        "wire": "ID",
-        "value": "p1"
-      },
-      {
-        "name": "team_slug",
-        "wire": "teamSlug",
-        "value": "p2"
-      }
-    ],
-    "select": {},
-    "headers": [],
-    "cookies": [],
-    "responseMedia": [
-      "application/vnd.api+json"
-    ],
-    "query": [],
-    "queryArgs": [],
-    "auth": null,
-    "status": 200,
-    "sample": {
-      "data": {
-        "id": "x",
-        "type": "environments",
-        "links": {
-          "self": "x"
-        },
-        "attributes": {
-          "name": "x",
-          "description": "x",
-          "color": "blue",
-          "slug": "x",
-          "settings": {
-            "delete_protected": true
-          }
-        }
-      }
-    },
-    "idField": "id"
-  },
-  {
-    "entity": "environment",
-    "accessor": "Environment",
-    "op": "load",
+    "op": "list",
     "method": "GET",
     "path": "/2/teams/{teamSlug}/environments",
     "args": [
@@ -1896,6 +2161,54 @@ const PLAN: any[] = [
       ],
       "links": {
         "next": "/2/teams/my-team/api-keys?page[after]=3025fa645ad1100d&page[size]=10"
+      }
+    },
+    "idField": "id"
+  },
+  {
+    "entity": "environment",
+    "accessor": "Environment",
+    "op": "load",
+    "method": "GET",
+    "path": "/2/teams/{teamSlug}/environments/{ID}",
+    "args": [
+      {
+        "name": "id",
+        "wire": "ID",
+        "value": "p1"
+      },
+      {
+        "name": "team_slug",
+        "wire": "teamSlug",
+        "value": "p2"
+      }
+    ],
+    "select": {},
+    "headers": [],
+    "cookies": [],
+    "responseMedia": [
+      "application/vnd.api+json"
+    ],
+    "query": [],
+    "queryArgs": [],
+    "auth": null,
+    "status": 200,
+    "sample": {
+      "data": {
+        "id": "x",
+        "type": "environments",
+        "links": {
+          "self": "x"
+        },
+        "attributes": {
+          "name": "x",
+          "description": "x",
+          "color": "blue",
+          "slug": "x",
+          "settings": {
+            "delete_protected": true
+          }
+        }
       }
     },
     "idField": "id"
@@ -2142,319 +2455,6 @@ const PLAN: any[] = [
       ],
       "links": {
         "next": "/2/teams/my-team/api-keys?page[after]=3025fa645ad1100d&page[size]=10"
-      }
-    },
-    "idField": "id"
-  },
-  {
-    "entity": "key_management",
-    "accessor": "KeyManagement",
-    "op": "create",
-    "method": "POST",
-    "path": "/2/teams/{teamSlug}/api-keys",
-    "args": [
-      {
-        "name": "team_slug",
-        "wire": "teamSlug",
-        "value": "p1"
-      }
-    ],
-    "select": {},
-    "headers": [],
-    "cookies": [],
-    "responseMedia": [
-      "application/vnd.api+json"
-    ],
-    "query": [],
-    "queryArgs": [],
-    "auth": null,
-    "status": 201,
-    "sample": {
-      "data": {
-        "id": "hcxik_12345678901234567890123456",
-        "type": "api-keys",
-        "attributes": {
-          "key_type": "ingest",
-          "name": "us-west-2 collectors key",
-          "disabled": false,
-          "permissions": {},
-          "timestamps": {},
-          "secret": "12345678901234567890123456789"
-        },
-        "relationships": {
-          "environment": {
-            "data": {
-              "id": "hxenv_12345678901234567890123456",
-              "type": "environments"
-            }
-          },
-          "creator": {
-            "data": {
-              "id": "x",
-              "type": "users"
-            }
-          },
-          "editor": {
-            "data": {
-              "id": "x",
-              "type": "users"
-            }
-          }
-        },
-        "links": {
-          "self": "/2/teams/my-team/api-keys/hcxik_12345678901234567890123456"
-        }
-      }
-    },
-    "idField": "id"
-  },
-  {
-    "entity": "key_management",
-    "accessor": "KeyManagement",
-    "op": "load",
-    "method": "GET",
-    "path": "/2/teams/{teamSlug}/api-keys/{ID}",
-    "args": [
-      {
-        "name": "id",
-        "wire": "ID",
-        "value": "p1"
-      },
-      {
-        "name": "team_slug",
-        "wire": "teamSlug",
-        "value": "p2"
-      }
-    ],
-    "select": {},
-    "headers": [],
-    "cookies": [],
-    "responseMedia": [
-      "application/vnd.api+json"
-    ],
-    "query": [],
-    "queryArgs": [],
-    "auth": null,
-    "status": 200,
-    "sample": {
-      "data": {
-        "id": "hcxik_12345678901234567890123456",
-        "type": "api-keys",
-        "attributes": {
-          "key_type": "ingest",
-          "name": "us-west-2 collectors key",
-          "disabled": false,
-          "permissions": {
-            "create_datasets": true
-          },
-          "timestamps": {
-            "created": "2022-09-22T17:32:11Z",
-            "updated": "2022-10-31T15:08:11Z"
-          }
-        },
-        "relationships": {
-          "environment": {
-            "data": {
-              "id": "hxenv_12345678901234567890123456",
-              "type": "environments"
-            }
-          },
-          "creator": {
-            "data": {
-              "id": "x",
-              "type": "users"
-            }
-          },
-          "editor": {
-            "data": {
-              "id": "x",
-              "type": "users"
-            }
-          }
-        },
-        "links": {
-          "self": "/2/teams/my-team/api-keys/hcxik_12345678901234567890123456"
-        }
-      }
-    },
-    "idField": "id"
-  },
-  {
-    "entity": "key_management",
-    "accessor": "KeyManagement",
-    "op": "load",
-    "method": "GET",
-    "path": "/2/teams/{teamSlug}/api-keys",
-    "args": [
-      {
-        "name": "team_slug",
-        "wire": "teamSlug",
-        "value": "p1"
-      }
-    ],
-    "select": {
-      "filter_type": "v1",
-      "page_after": "eyxJjcmAVhdGVkX",
-      "page_size": 10
-    },
-    "headers": [],
-    "cookies": [],
-    "responseMedia": [
-      "application/vnd.api+json"
-    ],
-    "query": [
-      "page[after]",
-      "page[size]",
-      "filter[type]"
-    ],
-    "queryArgs": [
-      {
-        "name": "filter_type",
-        "wire": "filter[type]"
-      },
-      {
-        "name": "page_after",
-        "wire": "page[after]"
-      },
-      {
-        "name": "page_size",
-        "wire": "page[size]"
-      }
-    ],
-    "auth": null,
-    "status": 200,
-    "sample": {
-      "data": [
-        {
-          "id": "hcxik_12345678901234567890123456",
-          "type": "api-keys",
-          "attributes": {
-            "key_type": "ingest",
-            "name": "us-west-2 collectors key",
-            "disabled": false,
-            "permissions": {},
-            "timestamps": {}
-          },
-          "relationships": {
-            "environment": {
-              "data": {
-                "id": "hxenv_12345678901234567890123456",
-                "type": "environments"
-              }
-            },
-            "creator": {
-              "data": {}
-            },
-            "editor": {
-              "data": {}
-            }
-          },
-          "links": {
-            "self": "/2/teams/my-team/api-keys/hcxik_12345678901234567890123456"
-          }
-        }
-      ],
-      "links": {
-        "next": "/2/teams/my-team/api-keys?page[after]=3025fa645ad1100d&page[size]=10"
-      }
-    },
-    "idField": "id"
-  },
-  {
-    "entity": "key_management",
-    "accessor": "KeyManagement",
-    "op": "remove",
-    "method": "DELETE",
-    "path": "/2/teams/{teamSlug}/api-keys/{ID}",
-    "args": [
-      {
-        "name": "id",
-        "wire": "ID",
-        "value": "p1"
-      },
-      {
-        "name": "team_slug",
-        "wire": "teamSlug",
-        "value": "p2"
-      }
-    ],
-    "select": {},
-    "headers": [],
-    "cookies": [],
-    "query": [],
-    "queryArgs": [],
-    "auth": null,
-    "status": 204,
-    "sample": null,
-    "idField": "id"
-  },
-  {
-    "entity": "key_management",
-    "accessor": "KeyManagement",
-    "op": "update",
-    "method": "PATCH",
-    "path": "/2/teams/{teamSlug}/api-keys/{ID}",
-    "args": [
-      {
-        "name": "id",
-        "wire": "ID",
-        "value": "p1"
-      },
-      {
-        "name": "team_slug",
-        "wire": "teamSlug",
-        "value": "p2"
-      }
-    ],
-    "select": {},
-    "headers": [],
-    "cookies": [],
-    "responseMedia": [
-      "application/vnd.api+json"
-    ],
-    "query": [],
-    "queryArgs": [],
-    "auth": null,
-    "status": 200,
-    "sample": {
-      "data": {
-        "id": "hcxik_12345678901234567890123456",
-        "type": "api-keys",
-        "attributes": {
-          "key_type": "ingest",
-          "name": "us-west-2 collectors key",
-          "disabled": false,
-          "permissions": {
-            "create_datasets": true
-          },
-          "timestamps": {
-            "created": "2022-09-22T17:32:11Z",
-            "updated": "2022-10-31T15:08:11Z"
-          }
-        },
-        "relationships": {
-          "environment": {
-            "data": {
-              "id": "hxenv_12345678901234567890123456",
-              "type": "environments"
-            }
-          },
-          "creator": {
-            "data": {
-              "id": "x",
-              "type": "users"
-            }
-          },
-          "editor": {
-            "data": {
-              "id": "x",
-              "type": "users"
-            }
-          }
-        },
-        "links": {
-          "self": "/2/teams/my-team/api-keys/hcxik_12345678901234567890123456"
-        }
       }
     },
     "idField": "id"

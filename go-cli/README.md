@@ -19,16 +19,18 @@ make build
 export HONEYCOMB_APIKEY=sk_live_xxx
 
 # 4. Each command line is ONE boru expression, run against the API:
-./honeycomb-cli load 1 auth            # {id:1} shorthand
-./honeycomb-cli load '{id:1}' auth       # explicit match map
+./honeycomb-cli list api_key
+./honeycomb-cli load 1 api_key            # {id:1} shorthand
+./honeycomb-cli load '{id:1}' api_key       # explicit match map
+./honeycomb-cli update '{name:"x"}' api_key
 ./honeycomb-cli list board
 
 # 5. Override the API base URL for a single call
-HONEYCOMB_BASE=https://api.example.com ./honeycomb-cli load 1 auth
+HONEYCOMB_BASE=https://api.example.com ./honeycomb-cli list api_key
 
 # 6. No arguments -> interactive REPL
 ./honeycomb-cli
-honeycomb> load 1 auth
+honeycomb> list api_key
 honeycomb> /quit
 ```
 
@@ -54,7 +56,7 @@ honeycomb> /quit
    arguments to open the REPL):
 
    ```sh
-   ./dist/*/honeycomb-cli load 1 auth
+   ./dist/*/honeycomb-cli list api_key
    ```
 
 4. **Go interactive.** Run the binary with no arguments to open the REPL, then
@@ -64,15 +66,33 @@ That is the whole loop: *build → set key → evaluate boru expressions*.
 
 ## How-to guides
 
+### List the records of an entity
+
+```sh
+./honeycomb-cli list api_key
+```
+
+`list <entity>` returns the first page of records. `<entity>` is a bareword —
+it is auto-quoted as an boru atom, so no quotes are needed.
+
 ### Load a single record
 
 ```sh
-./honeycomb-cli load 1 auth          # scalar shorthand for {id:1}
-./honeycomb-cli load '{id:1}' auth     # explicit match map
+./honeycomb-cli load 1 api_key          # scalar shorthand for {id:1}
+./honeycomb-cli load '{id:1}' api_key     # explicit match map
 ```
 
 The query is either a **scalar** (`1`, treated as `{id:1}`) or a **match map**
 (`{id:1}`, `{slug:"acme"}`). Quote the map so your shell passes it through intact.
+
+### Update a record
+
+```sh
+./honeycomb-cli update '{id:1,name:"new"}' api_key
+```
+
+The match map carries both the selector and the new field values; the updated
+record is printed back.
 
 ### Authenticate and choose an environment
 
@@ -81,7 +101,7 @@ Configuration is read from the environment — nothing is written to disk:
 ```sh
 export HONEYCOMB_APIKEY=sk_live_xxx            # API key
 export HONEYCOMB_BASE=https://api.example.com  # optional: override the API base URL
-./honeycomb-cli load 1 auth
+./honeycomb-cli list api_key
 ```
 
 Both are injectable by a secrets vault, so the key never has to be typed inline.
@@ -93,7 +113,7 @@ evaluated as its own boru expression:
 
 ```text
 $ ./honeycomb-cli
-honeycomb> load 1 auth
+honeycomb> list api_key
 honeycomb> /help
 honeycomb> /quit
 ```
@@ -122,7 +142,7 @@ The CLI registers these boru words, each bound to the SDK:
 | `load`   | `load <entity>` · `load <query> <entity>`     | A single record                |
 | `update` | `update <query> <entity>`                     | Update a record, return it     |
 
-- `<entity>` is a bareword, auto-quoted as an boru atom (e.g. `auth`).
+- `<entity>` is a bareword, auto-quoted as an boru atom (e.g. `api_key`).
 - `<query>` is either a **Map** (`{id:1}`) or a **Scalar** (`1`, treated as
   `{id:1}`). A scalar is always wrapped as `{id:<value>}`.
 
@@ -165,7 +185,7 @@ Meta-commands use the `/` prefix (everything else on a line is evaluated as boru
 
 The 28 entities this SDK exposes (any is valid as `<entity>`):
 
-auth board board_view bulk_signal_recipient_assignment burn_alert calculated_field column dataset dataset_definition environment event historical_anomaly key_management kinesis_event management_auth map_dependency marker marker_setting query query_annotation query_result recipient signal slo slo_count slo_history slo_hourly_count trigger
+api_key auth board board_view bulk_signal_recipient_assignment burn_alert calculated_field column dataset dataset_definition environment event historical_anomaly kinesis_event management_auth map_dependency marker marker_setting query query_annotation query_result recipient signal slo slo_count slo_history slo_hourly_count trigger
 
 ## Explanation
 

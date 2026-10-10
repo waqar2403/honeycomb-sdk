@@ -19,15 +19,15 @@ import (
 // request that fails, or a live test missing an input it needs,
 // fails the test.
 // An account with no record for a test to read skips it either way.
-const key_managementEntityLiveStrict = true
+const api_keyEntityLiveStrict = true
 
 
-func TestKeyManagementEntity(t *testing.T) {
+func TestApiKeyEntity(t *testing.T) {
 	t.Run("instance", func(t *testing.T) {
 		testsdk := sdk.TestSDK(nil, nil)
-		ent := testsdk.KeyManagement(nil)
+		ent := testsdk.ApiKey(nil)
 		if ent == nil {
-			t.Fatal("expected non-nil KeyManagementEntity")
+			t.Fatal("expected non-nil ApiKeyEntity")
 		}
 	})
 
@@ -38,7 +38,7 @@ func TestKeyManagementEntity(t *testing.T) {
 		client := sdk.TestSDK(nil, map[string]any{
 			"feature": map[string]any{"validate": map[string]any{"active": true}},
 		})
-		_, err := client.KeyManagement(nil).Load(map[string]any{"id": 1, "team_slug": "x"}, nil)
+		_, err := client.ApiKey(nil).List(map[string]any{"team_slug": 1}, nil)
 		if sdkerr, ok := err.(*core.HoneycombError); !ok || "validate_failed" != sdkerr.Code {
 			t.Fatalf("expected validate_failed, got %v", err)
 		}
@@ -46,15 +46,15 @@ func TestKeyManagementEntity(t *testing.T) {
 
 	t.Run("basic", func(tt *testing.T) {
 		var t testing.TB = tt
-		setup := key_managementBasicSetup(nil)
+		setup := api_keyBasicSetup(nil)
 		// Per-op sdk-test-control.json skip — basic test exercises a flow
 		// with multiple ops; skipping any op skips the whole flow.
 		_mode := "unit"
 		if setup.live {
 			_mode = "live"
 		}
-		for _, _op := range []string{"create", "update", "load", "remove"} {
-			if _shouldSkip, _reason := isControlSkipped("entityOp", "key_management." + _op, _mode); _shouldSkip {
+		for _, _op := range []string{"create", "list", "update", "load", "remove"} {
+			if _shouldSkip, _reason := isControlSkipped("entityOp", "api_key." + _op, _mode); _shouldSkip {
 				if _reason == "" {
 					_reason = "skipped via sdk-test-control.json"
 				}
@@ -65,7 +65,7 @@ func TestKeyManagementEntity(t *testing.T) {
 		if setup.live {
 			for _, _liveKey := range []string{"team_slug01"} {
 				if setup.syntheticOnly || setup.idmap[_liveKey] == nil {
-					liveMiss(t, key_managementEntityLiveStrict, "Live entity test blocked: needs %s via HONEYCOMB_TEST_KEY_MANAGEMENT_ENTID", _liveKey)
+					liveMiss(t, api_keyEntityLiveStrict, "Live entity test blocked: needs %s via HONEYCOMB_TEST_API_KEY_ENTID", _liveKey)
 				}
 			}
 		}
@@ -73,90 +73,133 @@ func TestKeyManagementEntity(t *testing.T) {
 		_ = client
 
 		// CREATE
-		keyManagementRef01Ent := client.KeyManagement(nil)
-		keyManagementRef01Data := core.ToMapAny(vs.GetProp(
-			vs.GetPath(setup.data, []any{"new", "key_management"}), "key_management_ref01"))
-		keyManagementRef01Data["team_slug"] = setup.idmap["team_slug01"]
+		apiKeyRef01Ent := client.ApiKey(nil)
+		apiKeyRef01Data := core.ToMapAny(vs.GetProp(
+			vs.GetPath(setup.data, []any{"new", "api_key"}), "api_key_ref01"))
+		apiKeyRef01Data["team_slug"] = setup.idmap["team_slug01"]
 
-		keyManagementRef01DataResult, err := keyManagementRef01Ent.Create(keyManagementRef01Data, nil)
+		apiKeyRef01DataResult, err := apiKeyRef01Ent.Create(apiKeyRef01Data, nil)
 		if err != nil {
 			t.Fatalf("create failed: %v", err)
 		}
-		keyManagementRef01Data = core.ToMapAny(entityData(keyManagementRef01DataResult))
-		if keyManagementRef01Data == nil {
+		apiKeyRef01Data = core.ToMapAny(entityData(apiKeyRef01DataResult))
+		if apiKeyRef01Data == nil {
 			t.Fatal("expected create result to be a map")
 		}
-		if keyManagementRef01Data["id"] == nil {
+		if apiKeyRef01Data["id"] == nil {
 			t.Fatal("expected created entity to have an id")
 		}
 
+		// LIST
+		apiKeyRef01Match := map[string]any{
+			"team_slug": setup.idmap["team_slug01"],
+		}
+
+		apiKeyRef01ListResult, err := apiKeyRef01Ent.List(apiKeyRef01Match, nil)
+		if err != nil {
+			t.Fatalf("list failed: %v", err)
+		}
+		apiKeyRef01List, apiKeyRef01ListOk := apiKeyRef01ListResult.([]any)
+		if !apiKeyRef01ListOk {
+			t.Fatalf("expected list result to be an array, got %T", apiKeyRef01ListResult)
+		}
+
+		foundItem := vs.Select(entityListToData(apiKeyRef01List), map[string]any{"id": apiKeyRef01Data["id"]})
+		if vs.IsEmpty(foundItem) {
+			t.Fatal("expected to find created entity in list")
+		}
+
 		// UPDATE
-		keyManagementRef01DataUp0Up := map[string]any{
-			"id": keyManagementRef01Data["id"],
+		apiKeyRef01DataUp0Up := map[string]any{
+			"id": apiKeyRef01Data["id"],
 			"team_slug": setup.idmap["team_slug"],
 		}
 
-		keyManagementRef01ResdataUp0Result, err := keyManagementRef01Ent.Update(keyManagementRef01DataUp0Up, nil)
+		apiKeyRef01ResdataUp0Result, err := apiKeyRef01Ent.Update(apiKeyRef01DataUp0Up, nil)
 		if err != nil {
 			t.Fatalf("update failed: %v", err)
 		}
-		keyManagementRef01ResdataUp0 := core.ToMapAny(entityData(keyManagementRef01ResdataUp0Result))
-		if keyManagementRef01ResdataUp0 == nil {
+		apiKeyRef01ResdataUp0 := core.ToMapAny(entityData(apiKeyRef01ResdataUp0Result))
+		if apiKeyRef01ResdataUp0 == nil {
 			t.Fatal("expected update result to be a map")
 		}
-		if keyManagementRef01ResdataUp0["id"] != keyManagementRef01DataUp0Up["id"] {
+		if apiKeyRef01ResdataUp0["id"] != apiKeyRef01DataUp0Up["id"] {
 			t.Fatal("expected update result id to match")
 		}
 
 		// LOAD
-		keyManagementRef01MatchDt0 := map[string]any{
-			"id": keyManagementRef01Data["id"],
+		apiKeyRef01MatchDt0 := map[string]any{
+			"id": apiKeyRef01Data["id"],
 		}
-		keyManagementRef01DataDt0Loaded, err := keyManagementRef01Ent.Load(keyManagementRef01MatchDt0, nil)
+		if v := setup.idmap["team_slug"]; v != nil {
+			apiKeyRef01MatchDt0["team_slug"] = v
+		} else {
+			apiKeyRef01MatchDt0["team_slug"] = setup.idmap["team_slug01"]
+		}
+		apiKeyRef01DataDt0Loaded, err := apiKeyRef01Ent.Load(apiKeyRef01MatchDt0, nil)
 		if err != nil {
 			t.Fatalf("load failed: %v", err)
 		}
-		keyManagementRef01DataDt0LoadResult := core.ToMapAny(entityData(keyManagementRef01DataDt0Loaded))
-		if keyManagementRef01DataDt0LoadResult == nil {
+		apiKeyRef01DataDt0LoadResult := core.ToMapAny(entityData(apiKeyRef01DataDt0Loaded))
+		if apiKeyRef01DataDt0LoadResult == nil {
 			t.Fatal("expected load result to be a map")
 		}
-		if keyManagementRef01DataDt0LoadResult["id"] != keyManagementRef01Data["id"] {
+		if apiKeyRef01DataDt0LoadResult["id"] != apiKeyRef01Data["id"] {
 			t.Fatal("expected load result id to match")
 		}
 
 		// REMOVE
-		keyManagementRef01MatchRm0 := map[string]any{
-			"id": keyManagementRef01Data["id"],
+		apiKeyRef01MatchRm0 := map[string]any{
+			"id": apiKeyRef01Data["id"],
 		}
 		if v := setup.idmap["team_slug"]; v != nil {
-			keyManagementRef01MatchRm0["team_slug"] = v
+			apiKeyRef01MatchRm0["team_slug"] = v
 		} else {
-			keyManagementRef01MatchRm0["team_slug"] = setup.idmap["team_slug01"]
+			apiKeyRef01MatchRm0["team_slug"] = setup.idmap["team_slug01"]
 		}
-		_, err = keyManagementRef01Ent.Remove(keyManagementRef01MatchRm0, nil)
+		_, err = apiKeyRef01Ent.Remove(apiKeyRef01MatchRm0, nil)
 		if err != nil {
 			t.Fatalf("remove failed: %v", err)
+		}
+
+		// LIST
+		apiKeyRef01MatchRt0 := map[string]any{
+			"team_slug": setup.idmap["team_slug01"],
+		}
+
+		apiKeyRef01ListRt0Result, err := apiKeyRef01Ent.List(apiKeyRef01MatchRt0, nil)
+		if err != nil {
+			t.Fatalf("list failed: %v", err)
+		}
+		apiKeyRef01ListRt0, apiKeyRef01ListRt0Ok := apiKeyRef01ListRt0Result.([]any)
+		if !apiKeyRef01ListRt0Ok {
+			t.Fatalf("expected list result to be an array, got %T", apiKeyRef01ListRt0Result)
+		}
+
+		notFoundItem := vs.Select(entityListToData(apiKeyRef01ListRt0), map[string]any{"id": apiKeyRef01Data["id"]})
+		if !vs.IsEmpty(notFoundItem) {
+			t.Fatal("expected removed entity to not be in list")
 		}
 
 	})
 }
 
-func key_managementBasicSetup(extra map[string]any) *entityTestSetup {
+func api_keyBasicSetup(extra map[string]any) *entityTestSetup {
 	loadEnvLocal()
 
 	_, filename, _, _ := runtime.Caller(0)
 	dir := filepath.Dir(filename)
 
-	entityDataFile := filepath.Join(dir, "..", "..", ".sdk", "test", "entity", "key_management", "KeyManagementTestData.json")
+	entityDataFile := filepath.Join(dir, "..", "..", ".sdk", "test", "entity", "api_key", "ApiKeyTestData.json")
 
 	entityDataSource, err := os.ReadFile(entityDataFile)
 	if err != nil {
-		panic("failed to read key_management test data: " + err.Error())
+		panic("failed to read api_key test data: " + err.Error())
 	}
 
 	var entityData map[string]any
 	if err := json.Unmarshal(entityDataSource, &entityData); err != nil {
-		panic("failed to parse key_management test data: " + err.Error())
+		panic("failed to parse api_key test data: " + err.Error())
 	}
 
 	options := map[string]any{}
@@ -166,7 +209,7 @@ func key_managementBasicSetup(extra map[string]any) *entityTestSetup {
 
 	// Generate idmap via transform, matching TS pattern.
 	idmap, _ := vs.Transform(
-		[]any{"key_management01", "key_management02", "key_management03", "team_slug01"},
+		[]any{"api_key01", "api_key02", "api_key03", "team_slug01"},
 		map[string]any{
 			"`$PACK`": []any{"", map[string]any{
 				"`$KEY`": "`$COPY`",
@@ -177,17 +220,17 @@ func key_managementBasicSetup(extra map[string]any) *entityTestSetup {
 
 	// Whether *_ENTID supplied the idmap, read before envOverride consumes it:
 	// without it, the ids a live flow binds are the fixture's synthetic ones.
-	entidEnvRaw := os.Getenv("HONEYCOMB_TEST_KEY_MANAGEMENT_ENTID")
+	entidEnvRaw := os.Getenv("HONEYCOMB_TEST_API_KEY_ENTID")
 	idmapOverridden := entidEnvRaw != "" && strings.HasPrefix(strings.TrimSpace(entidEnvRaw), "{")
 
 	env := envOverride(map[string]any{
-		"HONEYCOMB_TEST_KEY_MANAGEMENT_ENTID": idmap,
+		"HONEYCOMB_TEST_API_KEY_ENTID": idmap,
 		"HONEYCOMB_TEST_LIVE":      "FALSE",
 		"HONEYCOMB_TEST_EXPLAIN":   "FALSE",
 		"HONEYCOMB_APIKEY":         "",
 	})
 
-	idmapResolved := core.ToMapAny(env["HONEYCOMB_TEST_KEY_MANAGEMENT_ENTID"])
+	idmapResolved := core.ToMapAny(env["HONEYCOMB_TEST_API_KEY_ENTID"])
 	if idmapResolved == nil {
 		idmapResolved = core.ToMapAny(idmap)
 	}

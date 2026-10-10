@@ -9,7 +9,7 @@ const live_runner_1 = require("../../live-runner");
 const __1 = require("../../..");
 const utility_1 = require("../../utility");
 (0, utility_1.loadEnvLocal)(__dirname + '/../../../.env.local');
-(0, node_test_1.describe)('KeyManagementDirect', async () => {
+(0, node_test_1.describe)('ApiKeyDirect', async () => {
     // Per-test live pacing. Delay is read from sdk-test-control.json's
     // `test.live.delayMs`; only sleeps when HONEYCOMB_TEST_LIVE=TRUE.
     (0, node_test_1.afterEach)((0, utility_1.liveDelay)('HONEYCOMB_TEST_LIVE'));
@@ -21,21 +21,42 @@ const utility_1 = require("../../utility");
         (0, node_assert_1.default)('function' === typeof sdk.direct);
         (0, node_assert_1.default)('function' === typeof sdk.prepare);
     });
-    (0, node_test_1.test)('direct-load-key_management', async (t) => {
+    (0, node_test_1.test)('direct-load-api_key', async (t) => {
         if (liveScenariosActive()) {
             t.skip('Covered by live operation scenarios');
             return;
         }
         const setup = directSetup({ id: 'direct01' });
-        if ((0, utility_1.maybeSkipControl)(t, 'direct', 'direct-load-key_management', setup.live))
+        if ((0, utility_1.maybeSkipControl)(t, 'direct', 'direct-load-api_key', setup.live))
             return;
-        if ((0, utility_1.skipIfMissingIds)(t, setup, ["key_management01", "team_slug01"], LIVE_STRICT))
+        if ((0, utility_1.skipIfMissingIds)(t, setup, ["team_slug01"], LIVE_STRICT))
             return;
         const { client, calls } = setup;
         const params = {};
         const query = {};
         if (setup.live) {
-            params.id = setup.idmap['key_management01'];
+            const listResult = await client.direct({
+                path: '2/teams/{team_slug}/api-keys',
+                method: 'GET',
+                params: {
+                    team_slug: setup.idmap['team_slug01'],
+                },
+            });
+            if (!listResult.ok || listResult.status < 200 || listResult.status >= 300) {
+                return void (0, utility_1.liveMiss)(t, LIVE_STRICT, 'Live list discovery failed: ' + (0, utility_1.describeLive)(listResult));
+            }
+            const listArr = unwrapListData(listResult.data);
+            if (null == listArr) {
+                return void (0, utility_1.liveMiss)(t, LIVE_STRICT, 'Live list discovery returned no list: ' + (0, utility_1.describeLive)(listResult));
+            }
+            if (0 === listArr.length) {
+                return void (0, utility_1.liveEmpty)(t, 'The account has no api_key record to load');
+            }
+            const candidateId = listArr[0]?.id ?? listArr[0]?.id;
+            if (null == candidateId) {
+                return void (0, utility_1.liveMiss)(t, LIVE_STRICT, 'Live load blocked: discovery returned no usable identity');
+            }
+            params.id = candidateId;
             params.team_slug = setup.idmap['team_slug01'];
         }
         else {
@@ -67,6 +88,51 @@ const utility_1 = require("../../utility");
             (0, node_assert_1.default)(calls[0].url.includes('direct02'));
         }
     });
+    (0, node_test_1.test)('direct-list-api_key', async (t) => {
+        if (liveScenariosActive()) {
+            t.skip('Covered by live operation scenarios');
+            return;
+        }
+        const setup = directSetup([{ id: 'direct01' }, { id: 'direct02' }]);
+        if ((0, utility_1.maybeSkipControl)(t, 'direct', 'direct-list-api_key', setup.live))
+            return;
+        if ((0, utility_1.skipIfMissingIds)(t, setup, ["team_slug01"], LIVE_STRICT))
+            return;
+        const { client, calls } = setup;
+        const params = {};
+        const query = {};
+        if (setup.live) {
+            params.team_slug = setup.idmap['team_slug01'];
+        }
+        else {
+            params.team_slug = 'direct01';
+        }
+        const result = await client.direct({
+            path: '2/teams/{team_slug}/api-keys',
+            method: 'GET',
+            params,
+            query,
+        });
+        if (setup.live) {
+            if (!result.ok || result.status < 200 || result.status >= 300) {
+                return void (0, utility_1.liveMiss)(t, LIVE_STRICT, 'Live list failed: ' + (0, utility_1.describeLive)(result));
+            }
+            if (!(Array.isArray(unwrapListData(result.data)))) {
+                return void (0, utility_1.liveMiss)(t, LIVE_STRICT, 'Live list returned no list: ' + (0, utility_1.describeLive)(result));
+            }
+        }
+        else {
+            (0, node_assert_1.default)(result.ok === true);
+            (0, node_assert_1.default)(result.status === 200);
+            (0, node_assert_1.default)(null != result.data);
+            const listArr = unwrapListData(result.data);
+            (0, node_assert_1.default)(Array.isArray(listArr));
+            (0, node_assert_1.default)(listArr.length === 2);
+            (0, node_assert_1.default)(calls.length === 1);
+            (0, node_assert_1.default)(calls[0].init.method === 'GET');
+            (0, node_assert_1.default)(calls[0].url.includes('direct01'));
+        }
+    });
 });
 // main.kit.test.live.strict is true (the default is true): a live
 // request that fails, or a live test missing an input it needs,
@@ -77,7 +143,7 @@ function liveScenariosActive() { return false && process.env.HONEYCOMB_TEST_LIVE
 function directSetup(mockres) {
     const calls = [];
     const env = (0, utility_1.envOverride)({
-        'HONEYCOMB_TEST_KEY_MANAGEMENT_ENTID': {},
+        'HONEYCOMB_TEST_API_KEY_ENTID': {},
         'HONEYCOMB_TEST_LIVE': 'FALSE',
         'HONEYCOMB_APIKEY': '',
     });
@@ -89,7 +155,7 @@ function directSetup(mockres) {
         const client = new __1.HoneycombSDK(Object.assign({}, (0, utility_1.liveClientOptions)(), { system: { fetch: transport.fetch },
             apikey: env.HONEYCOMB_APIKEY,
         }));
-        let idmap = env['HONEYCOMB_TEST_KEY_MANAGEMENT_ENTID'];
+        let idmap = env['HONEYCOMB_TEST_API_KEY_ENTID'];
         if ('string' === typeof idmap && idmap.startsWith('{')) {
             idmap = JSON.parse(idmap);
         }
@@ -126,4 +192,4 @@ function unwrapListData(data) {
     }
     return null;
 }
-//# sourceMappingURL=KeyManagementDirect.test.js.map
+//# sourceMappingURL=ApiKeyDirect.test.js.map

@@ -33,6 +33,9 @@ func init() {
 	core.NewTestFeatureFunc = func() core.Feature {
 		return feature.NewTestFeature()
 	}
+	core.NewApiKeyEntityFunc = func(client *core.HoneycombSDK, entopts map[string]any) core.HoneycombEntity {
+		return entity.NewApiKeyEntity(client, entopts)
+	}
 	core.NewAuthEntityFunc = func(client *core.HoneycombSDK, entopts map[string]any) core.HoneycombEntity {
 		return entity.NewAuthEntity(client, entopts)
 	}
@@ -68,9 +71,6 @@ func init() {
 	}
 	core.NewHistoricalAnomalyEntityFunc = func(client *core.HoneycombSDK, entopts map[string]any) core.HoneycombEntity {
 		return entity.NewHistoricalAnomalyEntity(client, entopts)
-	}
-	core.NewKeyManagementEntityFunc = func(client *core.HoneycombSDK, entopts map[string]any) core.HoneycombEntity {
-		return entity.NewKeyManagementEntity(client, entopts)
 	}
 	core.NewKinesisEventEntityFunc = func(client *core.HoneycombSDK, entopts map[string]any) core.HoneycombEntity {
 		return entity.NewKinesisEventEntity(client, entopts)

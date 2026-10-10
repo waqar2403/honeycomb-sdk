@@ -5,7 +5,7 @@
 The TypeScript SDK for the Honeycomb API — a type-safe, entity-oriented client with full async/await support.
 
 The API is exposed as capitalised, semantic **Entities** — e.g.
-`client.Auth()` — each with a small set of operations (`list`, `load`, `create`, `update`, `remove`)
+`client.ApiKey()` — each with a small set of operations (`list`, `load`, `create`, `update`, `remove`)
 instead of raw URL paths and query parameters. This keeps the surface
 predictable and low-friction for both humans and AI agents.
 
@@ -39,6 +39,20 @@ const client = new HoneycombSDK({
 })
 ```
 
+### 2. List apikey records
+
+`list()` resolves to an array of ApiKey ENTITIES — every operation
+resolves to entities, not raw records. Iterate them directly, and call
+`.data()` on one for the record it holds:
+
+```ts
+const apikeys = await client.ApiKey().list({ team_slug: "example" })
+
+for (const apikey of apikeys) {
+  console.log(apikey.data())
+}
+```
+
 ### 3. Load a boardview
 
 BoardView is nested under board, so provide the `board_id`.
@@ -56,6 +70,29 @@ try {
 }
 ```
 
+### 4. Create, update, and remove
+
+```ts
+// Create — returns the created ApiKey ENTITY (.data() for the record)
+const created = await client.ApiKey().create({
+  team_slug: 'example_team_slug',
+  data: {},
+})
+
+// Update — the id comes off the returned entity's data()
+const updated = await client.ApiKey().update({
+  id: created.data().id!,
+  team_slug: 'example_team_slug',
+  data: {},
+})
+
+// Remove
+await client.ApiKey().remove({
+  id: created.data().id!,
+  team_slug: 'example_team_slug',
+})
+```
+
 
 ## Error handling
 
@@ -63,10 +100,10 @@ Entity operations reject on failure, so wrap them in `try` / `catch`:
 
 ```ts
 try {
-  const mapdependency = await client.MapDependency().load({ request_id: "example" })
-  console.log(mapdependency.data())
+  const datasets = await client.Dataset().list()
+  console.log(datasets.map((item) => item.data()))
 } catch (err) {
-  console.error('load failed:', err)
+  console.error('list failed:', err)
 }
 ```
 
@@ -128,9 +165,9 @@ Create a mock client for unit testing — no server required:
 ```ts
 const client = HoneycombSDK.test()
 
-const mapdependency = await client.MapDependency().load({ request_id: 'example_request_id' })
-// mapdependency is the MapDependency entity; .data() reads its mock record
-console.log(mapdependency.data())
+const datasets = await client.Dataset().list()
+// datasets is an array of Dataset entities, one per mock record
+console.log(datasets.map((dataset) => dataset.data()))
 ```
 
 You can also use the instance method:
@@ -145,14 +182,14 @@ const testClient = client.tester()
 Entity instances remember their last match and data:
 
 ```ts
-const entity = client.MapDependency()
+const entity = client.Dataset()
 
 // First call runs the operation and stores its result
-await entity.load({ request_id: 'example_request_id' })
+await entity.list()
 
 // Subsequent calls reuse the stored state
 const data = entity.data()
-console.log(data)
+console.log(data.id)
 ```
 
 ### Add custom middleware
@@ -232,6 +269,7 @@ new HoneycombSDK(options?: {
 | `utility()` | `Utility` | Deep copy of the SDK utility object. |
 | `prepare(fetchargs?)` | `Promise<FetchDef>` | Build an HTTP request definition without sending it. |
 | `direct(fetchargs?)` | `Promise<DirectResult>` | Build and send an HTTP request. |
+| `ApiKey(data?)` | `ApiKeyEntity` | Create an ApiKey entity instance. |
 | `Auth(data?)` | `AuthEntity` | Create an Auth entity instance. |
 | `Board(data?)` | `BoardEntity` | Create a Board entity instance. |
 | `BoardView(data?)` | `BoardViewEntity` | Create a BoardView entity instance. |
@@ -244,7 +282,6 @@ new HoneycombSDK(options?: {
 | `Environment(data?)` | `EnvironmentEntity` | Create an Environment entity instance. |
 | `Event(data?)` | `EventEntity` | Create an Event entity instance. |
 | `HistoricalAnomaly(data?)` | `HistoricalAnomalyEntity` | Create a HistoricalAnomaly entity instance. |
-| `KeyManagement(data?)` | `KeyManagementEntity` | Create a KeyManagement entity instance. |
 | `KinesisEvent(data?)` | `KinesisEventEntity` | Create a KinesisEvent entity instance. |
 | `ManagementAuth(data?)` | `ManagementAuthEntity` | Create a ManagementAuth entity instance. |
 | `MapDependency(data?)` | `MapDependencyEntity` | Create a MapDependency entity instance. |
@@ -330,6 +367,17 @@ The `prepare()` method returns:
 ```
 
 ### Entities
+
+#### ApiKey
+
+| Field | Description |
+| --- | --- |
+| `data` |  |
+| `id` |  |
+
+Operations: create, list, load, remove, update.
+
+API path: `/2/teams/{teamSlug}/api-keys`
 
 #### Auth
 
@@ -484,7 +532,7 @@ API path: `/1/dataset_definitions/{datasetSlug}`
 | `data` |  |
 | `id` |  |
 
-Operations: create, load, remove, update.
+Operations: create, list, load, remove, update.
 
 API path: `/2/teams/{teamSlug}/environments`
 
@@ -512,17 +560,6 @@ API path: `/1/batch/{datasetSlug}`
 Operations: list.
 
 API path: `/1/signals/{signalId}/historical_anomalies`
-
-#### KeyManagement
-
-| Field | Description |
-| --- | --- |
-| `data` |  |
-| `id` |  |
-
-Operations: create, load, remove, update.
-
-API path: `/2/teams/{teamSlug}/api-keys`
 
 #### KinesisEvent
 
@@ -782,6 +819,49 @@ API path: `/1/triggers/{datasetSlug}`
 
 
 ## Entities
+
+
+### ApiKey
+
+Create an instance: `const api_key = client.ApiKey()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+| `list(match)` | List entities matching the criteria. |
+| `load(match)` | Load a single entity by match criteria. |
+| `remove(match)` | Remove the matching entity. |
+| `update(data)` | Update an existing entity. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `data` | `Record<string, any>` |  |
+| `id` | `string` |  |
+
+#### Example: Load
+
+```ts
+const api_key = await client.ApiKey().load({ id: 'api_key_id', team_slug: 'team_slug' })
+```
+
+#### Example: List
+
+```ts
+const api_keys = await client.ApiKey().list({ team_slug: "example" })
+```
+
+#### Example: Create
+
+```ts
+const api_key = await client.ApiKey().create({
+  team_slug: 'example_team_slug',
+  data: {},
+})
+```
 
 
 ### Auth
@@ -1179,6 +1259,7 @@ Create an instance: `const environment = client.Environment()`
 | Method | Description |
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
+| `list(match)` | List entities matching the criteria. |
 | `load(match)` | Load a single entity by match criteria. |
 | `remove(match)` | Remove the matching entity. |
 | `update(data)` | Update an existing entity. |
@@ -1194,6 +1275,12 @@ Create an instance: `const environment = client.Environment()`
 
 ```ts
 const environment = await client.Environment().load({ id: 'environment_id', team_slug: 'team_slug' })
+```
+
+#### Example: List
+
+```ts
+const environments = await client.Environment().list({ team_slug: "example" })
 ```
 
 #### Example: Create
@@ -1256,42 +1343,6 @@ Create an instance: `const historical_anomaly = client.HistoricalAnomaly()`
 
 ```ts
 const historical_anomalys = await client.HistoricalAnomaly().list({ signal_id: "example", end_time: 1, start_time: 1 })
-```
-
-
-### KeyManagement
-
-Create an instance: `const key_management = client.KeyManagement()`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `create(data)` | Create a new entity with the given data. |
-| `load(match)` | Load a single entity by match criteria. |
-| `remove(match)` | Remove the matching entity. |
-| `update(data)` | Update an existing entity. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `data` | `Record<string, any>` |  |
-| `id` | `string` |  |
-
-#### Example: Load
-
-```ts
-const key_management = await client.KeyManagement().load({ id: 'key_management_id', team_slug: 'team_slug' })
-```
-
-#### Example: Create
-
-```ts
-const key_management = await client.KeyManagement().create({
-  team_slug: 'example_team_slug',
-  data: {},
-})
 ```
 
 
@@ -1989,16 +2040,16 @@ import { HoneycombSDK } from '@waqar2403/honeycomb-sdk'
 
 ### Entity state
 
-Entity instances are stateful. After a successful `load`, the entity
+Entity instances are stateful. After a successful `list`, the entity
 stores the returned data and match criteria internally. Subsequent
 calls on the same instance can rely on this state.
 
 ```ts
-const mapdependency = client.MapDependency()
-await mapdependency.load({ request_id: "example" })
+const dataset = client.Dataset()
+await dataset.list()
 
-// mapdependency.data() now returns the mapdependency data from the last `load`
-// mapdependency.match() returns the last match criteria
+// dataset.data() now returns the dataset data from the last `list`
+// dataset.match() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

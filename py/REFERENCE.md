@@ -42,6 +42,10 @@ client = HoneycombSDK.test()
 
 ### Instance Methods
 
+#### `ApiKey(data=None)`
+
+Create a new `ApiKeyEntity` instance. Pass `None` for no initial data.
+
 #### `Auth(data=None)`
 
 Create a new `AuthEntity` instance. Pass `None` for no initial data.
@@ -89,10 +93,6 @@ Create a new `EventEntity` instance. Pass `None` for no initial data.
 #### `HistoricalAnomaly(data=None)`
 
 Create a new `HistoricalAnomalyEntity` instance. Pass `None` for no initial data.
-
-#### `KeyManagement(data=None)`
-
-Create a new `KeyManagementEntity` instance. Pass `None` for no initial data.
 
 #### `KinesisEvent(data=None)`
 
@@ -182,6 +182,99 @@ Make a direct HTTP request to any API endpoint. Returns a result `dict` with `ok
 #### `prepare(fetchargs=None) -> dict`
 
 Prepare a fetch definition without sending. Returns the `fetchdef` and raises on error.
+
+
+---
+
+## ApiKeyEntity
+
+```python
+api_key = client.ApiKey()
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `data` | `dict` | Yes |  |
+| `id` | `str` | No |  |
+
+### Operations
+
+#### `create(reqdata, ctrl=None) -> ApiKeyEntity`
+
+Create a new entity with the given data. Returns the created entity and raises on error.
+
+```python
+result = client.ApiKey().create({
+    "team_slug": "example_team_slug",  # str
+    "data": {},  # dict
+})
+```
+
+#### `list(reqmatch=None, ctrl=None) -> list[ApiKeyEntity]`
+
+List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list of entities, one per record, and raises on error.
+
+```python
+results = client.ApiKey().list({"team_slug": "example"})
+for api_key in results:
+    print(api_key.data_get())
+```
+
+#### `load(reqmatch, ctrl=None) -> ApiKeyEntity`
+
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and raises on error.
+
+```python
+result = client.ApiKey().load({"id": "api_key_id", "team_slug": "team_slug"})
+```
+
+#### `remove(reqmatch, ctrl=None) -> ApiKeyEntity`
+
+Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
+
+```python
+result = client.ApiKey().remove({"id": "api_key_id", "team_slug": "team_slug"})
+```
+
+#### `update(reqdata, ctrl=None) -> ApiKeyEntity`
+
+Update an existing entity. The data must include the entity `id`. Returns the updated entity and raises on error.
+
+```python
+result = client.ApiKey().update({
+    "id": "api_key_id",
+    "team_slug": "team_slug",
+    # Fields to update
+})
+```
+
+### Common Methods
+
+#### `data_get() -> dict`
+
+Get the entity data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> dict`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `ApiKeyEntity` instance with the same options.
+
+#### `get_name() -> str`
+
+Return the entity name.
 
 
 ---
@@ -1026,6 +1119,16 @@ result = client.Environment().create({
 })
 ```
 
+#### `list(reqmatch=None, ctrl=None) -> list[EnvironmentEntity]`
+
+List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list of entities, one per record, and raises on error.
+
+```python
+results = client.Environment().list({"team_slug": "example"})
+for environment in results:
+    print(environment.data_get())
+```
+
 #### `load(reqmatch, ctrl=None) -> EnvironmentEntity`
 
 Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and raises on error.
@@ -1186,89 +1289,6 @@ Set the entity match criteria.
 #### `make() -> Entity`
 
 Create a new `HistoricalAnomalyEntity` instance with the same options.
-
-#### `get_name() -> str`
-
-Return the entity name.
-
-
----
-
-## KeyManagementEntity
-
-```python
-key_management = client.KeyManagement()
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `data` | `dict` | Yes |  |
-| `id` | `str` | No |  |
-
-### Operations
-
-#### `create(reqdata, ctrl=None) -> KeyManagementEntity`
-
-Create a new entity with the given data. Returns the created entity and raises on error.
-
-```python
-result = client.KeyManagement().create({
-    "team_slug": "example_team_slug",  # str
-    "data": {},  # dict
-})
-```
-
-#### `load(reqmatch, ctrl=None) -> KeyManagementEntity`
-
-Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and raises on error.
-
-```python
-result = client.KeyManagement().load({"id": "key_management_id", "team_slug": "team_slug"})
-```
-
-#### `remove(reqmatch, ctrl=None) -> KeyManagementEntity`
-
-Remove the entity matching the given criteria. Returns the entity, marked as deleted, and raises on error.
-
-```python
-result = client.KeyManagement().remove({"id": "key_management_id", "team_slug": "team_slug"})
-```
-
-#### `update(reqdata, ctrl=None) -> KeyManagementEntity`
-
-Update an existing entity. The data must include the entity `id`. Returns the updated entity and raises on error.
-
-```python
-result = client.KeyManagement().update({
-    "id": "key_management_id",
-    "team_slug": "team_slug",
-    # Fields to update
-})
-```
-
-### Common Methods
-
-#### `data_get() -> dict`
-
-Get the entity data.
-
-#### `data_set(data)`
-
-Set the entity data.
-
-#### `match_get() -> dict`
-
-Get the entity match criteria.
-
-#### `match_set(match)`
-
-Set the entity match criteria.
-
-#### `make() -> Entity`
-
-Create a new `KeyManagementEntity` instance with the same options.
 
 #### `get_name() -> str`
 

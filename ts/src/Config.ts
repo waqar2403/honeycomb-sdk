@@ -70,6 +70,9 @@ class Config {
 
     entity: {
       
+        api_key: {
+        },
+  
         auth: {
         },
   
@@ -104,9 +107,6 @@ class Config {
         },
   
         historical_anomaly: {
-        },
-  
-        key_management: {
         },
   
         kinesis_event: {
@@ -159,6 +159,396 @@ class Config {
 
 
   entity = {
+    "api_key": {
+      "fields": [
+        {
+          "name": "data",
+          "title": "Data",
+          "type": "`$OBJECT`",
+          "req": true
+        },
+        {
+          "name": "id",
+          "title": "Id",
+          "type": "`$STRING`"
+        }
+      ],
+      "id": {
+        "field": "id",
+        "name": "id"
+      },
+      "name": "api_key",
+      "op": {
+        "create": {
+          "input": "data",
+          "name": "create",
+          "points": [
+            {
+              "kind": "http",
+              "method": "POST",
+              "orig": "/2/teams/{teamSlug}/api-keys",
+              "segments": [
+                {
+                  "lit": "2"
+                },
+                {
+                  "lit": "teams"
+                },
+                {
+                  "var": "team_slug"
+                },
+                {
+                  "lit": "api-keys"
+                }
+              ],
+              "parts": [
+                "2",
+                "teams",
+                "{team_slug}",
+                "api-keys"
+              ],
+              "rename": {
+                "param": {
+                  "teamSlug": "team_slug"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body.data`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "team_slug",
+                    "orig": "teamSlug",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "team_slug"
+                ]
+              },
+              "body": {
+                "kind": "json",
+                "media": "application/vnd.api+json"
+              },
+              "response": {
+                "kind": "json",
+                "media": "application/vnd.api+json"
+              }
+            }
+          ]
+        },
+        "list": {
+          "input": "data",
+          "name": "list",
+          "points": [
+            {
+              "kind": "http",
+              "method": "GET",
+              "orig": "/2/teams/{teamSlug}/api-keys",
+              "segments": [
+                {
+                  "lit": "2"
+                },
+                {
+                  "lit": "teams"
+                },
+                {
+                  "var": "team_slug"
+                },
+                {
+                  "lit": "api-keys"
+                }
+              ],
+              "parts": [
+                "2",
+                "teams",
+                "{team_slug}",
+                "api-keys"
+              ],
+              "rename": {
+                "param": {
+                  "teamSlug": "team_slug"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body.data`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "team_slug",
+                    "orig": "teamSlug",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ],
+                "query": [
+                  {
+                    "name": "filter_type",
+                    "orig": "filter[type]",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  },
+                  {
+                    "name": "page_after",
+                    "orig": "page[after]",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "example": "eyxJjcmAVhdGVkX"
+                  },
+                  {
+                    "name": "page_size",
+                    "orig": "page[size]",
+                    "type": "`$NUMBER`",
+                    "kind": "query",
+                    "example": 10
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "team_slug"
+                ]
+              },
+              "response": {
+                "kind": "json",
+                "media": "application/vnd.api+json"
+              }
+            }
+          ]
+        },
+        "load": {
+          "input": "data",
+          "name": "load",
+          "points": [
+            {
+              "kind": "http",
+              "method": "GET",
+              "orig": "/2/teams/{teamSlug}/api-keys/{ID}",
+              "segments": [
+                {
+                  "lit": "2"
+                },
+                {
+                  "lit": "teams"
+                },
+                {
+                  "var": "team_slug"
+                },
+                {
+                  "lit": "api-keys"
+                },
+                {
+                  "var": "id"
+                }
+              ],
+              "parts": [
+                "2",
+                "teams",
+                "{team_slug}",
+                "api-keys",
+                "{id}"
+              ],
+              "rename": {
+                "param": {
+                  "ID": "id",
+                  "teamSlug": "team_slug"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body.data`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "ID",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  },
+                  {
+                    "name": "team_slug",
+                    "orig": "teamSlug",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "id",
+                  "team_slug"
+                ]
+              },
+              "response": {
+                "kind": "json",
+                "media": "application/vnd.api+json"
+              }
+            }
+          ]
+        },
+        "remove": {
+          "input": "data",
+          "name": "remove",
+          "points": [
+            {
+              "kind": "http",
+              "method": "DELETE",
+              "orig": "/2/teams/{teamSlug}/api-keys/{ID}",
+              "segments": [
+                {
+                  "lit": "2"
+                },
+                {
+                  "lit": "teams"
+                },
+                {
+                  "var": "team_slug"
+                },
+                {
+                  "lit": "api-keys"
+                },
+                {
+                  "var": "id"
+                }
+              ],
+              "parts": [
+                "2",
+                "teams",
+                "{team_slug}",
+                "api-keys",
+                "{id}"
+              ],
+              "rename": {
+                "param": {
+                  "ID": "id",
+                  "teamSlug": "team_slug"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "ID",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  },
+                  {
+                    "name": "team_slug",
+                    "orig": "teamSlug",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "id",
+                  "team_slug"
+                ]
+              }
+            }
+          ]
+        },
+        "update": {
+          "input": "data",
+          "name": "update",
+          "points": [
+            {
+              "kind": "http",
+              "method": "PATCH",
+              "orig": "/2/teams/{teamSlug}/api-keys/{ID}",
+              "segments": [
+                {
+                  "lit": "2"
+                },
+                {
+                  "lit": "teams"
+                },
+                {
+                  "var": "team_slug"
+                },
+                {
+                  "lit": "api-keys"
+                },
+                {
+                  "var": "id"
+                }
+              ],
+              "parts": [
+                "2",
+                "teams",
+                "{team_slug}",
+                "api-keys",
+                "{id}"
+              ],
+              "rename": {
+                "param": {
+                  "ID": "id",
+                  "teamSlug": "team_slug"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body.data`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "id",
+                    "orig": "ID",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  },
+                  {
+                    "name": "team_slug",
+                    "orig": "teamSlug",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "id",
+                  "team_slug"
+                ]
+              },
+              "body": {
+                "kind": "json",
+                "media": "application/vnd.api+json"
+              },
+              "response": {
+                "kind": "json",
+                "media": "application/vnd.api+json"
+              }
+            }
+          ]
+        }
+      },
+      "relations": {
+        "ancestors": []
+      }
+    },
     "auth": {
       "fields": [
         {
@@ -2784,7 +3174,7 @@ class Config {
               },
               "transform": {
                 "req": "`reqdata`",
-                "res": "`body`"
+                "res": "`body.data`"
               },
               "args": {
                 "params": [
@@ -2805,6 +3195,82 @@ class Config {
               "body": {
                 "kind": "json",
                 "media": "application/vnd.api+json"
+              },
+              "response": {
+                "kind": "json",
+                "media": "application/vnd.api+json"
+              }
+            }
+          ]
+        },
+        "list": {
+          "input": "data",
+          "name": "list",
+          "points": [
+            {
+              "kind": "http",
+              "method": "GET",
+              "orig": "/2/teams/{teamSlug}/environments",
+              "segments": [
+                {
+                  "lit": "2"
+                },
+                {
+                  "lit": "teams"
+                },
+                {
+                  "var": "team_slug"
+                },
+                {
+                  "lit": "environments"
+                }
+              ],
+              "parts": [
+                "2",
+                "teams",
+                "{team_slug}",
+                "environments"
+              ],
+              "rename": {
+                "param": {
+                  "teamSlug": "team_slug"
+                }
+              },
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body.data`"
+              },
+              "args": {
+                "params": [
+                  {
+                    "name": "team_slug",
+                    "orig": "teamSlug",
+                    "type": "`$STRING`",
+                    "kind": "param",
+                    "reqd": true
+                  }
+                ],
+                "query": [
+                  {
+                    "name": "page_after",
+                    "orig": "page[after]",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "example": "eyxJjcmAVhdGVkX"
+                  },
+                  {
+                    "name": "page_size",
+                    "orig": "page[size]",
+                    "type": "`$NUMBER`",
+                    "kind": "query",
+                    "example": 10
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "team_slug"
+                ]
               },
               "response": {
                 "kind": "json",
@@ -2853,7 +3319,7 @@ class Config {
               },
               "transform": {
                 "req": "`reqdata`",
-                "res": "`body`"
+                "res": "`body.data`"
               },
               "args": {
                 "params": [
@@ -2876,76 +3342,6 @@ class Config {
               "select": {
                 "exist": [
                   "id",
-                  "team_slug"
-                ]
-              },
-              "response": {
-                "kind": "json",
-                "media": "application/vnd.api+json"
-              }
-            },
-            {
-              "kind": "http",
-              "method": "GET",
-              "orig": "/2/teams/{teamSlug}/environments",
-              "segments": [
-                {
-                  "lit": "2"
-                },
-                {
-                  "lit": "teams"
-                },
-                {
-                  "var": "team_slug"
-                },
-                {
-                  "lit": "environments"
-                }
-              ],
-              "parts": [
-                "2",
-                "teams",
-                "{team_slug}",
-                "environments"
-              ],
-              "rename": {
-                "param": {
-                  "teamSlug": "team_slug"
-                }
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "args": {
-                "params": [
-                  {
-                    "name": "team_slug",
-                    "orig": "teamSlug",
-                    "type": "`$STRING`",
-                    "kind": "param",
-                    "reqd": true
-                  }
-                ],
-                "query": [
-                  {
-                    "name": "page_after",
-                    "orig": "page[after]",
-                    "type": "`$STRING`",
-                    "kind": "query",
-                    "example": "eyxJjcmAVhdGVkX"
-                  },
-                  {
-                    "name": "page_size",
-                    "orig": "page[size]",
-                    "type": "`$NUMBER`",
-                    "kind": "query",
-                    "example": 10
-                  }
-                ]
-              },
-              "select": {
-                "exist": [
                   "team_slug"
                 ]
               },
@@ -3065,7 +3461,7 @@ class Config {
               },
               "transform": {
                 "req": "`reqdata`",
-                "res": "`body`"
+                "res": "`body.data`"
               },
               "args": {
                 "params": [
@@ -3414,390 +3810,6 @@ class Config {
             "$.main.kit.entity.signal"
           ]
         ]
-      }
-    },
-    "key_management": {
-      "fields": [
-        {
-          "name": "data",
-          "title": "Data",
-          "type": "`$OBJECT`",
-          "req": true
-        },
-        {
-          "name": "id",
-          "title": "Id",
-          "type": "`$STRING`"
-        }
-      ],
-      "id": {
-        "field": "id",
-        "name": "id"
-      },
-      "name": "key_management",
-      "op": {
-        "create": {
-          "input": "data",
-          "name": "create",
-          "points": [
-            {
-              "kind": "http",
-              "method": "POST",
-              "orig": "/2/teams/{teamSlug}/api-keys",
-              "segments": [
-                {
-                  "lit": "2"
-                },
-                {
-                  "lit": "teams"
-                },
-                {
-                  "var": "team_slug"
-                },
-                {
-                  "lit": "api-keys"
-                }
-              ],
-              "parts": [
-                "2",
-                "teams",
-                "{team_slug}",
-                "api-keys"
-              ],
-              "rename": {
-                "param": {
-                  "teamSlug": "team_slug"
-                }
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "args": {
-                "params": [
-                  {
-                    "name": "team_slug",
-                    "orig": "teamSlug",
-                    "type": "`$STRING`",
-                    "kind": "param",
-                    "reqd": true
-                  }
-                ]
-              },
-              "select": {
-                "exist": [
-                  "team_slug"
-                ]
-              },
-              "body": {
-                "kind": "json",
-                "media": "application/vnd.api+json"
-              },
-              "response": {
-                "kind": "json",
-                "media": "application/vnd.api+json"
-              }
-            }
-          ]
-        },
-        "load": {
-          "input": "data",
-          "name": "load",
-          "points": [
-            {
-              "kind": "http",
-              "method": "GET",
-              "orig": "/2/teams/{teamSlug}/api-keys/{ID}",
-              "segments": [
-                {
-                  "lit": "2"
-                },
-                {
-                  "lit": "teams"
-                },
-                {
-                  "var": "team_slug"
-                },
-                {
-                  "lit": "api-keys"
-                },
-                {
-                  "var": "id"
-                }
-              ],
-              "parts": [
-                "2",
-                "teams",
-                "{team_slug}",
-                "api-keys",
-                "{id}"
-              ],
-              "rename": {
-                "param": {
-                  "ID": "id",
-                  "teamSlug": "team_slug"
-                }
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "args": {
-                "params": [
-                  {
-                    "name": "id",
-                    "orig": "ID",
-                    "type": "`$STRING`",
-                    "kind": "param",
-                    "reqd": true
-                  },
-                  {
-                    "name": "team_slug",
-                    "orig": "teamSlug",
-                    "type": "`$STRING`",
-                    "kind": "param",
-                    "reqd": true
-                  }
-                ]
-              },
-              "select": {
-                "exist": [
-                  "id",
-                  "team_slug"
-                ]
-              },
-              "response": {
-                "kind": "json",
-                "media": "application/vnd.api+json"
-              }
-            },
-            {
-              "kind": "http",
-              "method": "GET",
-              "orig": "/2/teams/{teamSlug}/api-keys",
-              "segments": [
-                {
-                  "lit": "2"
-                },
-                {
-                  "lit": "teams"
-                },
-                {
-                  "var": "team_slug"
-                },
-                {
-                  "lit": "api-keys"
-                }
-              ],
-              "parts": [
-                "2",
-                "teams",
-                "{team_slug}",
-                "api-keys"
-              ],
-              "rename": {
-                "param": {
-                  "teamSlug": "team_slug"
-                }
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "args": {
-                "params": [
-                  {
-                    "name": "team_slug",
-                    "orig": "teamSlug",
-                    "type": "`$STRING`",
-                    "kind": "param",
-                    "reqd": true
-                  }
-                ],
-                "query": [
-                  {
-                    "name": "filter_type",
-                    "orig": "filter[type]",
-                    "type": "`$STRING`",
-                    "kind": "query"
-                  },
-                  {
-                    "name": "page_after",
-                    "orig": "page[after]",
-                    "type": "`$STRING`",
-                    "kind": "query",
-                    "example": "eyxJjcmAVhdGVkX"
-                  },
-                  {
-                    "name": "page_size",
-                    "orig": "page[size]",
-                    "type": "`$NUMBER`",
-                    "kind": "query",
-                    "example": 10
-                  }
-                ]
-              },
-              "select": {
-                "exist": [
-                  "team_slug"
-                ]
-              },
-              "response": {
-                "kind": "json",
-                "media": "application/vnd.api+json"
-              }
-            }
-          ]
-        },
-        "remove": {
-          "input": "data",
-          "name": "remove",
-          "points": [
-            {
-              "kind": "http",
-              "method": "DELETE",
-              "orig": "/2/teams/{teamSlug}/api-keys/{ID}",
-              "segments": [
-                {
-                  "lit": "2"
-                },
-                {
-                  "lit": "teams"
-                },
-                {
-                  "var": "team_slug"
-                },
-                {
-                  "lit": "api-keys"
-                },
-                {
-                  "var": "id"
-                }
-              ],
-              "parts": [
-                "2",
-                "teams",
-                "{team_slug}",
-                "api-keys",
-                "{id}"
-              ],
-              "rename": {
-                "param": {
-                  "ID": "id",
-                  "teamSlug": "team_slug"
-                }
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "args": {
-                "params": [
-                  {
-                    "name": "id",
-                    "orig": "ID",
-                    "type": "`$STRING`",
-                    "kind": "param",
-                    "reqd": true
-                  },
-                  {
-                    "name": "team_slug",
-                    "orig": "teamSlug",
-                    "type": "`$STRING`",
-                    "kind": "param",
-                    "reqd": true
-                  }
-                ]
-              },
-              "select": {
-                "exist": [
-                  "id",
-                  "team_slug"
-                ]
-              }
-            }
-          ]
-        },
-        "update": {
-          "input": "data",
-          "name": "update",
-          "points": [
-            {
-              "kind": "http",
-              "method": "PATCH",
-              "orig": "/2/teams/{teamSlug}/api-keys/{ID}",
-              "segments": [
-                {
-                  "lit": "2"
-                },
-                {
-                  "lit": "teams"
-                },
-                {
-                  "var": "team_slug"
-                },
-                {
-                  "lit": "api-keys"
-                },
-                {
-                  "var": "id"
-                }
-              ],
-              "parts": [
-                "2",
-                "teams",
-                "{team_slug}",
-                "api-keys",
-                "{id}"
-              ],
-              "rename": {
-                "param": {
-                  "ID": "id",
-                  "teamSlug": "team_slug"
-                }
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "args": {
-                "params": [
-                  {
-                    "name": "id",
-                    "orig": "ID",
-                    "type": "`$STRING`",
-                    "kind": "param",
-                    "reqd": true
-                  },
-                  {
-                    "name": "team_slug",
-                    "orig": "teamSlug",
-                    "type": "`$STRING`",
-                    "kind": "param",
-                    "reqd": true
-                  }
-                ]
-              },
-              "select": {
-                "exist": [
-                  "id",
-                  "team_slug"
-                ]
-              },
-              "body": {
-                "kind": "json",
-                "media": "application/vnd.api+json"
-              },
-              "response": {
-                "kind": "json",
-                "media": "application/vnd.api+json"
-              }
-            }
-          ]
-        }
-      },
-      "relations": {
-        "ancestors": []
       }
     },
     "kinesis_event": {

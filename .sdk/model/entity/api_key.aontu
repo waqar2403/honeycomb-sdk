@@ -1,6 +1,6 @@
-# Entity: key_management
+# Entity: api_key
 
-main: kit: entity: key_management: {
+main: kit: entity: api_key: {
 
   alias: field: {}
 
@@ -24,7 +24,7 @@ main: kit: entity: key_management: {
     name: "id"
   }
 
-  name: "key_management"
+  name: "api_key"
   op: {
     create: {
       name: "create"
@@ -85,78 +85,14 @@ main: kit: entity: key_management: {
           ]
           t: {
             req: "`reqdata`"
-            res: "`body`"
+            res: "`body.data`"
           }
         }
       ]
     }
-    load: {
-      name: "load"
+    list: {
+      name: "list"
       points: [
-        {
-          co: {
-            id: "GET /2/teams/{teamSlug}/api-keys/{ID}"
-            source: "openapi3"
-            version: 2
-          }
-          g: {
-            params: [
-              {
-                k: "param"
-                n: "id"
-                or: "ID"
-                r: true
-                t: "`$STRING`"
-              }
-              {
-                k: "param"
-                n: "team_slug"
-                or: "teamSlug"
-                r: true
-                t: "`$STRING`"
-              }
-            ]
-          }
-          m: "GET"
-          o: "/2/teams/{teamSlug}/api-keys/{ID}"
-          q: {
-            exist: [
-              "id"
-              "team_slug"
-            ]
-          }
-          r: {
-            param: {
-              ID: "id"
-              teamSlug: "team_slug"
-            }
-          }
-          rs: {
-            kind: "json"
-            media: "application/vnd.api+json"
-          }
-          s: [
-            {
-              lit: "2"
-            }
-            {
-              lit: "teams"
-            }
-            {
-              var: "team_slug"
-            }
-            {
-              lit: "api-keys"
-            }
-            {
-              var: "id"
-            }
-          ]
-          t: {
-            req: "`reqdata`"
-            res: "`body`"
-          }
-        }
         {
           co: {
             id: "GET /2/teams/{teamSlug}/api-keys"
@@ -231,7 +167,76 @@ main: kit: entity: key_management: {
           ]
           t: {
             req: "`reqdata`"
-            res: "`body`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /2/teams/{teamSlug}/api-keys/{ID}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "id"
+                or: "ID"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "team_slug"
+                or: "teamSlug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/2/teams/{teamSlug}/api-keys/{ID}"
+          q: {
+            exist: [
+              "id"
+              "team_slug"
+            ]
+          }
+          r: {
+            param: {
+              ID: "id"
+              teamSlug: "team_slug"
+            }
+          }
+          rs: {
+            kind: "json"
+            media: "application/vnd.api+json"
+          }
+          s: [
+            {
+              lit: "2"
+            }
+            {
+              lit: "teams"
+            }
+            {
+              var: "team_slug"
+            }
+            {
+              lit: "api-keys"
+            }
+            {
+              var: "id"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
           }
         }
       ]
@@ -372,7 +377,7 @@ main: kit: entity: key_management: {
           ]
           t: {
             req: "`reqdata`"
-            res: "`body`"
+            res: "`body.data`"
           }
         }
       ]

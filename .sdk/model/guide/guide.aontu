@@ -125,3 +125,33 @@ guide: entity: auth: path: "/2/auth": active: false
 guide: entity: management_auth: {
   path: "/2/auth": op: load: method: "GET"
 }
+
+# The v2 management endpoints speak JSON:API: the record is under body.data,
+# and the collection GET returns { data: [...] }, so it is a list.
+guide: entity: environment: {
+  path: "/2/teams/{teamSlug}/environments": {
+    op: load: active: false
+    op: list: { method: "GET", transform: res: "`body.data`" }
+    op: create: transform: res: "`body.data`"
+  }
+  path: "/2/teams/{teamSlug}/environments/{ID}": {
+    op: load: transform: res: "`body.data`"
+    op: patch: transform: res: "`body.data`"
+  }
+}
+
+guide: entity: key_management: active: false
+guide: entity: api_key: {
+  path: "/2/teams/{teamSlug}/api-keys": {
+    rename: param: "teamSlug": "team_slug"
+    op: list: { method: "GET", transform: res: "`body.data`" }
+    op: create: { method: "POST", transform: res: "`body.data`" }
+  }
+  path: "/2/teams/{teamSlug}/api-keys/{ID}": {
+    rename: param: "ID": "id"
+    rename: param: "teamSlug": "team_slug"
+    op: load: { method: "GET", transform: res: "`body.data`" }
+    op: patch: { method: "PATCH", transform: res: "`body.data`" }
+    op: remove: method: "DELETE"
+  }
+}

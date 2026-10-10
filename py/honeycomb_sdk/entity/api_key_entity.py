@@ -1,19 +1,20 @@
-# Honeycomb SDK KeyManagement entity
+# Honeycomb SDK ApiKey entity
 
 from __future__ import annotations
 
 from honeycomb_sdk.utility.voxgig_struct import voxgig_struct as vs
 from honeycomb_sdk.core import helpers
 from honeycomb_sdk.honeycomb_types import (
-    KeyManagement,
-    KeyManagementLoadMatch,
-    KeyManagementCreateData,
-    KeyManagementUpdateData,
-    KeyManagementRemoveMatch,
+    ApiKey,
+    ApiKeyLoadMatch,
+    ApiKeyListMatch,
+    ApiKeyCreateData,
+    ApiKeyUpdateData,
+    ApiKeyRemoveMatch,
 )
 
 
-class KeyManagementEntity:
+class ApiKeyEntity:
 
     def __init__(self, client, entopts=None):
         if entopts is None:
@@ -25,7 +26,7 @@ class KeyManagementEntity:
         else:
             entopts["active"] = True
 
-        self._name = "key_management"
+        self._name = "api_key"
         self._client = client
         self._utility = client.get_utility()
         self._entopts = entopts
@@ -57,14 +58,14 @@ class KeyManagementEntity:
         opts = {}
         for k, v in self._entopts.items():
             opts[k] = v
-        return KeyManagementEntity(self._client, opts)
+        return ApiKeyEntity(self._client, opts)
 
     def data_set(self, args=None):
         if args is not None:
             self._data = helpers.to_map(vs.clone(args)) or {}
             self._utility.feature_hook(self._entctx, "SetData")
 
-    def data_get(self) -> KeyManagement:
+    def data_get(self) -> ApiKey:
         self._utility.feature_hook(self._entctx, "GetData")
         return vs.clone(self._data)
 
@@ -73,7 +74,7 @@ class KeyManagementEntity:
             self._match = helpers.to_map(vs.clone(args)) or {}
             self._utility.feature_hook(self._entctx, "SetMatch")
 
-    def match_get(self) -> KeyManagement:
+    def match_get(self) -> ApiKey:
         self._utility.feature_hook(self._entctx, "GetMatch")
         return vs.clone(self._match)
 
@@ -202,10 +203,10 @@ class KeyManagementEntity:
         return None
 
     
-    def load(self, reqmatch=None, ctrl=None) -> KeyManagementEntity:
+    def load(self, reqmatch=None, ctrl=None) -> ApiKeyEntity:
         utility = self._utility
         # reqmatch is optional: an entity with no id-like key loads with no
-        # match. Treat None as an empty match so client.KeyManagement().load()
+        # match. Treat None as an empty match so client.ApiKey().load()
         # works with no args.
         if reqmatch is None:
             reqmatch = {}
@@ -229,9 +230,31 @@ class KeyManagementEntity:
 
 
     
+    def list(self, reqmatch=None, ctrl=None) -> list[ApiKeyEntity]:
+        utility = self._utility
+        # reqmatch is optional: an omitted match lists all records. Treat None
+        # as an empty match so client.ApiKey().list() works with no args.
+        if reqmatch is None:
+            reqmatch = {}
+        ctx = utility.make_context({
+            "opname": "list",
+            "ctrl": ctrl,
+            "match": self._match,
+            "data": self._data,
+            "reqmatch": reqmatch,
+        }, self._entctx)
+
+        def post_done():
+            if ctx.result is not None:
+                if ctx.result.resmatch is not None:
+                    self._match = ctx.result.resmatch
+
+        return self._run_op(ctx, post_done)
+
+
 
     
-    def create(self, reqdata: KeyManagementCreateData, ctrl=None) -> KeyManagementEntity:
+    def create(self, reqdata: ApiKeyCreateData, ctrl=None) -> ApiKeyEntity:
         utility = self._utility
         ctx = utility.make_context({
             "opname": "create",
@@ -251,7 +274,7 @@ class KeyManagementEntity:
 
 
     
-    def update(self, reqdata: KeyManagementUpdateData, ctrl=None) -> KeyManagementEntity:
+    def update(self, reqdata: ApiKeyUpdateData, ctrl=None) -> ApiKeyEntity:
         utility = self._utility
         ctx = utility.make_context({
             "opname": "update",
@@ -275,10 +298,10 @@ class KeyManagementEntity:
     
 
     
-    def remove(self, reqmatch=None, ctrl=None) -> KeyManagementEntity:
+    def remove(self, reqmatch=None, ctrl=None) -> ApiKeyEntity:
         utility = self._utility
         # reqmatch is optional: an entity with no id-like key removes with no
-        # match. Treat None as an empty match so client.KeyManagement().remove()
+        # match. Treat None as an empty match so client.ApiKey().remove()
         # works with no args.
         if reqmatch is None:
             reqmatch = {}

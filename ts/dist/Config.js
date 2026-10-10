@@ -48,6 +48,7 @@ class Config {
             "content-type": "application/json"
         },
         entity: {
+            api_key: {},
             auth: {},
             board: {},
             board_view: {},
@@ -60,8 +61,8 @@ class Config {
             environment: {},
             event: {},
             historical_anomaly: {},
-            key_management: {},
-            kinesi: {},
+            kinesis_event: {},
+            management_auth: {},
             map_dependency: {},
             marker: {},
             marker_setting: {},
@@ -78,6 +79,396 @@ class Config {
         }
     };
     entity = {
+        "api_key": {
+            "fields": [
+                {
+                    "name": "data",
+                    "title": "Data",
+                    "type": "`$OBJECT`",
+                    "req": true
+                },
+                {
+                    "name": "id",
+                    "title": "Id",
+                    "type": "`$STRING`"
+                }
+            ],
+            "id": {
+                "field": "id",
+                "name": "id"
+            },
+            "name": "api_key",
+            "op": {
+                "create": {
+                    "input": "data",
+                    "name": "create",
+                    "points": [
+                        {
+                            "kind": "http",
+                            "method": "POST",
+                            "orig": "/2/teams/{teamSlug}/api-keys",
+                            "segments": [
+                                {
+                                    "lit": "2"
+                                },
+                                {
+                                    "lit": "teams"
+                                },
+                                {
+                                    "var": "team_slug"
+                                },
+                                {
+                                    "lit": "api-keys"
+                                }
+                            ],
+                            "parts": [
+                                "2",
+                                "teams",
+                                "{team_slug}",
+                                "api-keys"
+                            ],
+                            "rename": {
+                                "param": {
+                                    "teamSlug": "team_slug"
+                                }
+                            },
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body.data`"
+                            },
+                            "args": {
+                                "params": [
+                                    {
+                                        "name": "team_slug",
+                                        "orig": "teamSlug",
+                                        "type": "`$STRING`",
+                                        "kind": "param",
+                                        "reqd": true
+                                    }
+                                ]
+                            },
+                            "select": {
+                                "exist": [
+                                    "team_slug"
+                                ]
+                            },
+                            "body": {
+                                "kind": "json",
+                                "media": "application/vnd.api+json"
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/vnd.api+json"
+                            }
+                        }
+                    ]
+                },
+                "list": {
+                    "input": "data",
+                    "name": "list",
+                    "points": [
+                        {
+                            "kind": "http",
+                            "method": "GET",
+                            "orig": "/2/teams/{teamSlug}/api-keys",
+                            "segments": [
+                                {
+                                    "lit": "2"
+                                },
+                                {
+                                    "lit": "teams"
+                                },
+                                {
+                                    "var": "team_slug"
+                                },
+                                {
+                                    "lit": "api-keys"
+                                }
+                            ],
+                            "parts": [
+                                "2",
+                                "teams",
+                                "{team_slug}",
+                                "api-keys"
+                            ],
+                            "rename": {
+                                "param": {
+                                    "teamSlug": "team_slug"
+                                }
+                            },
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body.data`"
+                            },
+                            "args": {
+                                "params": [
+                                    {
+                                        "name": "team_slug",
+                                        "orig": "teamSlug",
+                                        "type": "`$STRING`",
+                                        "kind": "param",
+                                        "reqd": true
+                                    }
+                                ],
+                                "query": [
+                                    {
+                                        "name": "filter_type",
+                                        "orig": "filter[type]",
+                                        "type": "`$STRING`",
+                                        "kind": "query"
+                                    },
+                                    {
+                                        "name": "page_after",
+                                        "orig": "page[after]",
+                                        "type": "`$STRING`",
+                                        "kind": "query",
+                                        "example": "eyxJjcmAVhdGVkX"
+                                    },
+                                    {
+                                        "name": "page_size",
+                                        "orig": "page[size]",
+                                        "type": "`$NUMBER`",
+                                        "kind": "query",
+                                        "example": 10
+                                    }
+                                ]
+                            },
+                            "select": {
+                                "exist": [
+                                    "team_slug"
+                                ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/vnd.api+json"
+                            }
+                        }
+                    ]
+                },
+                "load": {
+                    "input": "data",
+                    "name": "load",
+                    "points": [
+                        {
+                            "kind": "http",
+                            "method": "GET",
+                            "orig": "/2/teams/{teamSlug}/api-keys/{ID}",
+                            "segments": [
+                                {
+                                    "lit": "2"
+                                },
+                                {
+                                    "lit": "teams"
+                                },
+                                {
+                                    "var": "team_slug"
+                                },
+                                {
+                                    "lit": "api-keys"
+                                },
+                                {
+                                    "var": "id"
+                                }
+                            ],
+                            "parts": [
+                                "2",
+                                "teams",
+                                "{team_slug}",
+                                "api-keys",
+                                "{id}"
+                            ],
+                            "rename": {
+                                "param": {
+                                    "ID": "id",
+                                    "teamSlug": "team_slug"
+                                }
+                            },
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body.data`"
+                            },
+                            "args": {
+                                "params": [
+                                    {
+                                        "name": "id",
+                                        "orig": "ID",
+                                        "type": "`$STRING`",
+                                        "kind": "param",
+                                        "reqd": true
+                                    },
+                                    {
+                                        "name": "team_slug",
+                                        "orig": "teamSlug",
+                                        "type": "`$STRING`",
+                                        "kind": "param",
+                                        "reqd": true
+                                    }
+                                ]
+                            },
+                            "select": {
+                                "exist": [
+                                    "id",
+                                    "team_slug"
+                                ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/vnd.api+json"
+                            }
+                        }
+                    ]
+                },
+                "remove": {
+                    "input": "data",
+                    "name": "remove",
+                    "points": [
+                        {
+                            "kind": "http",
+                            "method": "DELETE",
+                            "orig": "/2/teams/{teamSlug}/api-keys/{ID}",
+                            "segments": [
+                                {
+                                    "lit": "2"
+                                },
+                                {
+                                    "lit": "teams"
+                                },
+                                {
+                                    "var": "team_slug"
+                                },
+                                {
+                                    "lit": "api-keys"
+                                },
+                                {
+                                    "var": "id"
+                                }
+                            ],
+                            "parts": [
+                                "2",
+                                "teams",
+                                "{team_slug}",
+                                "api-keys",
+                                "{id}"
+                            ],
+                            "rename": {
+                                "param": {
+                                    "ID": "id",
+                                    "teamSlug": "team_slug"
+                                }
+                            },
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body`"
+                            },
+                            "args": {
+                                "params": [
+                                    {
+                                        "name": "id",
+                                        "orig": "ID",
+                                        "type": "`$STRING`",
+                                        "kind": "param",
+                                        "reqd": true
+                                    },
+                                    {
+                                        "name": "team_slug",
+                                        "orig": "teamSlug",
+                                        "type": "`$STRING`",
+                                        "kind": "param",
+                                        "reqd": true
+                                    }
+                                ]
+                            },
+                            "select": {
+                                "exist": [
+                                    "id",
+                                    "team_slug"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "update": {
+                    "input": "data",
+                    "name": "update",
+                    "points": [
+                        {
+                            "kind": "http",
+                            "method": "PATCH",
+                            "orig": "/2/teams/{teamSlug}/api-keys/{ID}",
+                            "segments": [
+                                {
+                                    "lit": "2"
+                                },
+                                {
+                                    "lit": "teams"
+                                },
+                                {
+                                    "var": "team_slug"
+                                },
+                                {
+                                    "lit": "api-keys"
+                                },
+                                {
+                                    "var": "id"
+                                }
+                            ],
+                            "parts": [
+                                "2",
+                                "teams",
+                                "{team_slug}",
+                                "api-keys",
+                                "{id}"
+                            ],
+                            "rename": {
+                                "param": {
+                                    "ID": "id",
+                                    "teamSlug": "team_slug"
+                                }
+                            },
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body.data`"
+                            },
+                            "args": {
+                                "params": [
+                                    {
+                                        "name": "id",
+                                        "orig": "ID",
+                                        "type": "`$STRING`",
+                                        "kind": "param",
+                                        "reqd": true
+                                    },
+                                    {
+                                        "name": "team_slug",
+                                        "orig": "teamSlug",
+                                        "type": "`$STRING`",
+                                        "kind": "param",
+                                        "reqd": true
+                                    }
+                                ]
+                            },
+                            "select": {
+                                "exist": [
+                                    "id",
+                                    "team_slug"
+                                ]
+                            },
+                            "body": {
+                                "kind": "json",
+                                "media": "application/vnd.api+json"
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/vnd.api+json"
+                            }
+                        }
+                    ]
+                }
+            },
+            "relations": {
+                "ancestors": []
+            }
+        },
         "auth": {
             "fields": [
                 {
@@ -149,34 +540,6 @@ class Config {
                             "response": {
                                 "kind": "json",
                                 "media": "application/json"
-                            }
-                        },
-                        {
-                            "kind": "http",
-                            "method": "GET",
-                            "orig": "/2/auth",
-                            "segments": [
-                                {
-                                    "lit": "2"
-                                },
-                                {
-                                    "lit": "auth"
-                                }
-                            ],
-                            "parts": [
-                                "2",
-                                "auth"
-                            ],
-                            "rename": {},
-                            "transform": {
-                                "req": "`reqdata`",
-                                "res": "`body`"
-                            },
-                            "args": {},
-                            "select": {},
-                            "response": {
-                                "kind": "json",
-                                "media": "application/vnd.api+json"
                             }
                         }
                     ]
@@ -383,69 +746,6 @@ class Config {
                         {
                             "kind": "http",
                             "method": "DELETE",
-                            "orig": "/1/boards/{boardId}/views/{viewId}",
-                            "segments": [
-                                {
-                                    "lit": "1"
-                                },
-                                {
-                                    "lit": "boards"
-                                },
-                                {
-                                    "var": "id"
-                                },
-                                {
-                                    "lit": "views"
-                                },
-                                {
-                                    "var": "view_id"
-                                }
-                            ],
-                            "parts": [
-                                "1",
-                                "boards",
-                                "{id}",
-                                "views",
-                                "{view_id}"
-                            ],
-                            "rename": {
-                                "param": {
-                                    "boardId": "id",
-                                    "viewId": "view_id"
-                                }
-                            },
-                            "transform": {
-                                "req": "`reqdata`",
-                                "res": "`body`"
-                            },
-                            "args": {
-                                "params": [
-                                    {
-                                        "name": "id",
-                                        "orig": "boardId",
-                                        "type": "`$STRING`",
-                                        "kind": "param",
-                                        "reqd": true
-                                    },
-                                    {
-                                        "name": "view_id",
-                                        "orig": "viewId",
-                                        "type": "`$STRING`",
-                                        "kind": "param",
-                                        "reqd": true
-                                    }
-                                ]
-                            },
-                            "select": {
-                                "exist": [
-                                    "id",
-                                    "view_id"
-                                ]
-                            }
-                        },
-                        {
-                            "kind": "http",
-                            "method": "DELETE",
                             "orig": "/1/boards/{boardId}",
                             "segments": [
                                 {
@@ -615,7 +915,7 @@ class Config {
                                     "lit": "boards"
                                 },
                                 {
-                                    "var": "id"
+                                    "var": "board_id"
                                 },
                                 {
                                     "lit": "views"
@@ -624,12 +924,12 @@ class Config {
                             "parts": [
                                 "1",
                                 "boards",
-                                "{id}",
+                                "{board_id}",
                                 "views"
                             ],
                             "rename": {
                                 "param": {
-                                    "boardId": "id"
+                                    "boardId": "board_id"
                                 }
                             },
                             "transform": {
@@ -639,7 +939,7 @@ class Config {
                             "args": {
                                 "params": [
                                     {
-                                        "name": "id",
+                                        "name": "board_id",
                                         "orig": "boardId",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -649,7 +949,7 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "id"
+                                    "board_id"
                                 ]
                             },
                             "response": {
@@ -675,7 +975,7 @@ class Config {
                                     "lit": "boards"
                                 },
                                 {
-                                    "var": "id"
+                                    "var": "board_id"
                                 },
                                 {
                                     "lit": "views"
@@ -684,12 +984,12 @@ class Config {
                             "parts": [
                                 "1",
                                 "boards",
-                                "{id}",
+                                "{board_id}",
                                 "views"
                             ],
                             "rename": {
                                 "param": {
-                                    "boardId": "id"
+                                    "boardId": "board_id"
                                 }
                             },
                             "transform": {
@@ -699,7 +999,7 @@ class Config {
                             "args": {
                                 "params": [
                                     {
-                                        "name": "id",
+                                        "name": "board_id",
                                         "orig": "boardId",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -709,7 +1009,7 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "id"
+                                    "board_id"
                                 ]
                             },
                             "response": {
@@ -788,6 +1088,75 @@ class Config {
                             "response": {
                                 "kind": "json",
                                 "media": "application/json"
+                            }
+                        }
+                    ]
+                },
+                "remove": {
+                    "input": "data",
+                    "name": "remove",
+                    "points": [
+                        {
+                            "kind": "http",
+                            "method": "DELETE",
+                            "orig": "/1/boards/{boardId}/views/{viewId}",
+                            "segments": [
+                                {
+                                    "lit": "1"
+                                },
+                                {
+                                    "lit": "boards"
+                                },
+                                {
+                                    "var": "board_id"
+                                },
+                                {
+                                    "lit": "views"
+                                },
+                                {
+                                    "var": "id"
+                                }
+                            ],
+                            "parts": [
+                                "1",
+                                "boards",
+                                "{board_id}",
+                                "views",
+                                "{id}"
+                            ],
+                            "rename": {
+                                "param": {
+                                    "boardId": "board_id",
+                                    "viewId": "id"
+                                }
+                            },
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body`"
+                            },
+                            "args": {
+                                "params": [
+                                    {
+                                        "name": "board_id",
+                                        "orig": "boardId",
+                                        "type": "`$STRING`",
+                                        "kind": "param",
+                                        "reqd": true
+                                    },
+                                    {
+                                        "name": "id",
+                                        "orig": "viewId",
+                                        "type": "`$STRING`",
+                                        "kind": "param",
+                                        "reqd": true
+                                    }
+                                ]
+                            },
+                            "select": {
+                                "exist": [
+                                    "board_id",
+                                    "id"
+                                ]
                             }
                         }
                     ]
@@ -976,7 +1345,7 @@ class Config {
                 "name": "id",
                 "parts": [
                     "dataset_slug",
-                    "burn_alert_id"
+                    "id"
                 ],
                 "sep": "/"
             },
@@ -998,17 +1367,17 @@ class Config {
                                     "lit": "burn_alerts"
                                 },
                                 {
-                                    "var": "id"
+                                    "var": "dataset_slug"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "burn_alerts",
-                                "{id}"
+                                "{dataset_slug}"
                             ],
                             "rename": {
                                 "param": {
-                                    "datasetSlug": "id"
+                                    "datasetSlug": "dataset_slug"
                                 }
                             },
                             "transform": {
@@ -1018,7 +1387,7 @@ class Config {
                             "args": {
                                 "params": [
                                     {
-                                        "name": "id",
+                                        "name": "dataset_slug",
                                         "orig": "datasetSlug",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -1028,7 +1397,73 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "id"
+                                    "dataset_slug"
+                                ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
+                            }
+                        }
+                    ]
+                },
+                "list": {
+                    "input": "data",
+                    "name": "list",
+                    "points": [
+                        {
+                            "kind": "http",
+                            "method": "GET",
+                            "orig": "/1/burn_alerts/{datasetSlug}",
+                            "segments": [
+                                {
+                                    "lit": "1"
+                                },
+                                {
+                                    "lit": "burn_alerts"
+                                },
+                                {
+                                    "var": "dataset_slug"
+                                }
+                            ],
+                            "parts": [
+                                "1",
+                                "burn_alerts",
+                                "{dataset_slug}"
+                            ],
+                            "rename": {
+                                "param": {
+                                    "datasetSlug": "dataset_slug"
+                                }
+                            },
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body`"
+                            },
+                            "args": {
+                                "params": [
+                                    {
+                                        "name": "dataset_slug",
+                                        "orig": "datasetSlug",
+                                        "type": "`$STRING`",
+                                        "kind": "param",
+                                        "reqd": true
+                                    }
+                                ],
+                                "query": [
+                                    {
+                                        "name": "slo_id",
+                                        "orig": "slo_id",
+                                        "type": "`$STRING`",
+                                        "kind": "query",
+                                        "reqd": true
+                                    }
+                                ]
+                            },
+                            "select": {
+                                "exist": [
+                                    "dataset_slug",
+                                    "slo_id"
                                 ]
                             },
                             "response": {
@@ -1057,18 +1492,18 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "burn_alert_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "burn_alerts",
                                 "{dataset_slug}",
-                                "{burn_alert_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
-                                    "burnAlertId": "burn_alert_id",
+                                    "burnAlertId": "id",
                                     "datasetSlug": "dataset_slug"
                                 }
                             },
@@ -1079,85 +1514,25 @@ class Config {
                             "args": {
                                 "params": [
                                     {
-                                        "name": "burn_alert_id",
-                                        "orig": "burnAlertId",
-                                        "type": "`$STRING`",
-                                        "kind": "param",
-                                        "reqd": true
-                                    },
-                                    {
                                         "name": "dataset_slug",
                                         "orig": "datasetSlug",
                                         "type": "`$STRING`",
                                         "kind": "param",
                                         "reqd": true
-                                    }
-                                ]
-                            },
-                            "select": {
-                                "exist": [
-                                    "burn_alert_id",
-                                    "dataset_slug"
-                                ]
-                            },
-                            "response": {
-                                "kind": "json",
-                                "media": "application/json"
-                            }
-                        },
-                        {
-                            "kind": "http",
-                            "method": "GET",
-                            "orig": "/1/burn_alerts/{datasetSlug}",
-                            "segments": [
-                                {
-                                    "lit": "1"
-                                },
-                                {
-                                    "lit": "burn_alerts"
-                                },
-                                {
-                                    "var": "id"
-                                }
-                            ],
-                            "parts": [
-                                "1",
-                                "burn_alerts",
-                                "{id}"
-                            ],
-                            "rename": {
-                                "param": {
-                                    "datasetSlug": "id"
-                                }
-                            },
-                            "transform": {
-                                "req": "`reqdata`",
-                                "res": "`body`"
-                            },
-                            "args": {
-                                "params": [
+                                    },
                                     {
                                         "name": "id",
-                                        "orig": "datasetSlug",
+                                        "orig": "burnAlertId",
                                         "type": "`$STRING`",
                                         "kind": "param",
                                         "reqd": true
                                     }
-                                ],
-                                "query": [
-                                    {
-                                        "name": "slo_id",
-                                        "orig": "slo_id",
-                                        "type": "`$STRING`",
-                                        "kind": "query",
-                                        "reqd": true
-                                    }
                                 ]
                             },
                             "select": {
                                 "exist": [
-                                    "id",
-                                    "slo_id"
+                                    "dataset_slug",
+                                    "id"
                                 ]
                             },
                             "response": {
@@ -1186,18 +1561,18 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "burn_alert_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "burn_alerts",
                                 "{dataset_slug}",
-                                "{burn_alert_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
-                                    "burnAlertId": "burn_alert_id",
+                                    "burnAlertId": "id",
                                     "datasetSlug": "dataset_slug"
                                 }
                             },
@@ -1208,15 +1583,15 @@ class Config {
                             "args": {
                                 "params": [
                                     {
-                                        "name": "burn_alert_id",
-                                        "orig": "burnAlertId",
+                                        "name": "dataset_slug",
+                                        "orig": "datasetSlug",
                                         "type": "`$STRING`",
                                         "kind": "param",
                                         "reqd": true
                                     },
                                     {
-                                        "name": "dataset_slug",
-                                        "orig": "datasetSlug",
+                                        "name": "id",
+                                        "orig": "burnAlertId",
                                         "type": "`$STRING`",
                                         "kind": "param",
                                         "reqd": true
@@ -1225,8 +1600,8 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "burn_alert_id",
-                                    "dataset_slug"
+                                    "dataset_slug",
+                                    "id"
                                 ]
                             }
                         }
@@ -1251,18 +1626,18 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "burn_alert_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "burn_alerts",
                                 "{dataset_slug}",
-                                "{burn_alert_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
-                                    "burnAlertId": "burn_alert_id",
+                                    "burnAlertId": "id",
                                     "datasetSlug": "dataset_slug"
                                 }
                             },
@@ -1273,15 +1648,15 @@ class Config {
                             "args": {
                                 "params": [
                                     {
-                                        "name": "burn_alert_id",
-                                        "orig": "burnAlertId",
+                                        "name": "dataset_slug",
+                                        "orig": "datasetSlug",
                                         "type": "`$STRING`",
                                         "kind": "param",
                                         "reqd": true
                                     },
                                     {
-                                        "name": "dataset_slug",
-                                        "orig": "datasetSlug",
+                                        "name": "id",
+                                        "orig": "burnAlertId",
                                         "type": "`$STRING`",
                                         "kind": "param",
                                         "reqd": true
@@ -1290,8 +1665,8 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "burn_alert_id",
-                                    "dataset_slug"
+                                    "dataset_slug",
+                                    "id"
                                 ]
                             },
                             "response": {
@@ -1355,10 +1730,13 @@ class Config {
             ],
             "id": {
                 "field": "id",
+                "from": {
+                    "id": "id"
+                },
                 "name": "id",
                 "parts": [
                     "dataset_slug",
-                    "derived_column_id"
+                    "id"
                 ],
                 "sep": "/"
             },
@@ -1420,73 +1798,10 @@ class Config {
                         }
                     ]
                 },
-                "load": {
+                "list": {
                     "input": "data",
-                    "name": "load",
+                    "name": "list",
                     "points": [
-                        {
-                            "kind": "http",
-                            "method": "GET",
-                            "orig": "/1/derived_columns/{datasetSlug}/{derivedColumnId}",
-                            "segments": [
-                                {
-                                    "lit": "1"
-                                },
-                                {
-                                    "lit": "derived_columns"
-                                },
-                                {
-                                    "var": "dataset_slug"
-                                },
-                                {
-                                    "var": "derived_column_id"
-                                }
-                            ],
-                            "parts": [
-                                "1",
-                                "derived_columns",
-                                "{dataset_slug}",
-                                "{derived_column_id}"
-                            ],
-                            "rename": {
-                                "param": {
-                                    "datasetSlug": "dataset_slug",
-                                    "derivedColumnId": "derived_column_id"
-                                }
-                            },
-                            "transform": {
-                                "req": "`reqdata`",
-                                "res": "`body`"
-                            },
-                            "args": {
-                                "params": [
-                                    {
-                                        "name": "dataset_slug",
-                                        "orig": "datasetSlug",
-                                        "type": "`$STRING`",
-                                        "kind": "param",
-                                        "reqd": true
-                                    },
-                                    {
-                                        "name": "derived_column_id",
-                                        "orig": "derivedColumnId",
-                                        "type": "`$STRING`",
-                                        "kind": "param",
-                                        "reqd": true
-                                    }
-                                ]
-                            },
-                            "select": {
-                                "exist": [
-                                    "dataset_slug",
-                                    "derived_column_id"
-                                ]
-                            },
-                            "response": {
-                                "kind": "json",
-                                "media": "application/json"
-                            }
-                        },
                         {
                             "kind": "http",
                             "method": "GET",
@@ -1547,6 +1862,75 @@ class Config {
                         }
                     ]
                 },
+                "load": {
+                    "input": "data",
+                    "name": "load",
+                    "points": [
+                        {
+                            "kind": "http",
+                            "method": "GET",
+                            "orig": "/1/derived_columns/{datasetSlug}/{derivedColumnId}",
+                            "segments": [
+                                {
+                                    "lit": "1"
+                                },
+                                {
+                                    "lit": "derived_columns"
+                                },
+                                {
+                                    "var": "dataset_slug"
+                                },
+                                {
+                                    "var": "id"
+                                }
+                            ],
+                            "parts": [
+                                "1",
+                                "derived_columns",
+                                "{dataset_slug}",
+                                "{id}"
+                            ],
+                            "rename": {
+                                "param": {
+                                    "datasetSlug": "dataset_slug",
+                                    "derivedColumnId": "id"
+                                }
+                            },
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body`"
+                            },
+                            "args": {
+                                "params": [
+                                    {
+                                        "name": "dataset_slug",
+                                        "orig": "datasetSlug",
+                                        "type": "`$STRING`",
+                                        "kind": "param",
+                                        "reqd": true
+                                    },
+                                    {
+                                        "name": "id",
+                                        "orig": "derivedColumnId",
+                                        "type": "`$STRING`",
+                                        "kind": "param",
+                                        "reqd": true
+                                    }
+                                ]
+                            },
+                            "select": {
+                                "exist": [
+                                    "dataset_slug",
+                                    "id"
+                                ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
+                            }
+                        }
+                    ]
+                },
                 "remove": {
                     "input": "data",
                     "name": "remove",
@@ -1566,19 +1950,19 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "derived_column_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "derived_columns",
                                 "{dataset_slug}",
-                                "{derived_column_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
                                     "datasetSlug": "dataset_slug",
-                                    "derivedColumnId": "derived_column_id"
+                                    "derivedColumnId": "id"
                                 }
                             },
                             "transform": {
@@ -1595,7 +1979,7 @@ class Config {
                                         "reqd": true
                                     },
                                     {
-                                        "name": "derived_column_id",
+                                        "name": "id",
                                         "orig": "derivedColumnId",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -1606,7 +1990,7 @@ class Config {
                             "select": {
                                 "exist": [
                                     "dataset_slug",
-                                    "derived_column_id"
+                                    "id"
                                 ]
                             }
                         }
@@ -1631,19 +2015,19 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "derived_column_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "derived_columns",
                                 "{dataset_slug}",
-                                "{derived_column_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
                                     "datasetSlug": "dataset_slug",
-                                    "derivedColumnId": "derived_column_id"
+                                    "derivedColumnId": "id"
                                 }
                             },
                             "transform": {
@@ -1660,7 +2044,7 @@ class Config {
                                         "reqd": true
                                     },
                                     {
-                                        "name": "derived_column_id",
+                                        "name": "id",
                                         "orig": "derivedColumnId",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -1671,7 +2055,7 @@ class Config {
                             "select": {
                                 "exist": [
                                     "dataset_slug",
-                                    "derived_column_id"
+                                    "id"
                                 ]
                             },
                             "response": {
@@ -1720,7 +2104,7 @@ class Config {
                     "type": "`$STRING`",
                     "req": true,
                     "op": {
-                        "load": {
+                        "list": {
                             "type": "`$STRING`"
                         }
                     },
@@ -1750,10 +2134,13 @@ class Config {
             ],
             "id": {
                 "field": "id",
+                "from": {
+                    "id": "id"
+                },
                 "name": "id",
                 "parts": [
                     "dataset_slug",
-                    "column_id"
+                    "id"
                 ],
                 "sep": "/"
             },
@@ -1775,17 +2162,17 @@ class Config {
                                     "lit": "columns"
                                 },
                                 {
-                                    "var": "id"
+                                    "var": "dataset_slug"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "columns",
-                                "{id}"
+                                "{dataset_slug}"
                             ],
                             "rename": {
                                 "param": {
-                                    "datasetSlug": "id"
+                                    "datasetSlug": "dataset_slug"
                                 }
                             },
                             "transform": {
@@ -1795,7 +2182,7 @@ class Config {
                             "args": {
                                 "params": [
                                     {
-                                        "name": "id",
+                                        "name": "dataset_slug",
                                         "orig": "datasetSlug",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -1805,7 +2192,71 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "id"
+                                    "dataset_slug"
+                                ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
+                            }
+                        }
+                    ]
+                },
+                "list": {
+                    "input": "data",
+                    "name": "list",
+                    "points": [
+                        {
+                            "kind": "http",
+                            "method": "GET",
+                            "orig": "/1/columns/{datasetSlug}",
+                            "segments": [
+                                {
+                                    "lit": "1"
+                                },
+                                {
+                                    "lit": "columns"
+                                },
+                                {
+                                    "var": "dataset_slug"
+                                }
+                            ],
+                            "parts": [
+                                "1",
+                                "columns",
+                                "{dataset_slug}"
+                            ],
+                            "rename": {
+                                "param": {
+                                    "datasetSlug": "dataset_slug"
+                                }
+                            },
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body`"
+                            },
+                            "args": {
+                                "params": [
+                                    {
+                                        "name": "dataset_slug",
+                                        "orig": "datasetSlug",
+                                        "type": "`$STRING`",
+                                        "kind": "param",
+                                        "reqd": true
+                                    }
+                                ],
+                                "query": [
+                                    {
+                                        "name": "key_name",
+                                        "orig": "key_name",
+                                        "type": "`$STRING`",
+                                        "kind": "query"
+                                    }
+                                ]
+                            },
+                            "select": {
+                                "exist": [
+                                    "dataset_slug"
                                 ]
                             },
                             "response": {
@@ -1834,18 +2285,18 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "column_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "columns",
                                 "{dataset_slug}",
-                                "{column_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
-                                    "columnId": "column_id",
+                                    "columnId": "id",
                                     "datasetSlug": "dataset_slug"
                                 }
                             },
@@ -1856,82 +2307,24 @@ class Config {
                             "args": {
                                 "params": [
                                     {
-                                        "name": "column_id",
-                                        "orig": "columnId",
-                                        "type": "`$STRING`",
-                                        "kind": "param",
-                                        "reqd": true
-                                    },
-                                    {
                                         "name": "dataset_slug",
                                         "orig": "datasetSlug",
                                         "type": "`$STRING`",
                                         "kind": "param",
                                         "reqd": true
-                                    }
-                                ]
-                            },
-                            "select": {
-                                "exist": [
-                                    "column_id",
-                                    "dataset_slug"
-                                ]
-                            },
-                            "response": {
-                                "kind": "json",
-                                "media": "application/json"
-                            }
-                        },
-                        {
-                            "kind": "http",
-                            "method": "GET",
-                            "orig": "/1/columns/{datasetSlug}",
-                            "segments": [
-                                {
-                                    "lit": "1"
-                                },
-                                {
-                                    "lit": "columns"
-                                },
-                                {
-                                    "var": "id"
-                                }
-                            ],
-                            "parts": [
-                                "1",
-                                "columns",
-                                "{id}"
-                            ],
-                            "rename": {
-                                "param": {
-                                    "datasetSlug": "id"
-                                }
-                            },
-                            "transform": {
-                                "req": "`reqdata`",
-                                "res": "`body`"
-                            },
-                            "args": {
-                                "params": [
+                                    },
                                     {
                                         "name": "id",
-                                        "orig": "datasetSlug",
+                                        "orig": "columnId",
                                         "type": "`$STRING`",
                                         "kind": "param",
                                         "reqd": true
                                     }
-                                ],
-                                "query": [
-                                    {
-                                        "name": "key_name",
-                                        "orig": "key_name",
-                                        "type": "`$STRING`",
-                                        "kind": "query"
-                                    }
                                 ]
                             },
                             "select": {
                                 "exist": [
+                                    "dataset_slug",
                                     "id"
                                 ]
                             },
@@ -1961,18 +2354,18 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "column_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "columns",
                                 "{dataset_slug}",
-                                "{column_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
-                                    "columnId": "column_id",
+                                    "columnId": "id",
                                     "datasetSlug": "dataset_slug"
                                 }
                             },
@@ -1983,15 +2376,15 @@ class Config {
                             "args": {
                                 "params": [
                                     {
-                                        "name": "column_id",
-                                        "orig": "columnId",
+                                        "name": "dataset_slug",
+                                        "orig": "datasetSlug",
                                         "type": "`$STRING`",
                                         "kind": "param",
                                         "reqd": true
                                     },
                                     {
-                                        "name": "dataset_slug",
-                                        "orig": "datasetSlug",
+                                        "name": "id",
+                                        "orig": "columnId",
                                         "type": "`$STRING`",
                                         "kind": "param",
                                         "reqd": true
@@ -2000,8 +2393,8 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "column_id",
-                                    "dataset_slug"
+                                    "dataset_slug",
+                                    "id"
                                 ]
                             }
                         }
@@ -2026,18 +2419,18 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "column_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "columns",
                                 "{dataset_slug}",
-                                "{column_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
-                                    "columnId": "column_id",
+                                    "columnId": "id",
                                     "datasetSlug": "dataset_slug"
                                 }
                             },
@@ -2048,15 +2441,15 @@ class Config {
                             "args": {
                                 "params": [
                                     {
-                                        "name": "column_id",
-                                        "orig": "columnId",
+                                        "name": "dataset_slug",
+                                        "orig": "datasetSlug",
                                         "type": "`$STRING`",
                                         "kind": "param",
                                         "reqd": true
                                     },
                                     {
-                                        "name": "dataset_slug",
-                                        "orig": "datasetSlug",
+                                        "name": "id",
+                                        "orig": "columnId",
                                         "type": "`$STRING`",
                                         "kind": "param",
                                         "reqd": true
@@ -2065,8 +2458,8 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "column_id",
-                                    "dataset_slug"
+                                    "dataset_slug",
+                                    "id"
                                 ]
                             },
                             "response": {
@@ -2701,7 +3094,7 @@ class Config {
                             },
                             "transform": {
                                 "req": "`reqdata`",
-                                "res": "`body`"
+                                "res": "`body.data`"
                             },
                             "args": {
                                 "params": [
@@ -2722,6 +3115,82 @@ class Config {
                             "body": {
                                 "kind": "json",
                                 "media": "application/vnd.api+json"
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/vnd.api+json"
+                            }
+                        }
+                    ]
+                },
+                "list": {
+                    "input": "data",
+                    "name": "list",
+                    "points": [
+                        {
+                            "kind": "http",
+                            "method": "GET",
+                            "orig": "/2/teams/{teamSlug}/environments",
+                            "segments": [
+                                {
+                                    "lit": "2"
+                                },
+                                {
+                                    "lit": "teams"
+                                },
+                                {
+                                    "var": "team_slug"
+                                },
+                                {
+                                    "lit": "environments"
+                                }
+                            ],
+                            "parts": [
+                                "2",
+                                "teams",
+                                "{team_slug}",
+                                "environments"
+                            ],
+                            "rename": {
+                                "param": {
+                                    "teamSlug": "team_slug"
+                                }
+                            },
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body.data`"
+                            },
+                            "args": {
+                                "params": [
+                                    {
+                                        "name": "team_slug",
+                                        "orig": "teamSlug",
+                                        "type": "`$STRING`",
+                                        "kind": "param",
+                                        "reqd": true
+                                    }
+                                ],
+                                "query": [
+                                    {
+                                        "name": "page_after",
+                                        "orig": "page[after]",
+                                        "type": "`$STRING`",
+                                        "kind": "query",
+                                        "example": "eyxJjcmAVhdGVkX"
+                                    },
+                                    {
+                                        "name": "page_size",
+                                        "orig": "page[size]",
+                                        "type": "`$NUMBER`",
+                                        "kind": "query",
+                                        "example": 10
+                                    }
+                                ]
+                            },
+                            "select": {
+                                "exist": [
+                                    "team_slug"
+                                ]
                             },
                             "response": {
                                 "kind": "json",
@@ -2770,7 +3239,7 @@ class Config {
                             },
                             "transform": {
                                 "req": "`reqdata`",
-                                "res": "`body`"
+                                "res": "`body.data`"
                             },
                             "args": {
                                 "params": [
@@ -2793,76 +3262,6 @@ class Config {
                             "select": {
                                 "exist": [
                                     "id",
-                                    "team_slug"
-                                ]
-                            },
-                            "response": {
-                                "kind": "json",
-                                "media": "application/vnd.api+json"
-                            }
-                        },
-                        {
-                            "kind": "http",
-                            "method": "GET",
-                            "orig": "/2/teams/{teamSlug}/environments",
-                            "segments": [
-                                {
-                                    "lit": "2"
-                                },
-                                {
-                                    "lit": "teams"
-                                },
-                                {
-                                    "var": "team_slug"
-                                },
-                                {
-                                    "lit": "environments"
-                                }
-                            ],
-                            "parts": [
-                                "2",
-                                "teams",
-                                "{team_slug}",
-                                "environments"
-                            ],
-                            "rename": {
-                                "param": {
-                                    "teamSlug": "team_slug"
-                                }
-                            },
-                            "transform": {
-                                "req": "`reqdata`",
-                                "res": "`body`"
-                            },
-                            "args": {
-                                "params": [
-                                    {
-                                        "name": "team_slug",
-                                        "orig": "teamSlug",
-                                        "type": "`$STRING`",
-                                        "kind": "param",
-                                        "reqd": true
-                                    }
-                                ],
-                                "query": [
-                                    {
-                                        "name": "page_after",
-                                        "orig": "page[after]",
-                                        "type": "`$STRING`",
-                                        "kind": "query",
-                                        "example": "eyxJjcmAVhdGVkX"
-                                    },
-                                    {
-                                        "name": "page_size",
-                                        "orig": "page[size]",
-                                        "type": "`$NUMBER`",
-                                        "kind": "query",
-                                        "example": 10
-                                    }
-                                ]
-                            },
-                            "select": {
-                                "exist": [
                                     "team_slug"
                                 ]
                             },
@@ -2982,7 +3381,7 @@ class Config {
                             },
                             "transform": {
                                 "req": "`reqdata`",
-                                "res": "`body`"
+                                "res": "`body.data`"
                             },
                             "args": {
                                 "params": [
@@ -3033,20 +3432,11 @@ class Config {
                     "short": "The array should contain one or more JSON objects representing Events."
                 },
                 {
-                    "name": "id",
-                    "title": "Id",
-                    "type": "`$STRING`"
-                },
-                {
                     "name": "status",
                     "title": "Status",
                     "type": "`$INTEGER`"
                 }
             ],
-            "id": {
-                "field": "id",
-                "name": "id"
-            },
             "name": "event",
             "op": {
                 "create": {
@@ -3136,17 +3526,17 @@ class Config {
                                     "lit": "events"
                                 },
                                 {
-                                    "var": "id"
+                                    "var": "dataset_slug"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "events",
-                                "{id}"
+                                "{dataset_slug}"
                             ],
                             "rename": {
                                 "param": {
-                                    "datasetSlug": "id"
+                                    "datasetSlug": "dataset_slug"
                                 }
                             },
                             "transform": {
@@ -3170,7 +3560,7 @@ class Config {
                                 ],
                                 "params": [
                                     {
-                                        "name": "id",
+                                        "name": "dataset_slug",
                                         "orig": "datasetSlug",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -3180,7 +3570,7 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "id"
+                                    "dataset_slug"
                                 ]
                             }
                         }
@@ -3342,391 +3732,7 @@ class Config {
                 ]
             }
         },
-        "key_management": {
-            "fields": [
-                {
-                    "name": "data",
-                    "title": "Data",
-                    "type": "`$OBJECT`",
-                    "req": true
-                },
-                {
-                    "name": "id",
-                    "title": "Id",
-                    "type": "`$STRING`"
-                }
-            ],
-            "id": {
-                "field": "id",
-                "name": "id"
-            },
-            "name": "key_management",
-            "op": {
-                "create": {
-                    "input": "data",
-                    "name": "create",
-                    "points": [
-                        {
-                            "kind": "http",
-                            "method": "POST",
-                            "orig": "/2/teams/{teamSlug}/api-keys",
-                            "segments": [
-                                {
-                                    "lit": "2"
-                                },
-                                {
-                                    "lit": "teams"
-                                },
-                                {
-                                    "var": "team_slug"
-                                },
-                                {
-                                    "lit": "api-keys"
-                                }
-                            ],
-                            "parts": [
-                                "2",
-                                "teams",
-                                "{team_slug}",
-                                "api-keys"
-                            ],
-                            "rename": {
-                                "param": {
-                                    "teamSlug": "team_slug"
-                                }
-                            },
-                            "transform": {
-                                "req": "`reqdata`",
-                                "res": "`body`"
-                            },
-                            "args": {
-                                "params": [
-                                    {
-                                        "name": "team_slug",
-                                        "orig": "teamSlug",
-                                        "type": "`$STRING`",
-                                        "kind": "param",
-                                        "reqd": true
-                                    }
-                                ]
-                            },
-                            "select": {
-                                "exist": [
-                                    "team_slug"
-                                ]
-                            },
-                            "body": {
-                                "kind": "json",
-                                "media": "application/vnd.api+json"
-                            },
-                            "response": {
-                                "kind": "json",
-                                "media": "application/vnd.api+json"
-                            }
-                        }
-                    ]
-                },
-                "load": {
-                    "input": "data",
-                    "name": "load",
-                    "points": [
-                        {
-                            "kind": "http",
-                            "method": "GET",
-                            "orig": "/2/teams/{teamSlug}/api-keys/{ID}",
-                            "segments": [
-                                {
-                                    "lit": "2"
-                                },
-                                {
-                                    "lit": "teams"
-                                },
-                                {
-                                    "var": "team_slug"
-                                },
-                                {
-                                    "lit": "api-keys"
-                                },
-                                {
-                                    "var": "id"
-                                }
-                            ],
-                            "parts": [
-                                "2",
-                                "teams",
-                                "{team_slug}",
-                                "api-keys",
-                                "{id}"
-                            ],
-                            "rename": {
-                                "param": {
-                                    "ID": "id",
-                                    "teamSlug": "team_slug"
-                                }
-                            },
-                            "transform": {
-                                "req": "`reqdata`",
-                                "res": "`body`"
-                            },
-                            "args": {
-                                "params": [
-                                    {
-                                        "name": "id",
-                                        "orig": "ID",
-                                        "type": "`$STRING`",
-                                        "kind": "param",
-                                        "reqd": true
-                                    },
-                                    {
-                                        "name": "team_slug",
-                                        "orig": "teamSlug",
-                                        "type": "`$STRING`",
-                                        "kind": "param",
-                                        "reqd": true
-                                    }
-                                ]
-                            },
-                            "select": {
-                                "exist": [
-                                    "id",
-                                    "team_slug"
-                                ]
-                            },
-                            "response": {
-                                "kind": "json",
-                                "media": "application/vnd.api+json"
-                            }
-                        },
-                        {
-                            "kind": "http",
-                            "method": "GET",
-                            "orig": "/2/teams/{teamSlug}/api-keys",
-                            "segments": [
-                                {
-                                    "lit": "2"
-                                },
-                                {
-                                    "lit": "teams"
-                                },
-                                {
-                                    "var": "team_slug"
-                                },
-                                {
-                                    "lit": "api-keys"
-                                }
-                            ],
-                            "parts": [
-                                "2",
-                                "teams",
-                                "{team_slug}",
-                                "api-keys"
-                            ],
-                            "rename": {
-                                "param": {
-                                    "teamSlug": "team_slug"
-                                }
-                            },
-                            "transform": {
-                                "req": "`reqdata`",
-                                "res": "`body`"
-                            },
-                            "args": {
-                                "params": [
-                                    {
-                                        "name": "team_slug",
-                                        "orig": "teamSlug",
-                                        "type": "`$STRING`",
-                                        "kind": "param",
-                                        "reqd": true
-                                    }
-                                ],
-                                "query": [
-                                    {
-                                        "name": "filter_type",
-                                        "orig": "filter[type]",
-                                        "type": "`$STRING`",
-                                        "kind": "query"
-                                    },
-                                    {
-                                        "name": "page_after",
-                                        "orig": "page[after]",
-                                        "type": "`$STRING`",
-                                        "kind": "query",
-                                        "example": "eyxJjcmAVhdGVkX"
-                                    },
-                                    {
-                                        "name": "page_size",
-                                        "orig": "page[size]",
-                                        "type": "`$NUMBER`",
-                                        "kind": "query",
-                                        "example": 10
-                                    }
-                                ]
-                            },
-                            "select": {
-                                "exist": [
-                                    "team_slug"
-                                ]
-                            },
-                            "response": {
-                                "kind": "json",
-                                "media": "application/vnd.api+json"
-                            }
-                        }
-                    ]
-                },
-                "remove": {
-                    "input": "data",
-                    "name": "remove",
-                    "points": [
-                        {
-                            "kind": "http",
-                            "method": "DELETE",
-                            "orig": "/2/teams/{teamSlug}/api-keys/{ID}",
-                            "segments": [
-                                {
-                                    "lit": "2"
-                                },
-                                {
-                                    "lit": "teams"
-                                },
-                                {
-                                    "var": "team_slug"
-                                },
-                                {
-                                    "lit": "api-keys"
-                                },
-                                {
-                                    "var": "id"
-                                }
-                            ],
-                            "parts": [
-                                "2",
-                                "teams",
-                                "{team_slug}",
-                                "api-keys",
-                                "{id}"
-                            ],
-                            "rename": {
-                                "param": {
-                                    "ID": "id",
-                                    "teamSlug": "team_slug"
-                                }
-                            },
-                            "transform": {
-                                "req": "`reqdata`",
-                                "res": "`body`"
-                            },
-                            "args": {
-                                "params": [
-                                    {
-                                        "name": "id",
-                                        "orig": "ID",
-                                        "type": "`$STRING`",
-                                        "kind": "param",
-                                        "reqd": true
-                                    },
-                                    {
-                                        "name": "team_slug",
-                                        "orig": "teamSlug",
-                                        "type": "`$STRING`",
-                                        "kind": "param",
-                                        "reqd": true
-                                    }
-                                ]
-                            },
-                            "select": {
-                                "exist": [
-                                    "id",
-                                    "team_slug"
-                                ]
-                            }
-                        }
-                    ]
-                },
-                "update": {
-                    "input": "data",
-                    "name": "update",
-                    "points": [
-                        {
-                            "kind": "http",
-                            "method": "PATCH",
-                            "orig": "/2/teams/{teamSlug}/api-keys/{ID}",
-                            "segments": [
-                                {
-                                    "lit": "2"
-                                },
-                                {
-                                    "lit": "teams"
-                                },
-                                {
-                                    "var": "team_slug"
-                                },
-                                {
-                                    "lit": "api-keys"
-                                },
-                                {
-                                    "var": "id"
-                                }
-                            ],
-                            "parts": [
-                                "2",
-                                "teams",
-                                "{team_slug}",
-                                "api-keys",
-                                "{id}"
-                            ],
-                            "rename": {
-                                "param": {
-                                    "ID": "id",
-                                    "teamSlug": "team_slug"
-                                }
-                            },
-                            "transform": {
-                                "req": "`reqdata`",
-                                "res": "`body`"
-                            },
-                            "args": {
-                                "params": [
-                                    {
-                                        "name": "id",
-                                        "orig": "ID",
-                                        "type": "`$STRING`",
-                                        "kind": "param",
-                                        "reqd": true
-                                    },
-                                    {
-                                        "name": "team_slug",
-                                        "orig": "teamSlug",
-                                        "type": "`$STRING`",
-                                        "kind": "param",
-                                        "reqd": true
-                                    }
-                                ]
-                            },
-                            "select": {
-                                "exist": [
-                                    "id",
-                                    "team_slug"
-                                ]
-                            },
-                            "body": {
-                                "kind": "json",
-                                "media": "application/vnd.api+json"
-                            },
-                            "response": {
-                                "kind": "json",
-                                "media": "application/vnd.api+json"
-                            }
-                        }
-                    ]
-                }
-            },
-            "relations": {
-                "ancestors": []
-            }
-        },
-        "kinesi": {
+        "kinesis_event": {
             "fields": [
                 {
                     "name": "errorMessage",
@@ -3749,7 +3755,7 @@ class Config {
                     "type": "`$INTEGER`"
                 }
             ],
-            "name": "kinesi",
+            "name": "kinesis_event",
             "op": {
                 "create": {
                     "input": "data",
@@ -3814,6 +3820,49 @@ class Config {
                             "response": {
                                 "kind": "json",
                                 "media": "application/json"
+                            }
+                        }
+                    ]
+                }
+            },
+            "relations": {
+                "ancestors": []
+            }
+        },
+        "management_auth": {
+            "fields": [],
+            "name": "management_auth",
+            "op": {
+                "load": {
+                    "input": "data",
+                    "name": "load",
+                    "points": [
+                        {
+                            "kind": "http",
+                            "method": "GET",
+                            "orig": "/2/auth",
+                            "segments": [
+                                {
+                                    "lit": "2"
+                                },
+                                {
+                                    "lit": "auth"
+                                }
+                            ],
+                            "parts": [
+                                "2",
+                                "auth"
+                            ],
+                            "rename": {},
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body`"
+                            },
+                            "args": {},
+                            "select": {},
+                            "response": {
+                                "kind": "json",
+                                "media": "application/vnd.api+json"
                             }
                         }
                     ]
@@ -4077,10 +4126,13 @@ class Config {
             ],
             "id": {
                 "field": "id",
+                "from": {
+                    "id": "id"
+                },
                 "name": "id",
                 "parts": [
                     "dataset_slug",
-                    "marker_id"
+                    "id"
                 ],
                 "sep": "/"
             },
@@ -4102,17 +4154,17 @@ class Config {
                                     "lit": "markers"
                                 },
                                 {
-                                    "var": "id"
+                                    "var": "dataset_slug"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "markers",
-                                "{id}"
+                                "{dataset_slug}"
                             ],
                             "rename": {
                                 "param": {
-                                    "datasetSlug": "id"
+                                    "datasetSlug": "dataset_slug"
                                 }
                             },
                             "transform": {
@@ -4122,7 +4174,7 @@ class Config {
                             "args": {
                                 "params": [
                                     {
-                                        "name": "id",
+                                        "name": "dataset_slug",
                                         "orig": "datasetSlug",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -4132,7 +4184,7 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "id"
+                                    "dataset_slug"
                                 ]
                             },
                             "response": {
@@ -4142,9 +4194,9 @@ class Config {
                         }
                     ]
                 },
-                "load": {
+                "list": {
                     "input": "data",
-                    "name": "load",
+                    "name": "list",
                     "points": [
                         {
                             "kind": "http",
@@ -4158,17 +4210,17 @@ class Config {
                                     "lit": "markers"
                                 },
                                 {
-                                    "var": "id"
+                                    "var": "dataset_slug"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "markers",
-                                "{id}"
+                                "{dataset_slug}"
                             ],
                             "rename": {
                                 "param": {
-                                    "datasetSlug": "id"
+                                    "datasetSlug": "dataset_slug"
                                 }
                             },
                             "transform": {
@@ -4178,7 +4230,7 @@ class Config {
                             "args": {
                                 "params": [
                                     {
-                                        "name": "id",
+                                        "name": "dataset_slug",
                                         "orig": "datasetSlug",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -4188,7 +4240,7 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "id"
+                                    "dataset_slug"
                                 ]
                             },
                             "response": {
@@ -4217,19 +4269,19 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "marker_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "markers",
                                 "{dataset_slug}",
-                                "{marker_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
                                     "datasetSlug": "dataset_slug",
-                                    "markerId": "marker_id"
+                                    "markerId": "id"
                                 }
                             },
                             "transform": {
@@ -4246,7 +4298,7 @@ class Config {
                                         "reqd": true
                                     },
                                     {
-                                        "name": "marker_id",
+                                        "name": "id",
                                         "orig": "markerId",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -4257,7 +4309,7 @@ class Config {
                             "select": {
                                 "exist": [
                                     "dataset_slug",
-                                    "marker_id"
+                                    "id"
                                 ]
                             },
                             "response": {
@@ -4286,19 +4338,19 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "marker_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "markers",
                                 "{dataset_slug}",
-                                "{marker_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
                                     "datasetSlug": "dataset_slug",
-                                    "markerId": "marker_id"
+                                    "markerId": "id"
                                 }
                             },
                             "transform": {
@@ -4315,7 +4367,7 @@ class Config {
                                         "reqd": true
                                     },
                                     {
-                                        "name": "marker_id",
+                                        "name": "id",
                                         "orig": "markerId",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -4326,7 +4378,7 @@ class Config {
                             "select": {
                                 "exist": [
                                     "dataset_slug",
-                                    "marker_id"
+                                    "id"
                                 ]
                             },
                             "response": {
@@ -4387,10 +4439,13 @@ class Config {
             ],
             "id": {
                 "field": "id",
+                "from": {
+                    "id": "id"
+                },
                 "name": "id",
                 "parts": [
                     "dataset_slug",
-                    "marker_setting_id"
+                    "id"
                 ],
                 "sep": "/"
             },
@@ -4412,17 +4467,17 @@ class Config {
                                     "lit": "marker_settings"
                                 },
                                 {
-                                    "var": "id"
+                                    "var": "dataset_slug"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "marker_settings",
-                                "{id}"
+                                "{dataset_slug}"
                             ],
                             "rename": {
                                 "param": {
-                                    "datasetSlug": "id"
+                                    "datasetSlug": "dataset_slug"
                                 }
                             },
                             "transform": {
@@ -4432,7 +4487,7 @@ class Config {
                             "args": {
                                 "params": [
                                     {
-                                        "name": "id",
+                                        "name": "dataset_slug",
                                         "orig": "datasetSlug",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -4442,7 +4497,7 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "id"
+                                    "dataset_slug"
                                 ]
                             },
                             "response": {
@@ -4452,9 +4507,9 @@ class Config {
                         }
                     ]
                 },
-                "load": {
+                "list": {
                     "input": "data",
-                    "name": "load",
+                    "name": "list",
                     "points": [
                         {
                             "kind": "http",
@@ -4468,17 +4523,17 @@ class Config {
                                     "lit": "marker_settings"
                                 },
                                 {
-                                    "var": "id"
+                                    "var": "dataset_slug"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "marker_settings",
-                                "{id}"
+                                "{dataset_slug}"
                             ],
                             "rename": {
                                 "param": {
-                                    "datasetSlug": "id"
+                                    "datasetSlug": "dataset_slug"
                                 }
                             },
                             "transform": {
@@ -4488,7 +4543,7 @@ class Config {
                             "args": {
                                 "params": [
                                     {
-                                        "name": "id",
+                                        "name": "dataset_slug",
                                         "orig": "datasetSlug",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -4498,7 +4553,7 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "id"
+                                    "dataset_slug"
                                 ]
                             },
                             "response": {
@@ -4527,19 +4582,19 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "marker_setting_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "marker_settings",
                                 "{dataset_slug}",
-                                "{marker_setting_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
                                     "datasetSlug": "dataset_slug",
-                                    "markerSettingId": "marker_setting_id"
+                                    "markerSettingId": "id"
                                 }
                             },
                             "transform": {
@@ -4556,7 +4611,7 @@ class Config {
                                         "reqd": true
                                     },
                                     {
-                                        "name": "marker_setting_id",
+                                        "name": "id",
                                         "orig": "markerSettingId",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -4567,7 +4622,7 @@ class Config {
                             "select": {
                                 "exist": [
                                     "dataset_slug",
-                                    "marker_setting_id"
+                                    "id"
                                 ]
                             },
                             "response": {
@@ -4596,19 +4651,19 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "marker_setting_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "marker_settings",
                                 "{dataset_slug}",
-                                "{marker_setting_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
                                     "datasetSlug": "dataset_slug",
-                                    "markerSettingId": "marker_setting_id"
+                                    "markerSettingId": "id"
                                 }
                             },
                             "transform": {
@@ -4625,7 +4680,7 @@ class Config {
                                         "reqd": true
                                     },
                                     {
-                                        "name": "marker_setting_id",
+                                        "name": "id",
                                         "orig": "markerSettingId",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -4636,7 +4691,7 @@ class Config {
                             "select": {
                                 "exist": [
                                     "dataset_slug",
-                                    "marker_setting_id"
+                                    "id"
                                 ]
                             },
                             "response": {
@@ -4752,10 +4807,13 @@ class Config {
             ],
             "id": {
                 "field": "id",
+                "from": {
+                    "id": "id"
+                },
                 "name": "id",
                 "parts": [
                     "dataset_slug",
-                    "query_id"
+                    "id"
                 ],
                 "sep": "/"
             },
@@ -4777,17 +4835,17 @@ class Config {
                                     "lit": "queries"
                                 },
                                 {
-                                    "var": "id"
+                                    "var": "dataset_slug"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "queries",
-                                "{id}"
+                                "{dataset_slug}"
                             ],
                             "rename": {
                                 "param": {
-                                    "datasetSlug": "id"
+                                    "datasetSlug": "dataset_slug"
                                 }
                             },
                             "transform": {
@@ -4797,7 +4855,7 @@ class Config {
                             "args": {
                                 "params": [
                                     {
-                                        "name": "id",
+                                        "name": "dataset_slug",
                                         "orig": "datasetSlug",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -4807,7 +4865,7 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "id"
+                                    "dataset_slug"
                                 ]
                             },
                             "response": {
@@ -4836,19 +4894,19 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "query_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "queries",
                                 "{dataset_slug}",
-                                "{query_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
                                     "datasetSlug": "dataset_slug",
-                                    "queryId": "query_id"
+                                    "queryId": "id"
                                 }
                             },
                             "transform": {
@@ -4865,7 +4923,7 @@ class Config {
                                         "reqd": true
                                     },
                                     {
-                                        "name": "query_id",
+                                        "name": "id",
                                         "orig": "queryId",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -4876,7 +4934,7 @@ class Config {
                             "select": {
                                 "exist": [
                                     "dataset_slug",
-                                    "query_id"
+                                    "id"
                                 ]
                             },
                             "response": {
@@ -4946,10 +5004,13 @@ class Config {
             ],
             "id": {
                 "field": "id",
+                "from": {
+                    "id": "id"
+                },
                 "name": "id",
                 "parts": [
                     "dataset_slug",
-                    "query_annotation_id"
+                    "id"
                 ],
                 "sep": "/"
             },
@@ -4971,17 +5032,17 @@ class Config {
                                     "lit": "query_annotations"
                                 },
                                 {
-                                    "var": "id"
+                                    "var": "dataset_slug"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "query_annotations",
-                                "{id}"
+                                "{dataset_slug}"
                             ],
                             "rename": {
                                 "param": {
-                                    "datasetSlug": "id"
+                                    "datasetSlug": "dataset_slug"
                                 }
                             },
                             "transform": {
@@ -4991,7 +5052,7 @@ class Config {
                             "args": {
                                 "params": [
                                     {
-                                        "name": "id",
+                                        "name": "dataset_slug",
                                         "orig": "datasetSlug",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -5001,7 +5062,72 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "id"
+                                    "dataset_slug"
+                                ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
+                            }
+                        }
+                    ]
+                },
+                "list": {
+                    "input": "data",
+                    "name": "list",
+                    "points": [
+                        {
+                            "kind": "http",
+                            "method": "GET",
+                            "orig": "/1/query_annotations/{datasetSlug}",
+                            "segments": [
+                                {
+                                    "lit": "1"
+                                },
+                                {
+                                    "lit": "query_annotations"
+                                },
+                                {
+                                    "var": "dataset_slug"
+                                }
+                            ],
+                            "parts": [
+                                "1",
+                                "query_annotations",
+                                "{dataset_slug}"
+                            ],
+                            "rename": {
+                                "param": {
+                                    "datasetSlug": "dataset_slug"
+                                }
+                            },
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body`"
+                            },
+                            "args": {
+                                "params": [
+                                    {
+                                        "name": "dataset_slug",
+                                        "orig": "datasetSlug",
+                                        "type": "`$STRING`",
+                                        "kind": "param",
+                                        "reqd": true
+                                    }
+                                ],
+                                "query": [
+                                    {
+                                        "name": "include_board_annotation",
+                                        "orig": "include_board_annotations",
+                                        "type": "`$BOOLEAN`",
+                                        "kind": "query",
+                                        "example": false
+                                    }
+                                ]
+                            },
+                            "select": {
+                                "exist": [
+                                    "dataset_slug"
                                 ]
                             },
                             "response": {
@@ -5030,19 +5156,19 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "query_annotation_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "query_annotations",
                                 "{dataset_slug}",
-                                "{query_annotation_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
                                     "datasetSlug": "dataset_slug",
-                                    "queryAnnotationId": "query_annotation_id"
+                                    "queryAnnotationId": "id"
                                 }
                             },
                             "transform": {
@@ -5059,7 +5185,7 @@ class Config {
                                         "reqd": true
                                     },
                                     {
-                                        "name": "query_annotation_id",
+                                        "name": "id",
                                         "orig": "queryAnnotationId",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -5070,65 +5196,6 @@ class Config {
                             "select": {
                                 "exist": [
                                     "dataset_slug",
-                                    "query_annotation_id"
-                                ]
-                            },
-                            "response": {
-                                "kind": "json",
-                                "media": "application/json"
-                            }
-                        },
-                        {
-                            "kind": "http",
-                            "method": "GET",
-                            "orig": "/1/query_annotations/{datasetSlug}",
-                            "segments": [
-                                {
-                                    "lit": "1"
-                                },
-                                {
-                                    "lit": "query_annotations"
-                                },
-                                {
-                                    "var": "id"
-                                }
-                            ],
-                            "parts": [
-                                "1",
-                                "query_annotations",
-                                "{id}"
-                            ],
-                            "rename": {
-                                "param": {
-                                    "datasetSlug": "id"
-                                }
-                            },
-                            "transform": {
-                                "req": "`reqdata`",
-                                "res": "`body`"
-                            },
-                            "args": {
-                                "params": [
-                                    {
-                                        "name": "id",
-                                        "orig": "datasetSlug",
-                                        "type": "`$STRING`",
-                                        "kind": "param",
-                                        "reqd": true
-                                    }
-                                ],
-                                "query": [
-                                    {
-                                        "name": "include_board_annotation",
-                                        "orig": "include_board_annotations",
-                                        "type": "`$BOOLEAN`",
-                                        "kind": "query",
-                                        "example": false
-                                    }
-                                ]
-                            },
-                            "select": {
-                                "exist": [
                                     "id"
                                 ]
                             },
@@ -5158,19 +5225,19 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "query_annotation_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "query_annotations",
                                 "{dataset_slug}",
-                                "{query_annotation_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
                                     "datasetSlug": "dataset_slug",
-                                    "queryAnnotationId": "query_annotation_id"
+                                    "queryAnnotationId": "id"
                                 }
                             },
                             "transform": {
@@ -5187,7 +5254,7 @@ class Config {
                                         "reqd": true
                                     },
                                     {
-                                        "name": "query_annotation_id",
+                                        "name": "id",
                                         "orig": "queryAnnotationId",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -5198,7 +5265,7 @@ class Config {
                             "select": {
                                 "exist": [
                                     "dataset_slug",
-                                    "query_annotation_id"
+                                    "id"
                                 ]
                             }
                         }
@@ -5223,19 +5290,19 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "query_annotation_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "query_annotations",
                                 "{dataset_slug}",
-                                "{query_annotation_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
                                     "datasetSlug": "dataset_slug",
-                                    "queryAnnotationId": "query_annotation_id"
+                                    "queryAnnotationId": "id"
                                 }
                             },
                             "transform": {
@@ -5252,7 +5319,7 @@ class Config {
                                         "reqd": true
                                     },
                                     {
-                                        "name": "query_annotation_id",
+                                        "name": "id",
                                         "orig": "queryAnnotationId",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -5263,7 +5330,7 @@ class Config {
                             "select": {
                                 "exist": [
                                     "dataset_slug",
-                                    "query_annotation_id"
+                                    "id"
                                 ]
                             },
                             "response": {
@@ -5358,10 +5425,13 @@ class Config {
             ],
             "id": {
                 "field": "id",
+                "from": {
+                    "id": "id"
+                },
                 "name": "id",
                 "parts": [
                     "dataset_slug",
-                    "query_result_id"
+                    "id"
                 ],
                 "sep": "/"
             },
@@ -5383,17 +5453,17 @@ class Config {
                                     "lit": "query_results"
                                 },
                                 {
-                                    "var": "id"
+                                    "var": "dataset_slug"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "query_results",
-                                "{id}"
+                                "{dataset_slug}"
                             ],
                             "rename": {
                                 "param": {
-                                    "datasetSlug": "id"
+                                    "datasetSlug": "dataset_slug"
                                 }
                             },
                             "transform": {
@@ -5403,7 +5473,7 @@ class Config {
                             "args": {
                                 "params": [
                                     {
-                                        "name": "id",
+                                        "name": "dataset_slug",
                                         "orig": "datasetSlug",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -5413,7 +5483,7 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "id"
+                                    "dataset_slug"
                                 ]
                             },
                             "response": {
@@ -5442,19 +5512,19 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "query_result_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "query_results",
                                 "{dataset_slug}",
-                                "{query_result_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
                                     "datasetSlug": "dataset_slug",
-                                    "queryResultId": "query_result_id"
+                                    "queryResultId": "id"
                                 }
                             },
                             "transform": {
@@ -5471,7 +5541,7 @@ class Config {
                                         "reqd": true
                                     },
                                     {
-                                        "name": "query_result_id",
+                                        "name": "id",
                                         "orig": "queryResultId",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -5482,7 +5552,7 @@ class Config {
                             "select": {
                                 "exist": [
                                     "dataset_slug",
-                                    "query_result_id"
+                                    "id"
                                 ]
                             },
                             "response": {
@@ -6148,7 +6218,7 @@ class Config {
                             "req": true,
                             "type": "`$STRING`"
                         },
-                        "load": {
+                        "list": {
                             "req": true,
                             "type": "`$STRING`"
                         },
@@ -6176,7 +6246,7 @@ class Config {
                             "req": true,
                             "type": "`$OBJECT`"
                         },
-                        "load": {
+                        "list": {
                             "req": true,
                             "type": "`$OBJECT`"
                         },
@@ -6185,7 +6255,7 @@ class Config {
                             "type": "`$OBJECT`"
                         }
                     },
-                    "short": "Reference to the [Calculated Field](/api/calculated-fields/) used as the indicator of event success."
+                    "short": "Reference to the [Calculated Field (also called Derived Column)](/api/calculated-fields/) used as the indicator of event success."
                 },
                 {
                     "name": "tags",
@@ -6202,7 +6272,7 @@ class Config {
                             "req": true,
                             "type": "`$INTEGER`"
                         },
-                        "load": {
+                        "list": {
                             "req": true,
                             "type": "`$INTEGER`"
                         },
@@ -6222,7 +6292,7 @@ class Config {
                             "req": true,
                             "type": "`$INTEGER`"
                         },
-                        "load": {
+                        "list": {
                             "req": true,
                             "type": "`$INTEGER`"
                         },
@@ -6244,10 +6314,13 @@ class Config {
             ],
             "id": {
                 "field": "id",
+                "from": {
+                    "id": "id"
+                },
                 "name": "id",
                 "parts": [
                     "dataset_slug",
-                    "slo_id"
+                    "id"
                 ],
                 "sep": "/"
             },
@@ -6269,17 +6342,17 @@ class Config {
                                     "lit": "slos"
                                 },
                                 {
-                                    "var": "id"
+                                    "var": "dataset_slug"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "slos",
-                                "{id}"
+                                "{dataset_slug}"
                             ],
                             "rename": {
                                 "param": {
-                                    "datasetSlug": "id"
+                                    "datasetSlug": "dataset_slug"
                                 }
                             },
                             "transform": {
@@ -6289,7 +6362,7 @@ class Config {
                             "args": {
                                 "params": [
                                     {
-                                        "name": "id",
+                                        "name": "dataset_slug",
                                         "orig": "datasetSlug",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -6299,7 +6372,63 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "id"
+                                    "dataset_slug"
+                                ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
+                            }
+                        }
+                    ]
+                },
+                "list": {
+                    "input": "data",
+                    "name": "list",
+                    "points": [
+                        {
+                            "kind": "http",
+                            "method": "GET",
+                            "orig": "/1/slos/{datasetSlug}",
+                            "segments": [
+                                {
+                                    "lit": "1"
+                                },
+                                {
+                                    "lit": "slos"
+                                },
+                                {
+                                    "var": "dataset_slug"
+                                }
+                            ],
+                            "parts": [
+                                "1",
+                                "slos",
+                                "{dataset_slug}"
+                            ],
+                            "rename": {
+                                "param": {
+                                    "datasetSlug": "dataset_slug"
+                                }
+                            },
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body`"
+                            },
+                            "args": {
+                                "params": [
+                                    {
+                                        "name": "dataset_slug",
+                                        "orig": "datasetSlug",
+                                        "type": "`$STRING`",
+                                        "kind": "param",
+                                        "reqd": true
+                                    }
+                                ]
+                            },
+                            "select": {
+                                "exist": [
+                                    "dataset_slug"
                                 ]
                             },
                             "response": {
@@ -6328,19 +6457,19 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "slo_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "slos",
                                 "{dataset_slug}",
-                                "{slo_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
                                     "datasetSlug": "dataset_slug",
-                                    "sloId": "slo_id"
+                                    "sloId": "id"
                                 }
                             },
                             "transform": {
@@ -6357,7 +6486,7 @@ class Config {
                                         "reqd": true
                                     },
                                     {
-                                        "name": "slo_id",
+                                        "name": "id",
                                         "orig": "sloId",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -6377,56 +6506,6 @@ class Config {
                             "select": {
                                 "exist": [
                                     "dataset_slug",
-                                    "slo_id"
-                                ]
-                            },
-                            "response": {
-                                "kind": "json",
-                                "media": "application/json"
-                            }
-                        },
-                        {
-                            "kind": "http",
-                            "method": "GET",
-                            "orig": "/1/slos/{datasetSlug}",
-                            "segments": [
-                                {
-                                    "lit": "1"
-                                },
-                                {
-                                    "lit": "slos"
-                                },
-                                {
-                                    "var": "id"
-                                }
-                            ],
-                            "parts": [
-                                "1",
-                                "slos",
-                                "{id}"
-                            ],
-                            "rename": {
-                                "param": {
-                                    "datasetSlug": "id"
-                                }
-                            },
-                            "transform": {
-                                "req": "`reqdata`",
-                                "res": "`body`"
-                            },
-                            "args": {
-                                "params": [
-                                    {
-                                        "name": "id",
-                                        "orig": "datasetSlug",
-                                        "type": "`$STRING`",
-                                        "kind": "param",
-                                        "reqd": true
-                                    }
-                                ]
-                            },
-                            "select": {
-                                "exist": [
                                     "id"
                                 ]
                             },
@@ -6456,19 +6535,19 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "slo_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "slos",
                                 "{dataset_slug}",
-                                "{slo_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
                                     "datasetSlug": "dataset_slug",
-                                    "sloId": "slo_id"
+                                    "sloId": "id"
                                 }
                             },
                             "transform": {
@@ -6485,7 +6564,7 @@ class Config {
                                         "reqd": true
                                     },
                                     {
-                                        "name": "slo_id",
+                                        "name": "id",
                                         "orig": "sloId",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -6496,7 +6575,7 @@ class Config {
                             "select": {
                                 "exist": [
                                     "dataset_slug",
-                                    "slo_id"
+                                    "id"
                                 ]
                             }
                         }
@@ -6521,19 +6600,19 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "slo_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "slos",
                                 "{dataset_slug}",
-                                "{slo_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
                                     "datasetSlug": "dataset_slug",
-                                    "sloId": "slo_id"
+                                    "sloId": "id"
                                 }
                             },
                             "transform": {
@@ -6550,7 +6629,7 @@ class Config {
                                         "reqd": true
                                     },
                                     {
-                                        "name": "slo_id",
+                                        "name": "id",
                                         "orig": "sloId",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -6561,7 +6640,7 @@ class Config {
                             "select": {
                                 "exist": [
                                     "dataset_slug",
-                                    "slo_id"
+                                    "id"
                                 ]
                             },
                             "response": {
@@ -7065,12 +7144,13 @@ class Config {
             "id": {
                 "field": "id",
                 "from": {
-                    "dataset_slug": "dataset_slug"
+                    "dataset_slug": "dataset_slug",
+                    "id": "id"
                 },
                 "name": "id",
                 "parts": [
                     "dataset_slug",
-                    "trigger_id"
+                    "id"
                 ],
                 "sep": "/"
             },
@@ -7092,17 +7172,17 @@ class Config {
                                     "lit": "triggers"
                                 },
                                 {
-                                    "var": "id"
+                                    "var": "dataset_slug"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "triggers",
-                                "{id}"
+                                "{dataset_slug}"
                             ],
                             "rename": {
                                 "param": {
-                                    "datasetSlug": "id"
+                                    "datasetSlug": "dataset_slug"
                                 }
                             },
                             "transform": {
@@ -7112,7 +7192,7 @@ class Config {
                             "args": {
                                 "params": [
                                     {
-                                        "name": "id",
+                                        "name": "dataset_slug",
                                         "orig": "datasetSlug",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -7122,7 +7202,7 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "id"
+                                    "dataset_slug"
                                 ]
                             },
                             "response": {
@@ -7136,6 +7216,56 @@ class Config {
                     "input": "data",
                     "name": "list",
                     "points": [
+                        {
+                            "kind": "http",
+                            "method": "GET",
+                            "orig": "/1/triggers/{datasetSlug}",
+                            "segments": [
+                                {
+                                    "lit": "1"
+                                },
+                                {
+                                    "lit": "triggers"
+                                },
+                                {
+                                    "var": "dataset_slug"
+                                }
+                            ],
+                            "parts": [
+                                "1",
+                                "triggers",
+                                "{dataset_slug}"
+                            ],
+                            "rename": {
+                                "param": {
+                                    "datasetSlug": "dataset_slug"
+                                }
+                            },
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body`"
+                            },
+                            "args": {
+                                "params": [
+                                    {
+                                        "name": "dataset_slug",
+                                        "orig": "datasetSlug",
+                                        "type": "`$STRING`",
+                                        "kind": "param",
+                                        "reqd": true
+                                    }
+                                ]
+                            },
+                            "select": {
+                                "exist": [
+                                    "dataset_slug"
+                                ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
+                            }
+                        },
                         {
                             "kind": "http",
                             "method": "GET",
@@ -7211,19 +7341,19 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "trigger_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "triggers",
                                 "{dataset_slug}",
-                                "{trigger_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
                                     "datasetSlug": "dataset_slug",
-                                    "triggerId": "trigger_id"
+                                    "triggerId": "id"
                                 }
                             },
                             "transform": {
@@ -7240,7 +7370,7 @@ class Config {
                                         "reqd": true
                                     },
                                     {
-                                        "name": "trigger_id",
+                                        "name": "id",
                                         "orig": "triggerId",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -7251,56 +7381,6 @@ class Config {
                             "select": {
                                 "exist": [
                                     "dataset_slug",
-                                    "trigger_id"
-                                ]
-                            },
-                            "response": {
-                                "kind": "json",
-                                "media": "application/json"
-                            }
-                        },
-                        {
-                            "kind": "http",
-                            "method": "GET",
-                            "orig": "/1/triggers/{datasetSlug}",
-                            "segments": [
-                                {
-                                    "lit": "1"
-                                },
-                                {
-                                    "lit": "triggers"
-                                },
-                                {
-                                    "var": "id"
-                                }
-                            ],
-                            "parts": [
-                                "1",
-                                "triggers",
-                                "{id}"
-                            ],
-                            "rename": {
-                                "param": {
-                                    "datasetSlug": "id"
-                                }
-                            },
-                            "transform": {
-                                "req": "`reqdata`",
-                                "res": "`body`"
-                            },
-                            "args": {
-                                "params": [
-                                    {
-                                        "name": "id",
-                                        "orig": "datasetSlug",
-                                        "type": "`$STRING`",
-                                        "kind": "param",
-                                        "reqd": true
-                                    }
-                                ]
-                            },
-                            "select": {
-                                "exist": [
                                     "id"
                                 ]
                             },
@@ -7330,19 +7410,19 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "trigger_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "triggers",
                                 "{dataset_slug}",
-                                "{trigger_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
                                     "datasetSlug": "dataset_slug",
-                                    "triggerId": "trigger_id"
+                                    "triggerId": "id"
                                 }
                             },
                             "transform": {
@@ -7359,7 +7439,7 @@ class Config {
                                         "reqd": true
                                     },
                                     {
-                                        "name": "trigger_id",
+                                        "name": "id",
                                         "orig": "triggerId",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -7370,7 +7450,7 @@ class Config {
                             "select": {
                                 "exist": [
                                     "dataset_slug",
-                                    "trigger_id"
+                                    "id"
                                 ]
                             }
                         }
@@ -7395,19 +7475,19 @@ class Config {
                                     "var": "dataset_slug"
                                 },
                                 {
-                                    "var": "trigger_id"
+                                    "var": "id"
                                 }
                             ],
                             "parts": [
                                 "1",
                                 "triggers",
                                 "{dataset_slug}",
-                                "{trigger_id}"
+                                "{id}"
                             ],
                             "rename": {
                                 "param": {
                                     "datasetSlug": "dataset_slug",
-                                    "triggerId": "trigger_id"
+                                    "triggerId": "id"
                                 }
                             },
                             "transform": {
@@ -7424,7 +7504,7 @@ class Config {
                                         "reqd": true
                                     },
                                     {
-                                        "name": "trigger_id",
+                                        "name": "id",
                                         "orig": "triggerId",
                                         "type": "`$STRING`",
                                         "kind": "param",
@@ -7435,7 +7515,7 @@ class Config {
                             "select": {
                                 "exist": [
                                     "dataset_slug",
-                                    "trigger_id"
+                                    "id"
                                 ]
                             },
                             "response": {

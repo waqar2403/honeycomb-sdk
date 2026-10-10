@@ -28,7 +28,7 @@ Each feature is generated into every SDK target — as a directory
 `<lang>/src/feature/<name>/` (ts/js) or a flat file in the `<lang>/feature/`
 package (other languages). Each target's guide documents its features.
 
-**Entities** (28): `Auth`, `Board`, `BoardView`, `BulkSignalRecipientAssignment`, `BurnAlert`, `CalculatedField`, `Column`, `Dataset`, `DatasetDefinition`, `Environment`, `Event`, `HistoricalAnomaly`, `KeyManagement`, `KinesisEvent`, `ManagementAuth`, `MapDependency`, `Marker`, `MarkerSetting`, `Query`, `QueryAnnotation`, `QueryResult`, `Recipient`, `Signal`, `Slo`, `SloCount`, `SloHistory`, `SloHourlyCount`, `Trigger`.
+**Entities** (28): `ApiKey`, `Auth`, `Board`, `BoardView`, `BulkSignalRecipientAssignment`, `BurnAlert`, `CalculatedField`, `Column`, `Dataset`, `DatasetDefinition`, `Environment`, `Event`, `HistoricalAnomaly`, `KinesisEvent`, `ManagementAuth`, `MapDependency`, `Marker`, `MarkerSetting`, `Query`, `QueryAnnotation`, `QueryResult`, `Recipient`, `Signal`, `Slo`, `SloCount`, `SloHistory`, `SloHourlyCount`, `Trigger`.
 
 ## Generating and updating the SDK
 

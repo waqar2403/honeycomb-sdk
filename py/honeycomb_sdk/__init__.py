@@ -341,6 +341,12 @@ class HoneycombSDK:
         return res
 
 
+    def ApiKey(self, data=None) -> "ApiKeyEntity":
+        """Entity factory: client.ApiKey().list() / client.ApiKey().load({"id": ...})."""
+        from honeycomb_sdk.entity.api_key_entity import ApiKeyEntity
+        return ApiKeyEntity(self, data)
+
+
     def Auth(self, data=None) -> "AuthEntity":
         """Entity factory: client.Auth().list() / client.Auth().load({"id": ...})."""
         from honeycomb_sdk.entity.auth_entity import AuthEntity
@@ -411,12 +417,6 @@ class HoneycombSDK:
         """Entity factory: client.HistoricalAnomaly().list() / client.HistoricalAnomaly().load({"id": ...})."""
         from honeycomb_sdk.entity.historical_anomaly_entity import HistoricalAnomalyEntity
         return HistoricalAnomalyEntity(self, data)
-
-
-    def KeyManagement(self, data=None) -> "KeyManagementEntity":
-        """Entity factory: client.KeyManagement().list() / client.KeyManagement().load({"id": ...})."""
-        from honeycomb_sdk.entity.key_management_entity import KeyManagementEntity
-        return KeyManagementEntity(self, data)
 
 
     def KinesisEvent(self, data=None) -> "KinesisEventEntity":
@@ -536,6 +536,7 @@ class HoneycombSDK:
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from honeycomb_sdk.entity.api_key_entity import ApiKeyEntity
     from honeycomb_sdk.entity.auth_entity import AuthEntity
     from honeycomb_sdk.entity.board_entity import BoardEntity
     from honeycomb_sdk.entity.board_view_entity import BoardViewEntity
@@ -548,7 +549,6 @@ if TYPE_CHECKING:
     from honeycomb_sdk.entity.environment_entity import EnvironmentEntity
     from honeycomb_sdk.entity.event_entity import EventEntity
     from honeycomb_sdk.entity.historical_anomaly_entity import HistoricalAnomalyEntity
-    from honeycomb_sdk.entity.key_management_entity import KeyManagementEntity
     from honeycomb_sdk.entity.kinesis_event_entity import KinesisEventEntity
     from honeycomb_sdk.entity.management_auth_entity import ManagementAuthEntity
     from honeycomb_sdk.entity.map_dependency_entity import MapDependencyEntity

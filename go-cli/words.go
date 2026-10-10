@@ -77,6 +77,8 @@ func runOp(client *sdk.HoneycombSDK, op string, query *eng.Value, entityAtom eng
 // emits one `case "<name>":` per entity defined in the SDK model.
 func entityFor(client *sdk.HoneycombSDK, name string) (sdk.HoneycombEntity, error) {
 	switch strings.ToLower(name) {
+	case "api_key":
+		return client.ApiKey(nil), nil
 	case "auth":
 		return client.Auth(nil), nil
 	case "board":
@@ -101,8 +103,6 @@ func entityFor(client *sdk.HoneycombSDK, name string) (sdk.HoneycombEntity, erro
 		return client.Event(nil), nil
 	case "historical_anomaly":
 		return client.HistoricalAnomaly(nil), nil
-	case "key_management":
-		return client.KeyManagement(nil), nil
 	case "kinesis_event":
 		return client.KinesisEvent(nil), nil
 	case "management_auth":

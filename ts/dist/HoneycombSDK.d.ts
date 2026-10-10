@@ -1,3 +1,4 @@
+import { ApiKeyEntity } from './entity/ApiKeyEntity';
 import { AuthEntity } from './entity/AuthEntity';
 import { BoardEntity } from './entity/BoardEntity';
 import { BoardViewEntity } from './entity/BoardViewEntity';
@@ -10,8 +11,8 @@ import { DatasetDefinitionEntity } from './entity/DatasetDefinitionEntity';
 import { EnvironmentEntity } from './entity/EnvironmentEntity';
 import { EventEntity } from './entity/EventEntity';
 import { HistoricalAnomalyEntity } from './entity/HistoricalAnomalyEntity';
-import { KeyManagementEntity } from './entity/KeyManagementEntity';
-import { KinesiEntity } from './entity/KinesiEntity';
+import { KinesisEventEntity } from './entity/KinesisEventEntity';
+import { ManagementAuthEntity } from './entity/ManagementAuthEntity';
 import { MapDependencyEntity } from './entity/MapDependencyEntity';
 import { MarkerEntity } from './entity/MarkerEntity';
 import { MarkerSettingEntity } from './entity/MarkerSettingEntity';
@@ -59,6 +60,7 @@ declare class HoneycombSDK {
     direct(fetchargs?: any): Promise<DirectResult>;
     _rawRequest(fetchargs?: any): Promise<DirectResult>;
     graphql(query: string, variables?: any, ctrl?: any): Promise<any>;
+    ApiKey(entopts?: Record<string, any>): ApiKeyEntity;
     Auth(entopts?: Record<string, any>): AuthEntity;
     Board(entopts?: Record<string, any>): BoardEntity;
     BoardView(entopts?: Record<string, any>): BoardViewEntity;
@@ -71,8 +73,8 @@ declare class HoneycombSDK {
     Environment(entopts?: Record<string, any>): EnvironmentEntity;
     Event(entopts?: Record<string, any>): EventEntity;
     HistoricalAnomaly(entopts?: Record<string, any>): HistoricalAnomalyEntity;
-    KeyManagement(entopts?: Record<string, any>): KeyManagementEntity;
-    Kinesi(entopts?: Record<string, any>): KinesiEntity;
+    KinesisEvent(entopts?: Record<string, any>): KinesisEventEntity;
+    ManagementAuth(entopts?: Record<string, any>): ManagementAuthEntity;
     MapDependency(entopts?: Record<string, any>): MapDependencyEntity;
     Marker(entopts?: Record<string, any>): MarkerEntity;
     MarkerSetting(entopts?: Record<string, any>): MarkerSettingEntity;

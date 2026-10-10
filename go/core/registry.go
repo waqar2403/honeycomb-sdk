@@ -6,6 +6,8 @@ var NewBaseFeatureFunc func() Feature
 
 var NewTestFeatureFunc func() Feature
 
+var NewApiKeyEntityFunc func(client *HoneycombSDK, entopts map[string]any) HoneycombEntity
+
 var NewAuthEntityFunc func(client *HoneycombSDK, entopts map[string]any) HoneycombEntity
 
 var NewBoardEntityFunc func(client *HoneycombSDK, entopts map[string]any) HoneycombEntity
@@ -29,8 +31,6 @@ var NewEnvironmentEntityFunc func(client *HoneycombSDK, entopts map[string]any) 
 var NewEventEntityFunc func(client *HoneycombSDK, entopts map[string]any) HoneycombEntity
 
 var NewHistoricalAnomalyEntityFunc func(client *HoneycombSDK, entopts map[string]any) HoneycombEntity
-
-var NewKeyManagementEntityFunc func(client *HoneycombSDK, entopts map[string]any) HoneycombEntity
 
 var NewKinesisEventEntityFunc func(client *HoneycombSDK, entopts map[string]any) HoneycombEntity
 

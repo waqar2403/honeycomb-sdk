@@ -9,6 +9,369 @@ const utility_1 = require("./utility");
 // scheme names, and the definition's own response example.
 const PLAN = [
     {
+        "entity": "api_key",
+        "accessor": "ApiKey",
+        "op": "create",
+        "method": "POST",
+        "path": "/2/teams/{teamSlug}/api-keys",
+        "args": [
+            {
+                "name": "team_slug",
+                "wire": "teamSlug",
+                "value": "p1"
+            }
+        ],
+        "select": {},
+        "headers": [],
+        "cookies": [],
+        "responseMedia": [
+            "application/vnd.api+json"
+        ],
+        "query": [],
+        "queryArgs": [],
+        "auth": null,
+        "status": 201,
+        "sample": {
+            "data": {
+                "id": "hcxik_12345678901234567890123456",
+                "type": "api-keys",
+                "attributes": {
+                    "key_type": "ingest",
+                    "name": "us-west-2 collectors key",
+                    "disabled": false,
+                    "permissions": {},
+                    "timestamps": {},
+                    "secret": "12345678901234567890123456789"
+                },
+                "relationships": {
+                    "environment": {
+                        "data": {
+                            "id": "hxenv_12345678901234567890123456",
+                            "type": "environments"
+                        }
+                    },
+                    "creator": {
+                        "data": {
+                            "id": "x",
+                            "type": "users"
+                        }
+                    },
+                    "editor": {
+                        "data": {
+                            "id": "x",
+                            "type": "users"
+                        }
+                    }
+                },
+                "links": {
+                    "self": "/2/teams/my-team/api-keys/hcxik_12345678901234567890123456"
+                }
+            }
+        },
+        "idField": "id"
+    },
+    {
+        "entity": "api_key",
+        "accessor": "ApiKey",
+        "op": "list",
+        "method": "GET",
+        "path": "/2/teams/{teamSlug}/api-keys",
+        "args": [
+            {
+                "name": "team_slug",
+                "wire": "teamSlug",
+                "value": "p1"
+            }
+        ],
+        "select": {
+            "filter_type": "v1",
+            "page_after": "eyxJjcmAVhdGVkX",
+            "page_size": 10
+        },
+        "headers": [],
+        "cookies": [],
+        "responseMedia": [
+            "application/vnd.api+json"
+        ],
+        "query": [
+            "page[after]",
+            "page[size]",
+            "filter[type]"
+        ],
+        "queryArgs": [
+            {
+                "name": "filter_type",
+                "wire": "filter[type]"
+            },
+            {
+                "name": "page_after",
+                "wire": "page[after]"
+            },
+            {
+                "name": "page_size",
+                "wire": "page[size]"
+            }
+        ],
+        "auth": null,
+        "status": 200,
+        "sample": {
+            "data": [
+                {
+                    "id": "hcxik_12345678901234567890123456",
+                    "type": "api-keys",
+                    "attributes": {
+                        "key_type": "ingest",
+                        "name": "us-west-2 collectors key",
+                        "disabled": false,
+                        "permissions": {},
+                        "timestamps": {}
+                    },
+                    "relationships": {
+                        "environment": {
+                            "data": {
+                                "id": "hxenv_12345678901234567890123456",
+                                "type": "environments"
+                            }
+                        },
+                        "creator": {
+                            "data": {}
+                        },
+                        "editor": {
+                            "data": {}
+                        }
+                    },
+                    "links": {
+                        "self": "/2/teams/my-team/api-keys/hcxik_12345678901234567890123456"
+                    }
+                }
+            ],
+            "links": {
+                "next": "/2/teams/my-team/api-keys?page[after]=3025fa645ad1100d&page[size]=10"
+            }
+        },
+        "idField": "id"
+    },
+    {
+        "entity": "api_key",
+        "accessor": "ApiKey",
+        "op": "load",
+        "method": "GET",
+        "path": "/2/teams/{teamSlug}/api-keys/{ID}",
+        "args": [
+            {
+                "name": "id",
+                "wire": "ID",
+                "value": "p1"
+            },
+            {
+                "name": "team_slug",
+                "wire": "teamSlug",
+                "value": "p2"
+            }
+        ],
+        "select": {},
+        "headers": [],
+        "cookies": [],
+        "responseMedia": [
+            "application/vnd.api+json"
+        ],
+        "query": [],
+        "queryArgs": [],
+        "auth": null,
+        "status": 200,
+        "sample": {
+            "data": {
+                "id": "hcxik_12345678901234567890123456",
+                "type": "api-keys",
+                "attributes": {
+                    "key_type": "ingest",
+                    "name": "us-west-2 collectors key",
+                    "disabled": false,
+                    "permissions": {
+                        "create_datasets": true
+                    },
+                    "timestamps": {
+                        "created": "2022-09-22T17:32:11Z",
+                        "updated": "2022-10-31T15:08:11Z"
+                    }
+                },
+                "relationships": {
+                    "environment": {
+                        "data": {
+                            "id": "hxenv_12345678901234567890123456",
+                            "type": "environments"
+                        }
+                    },
+                    "creator": {
+                        "data": {
+                            "id": "x",
+                            "type": "users"
+                        }
+                    },
+                    "editor": {
+                        "data": {
+                            "id": "x",
+                            "type": "users"
+                        }
+                    }
+                },
+                "links": {
+                    "self": "/2/teams/my-team/api-keys/hcxik_12345678901234567890123456"
+                }
+            }
+        },
+        "idField": "id"
+    },
+    {
+        "entity": "api_key",
+        "accessor": "ApiKey",
+        "op": "remove",
+        "method": "DELETE",
+        "path": "/2/teams/{teamSlug}/api-keys/{ID}",
+        "args": [
+            {
+                "name": "id",
+                "wire": "ID",
+                "value": "p1"
+            },
+            {
+                "name": "team_slug",
+                "wire": "teamSlug",
+                "value": "p2"
+            }
+        ],
+        "select": {},
+        "headers": [],
+        "cookies": [],
+        "query": [],
+        "queryArgs": [],
+        "auth": null,
+        "status": 204,
+        "sample": null,
+        "idField": "id"
+    },
+    {
+        "entity": "api_key",
+        "accessor": "ApiKey",
+        "op": "update",
+        "method": "PATCH",
+        "path": "/2/teams/{teamSlug}/api-keys/{ID}",
+        "args": [
+            {
+                "name": "id",
+                "wire": "ID",
+                "value": "p1"
+            },
+            {
+                "name": "team_slug",
+                "wire": "teamSlug",
+                "value": "p2"
+            }
+        ],
+        "select": {},
+        "headers": [],
+        "cookies": [],
+        "responseMedia": [
+            "application/vnd.api+json"
+        ],
+        "query": [],
+        "queryArgs": [],
+        "auth": null,
+        "status": 200,
+        "sample": {
+            "data": {
+                "id": "hcxik_12345678901234567890123456",
+                "type": "api-keys",
+                "attributes": {
+                    "key_type": "ingest",
+                    "name": "us-west-2 collectors key",
+                    "disabled": false,
+                    "permissions": {
+                        "create_datasets": true
+                    },
+                    "timestamps": {
+                        "created": "2022-09-22T17:32:11Z",
+                        "updated": "2022-10-31T15:08:11Z"
+                    }
+                },
+                "relationships": {
+                    "environment": {
+                        "data": {
+                            "id": "hxenv_12345678901234567890123456",
+                            "type": "environments"
+                        }
+                    },
+                    "creator": {
+                        "data": {
+                            "id": "x",
+                            "type": "users"
+                        }
+                    },
+                    "editor": {
+                        "data": {
+                            "id": "x",
+                            "type": "users"
+                        }
+                    }
+                },
+                "links": {
+                    "self": "/2/teams/my-team/api-keys/hcxik_12345678901234567890123456"
+                }
+            }
+        },
+        "idField": "id"
+    },
+    {
+        "entity": "auth",
+        "accessor": "Auth",
+        "op": "load",
+        "method": "GET",
+        "path": "/1/auth",
+        "args": [],
+        "select": {},
+        "headers": [],
+        "cookies": [],
+        "responseMedia": [
+            "application/json"
+        ],
+        "query": [],
+        "queryArgs": [],
+        "auth": [
+            [
+                {
+                    "in": "header",
+                    "name": "x-honeycomb-team"
+                }
+            ]
+        ],
+        "status": 200,
+        "sample": {
+            "id": "FL_xMM5LapLC",
+            "type": "configuration",
+            "api_key_access": {
+                "events": true,
+                "markers": true,
+                "triggers": false,
+                "boards": false,
+                "queries": false,
+                "columns": false,
+                "createDatasets": true,
+                "slos": false,
+                "recipients": false,
+                "privateBoards": false
+            },
+            "environment": {
+                "name": "Production",
+                "slug": "production"
+            },
+            "team": {
+                "name": "Honeycomb Docs",
+                "slug": "honeycomb-docs"
+            }
+        },
+        "idField": "id"
+    },
+    {
         "entity": "board",
         "accessor": "Board",
         "op": "create",
@@ -271,41 +634,6 @@ const PLAN = [
         "accessor": "Board",
         "op": "remove",
         "method": "DELETE",
-        "path": "/1/boards/{boardId}/views/{viewId}",
-        "args": [
-            {
-                "name": "id",
-                "wire": "boardId",
-                "value": "p1"
-            },
-            {
-                "name": "view_id",
-                "wire": "viewId",
-                "value": "p2"
-            }
-        ],
-        "select": {},
-        "headers": [],
-        "cookies": [],
-        "query": [],
-        "queryArgs": [],
-        "auth": [
-            [
-                {
-                    "in": "header",
-                    "name": "x-honeycomb-team"
-                }
-            ]
-        ],
-        "status": 204,
-        "sample": null,
-        "idField": "id"
-    },
-    {
-        "entity": "board",
-        "accessor": "Board",
-        "op": "remove",
-        "method": "DELETE",
         "path": "/1/boards/{boardId}",
         "args": [
             {
@@ -417,7 +745,7 @@ const PLAN = [
         "path": "/1/boards/{boardId}/views",
         "args": [
             {
-                "name": "id",
+                "name": "board_id",
                 "wire": "boardId",
                 "value": "p1"
             }
@@ -460,7 +788,7 @@ const PLAN = [
         "path": "/1/boards/{boardId}/views",
         "args": [
             {
-                "name": "id",
+                "name": "board_id",
                 "wire": "boardId",
                 "value": "p1"
             }
@@ -572,6 +900,41 @@ const PLAN = [
     {
         "entity": "board_view",
         "accessor": "BoardView",
+        "op": "remove",
+        "method": "DELETE",
+        "path": "/1/boards/{boardId}/views/{viewId}",
+        "args": [
+            {
+                "name": "board_id",
+                "wire": "boardId",
+                "value": "p1"
+            },
+            {
+                "name": "id",
+                "wire": "viewId",
+                "value": "p2"
+            }
+        ],
+        "select": {},
+        "headers": [],
+        "cookies": [],
+        "query": [],
+        "queryArgs": [],
+        "auth": [
+            [
+                {
+                    "in": "header",
+                    "name": "x-honeycomb-team"
+                }
+            ]
+        ],
+        "status": 204,
+        "sample": null,
+        "idField": "id"
+    },
+    {
+        "entity": "board_view",
+        "accessor": "BoardView",
         "op": "update",
         "method": "PUT",
         "path": "/1/boards/{boardId}/views/{viewId}",
@@ -666,7 +1029,7 @@ const PLAN = [
         "path": "/1/burn_alerts/{datasetSlug}",
         "args": [
             {
-                "name": "id",
+                "name": "dataset_slug",
                 "wire": "datasetSlug",
                 "value": "p1"
             }
@@ -713,69 +1076,12 @@ const PLAN = [
     {
         "entity": "burn_alert",
         "accessor": "BurnAlert",
-        "op": "load",
-        "method": "GET",
-        "path": "/1/burn_alerts/{datasetSlug}/{burnAlertId}",
-        "args": [
-            {
-                "name": "burn_alert_id",
-                "wire": "burnAlertId",
-                "value": "p1"
-            },
-            {
-                "name": "dataset_slug",
-                "wire": "datasetSlug",
-                "value": "p2"
-            }
-        ],
-        "select": {},
-        "headers": [],
-        "cookies": [],
-        "responseMedia": [
-            "application/json"
-        ],
-        "query": [],
-        "queryArgs": [],
-        "auth": [
-            [
-                {
-                    "in": "header",
-                    "name": "x-honeycomb-team"
-                }
-            ]
-        ],
-        "status": 200,
-        "sample": {
-            "id": "fS7vfB81Wcy",
-            "description": "Use this runbook if this alert fires.",
-            "triggered": false,
-            "created_at": "2022-09-22T17:32:11Z",
-            "updated_at": "2022-10-31T15:08:11Z",
-            "auto_investigate": false,
-            "alert_type": "exhaustion_time",
-            "exhaustion_minutes": 120,
-            "slo": {
-                "id": "2LBq9LckbcA"
-            },
-            "recipients": [
-                {
-                    "id": "abcd123",
-                    "type": "email",
-                    "target": "alerts@example.com"
-                }
-            ]
-        },
-        "idField": "id"
-    },
-    {
-        "entity": "burn_alert",
-        "accessor": "BurnAlert",
-        "op": "load",
+        "op": "list",
         "method": "GET",
         "path": "/1/burn_alerts/{datasetSlug}",
         "args": [
             {
-                "name": "id",
+                "name": "dataset_slug",
                 "wire": "datasetSlug",
                 "value": "p1"
             }
@@ -838,18 +1144,75 @@ const PLAN = [
     {
         "entity": "burn_alert",
         "accessor": "BurnAlert",
+        "op": "load",
+        "method": "GET",
+        "path": "/1/burn_alerts/{datasetSlug}/{burnAlertId}",
+        "args": [
+            {
+                "name": "dataset_slug",
+                "wire": "datasetSlug",
+                "value": "p1"
+            },
+            {
+                "name": "id",
+                "wire": "burnAlertId",
+                "value": "p2"
+            }
+        ],
+        "select": {},
+        "headers": [],
+        "cookies": [],
+        "responseMedia": [
+            "application/json"
+        ],
+        "query": [],
+        "queryArgs": [],
+        "auth": [
+            [
+                {
+                    "in": "header",
+                    "name": "x-honeycomb-team"
+                }
+            ]
+        ],
+        "status": 200,
+        "sample": {
+            "id": "fS7vfB81Wcy",
+            "description": "Use this runbook if this alert fires.",
+            "triggered": false,
+            "created_at": "2022-09-22T17:32:11Z",
+            "updated_at": "2022-10-31T15:08:11Z",
+            "auto_investigate": false,
+            "alert_type": "exhaustion_time",
+            "exhaustion_minutes": 120,
+            "slo": {
+                "id": "2LBq9LckbcA"
+            },
+            "recipients": [
+                {
+                    "id": "abcd123",
+                    "type": "email",
+                    "target": "alerts@example.com"
+                }
+            ]
+        },
+        "idField": "id"
+    },
+    {
+        "entity": "burn_alert",
+        "accessor": "BurnAlert",
         "op": "remove",
         "method": "DELETE",
         "path": "/1/burn_alerts/{datasetSlug}/{burnAlertId}",
         "args": [
             {
-                "name": "burn_alert_id",
-                "wire": "burnAlertId",
+                "name": "dataset_slug",
+                "wire": "datasetSlug",
                 "value": "p1"
             },
             {
-                "name": "dataset_slug",
-                "wire": "datasetSlug",
+                "name": "id",
+                "wire": "burnAlertId",
                 "value": "p2"
             }
         ],
@@ -878,13 +1241,13 @@ const PLAN = [
         "path": "/1/burn_alerts/{datasetSlug}/{burnAlertId}",
         "args": [
             {
-                "name": "burn_alert_id",
-                "wire": "burnAlertId",
+                "name": "dataset_slug",
+                "wire": "datasetSlug",
                 "value": "p1"
             },
             {
-                "name": "dataset_slug",
-                "wire": "datasetSlug",
+                "name": "id",
+                "wire": "burnAlertId",
                 "value": "p2"
             }
         ],
@@ -970,52 +1333,7 @@ const PLAN = [
     {
         "entity": "calculated_field",
         "accessor": "CalculatedField",
-        "op": "load",
-        "method": "GET",
-        "path": "/1/derived_columns/{datasetSlug}/{derivedColumnId}",
-        "args": [
-            {
-                "name": "dataset_slug",
-                "wire": "datasetSlug",
-                "value": "p1"
-            },
-            {
-                "name": "derived_column_id",
-                "wire": "derivedColumnId",
-                "value": "p2"
-            }
-        ],
-        "select": {},
-        "headers": [],
-        "cookies": [],
-        "responseMedia": [
-            "application/json"
-        ],
-        "query": [],
-        "queryArgs": [],
-        "auth": [
-            [
-                {
-                    "in": "header",
-                    "name": "x-honeycomb-team"
-                }
-            ]
-        ],
-        "status": 200,
-        "sample": {
-            "id": "yUheCUmgZ8p",
-            "alias": "one",
-            "description": "just one",
-            "expression": "INT(1)",
-            "created_at": "2022-07-26T22:38:04Z",
-            "updated_at": "2022-11-16T17:34:01Z"
-        },
-        "idField": "id"
-    },
-    {
-        "entity": "calculated_field",
-        "accessor": "CalculatedField",
-        "op": "load",
+        "op": "list",
         "method": "GET",
         "path": "/1/derived_columns/{datasetSlug}",
         "args": [
@@ -1066,6 +1384,51 @@ const PLAN = [
     {
         "entity": "calculated_field",
         "accessor": "CalculatedField",
+        "op": "load",
+        "method": "GET",
+        "path": "/1/derived_columns/{datasetSlug}/{derivedColumnId}",
+        "args": [
+            {
+                "name": "dataset_slug",
+                "wire": "datasetSlug",
+                "value": "p1"
+            },
+            {
+                "name": "id",
+                "wire": "derivedColumnId",
+                "value": "p2"
+            }
+        ],
+        "select": {},
+        "headers": [],
+        "cookies": [],
+        "responseMedia": [
+            "application/json"
+        ],
+        "query": [],
+        "queryArgs": [],
+        "auth": [
+            [
+                {
+                    "in": "header",
+                    "name": "x-honeycomb-team"
+                }
+            ]
+        ],
+        "status": 200,
+        "sample": {
+            "id": "yUheCUmgZ8p",
+            "alias": "one",
+            "description": "just one",
+            "expression": "INT(1)",
+            "created_at": "2022-07-26T22:38:04Z",
+            "updated_at": "2022-11-16T17:34:01Z"
+        },
+        "idField": "id"
+    },
+    {
+        "entity": "calculated_field",
+        "accessor": "CalculatedField",
         "op": "remove",
         "method": "DELETE",
         "path": "/1/derived_columns/{datasetSlug}/{derivedColumnId}",
@@ -1076,7 +1439,7 @@ const PLAN = [
                 "value": "p1"
             },
             {
-                "name": "derived_column_id",
+                "name": "id",
                 "wire": "derivedColumnId",
                 "value": "p2"
             }
@@ -1111,7 +1474,7 @@ const PLAN = [
                 "value": "p1"
             },
             {
-                "name": "derived_column_id",
+                "name": "id",
                 "wire": "derivedColumnId",
                 "value": "p2"
             }
@@ -1151,7 +1514,7 @@ const PLAN = [
         "path": "/1/columns/{datasetSlug}",
         "args": [
             {
-                "name": "id",
+                "name": "dataset_slug",
                 "wire": "datasetSlug",
                 "value": "p1"
             }
@@ -1188,59 +1551,12 @@ const PLAN = [
     {
         "entity": "column",
         "accessor": "Column",
-        "op": "load",
-        "method": "GET",
-        "path": "/1/columns/{datasetSlug}/{columnId}",
-        "args": [
-            {
-                "name": "column_id",
-                "wire": "columnId",
-                "value": "p1"
-            },
-            {
-                "name": "dataset_slug",
-                "wire": "datasetSlug",
-                "value": "p2"
-            }
-        ],
-        "select": {},
-        "headers": [],
-        "cookies": [],
-        "responseMedia": [
-            "application/json"
-        ],
-        "query": [],
-        "queryArgs": [],
-        "auth": [
-            [
-                {
-                    "in": "header",
-                    "name": "x-honeycomb-team"
-                }
-            ]
-        ],
-        "status": 200,
-        "sample": {
-            "id": "yUheCUmgZ8p",
-            "key_name": "my_column",
-            "hidden": false,
-            "description": "",
-            "type": "integer",
-            "last_written": "2022-07-26T22:38:05Z",
-            "created_at": "2022-07-26T22:38:04Z",
-            "updated_at": "2022-07-26T22:38:04Z"
-        },
-        "idField": "id"
-    },
-    {
-        "entity": "column",
-        "accessor": "Column",
-        "op": "load",
+        "op": "list",
         "method": "GET",
         "path": "/1/columns/{datasetSlug}",
         "args": [
             {
-                "name": "id",
+                "name": "dataset_slug",
                 "wire": "datasetSlug",
                 "value": "p1"
             }
@@ -1298,18 +1614,65 @@ const PLAN = [
     {
         "entity": "column",
         "accessor": "Column",
+        "op": "load",
+        "method": "GET",
+        "path": "/1/columns/{datasetSlug}/{columnId}",
+        "args": [
+            {
+                "name": "dataset_slug",
+                "wire": "datasetSlug",
+                "value": "p1"
+            },
+            {
+                "name": "id",
+                "wire": "columnId",
+                "value": "p2"
+            }
+        ],
+        "select": {},
+        "headers": [],
+        "cookies": [],
+        "responseMedia": [
+            "application/json"
+        ],
+        "query": [],
+        "queryArgs": [],
+        "auth": [
+            [
+                {
+                    "in": "header",
+                    "name": "x-honeycomb-team"
+                }
+            ]
+        ],
+        "status": 200,
+        "sample": {
+            "id": "yUheCUmgZ8p",
+            "key_name": "my_column",
+            "hidden": false,
+            "description": "",
+            "type": "integer",
+            "last_written": "2022-07-26T22:38:05Z",
+            "created_at": "2022-07-26T22:38:04Z",
+            "updated_at": "2022-07-26T22:38:04Z"
+        },
+        "idField": "id"
+    },
+    {
+        "entity": "column",
+        "accessor": "Column",
         "op": "remove",
         "method": "DELETE",
         "path": "/1/columns/{datasetSlug}/{columnId}",
         "args": [
             {
-                "name": "column_id",
-                "wire": "columnId",
+                "name": "dataset_slug",
+                "wire": "datasetSlug",
                 "value": "p1"
             },
             {
-                "name": "dataset_slug",
-                "wire": "datasetSlug",
+                "name": "id",
+                "wire": "columnId",
                 "value": "p2"
             }
         ],
@@ -1338,13 +1701,13 @@ const PLAN = [
         "path": "/1/columns/{datasetSlug}/{columnId}",
         "args": [
             {
-                "name": "column_id",
-                "wire": "columnId",
+                "name": "dataset_slug",
+                "wire": "datasetSlug",
                 "value": "p1"
             },
             {
-                "name": "dataset_slug",
-                "wire": "datasetSlug",
+                "name": "id",
+                "wire": "columnId",
                 "value": "p2"
             }
         ],
@@ -1742,55 +2105,7 @@ const PLAN = [
     {
         "entity": "environment",
         "accessor": "Environment",
-        "op": "load",
-        "method": "GET",
-        "path": "/2/teams/{teamSlug}/environments/{ID}",
-        "args": [
-            {
-                "name": "id",
-                "wire": "ID",
-                "value": "p1"
-            },
-            {
-                "name": "team_slug",
-                "wire": "teamSlug",
-                "value": "p2"
-            }
-        ],
-        "select": {},
-        "headers": [],
-        "cookies": [],
-        "responseMedia": [
-            "application/vnd.api+json"
-        ],
-        "query": [],
-        "queryArgs": [],
-        "auth": null,
-        "status": 200,
-        "sample": {
-            "data": {
-                "id": "x",
-                "type": "environments",
-                "links": {
-                    "self": "x"
-                },
-                "attributes": {
-                    "name": "x",
-                    "description": "x",
-                    "color": "blue",
-                    "slug": "x",
-                    "settings": {
-                        "delete_protected": true
-                    }
-                }
-            }
-        },
-        "idField": "id"
-    },
-    {
-        "entity": "environment",
-        "accessor": "Environment",
-        "op": "load",
+        "op": "list",
         "method": "GET",
         "path": "/2/teams/{teamSlug}/environments",
         "args": [
@@ -1846,6 +2161,54 @@ const PLAN = [
             ],
             "links": {
                 "next": "/2/teams/my-team/api-keys?page[after]=3025fa645ad1100d&page[size]=10"
+            }
+        },
+        "idField": "id"
+    },
+    {
+        "entity": "environment",
+        "accessor": "Environment",
+        "op": "load",
+        "method": "GET",
+        "path": "/2/teams/{teamSlug}/environments/{ID}",
+        "args": [
+            {
+                "name": "id",
+                "wire": "ID",
+                "value": "p1"
+            },
+            {
+                "name": "team_slug",
+                "wire": "teamSlug",
+                "value": "p2"
+            }
+        ],
+        "select": {},
+        "headers": [],
+        "cookies": [],
+        "responseMedia": [
+            "application/vnd.api+json"
+        ],
+        "query": [],
+        "queryArgs": [],
+        "auth": null,
+        "status": 200,
+        "sample": {
+            "data": {
+                "id": "x",
+                "type": "environments",
+                "links": {
+                    "self": "x"
+                },
+                "attributes": {
+                    "name": "x",
+                    "description": "x",
+                    "color": "blue",
+                    "slug": "x",
+                    "settings": {
+                        "delete_protected": true
+                    }
+                }
             }
         },
         "idField": "id"
@@ -1987,7 +2350,7 @@ const PLAN = [
         "path": "/1/events/{datasetSlug}",
         "args": [
             {
-                "name": "id",
+                "name": "dataset_slug",
                 "wire": "datasetSlug",
                 "value": "p1"
             }
@@ -2097,321 +2460,8 @@ const PLAN = [
         "idField": "id"
     },
     {
-        "entity": "key_management",
-        "accessor": "KeyManagement",
-        "op": "create",
-        "method": "POST",
-        "path": "/2/teams/{teamSlug}/api-keys",
-        "args": [
-            {
-                "name": "team_slug",
-                "wire": "teamSlug",
-                "value": "p1"
-            }
-        ],
-        "select": {},
-        "headers": [],
-        "cookies": [],
-        "responseMedia": [
-            "application/vnd.api+json"
-        ],
-        "query": [],
-        "queryArgs": [],
-        "auth": null,
-        "status": 201,
-        "sample": {
-            "data": {
-                "id": "hcxik_12345678901234567890123456",
-                "type": "api-keys",
-                "attributes": {
-                    "key_type": "ingest",
-                    "name": "us-west-2 collectors key",
-                    "disabled": false,
-                    "permissions": {},
-                    "timestamps": {},
-                    "secret": "12345678901234567890123456789"
-                },
-                "relationships": {
-                    "environment": {
-                        "data": {
-                            "id": "hxenv_12345678901234567890123456",
-                            "type": "environments"
-                        }
-                    },
-                    "creator": {
-                        "data": {
-                            "id": "x",
-                            "type": "users"
-                        }
-                    },
-                    "editor": {
-                        "data": {
-                            "id": "x",
-                            "type": "users"
-                        }
-                    }
-                },
-                "links": {
-                    "self": "/2/teams/my-team/api-keys/hcxik_12345678901234567890123456"
-                }
-            }
-        },
-        "idField": "id"
-    },
-    {
-        "entity": "key_management",
-        "accessor": "KeyManagement",
-        "op": "load",
-        "method": "GET",
-        "path": "/2/teams/{teamSlug}/api-keys/{ID}",
-        "args": [
-            {
-                "name": "id",
-                "wire": "ID",
-                "value": "p1"
-            },
-            {
-                "name": "team_slug",
-                "wire": "teamSlug",
-                "value": "p2"
-            }
-        ],
-        "select": {},
-        "headers": [],
-        "cookies": [],
-        "responseMedia": [
-            "application/vnd.api+json"
-        ],
-        "query": [],
-        "queryArgs": [],
-        "auth": null,
-        "status": 200,
-        "sample": {
-            "data": {
-                "id": "hcxik_12345678901234567890123456",
-                "type": "api-keys",
-                "attributes": {
-                    "key_type": "ingest",
-                    "name": "us-west-2 collectors key",
-                    "disabled": false,
-                    "permissions": {
-                        "create_datasets": true
-                    },
-                    "timestamps": {
-                        "created": "2022-09-22T17:32:11Z",
-                        "updated": "2022-10-31T15:08:11Z"
-                    }
-                },
-                "relationships": {
-                    "environment": {
-                        "data": {
-                            "id": "hxenv_12345678901234567890123456",
-                            "type": "environments"
-                        }
-                    },
-                    "creator": {
-                        "data": {
-                            "id": "x",
-                            "type": "users"
-                        }
-                    },
-                    "editor": {
-                        "data": {
-                            "id": "x",
-                            "type": "users"
-                        }
-                    }
-                },
-                "links": {
-                    "self": "/2/teams/my-team/api-keys/hcxik_12345678901234567890123456"
-                }
-            }
-        },
-        "idField": "id"
-    },
-    {
-        "entity": "key_management",
-        "accessor": "KeyManagement",
-        "op": "load",
-        "method": "GET",
-        "path": "/2/teams/{teamSlug}/api-keys",
-        "args": [
-            {
-                "name": "team_slug",
-                "wire": "teamSlug",
-                "value": "p1"
-            }
-        ],
-        "select": {
-            "filter_type": "v1",
-            "page_after": "eyxJjcmAVhdGVkX",
-            "page_size": 10
-        },
-        "headers": [],
-        "cookies": [],
-        "responseMedia": [
-            "application/vnd.api+json"
-        ],
-        "query": [
-            "page[after]",
-            "page[size]",
-            "filter[type]"
-        ],
-        "queryArgs": [
-            {
-                "name": "filter_type",
-                "wire": "filter[type]"
-            },
-            {
-                "name": "page_after",
-                "wire": "page[after]"
-            },
-            {
-                "name": "page_size",
-                "wire": "page[size]"
-            }
-        ],
-        "auth": null,
-        "status": 200,
-        "sample": {
-            "data": [
-                {
-                    "id": "hcxik_12345678901234567890123456",
-                    "type": "api-keys",
-                    "attributes": {
-                        "key_type": "ingest",
-                        "name": "us-west-2 collectors key",
-                        "disabled": false,
-                        "permissions": {},
-                        "timestamps": {}
-                    },
-                    "relationships": {
-                        "environment": {
-                            "data": {
-                                "id": "hxenv_12345678901234567890123456",
-                                "type": "environments"
-                            }
-                        },
-                        "creator": {
-                            "data": {}
-                        },
-                        "editor": {
-                            "data": {}
-                        }
-                    },
-                    "links": {
-                        "self": "/2/teams/my-team/api-keys/hcxik_12345678901234567890123456"
-                    }
-                }
-            ],
-            "links": {
-                "next": "/2/teams/my-team/api-keys?page[after]=3025fa645ad1100d&page[size]=10"
-            }
-        },
-        "idField": "id"
-    },
-    {
-        "entity": "key_management",
-        "accessor": "KeyManagement",
-        "op": "remove",
-        "method": "DELETE",
-        "path": "/2/teams/{teamSlug}/api-keys/{ID}",
-        "args": [
-            {
-                "name": "id",
-                "wire": "ID",
-                "value": "p1"
-            },
-            {
-                "name": "team_slug",
-                "wire": "teamSlug",
-                "value": "p2"
-            }
-        ],
-        "select": {},
-        "headers": [],
-        "cookies": [],
-        "query": [],
-        "queryArgs": [],
-        "auth": null,
-        "status": 204,
-        "sample": null,
-        "idField": "id"
-    },
-    {
-        "entity": "key_management",
-        "accessor": "KeyManagement",
-        "op": "update",
-        "method": "PATCH",
-        "path": "/2/teams/{teamSlug}/api-keys/{ID}",
-        "args": [
-            {
-                "name": "id",
-                "wire": "ID",
-                "value": "p1"
-            },
-            {
-                "name": "team_slug",
-                "wire": "teamSlug",
-                "value": "p2"
-            }
-        ],
-        "select": {},
-        "headers": [],
-        "cookies": [],
-        "responseMedia": [
-            "application/vnd.api+json"
-        ],
-        "query": [],
-        "queryArgs": [],
-        "auth": null,
-        "status": 200,
-        "sample": {
-            "data": {
-                "id": "hcxik_12345678901234567890123456",
-                "type": "api-keys",
-                "attributes": {
-                    "key_type": "ingest",
-                    "name": "us-west-2 collectors key",
-                    "disabled": false,
-                    "permissions": {
-                        "create_datasets": true
-                    },
-                    "timestamps": {
-                        "created": "2022-09-22T17:32:11Z",
-                        "updated": "2022-10-31T15:08:11Z"
-                    }
-                },
-                "relationships": {
-                    "environment": {
-                        "data": {
-                            "id": "hxenv_12345678901234567890123456",
-                            "type": "environments"
-                        }
-                    },
-                    "creator": {
-                        "data": {
-                            "id": "x",
-                            "type": "users"
-                        }
-                    },
-                    "editor": {
-                        "data": {
-                            "id": "x",
-                            "type": "users"
-                        }
-                    }
-                },
-                "links": {
-                    "self": "/2/teams/my-team/api-keys/hcxik_12345678901234567890123456"
-                }
-            }
-        },
-        "idField": "id"
-    },
-    {
-        "entity": "kinesi",
-        "accessor": "Kinesi",
+        "entity": "kinesis_event",
+        "accessor": "KinesisEvent",
         "op": "create",
         "method": "POST",
         "path": "/1/kinesis_events/{datasetSlug}",
@@ -2442,6 +2492,61 @@ const PLAN = [
             "requestId": "x",
             "timestamp": 1,
             "errorMessage": "x"
+        },
+        "idField": "id"
+    },
+    {
+        "entity": "management_auth",
+        "accessor": "ManagementAuth",
+        "op": "load",
+        "method": "GET",
+        "path": "/2/auth",
+        "args": [],
+        "select": {},
+        "headers": [],
+        "cookies": [],
+        "responseMedia": [
+            "application/vnd.api+json"
+        ],
+        "query": [],
+        "queryArgs": [],
+        "auth": null,
+        "status": 200,
+        "sample": {
+            "included": [
+                {
+                    "id": "hcxtm_12345678901234567890123456",
+                    "type": "teams",
+                    "attributes": {
+                        "name": "My Team",
+                        "slug": "my-team"
+                    }
+                }
+            ],
+            "data": {
+                "id": "hcxik_12345678901234567890123456",
+                "type": "api-keys",
+                "relationships": {
+                    "team": {
+                        "data": {
+                            "id": "hxctm_12345678901234567890123456",
+                            "type": "teams"
+                        }
+                    }
+                },
+                "attributes": {
+                    "name": "mgmt write key",
+                    "key_type": "management",
+                    "disabled": true,
+                    "scopes": [
+                        "api-keys:write"
+                    ],
+                    "timestamps": {
+                        "created": "2022-09-22T17:32:11Z",
+                        "updated": "2022-10-31T15:08:11Z"
+                    }
+                }
+            }
         },
         "idField": "id"
     },
@@ -2554,7 +2659,7 @@ const PLAN = [
         "path": "/1/markers/{datasetSlug}",
         "args": [
             {
-                "name": "id",
+                "name": "dataset_slug",
                 "wire": "datasetSlug",
                 "value": "p1"
             }
@@ -2589,12 +2694,12 @@ const PLAN = [
     {
         "entity": "marker",
         "accessor": "Marker",
-        "op": "load",
+        "op": "list",
         "method": "GET",
         "path": "/1/markers/{datasetSlug}",
         "args": [
             {
-                "name": "id",
+                "name": "dataset_slug",
                 "wire": "datasetSlug",
                 "value": "p1"
             }
@@ -2649,7 +2754,7 @@ const PLAN = [
                 "value": "p1"
             },
             {
-                "name": "marker_id",
+                "name": "id",
                 "wire": "markerId",
                 "value": "p2"
             }
@@ -2694,7 +2799,7 @@ const PLAN = [
                 "value": "p1"
             },
             {
-                "name": "marker_id",
+                "name": "id",
                 "wire": "markerId",
                 "value": "p2"
             }
@@ -2734,7 +2839,7 @@ const PLAN = [
         "path": "/1/marker_settings/{datasetSlug}",
         "args": [
             {
-                "name": "id",
+                "name": "dataset_slug",
                 "wire": "datasetSlug",
                 "value": "p1"
             }
@@ -2768,12 +2873,12 @@ const PLAN = [
     {
         "entity": "marker_setting",
         "accessor": "MarkerSetting",
-        "op": "load",
+        "op": "list",
         "method": "GET",
         "path": "/1/marker_settings/{datasetSlug}",
         "args": [
             {
-                "name": "id",
+                "name": "dataset_slug",
                 "wire": "datasetSlug",
                 "value": "p1"
             }
@@ -2819,7 +2924,7 @@ const PLAN = [
                 "value": "p1"
             },
             {
-                "name": "marker_setting_id",
+                "name": "id",
                 "wire": "markerSettingId",
                 "value": "p2"
             }
@@ -2863,7 +2968,7 @@ const PLAN = [
                 "value": "p1"
             },
             {
-                "name": "marker_setting_id",
+                "name": "id",
                 "wire": "markerSettingId",
                 "value": "p2"
             }
@@ -2902,7 +3007,7 @@ const PLAN = [
         "path": "/1/queries/{datasetSlug}",
         "args": [
             {
-                "name": "id",
+                "name": "dataset_slug",
                 "wire": "datasetSlug",
                 "value": "p1"
             }
@@ -2954,7 +3059,7 @@ const PLAN = [
                 "value": "p1"
             },
             {
-                "name": "query_id",
+                "name": "id",
                 "wire": "queryId",
                 "value": "p2"
             }
@@ -3006,7 +3111,7 @@ const PLAN = [
         "path": "/1/query_annotations/{datasetSlug}",
         "args": [
             {
-                "name": "id",
+                "name": "dataset_slug",
                 "wire": "datasetSlug",
                 "value": "p1"
             }
@@ -3042,58 +3147,12 @@ const PLAN = [
     {
         "entity": "query_annotation",
         "accessor": "QueryAnnotation",
-        "op": "load",
-        "method": "GET",
-        "path": "/1/query_annotations/{datasetSlug}/{queryAnnotationId}",
-        "args": [
-            {
-                "name": "dataset_slug",
-                "wire": "datasetSlug",
-                "value": "p1"
-            },
-            {
-                "name": "query_annotation_id",
-                "wire": "queryAnnotationId",
-                "value": "p2"
-            }
-        ],
-        "select": {},
-        "headers": [],
-        "cookies": [],
-        "responseMedia": [
-            "application/json"
-        ],
-        "query": [],
-        "queryArgs": [],
-        "auth": [
-            [
-                {
-                    "in": "header",
-                    "name": "x-honeycomb-team"
-                }
-            ]
-        ],
-        "status": 200,
-        "sample": {
-            "name": "My Named Query",
-            "description": "A nice description of My Named Query",
-            "query_id": "mabAMpSPDjH",
-            "id": "sGUnkBHgRFN",
-            "created_at": "2022-10-26T21:36:04Z",
-            "updated_at": "2022-12-04T08:14:26Z",
-            "source": "query"
-        },
-        "idField": "id"
-    },
-    {
-        "entity": "query_annotation",
-        "accessor": "QueryAnnotation",
-        "op": "load",
+        "op": "list",
         "method": "GET",
         "path": "/1/query_annotations/{datasetSlug}",
         "args": [
             {
-                "name": "id",
+                "name": "dataset_slug",
                 "wire": "datasetSlug",
                 "value": "p1"
             }
@@ -3140,6 +3199,52 @@ const PLAN = [
     {
         "entity": "query_annotation",
         "accessor": "QueryAnnotation",
+        "op": "load",
+        "method": "GET",
+        "path": "/1/query_annotations/{datasetSlug}/{queryAnnotationId}",
+        "args": [
+            {
+                "name": "dataset_slug",
+                "wire": "datasetSlug",
+                "value": "p1"
+            },
+            {
+                "name": "id",
+                "wire": "queryAnnotationId",
+                "value": "p2"
+            }
+        ],
+        "select": {},
+        "headers": [],
+        "cookies": [],
+        "responseMedia": [
+            "application/json"
+        ],
+        "query": [],
+        "queryArgs": [],
+        "auth": [
+            [
+                {
+                    "in": "header",
+                    "name": "x-honeycomb-team"
+                }
+            ]
+        ],
+        "status": 200,
+        "sample": {
+            "name": "My Named Query",
+            "description": "A nice description of My Named Query",
+            "query_id": "mabAMpSPDjH",
+            "id": "sGUnkBHgRFN",
+            "created_at": "2022-10-26T21:36:04Z",
+            "updated_at": "2022-12-04T08:14:26Z",
+            "source": "query"
+        },
+        "idField": "id"
+    },
+    {
+        "entity": "query_annotation",
+        "accessor": "QueryAnnotation",
         "op": "remove",
         "method": "DELETE",
         "path": "/1/query_annotations/{datasetSlug}/{queryAnnotationId}",
@@ -3150,7 +3255,7 @@ const PLAN = [
                 "value": "p1"
             },
             {
-                "name": "query_annotation_id",
+                "name": "id",
                 "wire": "queryAnnotationId",
                 "value": "p2"
             }
@@ -3185,7 +3290,7 @@ const PLAN = [
                 "value": "p1"
             },
             {
-                "name": "query_annotation_id",
+                "name": "id",
                 "wire": "queryAnnotationId",
                 "value": "p2"
             }
@@ -3222,7 +3327,7 @@ const PLAN = [
         "path": "/1/query_results/{datasetSlug}",
         "args": [
             {
-                "name": "id",
+                "name": "dataset_slug",
                 "wire": "datasetSlug",
                 "value": "p1"
             }
@@ -3282,7 +3387,7 @@ const PLAN = [
                 "value": "p1"
             },
             {
-                "name": "query_result_id",
+                "name": "id",
                 "wire": "queryResultId",
                 "value": "p2"
             }
@@ -3745,7 +3850,7 @@ const PLAN = [
         "path": "/1/slos/{datasetSlug}",
         "args": [
             {
-                "name": "id",
+                "name": "dataset_slug",
                 "wire": "datasetSlug",
                 "value": "p1"
             }
@@ -3795,74 +3900,12 @@ const PLAN = [
     {
         "entity": "slo",
         "accessor": "Slo",
-        "op": "load",
-        "method": "GET",
-        "path": "/1/slos/{datasetSlug}/{sloId}",
-        "args": [
-            {
-                "name": "dataset_slug",
-                "wire": "datasetSlug",
-                "value": "p1"
-            },
-            {
-                "name": "slo_id",
-                "wire": "sloId",
-                "value": "p2"
-            }
-        ],
-        "select": {
-            "detailed": ""
-        },
-        "headers": [],
-        "cookies": [],
-        "responseMedia": [
-            "application/json"
-        ],
-        "query": [
-            "detailed"
-        ],
-        "queryArgs": [
-            {
-                "name": "detailed",
-                "wire": "detailed"
-            }
-        ],
-        "auth": [
-            [
-                {
-                    "in": "header",
-                    "name": "x-honeycomb-team"
-                }
-            ]
-        ],
-        "status": 200,
-        "sample": {
-            "id": "bZ1aRHAUsjG",
-            "name": "My SLO",
-            "description": "My SLO description",
-            "sli": {
-                "alias": "my-sli"
-            },
-            "time_period_days": 30,
-            "target_per_million": 989900,
-            "reset_at": "2022-10-15T13:53:11Z",
-            "created_at": "2022-09-15T05:39:42Z",
-            "updated_at": "2022-12-20T08:10:05Z",
-            "dataset_slugs": [
-                "mydataset1"
-            ]
-        },
-        "idField": "id"
-    },
-    {
-        "entity": "slo",
-        "accessor": "Slo",
-        "op": "load",
+        "op": "list",
         "method": "GET",
         "path": "/1/slos/{datasetSlug}",
         "args": [
             {
-                "name": "id",
+                "name": "dataset_slug",
                 "wire": "datasetSlug",
                 "value": "p1"
             }
@@ -3914,6 +3957,68 @@ const PLAN = [
     {
         "entity": "slo",
         "accessor": "Slo",
+        "op": "load",
+        "method": "GET",
+        "path": "/1/slos/{datasetSlug}/{sloId}",
+        "args": [
+            {
+                "name": "dataset_slug",
+                "wire": "datasetSlug",
+                "value": "p1"
+            },
+            {
+                "name": "id",
+                "wire": "sloId",
+                "value": "p2"
+            }
+        ],
+        "select": {
+            "detailed": ""
+        },
+        "headers": [],
+        "cookies": [],
+        "responseMedia": [
+            "application/json"
+        ],
+        "query": [
+            "detailed"
+        ],
+        "queryArgs": [
+            {
+                "name": "detailed",
+                "wire": "detailed"
+            }
+        ],
+        "auth": [
+            [
+                {
+                    "in": "header",
+                    "name": "x-honeycomb-team"
+                }
+            ]
+        ],
+        "status": 200,
+        "sample": {
+            "id": "bZ1aRHAUsjG",
+            "name": "My SLO",
+            "description": "My SLO description",
+            "sli": {
+                "alias": "my-sli"
+            },
+            "time_period_days": 30,
+            "target_per_million": 989900,
+            "reset_at": "2022-10-15T13:53:11Z",
+            "created_at": "2022-09-15T05:39:42Z",
+            "updated_at": "2022-12-20T08:10:05Z",
+            "dataset_slugs": [
+                "mydataset1"
+            ]
+        },
+        "idField": "id"
+    },
+    {
+        "entity": "slo",
+        "accessor": "Slo",
         "op": "remove",
         "method": "DELETE",
         "path": "/1/slos/{datasetSlug}/{sloId}",
@@ -3924,7 +4029,7 @@ const PLAN = [
                 "value": "p1"
             },
             {
-                "name": "slo_id",
+                "name": "id",
                 "wire": "sloId",
                 "value": "p2"
             }
@@ -3959,7 +4064,7 @@ const PLAN = [
                 "value": "p1"
             },
             {
-                "name": "slo_id",
+                "name": "id",
                 "wire": "sloId",
                 "value": "p2"
             }
@@ -4221,7 +4326,7 @@ const PLAN = [
         "path": "/1/triggers/{datasetSlug}",
         "args": [
             {
-                "name": "id",
+                "name": "dataset_slug",
                 "wire": "datasetSlug",
                 "value": "p1"
             }
@@ -4293,6 +4398,81 @@ const PLAN = [
             "query": {},
             "query_id": "x"
         },
+        "idField": "id"
+    },
+    {
+        "entity": "trigger",
+        "accessor": "Trigger",
+        "op": "list",
+        "method": "GET",
+        "path": "/1/triggers/{datasetSlug}",
+        "args": [
+            {
+                "name": "dataset_slug",
+                "wire": "datasetSlug",
+                "value": "p1"
+            }
+        ],
+        "select": {},
+        "headers": [],
+        "cookies": [],
+        "responseMedia": [
+            "application/json"
+        ],
+        "query": [],
+        "queryArgs": [],
+        "auth": [
+            [
+                {
+                    "in": "header",
+                    "name": "x-honeycomb-team"
+                }
+            ]
+        ],
+        "status": 200,
+        "sample": [
+            {
+                "id": "x",
+                "dataset_slug": "x",
+                "name": "x",
+                "description": "x",
+                "tags": [
+                    {
+                        "key": "team",
+                        "value": "blue"
+                    }
+                ],
+                "threshold": {
+                    "op": ">",
+                    "value": 1,
+                    "exceeded_limit": 1
+                },
+                "frequency": 1,
+                "alert_type": "on_change",
+                "disabled": true,
+                "triggered": true,
+                "recipients": [
+                    {}
+                ],
+                "evaluation_schedule_type": "frequency",
+                "evaluation_schedule": {
+                    "window": {
+                        "days_of_week": [],
+                        "start_time": 840,
+                        "end_time": 1260
+                    }
+                },
+                "created_at": "2026-01-01T00:00:00Z",
+                "updated_at": "2026-01-01T00:00:00Z",
+                "baseline_details": {
+                    "offset_minutes": 60,
+                    "type": "percentage"
+                },
+                "auto_investigate": false,
+                "query": {},
+                "query_id": "x"
+            }
+        ],
         "idField": "id"
     },
     {
@@ -4383,7 +4563,7 @@ const PLAN = [
                 "value": "p1"
             },
             {
-                "name": "trigger_id",
+                "name": "id",
                 "wire": "triggerId",
                 "value": "p2"
             }
@@ -4460,81 +4640,6 @@ const PLAN = [
     {
         "entity": "trigger",
         "accessor": "Trigger",
-        "op": "load",
-        "method": "GET",
-        "path": "/1/triggers/{datasetSlug}",
-        "args": [
-            {
-                "name": "id",
-                "wire": "datasetSlug",
-                "value": "p1"
-            }
-        ],
-        "select": {},
-        "headers": [],
-        "cookies": [],
-        "responseMedia": [
-            "application/json"
-        ],
-        "query": [],
-        "queryArgs": [],
-        "auth": [
-            [
-                {
-                    "in": "header",
-                    "name": "x-honeycomb-team"
-                }
-            ]
-        ],
-        "status": 200,
-        "sample": [
-            {
-                "id": "x",
-                "dataset_slug": "x",
-                "name": "x",
-                "description": "x",
-                "tags": [
-                    {
-                        "key": "team",
-                        "value": "blue"
-                    }
-                ],
-                "threshold": {
-                    "op": ">",
-                    "value": 1,
-                    "exceeded_limit": 1
-                },
-                "frequency": 1,
-                "alert_type": "on_change",
-                "disabled": true,
-                "triggered": true,
-                "recipients": [
-                    {}
-                ],
-                "evaluation_schedule_type": "frequency",
-                "evaluation_schedule": {
-                    "window": {
-                        "days_of_week": [],
-                        "start_time": 840,
-                        "end_time": 1260
-                    }
-                },
-                "created_at": "2026-01-01T00:00:00Z",
-                "updated_at": "2026-01-01T00:00:00Z",
-                "baseline_details": {
-                    "offset_minutes": 60,
-                    "type": "percentage"
-                },
-                "auto_investigate": false,
-                "query": {},
-                "query_id": "x"
-            }
-        ],
-        "idField": "id"
-    },
-    {
-        "entity": "trigger",
-        "accessor": "Trigger",
         "op": "remove",
         "method": "DELETE",
         "path": "/1/triggers/{datasetSlug}/{triggerId}",
@@ -4545,7 +4650,7 @@ const PLAN = [
                 "value": "p1"
             },
             {
-                "name": "trigger_id",
+                "name": "id",
                 "wire": "triggerId",
                 "value": "p2"
             }
@@ -4580,7 +4685,7 @@ const PLAN = [
                 "value": "p1"
             },
             {
-                "name": "trigger_id",
+                "name": "id",
                 "wire": "triggerId",
                 "value": "p2"
             }

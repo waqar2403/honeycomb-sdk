@@ -14,6 +14,16 @@ An entity groups related API operations. An operation can have several routes wi
 
 ## What the API provides
 
+### ApiKey
+
+Results: Created; Success; No Content.
+
+SDK operations: `create`, `list`, `load`, `remove`, `update`.
+
+Key fields to recognise:
+
+- `id`: The unique identifier of the API Key
+
 ### Auth
 
 Results: Success.
@@ -136,7 +146,7 @@ Key fields to recognise:
 
 Results: Created; Success; No Content.
 
-SDK operations: `create`, `load`, `remove`, `update`.
+SDK operations: `create`, `list`, `load`, `remove`, `update`.
 
 ### Event
 
@@ -162,16 +172,6 @@ Key fields to recognise:
 - `measurement`: The measured value that triggered the anomaly.
 - `normal_range`: The trained normal band the measurement exceeded. Always `null` for anomalies on `presence` Signals.
 - `started_at`: The time the anomaly started, in seconds since UNIX epoch.
-
-### KeyManagement
-
-Results: Created; Success; No Content.
-
-SDK operations: `create`, `load`, `remove`, `update`.
-
-Key fields to recognise:
-
-- `id`: The unique identifier of the API Key
 
 ### KinesisEvent
 
@@ -367,6 +367,11 @@ Use this map to locate a capability. Consult the entity reference before supplyi
 
 | Entity | SDK operation | HTTP route | Authentication |
 | --- | --- | --- | --- |
+| ApiKey | `create` | `POST /2/teams/{teamSlug}/api-keys` | Required |
+| ApiKey | `list` | `GET /2/teams/{teamSlug}/api-keys` | Required |
+| ApiKey | `load` | `GET /2/teams/{teamSlug}/api-keys/{ID}` | Required |
+| ApiKey | `remove` | `DELETE /2/teams/{teamSlug}/api-keys/{ID}` | Required |
+| ApiKey | `update` | `PATCH /2/teams/{teamSlug}/api-keys/{ID}` | Required |
 | Auth | `load` | `GET /1/auth` | Required |
 | Board | `create` | `POST /1/boards` | Required |
 | Board | `list` | `GET /1/boards` | Required |
@@ -402,18 +407,13 @@ Use this map to locate a capability. Consult the entity reference before supplyi
 | DatasetDefinition | `load` | `GET /1/dataset_definitions/{datasetSlug}` | Required |
 | DatasetDefinition | `update` | `PATCH /1/dataset_definitions/{datasetSlug}` | Required |
 | Environment | `create` | `POST /2/teams/{teamSlug}/environments` | Required |
+| Environment | `list` | `GET /2/teams/{teamSlug}/environments` | Required |
 | Environment | `load` | `GET /2/teams/{teamSlug}/environments/{ID}` | Required |
-| Environment | `load` | `GET /2/teams/{teamSlug}/environments` | Required |
 | Environment | `remove` | `DELETE /2/teams/{teamSlug}/environments/{ID}` | Required |
 | Environment | `update` | `PATCH /2/teams/{teamSlug}/environments/{ID}` | Required |
 | Event | `create` | `POST /1/batch/{datasetSlug}` | Required |
 | Event | `create` | `POST /1/events/{datasetSlug}` | Required |
 | HistoricalAnomaly | `list` | `GET /1/signals/{signalId}/historical_anomalies` | Required |
-| KeyManagement | `create` | `POST /2/teams/{teamSlug}/api-keys` | Required |
-| KeyManagement | `load` | `GET /2/teams/{teamSlug}/api-keys/{ID}` | Required |
-| KeyManagement | `load` | `GET /2/teams/{teamSlug}/api-keys` | Required |
-| KeyManagement | `remove` | `DELETE /2/teams/{teamSlug}/api-keys/{ID}` | Required |
-| KeyManagement | `update` | `PATCH /2/teams/{teamSlug}/api-keys/{ID}` | Required |
 | KinesisEvent | `create` | `POST /1/kinesis_events/{datasetSlug}` | Required |
 | ManagementAuth | `load` | `GET /2/auth` | Required |
 | MapDependency | `create` | `POST /1/maps/dependencies/requests` | Required |
@@ -543,8 +543,8 @@ Use the MCP server to expose supported API operations to an MCP client.
 
 Repository directory: `go-mcp/`. Not published. Build from the go-mcp directory.
 
-- `honeycomb_list`: List records for an entity. Supported entities: `board`, `board_view`, `burn_alert`, `calculated_field`, `column`, `dataset`, `historical_anomaly`, `marker`, `marker_setting`, `query_annotation`, `recipient`, `signal`, `slo`, `slo_count`, `slo_hourly_count`, `trigger`.
-- `honeycomb_load`: Load one record for an entity. Supported entities: `auth`, `board`, `board_view`, `burn_alert`, `calculated_field`, `column`, `dataset`, `dataset_definition`, `environment`, `key_management`, `management_auth`, `map_dependency`, `query`, `query_annotation`, `query_result`, `recipient`, `signal`, `slo`, `trigger`.
+- `honeycomb_list`: List records for an entity. Supported entities: `api_key`, `board`, `board_view`, `burn_alert`, `calculated_field`, `column`, `dataset`, `environment`, `historical_anomaly`, `marker`, `marker_setting`, `query_annotation`, `recipient`, `signal`, `slo`, `slo_count`, `slo_hourly_count`, `trigger`.
+- `honeycomb_load`: Load one record for an entity. Supported entities: `api_key`, `auth`, `board`, `board_view`, `burn_alert`, `calculated_field`, `column`, `dataset`, `dataset_definition`, `environment`, `management_auth`, `map_dependency`, `query`, `query_annotation`, `query_result`, `recipient`, `signal`, `slo`, `trigger`.
 
 ## Operational features
 

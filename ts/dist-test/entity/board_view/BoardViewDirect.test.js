@@ -29,17 +29,17 @@ const utility_1 = require("../../utility");
         const setup = directSetup({ id: 'direct01' });
         if ((0, utility_1.maybeSkipControl)(t, 'direct', 'direct-load-board_view', setup.live))
             return;
-        if ((0, utility_1.skipIfMissingIds)(t, setup, ["board_view01", "board01"], LIVE_STRICT))
+        if ((0, utility_1.skipIfMissingIds)(t, setup, ["board01"], LIVE_STRICT))
             return;
         const { client, calls } = setup;
         const params = {};
         const query = {};
         if (setup.live) {
             const listResult = await client.direct({
-                path: '1/boards/{id}/views',
+                path: '1/boards/{board_id}/views',
                 method: 'GET',
                 params: {
-                    id: setup.idmap['board_view01'],
+                    board_id: setup.idmap['board01'],
                 },
             });
             if (!listResult.ok || listResult.status < 200 || listResult.status >= 300) {
@@ -96,19 +96,19 @@ const utility_1 = require("../../utility");
         const setup = directSetup([{ id: 'direct01' }, { id: 'direct02' }]);
         if ((0, utility_1.maybeSkipControl)(t, 'direct', 'direct-list-board_view', setup.live))
             return;
-        if ((0, utility_1.skipIfMissingIds)(t, setup, ["board_view01"], LIVE_STRICT))
+        if ((0, utility_1.skipIfMissingIds)(t, setup, ["board01"], LIVE_STRICT))
             return;
         const { client, calls } = setup;
         const params = {};
         const query = {};
         if (setup.live) {
-            params.id = setup.idmap['board_view01'];
+            params.board_id = setup.idmap['board01'];
         }
         else {
-            params.id = 'direct01';
+            params.board_id = 'direct01';
         }
         const result = await client.direct({
-            path: '1/boards/{id}/views',
+            path: '1/boards/{board_id}/views',
             method: 'GET',
             params,
             query,

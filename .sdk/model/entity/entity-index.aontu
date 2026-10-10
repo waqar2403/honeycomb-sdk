@@ -1,5 +1,6 @@
 # Entity Models
 
+@"./api_key.aontu"
 @"./auth.aontu"
 @"./board.aontu"
 @"./board_view.aontu"
@@ -12,7 +13,6 @@
 @"./environment.aontu"
 @"./event.aontu"
 @"./historical_anomaly.aontu"
-@"./key_management.aontu"
 @"./kinesis_event.aontu"
 @"./management_auth.aontu"
 @"./map_dependency.aontu"

@@ -9,7 +9,7 @@ import (
 	vs "github.com/waqar2403/honeycomb-sdk/go/utility/struct"
 )
 
-type KeyManagementEntity struct {
+type ApiKeyEntity struct {
 	name    string
 	client  *core.HoneycombSDK
 	utility *core.Utility
@@ -20,7 +20,7 @@ type KeyManagementEntity struct {
 	deleted bool
 }
 
-func NewKeyManagementEntity(client *core.HoneycombSDK, entopts map[string]any) *KeyManagementEntity {
+func NewApiKeyEntity(client *core.HoneycombSDK, entopts map[string]any) *ApiKeyEntity {
 	if entopts == nil {
 		entopts = map[string]any{}
 	}
@@ -32,8 +32,8 @@ func NewKeyManagementEntity(client *core.HoneycombSDK, entopts map[string]any) *
 		entopts["active"] = true
 	}
 
-	e := &KeyManagementEntity{
-		name:    "key_management",
+	e := &ApiKeyEntity{
+		name:    "api_key",
 		client:  client,
 		utility: client.GetUtility(),
 		entopts: entopts,
@@ -51,47 +51,47 @@ func NewKeyManagementEntity(client *core.HoneycombSDK, entopts map[string]any) *
 	return e
 }
 
-func (e *KeyManagementEntity) GetName() string { return e.name }
+func (e *ApiKeyEntity) GetName() string { return e.name }
 
 // An entity prints and serialises as its data, as ts's toString and toJSON
 // do: the client it holds carries the options.
-func (e *KeyManagementEntity) String() string {
-	return "KeyManagement " + vs.Jsonify(e.data, map[string]any{"indent": 0})
+func (e *ApiKeyEntity) String() string {
+	return "ApiKey " + vs.Jsonify(e.data, map[string]any{"indent": 0})
 }
 
-func (e *KeyManagementEntity) GoString() string {
+func (e *ApiKeyEntity) GoString() string {
 	return e.String()
 }
 
-func (e *KeyManagementEntity) MarshalJSON() ([]byte, error) {
+func (e *ApiKeyEntity) MarshalJSON() ([]byte, error) {
 	out := map[string]any{}
 	for k, v := range e.data {
 		out[k] = v
 	}
-	out["voxgig$entity"] = "KeyManagement"
+	out["voxgig$entity"] = "ApiKey"
 	return json.Marshal(out)
 }
 
-func (e *KeyManagementEntity) MarkDeleted() {
+func (e *ApiKeyEntity) MarkDeleted() {
 	e.deleted = true
 }
 
 
 // Deleted reports whether a successful Remove has resolved on this instance.
-func (e *KeyManagementEntity) Deleted() bool {
+func (e *ApiKeyEntity) Deleted() bool {
 	return e.deleted
 }
 
 
-func (e *KeyManagementEntity) Make() core.Entity {
+func (e *ApiKeyEntity) Make() core.Entity {
 	opts := map[string]any{}
 	for k, v := range e.entopts {
 		opts[k] = v
 	}
-	return NewKeyManagementEntity(e.client, opts)
+	return NewApiKeyEntity(e.client, opts)
 }
 
-func (e *KeyManagementEntity) Data(args ...any) any {
+func (e *ApiKeyEntity) Data(args ...any) any {
 	if len(args) > 0 && args[0] != nil {
 		e.data = core.ToMapAny(vs.Clone(args[0]))
 		if e.data == nil {
@@ -105,7 +105,7 @@ func (e *KeyManagementEntity) Data(args ...any) any {
 	return out
 }
 
-func (e *KeyManagementEntity) Match(args ...any) any {
+func (e *ApiKeyEntity) Match(args ...any) any {
 	if len(args) > 0 && args[0] != nil {
 		e.match = core.ToMapAny(vs.Clone(args[0]))
 		if e.match == nil {
@@ -120,27 +120,27 @@ func (e *KeyManagementEntity) Match(args ...any) any {
 }
 
 // DataTyped is the statically-typed accessor for this entity's data. With no
-// argument it returns the current data as an KeyManagement; with an argument it
+// argument it returns the current data as an ApiKey; with an argument it
 // sets the data and returns the stored value. It delegates to the untyped Data
 // (identical runtime) and converts at the typed boundary.
-func (e *KeyManagementEntity) DataTyped(data ...KeyManagement) KeyManagement {
+func (e *ApiKeyEntity) DataTyped(data ...ApiKey) ApiKey {
 	if len(data) > 0 {
-		return typedFrom[KeyManagement](e.Data(asMap(data[0])))
+		return typedFrom[ApiKey](e.Data(asMap(data[0])))
 	}
-	return typedFrom[KeyManagement](e.Data())
+	return typedFrom[ApiKey](e.Data())
 }
 
 // MatchTyped mirrors DataTyped for the entity's match filter. The match is a
-// partial of the entity, so it round-trips through KeyManagement (all fields
+// partial of the entity, so it round-trips through ApiKey (all fields
 // optional at the wire level).
-func (e *KeyManagementEntity) MatchTyped(match ...KeyManagement) KeyManagement {
+func (e *ApiKeyEntity) MatchTyped(match ...ApiKey) ApiKey {
 	if len(match) > 0 {
-		return typedFrom[KeyManagement](e.Match(asMap(match[0])))
+		return typedFrom[ApiKey](e.Match(asMap(match[0])))
 	}
-	return typedFrom[KeyManagement](e.Match())
+	return typedFrom[ApiKey](e.Match())
 }
 
-func (e *KeyManagementEntity) Stream(action string, args map[string]any, callopts map[string]any) <-chan core.StreamItem {
+func (e *ApiKeyEntity) Stream(action string, args map[string]any, callopts map[string]any) <-chan core.StreamItem {
 	out := make(chan core.StreamItem)
 
 	if callopts == nil {
@@ -251,7 +251,7 @@ func (e *KeyManagementEntity) Stream(action string, args map[string]any, callopt
 
 // The steps an operation runs, with their hooks; the first that fails hands
 // back its error.
-func (e *KeyManagementEntity) streamSteps(ctx *core.Context) error {
+func (e *ApiKeyEntity) streamSteps(ctx *core.Context) error {
 	utility := e.utility
 
 	utility.FeatureHook(ctx, "PrePoint")
@@ -294,7 +294,7 @@ func (e *KeyManagementEntity) streamSteps(ctx *core.Context) error {
 }
 
 
-func (e *KeyManagementEntity) Load(reqmatch map[string]any, ctrl map[string]any) (any, error) {
+func (e *ApiKeyEntity) Load(reqmatch map[string]any, ctrl map[string]any) (any, error) {
 	utility := e.utility
 	ctx := utility.MakeContext(map[string]any{
 		"opname":   "load",
@@ -320,25 +320,53 @@ func (e *KeyManagementEntity) Load(reqmatch map[string]any, ctrl map[string]any)
 }
 
 // LoadTyped is the statically-typed variant of Load: it takes an
-// KeyManagementLoadMatch and returns an KeyManagement. It delegates to the untyped
+// ApiKeyLoadMatch and returns an ApiKey. It delegates to the untyped
 // Load (identical runtime) and converts at the typed boundary.
-func (e *KeyManagementEntity) LoadTyped(reqmatch KeyManagementLoadMatch, ctrl map[string]any) (KeyManagement, error) {
+func (e *ApiKeyEntity) LoadTyped(reqmatch ApiKeyLoadMatch, ctrl map[string]any) (ApiKey, error) {
 	res, err := e.Load(asMap(reqmatch), ctrl)
 	if err != nil {
-		return KeyManagement{}, err
+		return ApiKey{}, err
 	}
-	return typedFrom[KeyManagement](res), nil
+	return typedFrom[ApiKey](res), nil
 }
 
 
 
-func (e *KeyManagementEntity) List(_ map[string]any, _ map[string]any) (any, error) {
-	return core.UnsupportedOp("list", e.name)
+
+func (e *ApiKeyEntity) List(reqmatch map[string]any, ctrl map[string]any) (any, error) {
+	utility := e.utility
+	ctx := utility.MakeContext(map[string]any{
+		"opname":   "list",
+		"ctrl":     ctrl,
+		"match":    e.match,
+		"data":     e.data,
+		"reqmatch": reqmatch,
+	}, e.entctx)
+
+	return e.runOp(ctx, func() {
+		if ctx.Result != nil {
+			if ctx.Result.Resmatch != nil {
+				e.match = ctx.Result.Resmatch
+			}
+		}
+	})
+}
+
+// ListTyped is the statically-typed variant of List: it takes an
+// ApiKeyListMatch and returns []ApiKey. It delegates to the untyped
+// List (identical runtime) and converts at the typed boundary.
+func (e *ApiKeyEntity) ListTyped(reqmatch ApiKeyListMatch, ctrl map[string]any) ([]ApiKey, error) {
+	res, err := e.List(asMap(reqmatch), ctrl)
+	if err != nil {
+		return nil, err
+	}
+	return typedSliceFrom[ApiKey](res), nil
 }
 
 
 
-func (e *KeyManagementEntity) Create(reqdata map[string]any, ctrl map[string]any) (any, error) {
+
+func (e *ApiKeyEntity) Create(reqdata map[string]any, ctrl map[string]any) (any, error) {
 	utility := e.utility
 	ctx := utility.MakeContext(map[string]any{
 		"opname":  "create",
@@ -361,20 +389,20 @@ func (e *KeyManagementEntity) Create(reqdata map[string]any, ctrl map[string]any
 }
 
 // CreateTyped is the statically-typed variant of Create: it takes an
-// KeyManagementCreateData and returns an KeyManagement. It delegates to the untyped
+// ApiKeyCreateData and returns an ApiKey. It delegates to the untyped
 // Create (identical runtime) and converts at the typed boundary.
-func (e *KeyManagementEntity) CreateTyped(reqdata KeyManagementCreateData, ctrl map[string]any) (KeyManagement, error) {
+func (e *ApiKeyEntity) CreateTyped(reqdata ApiKeyCreateData, ctrl map[string]any) (ApiKey, error) {
 	res, err := e.Create(asMap(reqdata), ctrl)
 	if err != nil {
-		return KeyManagement{}, err
+		return ApiKey{}, err
 	}
-	return typedFrom[KeyManagement](res), nil
+	return typedFrom[ApiKey](res), nil
 }
 
 
 
 
-func (e *KeyManagementEntity) Update(reqdata map[string]any, ctrl map[string]any) (any, error) {
+func (e *ApiKeyEntity) Update(reqdata map[string]any, ctrl map[string]any) (any, error) {
 	utility := e.utility
 	ctx := utility.MakeContext(map[string]any{
 		"opname":  "update",
@@ -400,25 +428,25 @@ func (e *KeyManagementEntity) Update(reqdata map[string]any, ctrl map[string]any
 }
 
 // UpdateTyped is the statically-typed variant of Update: it takes an
-// KeyManagementUpdateData and returns an KeyManagement. It delegates to the untyped
+// ApiKeyUpdateData and returns an ApiKey. It delegates to the untyped
 // Update (identical runtime) and converts at the typed boundary.
-func (e *KeyManagementEntity) UpdateTyped(reqdata KeyManagementUpdateData, ctrl map[string]any) (KeyManagement, error) {
+func (e *ApiKeyEntity) UpdateTyped(reqdata ApiKeyUpdateData, ctrl map[string]any) (ApiKey, error) {
 	res, err := e.Update(asMap(reqdata), ctrl)
 	if err != nil {
-		return KeyManagement{}, err
+		return ApiKey{}, err
 	}
-	return typedFrom[KeyManagement](res), nil
+	return typedFrom[ApiKey](res), nil
 }
 
 
 
-func (e *KeyManagementEntity) Patch(_ map[string]any, _ map[string]any) (any, error) {
+func (e *ApiKeyEntity) Patch(_ map[string]any, _ map[string]any) (any, error) {
 	return core.UnsupportedOp("patch", e.name)
 }
 
 
 
-func (e *KeyManagementEntity) Remove(reqmatch map[string]any, ctrl map[string]any) (any, error) {
+func (e *ApiKeyEntity) Remove(reqmatch map[string]any, ctrl map[string]any) (any, error) {
 	utility := e.utility
 	ctx := utility.MakeContext(map[string]any{
 		"opname":   "remove",
@@ -444,19 +472,19 @@ func (e *KeyManagementEntity) Remove(reqmatch map[string]any, ctrl map[string]an
 }
 
 // RemoveTyped is the statically-typed variant of Remove: it takes an
-// KeyManagementRemoveMatch and returns an KeyManagement. It delegates to the untyped
+// ApiKeyRemoveMatch and returns an ApiKey. It delegates to the untyped
 // Remove (identical runtime) and converts at the typed boundary.
-func (e *KeyManagementEntity) RemoveTyped(reqmatch KeyManagementRemoveMatch, ctrl map[string]any) (KeyManagement, error) {
+func (e *ApiKeyEntity) RemoveTyped(reqmatch ApiKeyRemoveMatch, ctrl map[string]any) (ApiKey, error) {
 	res, err := e.Remove(asMap(reqmatch), ctrl)
 	if err != nil {
-		return KeyManagement{}, err
+		return ApiKey{}, err
 	}
-	return typedFrom[KeyManagement](res), nil
+	return typedFrom[ApiKey](res), nil
 }
 
 
 
-func (e *KeyManagementEntity) runOp(ctx *core.Context, postDone func()) (out any, err error) {
+func (e *ApiKeyEntity) runOp(ctx *core.Context, postDone func()) (out any, err error) {
 	utility := e.utility
 
 	defer func() {
@@ -525,7 +553,7 @@ func (e *KeyManagementEntity) runOp(ctx *core.Context, postDone func()) (out any
 
 // A hook, fetcher or parser that panics never reached MakeError, and its
 // message can quote the request.
-func (e *KeyManagementEntity) recovered(ctx *core.Context, r any) (any, error) {
+func (e *ApiKeyEntity) recovered(ctx *core.Context, r any) (any, error) {
 	perr, ok := r.(error)
 	if !ok {
 		perr = fmt.Errorf("%v", r)

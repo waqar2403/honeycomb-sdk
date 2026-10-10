@@ -29,17 +29,17 @@ const utility_1 = require("../../utility");
         const setup = directSetup({ id: 'direct01' });
         if ((0, utility_1.maybeSkipControl)(t, 'direct', 'direct-load-trigger', setup.live))
             return;
-        if ((0, utility_1.skipIfMissingIds)(t, setup, ["recipient01", "dataset_slug01", "trigger01"], LIVE_STRICT))
+        if ((0, utility_1.skipIfMissingIds)(t, setup, ["dataset_slug01"], LIVE_STRICT))
             return;
         const { client, calls } = setup;
         const params = {};
         const query = {};
         if (setup.live) {
             const listResult = await client.direct({
-                path: '1/recipients/{recipient_id}/triggers',
+                path: '1/triggers/{dataset_slug}',
                 method: 'GET',
                 params: {
-                    recipient_id: setup.idmap['recipient01'],
+                    dataset_slug: setup.idmap['dataset_slug01'],
                 },
             });
             if (!listResult.ok || listResult.status < 200 || listResult.status >= 300) {
@@ -52,20 +52,19 @@ const utility_1 = require("../../utility");
             if (0 === listArr.length) {
                 return void (0, utility_1.liveEmpty)(t, 'The account has no trigger record to load');
             }
-            const candidateId = listArr[0]?.dataset_slug ?? listArr[0]?.id;
+            const candidateId = listArr[0]?.id ?? listArr[0]?.id;
             if (null == candidateId) {
                 return void (0, utility_1.liveMiss)(t, LIVE_STRICT, 'Live load blocked: discovery returned no usable identity');
             }
-            params.dataset_slug = candidateId;
+            params.id = candidateId;
             params.dataset_slug = setup.idmap['dataset_slug01'];
-            params.trigger_id = setup.idmap['trigger01'];
         }
         else {
             params.dataset_slug = 'direct01';
-            params.trigger_id = 'direct02';
+            params.id = 'direct02';
         }
         const result = await client.direct({
-            path: '1/triggers/{dataset_slug}/{trigger_id}',
+            path: '1/triggers/{dataset_slug}/{id}',
             method: 'GET',
             params,
             query,
@@ -97,19 +96,19 @@ const utility_1 = require("../../utility");
         const setup = directSetup([{ id: 'direct01' }, { id: 'direct02' }]);
         if ((0, utility_1.maybeSkipControl)(t, 'direct', 'direct-list-trigger', setup.live))
             return;
-        if ((0, utility_1.skipIfMissingIds)(t, setup, ["recipient01"], LIVE_STRICT))
+        if ((0, utility_1.skipIfMissingIds)(t, setup, ["dataset_slug01"], LIVE_STRICT))
             return;
         const { client, calls } = setup;
         const params = {};
         const query = {};
         if (setup.live) {
-            params.recipient_id = setup.idmap['recipient01'];
+            params.dataset_slug = setup.idmap['dataset_slug01'];
         }
         else {
-            params.recipient_id = 'direct01';
+            params.dataset_slug = 'direct01';
         }
         const result = await client.direct({
-            path: '1/recipients/{recipient_id}/triggers',
+            path: '1/triggers/{dataset_slug}',
             method: 'GET',
             params,
             query,

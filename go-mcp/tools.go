@@ -13,13 +13,13 @@ import (
 
 // ListArgs is what an agent sends to honeycomb_list.
 type ListArgs struct {
-	Entity string         `json:"entity" jsonschema:"one of: board | board_view | burn_alert | calculated_field | column | dataset | historical_anomaly | marker | marker_setting | query_annotation | recipient | signal | slo | slo_count | slo_hourly_count | trigger"`
+	Entity string         `json:"entity" jsonschema:"one of: api_key | board | board_view | burn_alert | calculated_field | column | dataset | environment | historical_anomaly | marker | marker_setting | query_annotation | recipient | signal | slo | slo_count | slo_hourly_count | trigger"`
 	Query  map[string]any `json:"query,omitempty" jsonschema:"optional filter map; omit it for the first page"`
 }
 
 // LoadArgs is what an agent sends to honeycomb_load.
 type LoadArgs struct {
-	Entity string         `json:"entity" jsonschema:"one of: auth | board | board_view | burn_alert | calculated_field | column | dataset | dataset_definition | environment | key_management | management_auth | map_dependency | query | query_annotation | query_result | recipient | signal | slo | trigger"`
+	Entity string         `json:"entity" jsonschema:"one of: api_key | auth | board | board_view | burn_alert | calculated_field | column | dataset | dataset_definition | environment | management_auth | map_dependency | query | query_annotation | query_result | recipient | signal | slo | trigger"`
 	Query  map[string]any `json:"query" jsonschema:"match map naming the record, such as {\"id\":1}"`
 }
 
@@ -28,7 +28,7 @@ func registerTools(server *mcp.Server, client *sdk.HoneycombSDK) {
 		Name:        "honeycomb_list",
 		Description: "List records from Honeycomb. Args: entity, query (optional filter map; omit it for the first page). Returns the first page of records as JSON.",
 		Annotations: &mcp.ToolAnnotations{ReadOnlyHint: true},
-		InputSchema: entitySchema[ListArgs]("board", "board_view", "burn_alert", "calculated_field", "column", "dataset", "historical_anomaly", "marker", "marker_setting", "query_annotation", "recipient", "signal", "slo", "slo_count", "slo_hourly_count", "trigger"),
+		InputSchema: entitySchema[ListArgs]("api_key", "board", "board_view", "burn_alert", "calculated_field", "column", "dataset", "environment", "historical_anomaly", "marker", "marker_setting", "query_annotation", "recipient", "signal", "slo", "slo_count", "slo_hourly_count", "trigger"),
 	}, func(ctx context.Context, req *mcp.CallToolRequest, args ListArgs) (*mcp.CallToolResult, any, error) {
 		return runOp(ctx, client, "list", args.Entity, args.Query)
 	})
@@ -36,7 +36,7 @@ func registerTools(server *mcp.Server, client *sdk.HoneycombSDK) {
 		Name:        "honeycomb_load",
 		Description: "Load one record from Honeycomb. Args: entity, query (match map naming the record, such as {\"id\":1}). Returns the record as JSON.",
 		Annotations: &mcp.ToolAnnotations{ReadOnlyHint: true},
-		InputSchema: entitySchema[LoadArgs]("auth", "board", "board_view", "burn_alert", "calculated_field", "column", "dataset", "dataset_definition", "environment", "key_management", "management_auth", "map_dependency", "query", "query_annotation", "query_result", "recipient", "signal", "slo", "trigger"),
+		InputSchema: entitySchema[LoadArgs]("api_key", "auth", "board", "board_view", "burn_alert", "calculated_field", "column", "dataset", "dataset_definition", "environment", "management_auth", "map_dependency", "query", "query_annotation", "query_result", "recipient", "signal", "slo", "trigger"),
 	}, func(ctx context.Context, req *mcp.CallToolRequest, args LoadArgs) (*mcp.CallToolResult, any, error) {
 		return runOp(ctx, client, "load", args.Entity, args.Query)
 	})
@@ -103,6 +103,8 @@ func runOp(_ context.Context, client *sdk.HoneycombSDK, op string, entity string
 // emits one `case "<name>":` per entity defined in the SDK model.
 func entityFor(client *sdk.HoneycombSDK, name string) (sdk.HoneycombEntity, error) {
 	switch strings.ToLower(name) {
+	case "api_key":
+		return client.ApiKey(nil), nil
 	case "auth":
 		return client.Auth(nil), nil
 	case "board":
@@ -127,8 +129,6 @@ func entityFor(client *sdk.HoneycombSDK, name string) (sdk.HoneycombEntity, erro
 		return client.Event(nil), nil
 	case "historical_anomaly":
 		return client.HistoricalAnomaly(nil), nil
-	case "key_management":
-		return client.KeyManagement(nil), nil
 	case "kinesis_event":
 		return client.KinesisEvent(nil), nil
 	case "management_auth":

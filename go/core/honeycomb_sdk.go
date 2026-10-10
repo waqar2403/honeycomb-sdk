@@ -372,6 +372,14 @@ func (sdk *HoneycombSDK) Graphql(
 }
 
 
+// ApiKey returns a ApiKey entity bound to this client.
+// Idiomatic usage: client.ApiKey(nil).List(nil, nil) or
+// client.ApiKey(nil).Load(map[string]any{"id": ...}, nil).
+func (sdk *HoneycombSDK) ApiKey(data map[string]any) HoneycombEntity {
+	return NewApiKeyEntityFunc(sdk, data)
+}
+
+
 // Auth returns a Auth entity bound to this client.
 // Idiomatic usage: client.Auth(nil).List(nil, nil) or
 // client.Auth(nil).Load(map[string]any{"id": ...}, nil).
@@ -465,14 +473,6 @@ func (sdk *HoneycombSDK) Event(data map[string]any) HoneycombEntity {
 // client.HistoricalAnomaly(nil).Load(map[string]any{"id": ...}, nil).
 func (sdk *HoneycombSDK) HistoricalAnomaly(data map[string]any) HoneycombEntity {
 	return NewHistoricalAnomalyEntityFunc(sdk, data)
-}
-
-
-// KeyManagement returns a KeyManagement entity bound to this client.
-// Idiomatic usage: client.KeyManagement(nil).List(nil, nil) or
-// client.KeyManagement(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *HoneycombSDK) KeyManagement(data map[string]any) HoneycombEntity {
-	return NewKeyManagementEntityFunc(sdk, data)
 }
 
 

@@ -37,7 +37,7 @@ class TestEnvironmentEntity:
         client = HoneycombSDK.test(
             None, {"feature": {"validate": {"active": True}}})
         with pytest.raises(Exception) as err:
-            client.Environment(None).load({"id": 1, "team_slug": "x"}, None)
+            client.Environment(None).list({"team_slug": 1}, None)
         assert "validate_failed" == getattr(err.value, "code", None)
 
     def test_should_run_basic_flow(self):
@@ -46,7 +46,7 @@ class TestEnvironmentEntity:
         # multiple ops; skipping any one skips the whole flow (steps depend
         # on each other).
         _live = setup.get("live", False)
-        for _op in ["create", "update", "load", "remove"]:
+        for _op in ["create", "list", "update", "load", "remove"]:
             _skip, _reason = runner.is_control_skipped("entityOp", "environment." + _op, "live" if _live else "unit")
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
@@ -67,6 +67,19 @@ class TestEnvironmentEntity:
         assert environment_ref01_data is not None
         assert environment_ref01_data["id"] is not None
 
+        # LIST
+        environment_ref01_match = {
+            "team_slug": setup["idmap"]["team_slug01"],
+        }
+
+        environment_ref01_list_result = environment_ref01_ent.list(environment_ref01_match, None)
+        assert isinstance(environment_ref01_list_result, list)
+
+        found_item = vs.select(
+            runner.entity_list_to_data(environment_ref01_list_result),
+            {"id": environment_ref01_data["id"]})
+        assert not vs.isempty(found_item)
+
         # UPDATE
         environment_ref01_data_up0_up = {
             "id": environment_ref01_data["id"],
@@ -81,6 +94,7 @@ class TestEnvironmentEntity:
         environment_ref01_match_dt0 = {
             "id": environment_ref01_data["id"],
         }
+        environment_ref01_match_dt0["team_slug"] = setup["idmap"].get("team_slug") or setup["idmap"].get("team_slug01")
         environment_ref01_data_dt0_loaded = environment_ref01_ent.load(environment_ref01_match_dt0, None)
         environment_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(environment_ref01_data_dt0_loaded))
         assert environment_ref01_data_dt0_load_result is not None
@@ -92,6 +106,19 @@ class TestEnvironmentEntity:
         }
         environment_ref01_match_rm0["team_slug"] = setup["idmap"].get("team_slug") or setup["idmap"].get("team_slug01")
         environment_ref01_ent.remove(environment_ref01_match_rm0, None)
+
+        # LIST
+        environment_ref01_match_rt0 = {
+            "team_slug": setup["idmap"]["team_slug01"],
+        }
+
+        environment_ref01_list_rt0_result = environment_ref01_ent.list(environment_ref01_match_rt0, None)
+        assert isinstance(environment_ref01_list_rt0_result, list)
+
+        not_found_item = vs.select(
+            runner.entity_list_to_data(environment_ref01_list_rt0_result),
+            {"id": environment_ref01_data["id"]})
+        assert vs.isempty(not_found_item)
 
 
 
